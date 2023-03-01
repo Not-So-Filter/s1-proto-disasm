@@ -1,12 +1,31 @@
-AniSonic:	dc.w byte_F64C-AniSonic, byte_F654-AniSonic, byte_F65C-AniSonic
-		dc.w byte_F664-AniSonic, byte_F66C-AniSonic, byte_F674-AniSonic
-		dc.w byte_F68A-AniSonic, byte_F68E-AniSonic, byte_F692-AniSonic
-		dc.w byte_F696-AniSonic, byte_F69A-AniSonic, byte_F69E-AniSonic
-		dc.w byte_F6A2-AniSonic, byte_F6A6-AniSonic, byte_F6AA-AniSonic
-		dc.w byte_F6AE-AniSonic, byte_F6B6-AniSonic, byte_F6BA-AniSonic
-		dc.w byte_F6BE-AniSonic, byte_F6C4-AniSonic, byte_F6CA-AniSonic
-		dc.w byte_F6CE-AniSonic, byte_F6D2-AniSonic, byte_F6D6-AniSonic
-		dc.w byte_F6DA-AniSonic, byte_F6DE-AniSonic, byte_F6E8-AniSonic
+AniSonic_internal:	
+                dc.w byte_F64C-*
+                dc.w byte_F654-AniSonic_internal
+                dc.w byte_F65C-AniSonic_internal
+		dc.w byte_F664-AniSonic_internal
+                dc.w byte_F66C-AniSonic_internal
+                dc.w byte_F674-AniSonic_internal
+		dc.w byte_F68A-AniSonic_internal
+                dc.w byte_F68E-AniSonic_internal
+                dc.w byte_F692-AniSonic_internal
+		dc.w byte_F696-AniSonic_internal
+                dc.w byte_F69A-AniSonic_internal
+                dc.w byte_F69E-AniSonic_internal
+		dc.w byte_F6A2-AniSonic_internal
+                dc.w byte_F6A6-AniSonic_internal
+                dc.w byte_F6AA-AniSonic_internal
+		dc.w byte_F6AE-AniSonic_internal
+                dc.w byte_F6B6-AniSonic_internal
+                dc.w byte_F6BA-AniSonic_internal
+		dc.w byte_F6BE-AniSonic_internal
+                dc.w byte_F6C4-AniSonic_internal
+                dc.w byte_F6CA-AniSonic_internal
+		dc.w byte_F6CE-AniSonic_internal
+                dc.w byte_F6D2-AniSonic_internal
+                dc.w byte_F6D6-AniSonic_internal
+		dc.w byte_F6DA-AniSonic_internal
+                dc.w byte_F6DE-AniSonic_internal
+                dc.w byte_F6E8-AniSonic_internal
 
 byte_F64C:	dc.b $FF, 8, 9, $A, $B, 6, 7, $FF
 
