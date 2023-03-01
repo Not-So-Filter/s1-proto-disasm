@@ -1,0 +1,1 @@
+The compression used here is different from the final, being Uncompressed rather than Enigma.

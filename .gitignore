@@ -1,0 +1,9 @@
+
+s1built.bin
+s1built.prev.bin
+sonic.lst
+log.txt
+SonLVL INI Files/dllcache/*
+
+# mainly cause Amiga-Assembly extension on VS code does this..
+build/*

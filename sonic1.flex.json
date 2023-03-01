@@ -1,0 +1,34 @@
+{
+    "Flex": 2,
+    "name": "Sonic 1",
+    "node": "4d50d5df-3ff1-4200-a067-8beab9398e26",
+    "objects": [
+        {
+            "uuid": "4d50d5df-3ff1-4200-a067-8beab9398e26",
+            "format": "Sonic 1.js",
+            "name": "object",
+            "palettes": [],
+            "art": {
+                "path": "",
+                "compression": "Nemesis",
+                "offset": 0
+            },
+            "mappings": {
+                "path": "",
+                "label": ""
+            },
+            "dplcs": {
+                "enabled": false,
+                "path": "",
+                "label": ""
+            }
+        },
+        {
+            "name": "Common",
+            "children": [],
+            "isDirectory": true,
+            "expanded": true,
+            "uuid": "14da472a-b9f3-4355-a6ce-e3a83fd70d6d"
+        }
+    ]
+}
