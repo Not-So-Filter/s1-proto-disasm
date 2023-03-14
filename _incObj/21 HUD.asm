@@ -18,4 +18,4 @@ loc_115EE:
 		move.b	#0,prio(a0)
 
 loc_11618:
-		jmp	DisplaySprite
+		jmp	(DisplaySprite).l

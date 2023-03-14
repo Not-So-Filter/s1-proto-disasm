@@ -91,7 +91,7 @@ loc_B0D2:
 		tst.b	$3E(a0)
 		bne.s	loc_B11A
 		move.b	#$20,$3E(a0)
-		move.w	#$AC,d0
+		move.w	#sfx_HitBoss,d0
 		jsr	(PlaySFX).l
 
 loc_B11A:

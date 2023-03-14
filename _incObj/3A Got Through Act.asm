@@ -97,7 +97,7 @@ loc_A7B0:
 loc_A7C0:
 		tst.w	d0
 		bne.s	loc_A7DA
-		move.w	#$C5,d0
+		move.w	#sfx_Cash,d0
 		jsr	(PlaySFX).l
 		addq.b	#2,act(a0)
 		move.w	#$B4,anidelay(a0)
@@ -111,7 +111,7 @@ loc_A7DA:
 		move.b	(byte_FFFE0F).w,d0
 		andi.b	#3,d0
 		bne.s	locret_A7D8
-		move.w	#$CD,d0
+		move.w	#sfx_Switch,d0
 		jmp	(PlaySFX).l
 ; ---------------------------------------------------------------------------
 

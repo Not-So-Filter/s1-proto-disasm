@@ -20,7 +20,7 @@ loc_6F46:
 		move.b	#5,$20(a0)
 		move.b	#$C,$18(a0)
 		bsr.w	ObjectFall
-		jsr	ObjectHitFloor
+		jsr	(ObjectHitFloor).l
 		tst.w	d1
 		bpl.s	locret_6F94
 		add.w	d1,$C(a0)

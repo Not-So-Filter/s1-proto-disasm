@@ -37,7 +37,7 @@ ObjEntryRingBeta_RmvSonic:
 		tst.b	(v_objspace).w
 		beq.s	ObjEntryRingBeta_Display
 		move.b	#0,(v_objspace).w
-		move.w	#$A8,d0
+		move.w	#sfx_SSGoal,d0
 		jsr	(PlaySFX).l
 
 ObjEntryRingBeta_Display:

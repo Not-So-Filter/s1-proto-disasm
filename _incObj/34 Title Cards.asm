@@ -101,11 +101,11 @@ locret_A5AE:
 loc_A5B0:
 		cmpi.b	#4,act(a0)
 		bne.s	loc_A5D0
-		moveq	#2,d0
+		moveq	#plcid_Explode,d0
 		jsr	(plcAdd).l
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
-		addi.w	#$15,d0
+		addi.w	#plcid_GHZAnimals,d0
 		jsr	(plcAdd).l
 
 loc_A5D0:

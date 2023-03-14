@@ -190,7 +190,7 @@ loc_56A6:
 		moveq	#0,d4
 		move.b	(a2)+,d4
 		lsl.w	#6,d4
-		addi.l	#(v_objspace)&$FFFFFF,d4
+		addi.l	#v_objspace&$FFFFFF,d4
 		movea.l	d4,a1
 		moveq	#0,d4
 		move.b	$3C(a1),d4
@@ -228,7 +228,7 @@ loc_56FE:
 		moveq	#0,d0
 		move.b	(a2)+,d0
 		lsl.w	#6,d0
-		addi.l	#(v_objspace)&$FFFFFF,d0
+		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a1
 		bsr.w	ObjectDeleteA1
 		dbf	d2,loc_56FE

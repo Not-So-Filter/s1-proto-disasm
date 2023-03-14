@@ -44,5 +44,5 @@ loc_AF24:
 		dbf	d1,loc_AECE
 
 loc_AF28:
-		move.w	#$CB,d0
+		move.w	#sfx_WallSmash,d0
 		jmp	(PlaySFX).l

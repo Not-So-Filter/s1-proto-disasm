@@ -37,7 +37,7 @@ loc_11EB8:
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d6
 		bsr.w	sub_11ED6
-		jmp	DisplaySprite
+		jmp	(DisplaySprite).l
 ; ---------------------------------------------------------------------------
 
 sub_11ED6:
@@ -114,7 +114,7 @@ loc_11F7C:
 loc_11F80:
 		btst	#5,(v_jpadpress2).w
 		beq.s	loc_11FA4
-		jsr	ObjectLoad
+		jsr	(ObjectLoad).l
 		bne.s	loc_11FA4
 		move.w	xpos(a0),xpos(a1)
 		move.w	ypos(a0),ypos(a1)

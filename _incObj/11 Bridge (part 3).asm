@@ -5,7 +5,7 @@ ObjBridge_PlayerPos:
 		move.b	$3F(a0),d0
 		move.b	$29(a0,d0.w),d0
 		lsl.w	#6,d0
-		addi.l	#(v_objspace)&$FFFFFF,d0
+		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a2
 		lea	(v_objspace).w,a1
 		move.w	ypos(a2),d0
@@ -41,7 +41,7 @@ loc_5186:
 		moveq	#0,d0
 		move.b	(a2)+,d0
 		lsl.w	#6,d0
-		addi.l	#(v_objspace)&$FFFFFF,d0
+		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a1
 		moveq	#0,d0
 		move.b	(a3)+,d0
@@ -71,7 +71,7 @@ loc_51CE:
 		moveq	#0,d0
 		move.b	(a2)+,d0
 		lsl.w	#6,d0
-		addi.l	#(v_objspace)&$FFFFFF,d0
+		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a1
 		moveq	#0,d0
 		move.b	-(a3),d0
@@ -151,7 +151,7 @@ loc_5432:
 		moveq	#0,d0
 		move.b	(a2)+,d0
 		lsl.w	#6,d0
-		addi.l	#(v_objspace)&$FFFFFF,d0
+		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a1
 		cmp.w	a0,d0
 		beq.s	loc_5448

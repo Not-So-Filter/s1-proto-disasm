@@ -849,16 +849,16 @@ unk_119C:
 ; ---------------------------------------------------------------------------
 
 PlayMusic:
-		move.b	d0,(v_snddriver_ram+$A).w
+		move.b	d0,(v_snddriver_ram+v_soundqueue0).w
 		rts
 ; ---------------------------------------------------------------------------
 
 PlaySFX:
-		move.b	d0,(v_snddriver_ram+$B).w
+		move.b	d0,(v_snddriver_ram+v_soundqueue1).w
 		rts
 ; ---------------------------------------------------------------------------
 PlaySound_Unused:
-		move.b	d0,(v_snddriver_ram+$C).w
+		move.b	d0,(v_snddriver_ram+v_soundqueue2).w
 		rts
 
                 include "_inc\PauseGame.asm"
@@ -1424,7 +1424,7 @@ AngleTable:	incbin "misc\angles.bin"
 ; ---------------------------------------------------------------------------
 
 GM_Sega:
-		move.b	#$E0,d0
+		move.b	#bgm_Fade,d0
 		bsr.w	PlaySFX
 		bsr.w	ClearPLC
 		bsr.w	PaletteFadeOut
@@ -1549,7 +1549,7 @@ loc_25D8:
 		move.b	#$F,(v_objspace+$80).w  ; load press start button text
 		move.b	#$F,(v_objspace+$C0).w  ; load object which hides sonic
 		move.b	#2,(v_objspace+$DA).w
-		moveq	#0,d0
+		moveq	#plcid_Main,d0
 		bsr.w	plcReplace
 		move.w	(v_vdp_buffer1).w,d0
 		ori.b	#$40,d0
@@ -1617,7 +1617,7 @@ LevelSelect:
 		addi.w	#$80,d0
 		cmpi.w	#$93,d0		; There's no pointer for music $92 or $93
 		bcs.s	loc_277A	; So the game crashes when played
-		cmpi.w	#$A0,d0
+		cmpi.w	#sfx__First,d0
 		bcs.s	LevelSelect
 
 loc_277A:
@@ -1651,7 +1651,7 @@ loc_27AA:
 		move.w	d0,(v_rings).w
 		move.l	d0,(v_time).w
 		move.l	d0,(v_score).w
-		move.b	#$E0,d0
+		move.b	#bgm_Fade,d0
 		bsr.w	PlaySFX
 		rts
 ; ---------------------------------------------------------------------------
@@ -1686,7 +1686,7 @@ loc_27FE:
 loc_282C:
 		tst.w	(v_demolength).w
 		bne.w	loc_27FE
-		move.b	#$E0,d0
+		move.b	#bgm_Fade,d0
 		bsr.w	PlaySFX
 		move.w	(DemoNum).w,d0
 		andi.w	#7,d0
@@ -1869,7 +1869,7 @@ MusicList:	dc.b bgm_GHZ
 ; ---------------------------------------------------------------------------
 
 GM_Level:
-		move.b	#$E0,d0
+		move.b	#bgm_Fade,d0
 		bsr.w	PlaySFX
                 locVRAM $B000
 		lea	(Nem_TitleCard).l,a0
@@ -1886,7 +1886,7 @@ GM_Level:
 		bsr.w	plcAdd
 
 loc_2C0A:
-		moveq	#1,d0
+		moveq	#plcid_Main2,d0
 		bsr.w	plcAdd
 		bsr.w	PaletteFadeOut
 		bsr.w	sub_10A6
@@ -2204,8 +2204,8 @@ off_3100:	dc.l byte_614C6
 ; ---------------------------------------------------------------------------
 
 sub_3166:
-		lea	(Anim16End1).l,a0
-		move.w	#(Anim16End1_end-Anim16End1)/2-1,d1
+		lea	(Anim16Unk1).l,a0
+		move.w	#(Anim16Unk1_end-Anim16Unk1)/2-1,d1
 
 loc_3170:
 		move.w	(a0)+,(a1)+
@@ -2217,8 +2217,8 @@ locret_3176:
 
 sub_3178:
 		lea	($FF0000).l,a1
-		lea	(Anim16End2).l,a0
-		move.w	#(Anim16End2_end-Anim16End2)/2-1,d1
+		lea	(Anim16Unk2).l,a0
+		move.w	#(Anim16Unk2_end-Anim16Unk2)/2-1,d1
 
 loc_3188:
 		move.w	(a0)+,d0
@@ -2226,10 +2226,10 @@ loc_3188:
 		dbf	d1,loc_3188
 		rts
 ; ---------------------------------------------------------------------------
-Anim16End1:	incbin "map16\Anim Ending 1.bin"
-Anim16End1_end:	even
-Anim16End2:	incbin "map16\Anim Ending 2.bin"
-Anim16End2_end:	even
+Anim16Unk1:	incbin "map16\Anim Unknown 1.bin"
+Anim16Unk1_end:	even
+Anim16Unk2:	incbin "map16\Anim Unknown 2.bin"
+Anim16Unk2_end:	even
 ; ---------------------------------------------------------------------------
 
 LoadAnimatedBlocks:
@@ -2368,7 +2368,7 @@ loc_34D4:
 		cmp.w	(unk_FFF728).w,d1
 		beq.s	locret_34FA
 		move.w	d1,(unk_FFF728).w
-		moveq	#$12,d0
+		moveq	#plcid_Signpost,d0
 		bra.w	plcReplace
 ; ---------------------------------------------------------------------------
 
@@ -2441,7 +2441,7 @@ loc_3584:
 		bsr.w	SS_PalCycle
 		clr.w	(unk_FFF780).w
 		move.w	#$40,(unk_FFF782).w
-		move.w	#$89,d0
+		move.w	#bgm_SS,d0
 		bsr.w	PlaySFX
 		move.w	#0,(unk_FFF790).w
 		lea	(off_3100).l,a1
@@ -4389,7 +4389,7 @@ loc_61A4:
 
 loc_61A8:
 		bsr.w	DisplaySprite
-		move.w	#$B9,d0
+		move.w	#sfx_Collapse,d0
 		jmp	(PlaySFX).l
 ; ---------------------------------------------------------------------------
 
@@ -5034,7 +5034,7 @@ ObjExplode_Init:
 		move.b	#12,xdisp(a0)
 		move.b	#7,anidelay(a0)
 		move.b	#0,frame(a0)
-		move.w	#$C1,d0
+		move.w	#sfx_BreakItem,d0
 		jsr	(PlaySFX).l
 
 ObjExplode_Act:
@@ -5069,7 +5069,7 @@ ObjBomb_Init:
 		move.b	#$C,xdisp(a0)
 		move.b	#7,anidelay(a0)
 		move.b	#0,frame(a0)
-		move.w	#$C4,d0
+		move.w	#sfx_Bomb,d0
 		jmp	(PlaySFX).l
 ; ---------------------------------------------------------------------------
 		include "_anim\BallHog.asm"
@@ -5797,7 +5797,7 @@ CollectRing:
 loc_7D5E:
 		addq.b	#1,(v_lives).w
 		addq.b	#1,(byte_FFFE1C).w
-		move.w	#$88,d0
+		move.w	#bgm_ExtraLife,d0
 
 loc_7D6A:
 		jmp	(PlaySFX).l
@@ -5877,7 +5877,7 @@ loc_7E2C:
 		move.w	#0,(v_rings).w
 		move.b	#$80,(f_extralife).w
 		move.b	#0,(byte_FFFE1B).w
-		move.w	#$C6,d0
+		move.w	#sfx_RingLoss,d0
 		jsr	(PlaySFX).l
 
 loc_7E48:
@@ -5969,7 +5969,7 @@ loc_7F3C:
 
 loc_7F4C:
 		move.b	#$4A,(v_objspace+$1C0).w
-		moveq	#$13,d0
+		moveq	#plcid_Warp,d0
 		bsr.w	plcAdd
 		bra.w	DeleteObject
 ; ---------------------------------------------------------------------------
@@ -6199,7 +6199,7 @@ loc_82B2:
 loc_82B8:
 		addq.b	#1,(v_lives).w
 		addq.b	#1,(byte_FFFE1C).w
-		move.w	#$88,d0
+		move.w	#bgm_ExtraLife,d0
 		jmp	(PlayMusic).l
 ; ---------------------------------------------------------------------------
 
@@ -6211,7 +6211,7 @@ loc_82CA:
 		move.w	#$C00,(unk_FFF760).w
 		move.w	#$18,(unk_FFF762).w
 		move.w	#$80,(unk_FFF764).w
-		move.w	#$E2,d0
+		move.w	#bgm_Speedup,d0
 		jmp	(PlayMusic).l
 ; ---------------------------------------------------------------------------
 
@@ -6220,7 +6220,7 @@ loc_82F8:
 		bne.s	loc_8314
 		move.b	#1,(v_shield).w
 		move.b	#$38,(v_objspace+$180).w
-		move.w	#$AF,d0
+		move.w	#sfx_Shield,d0
 		jmp	(PlayMusic).l
 ; ---------------------------------------------------------------------------
 
@@ -6237,7 +6237,7 @@ loc_8314:
 		move.b	#3,(v_objspace+$29C).w
 		move.b	#$38,(v_objspace+$2C0).w
 		move.b	#4,(v_objspace+$2DC).w
-		move.w	#$87,d0
+		move.w	#bgm_Invincible,d0
 		jmp	(PlayMusic).l
 ; ---------------------------------------------------------------------------
 
@@ -6256,7 +6256,7 @@ loc_8360:
 		beq.w	loc_82B8
 
 loc_8396:
-		move.w	#$B5,d0
+		move.w	#sfx_Ring,d0
 		jmp	(PlayMusic).l
 ; ---------------------------------------------------------------------------
 
@@ -7271,7 +7271,7 @@ loc_91F8:
 		move.b	#1,$19(a0)
 		move.b	#$8B,$20(a0)
 		move.b	#8,$18(a0)
-		move.w	#$C8,d0
+		move.w	#sfx_Burning,d0
 		jsr	(PlaySFX).l
 		tst.b	$28(a0)
 		beq.s	loc_9240
@@ -7772,7 +7772,7 @@ loc_98A8:
 		bne.s	loc_98C8
 		tst.b	1(a0)
 		bpl.s	loc_98C8
-		move.w	#$C7,d0
+		move.w	#sfx_ChainRise,d0
 		jsr	(PlaySFX).l
 
 loc_98C8:
@@ -7798,7 +7798,7 @@ loc_98DE:
 		move.w	#0,$12(a0)
 		tst.b	1(a0)
 		bpl.s	loc_9916
-		move.w	#$BD,d0
+		move.w	#sfx_ChainStomp,d0
 		jsr	(PlaySFX).l
 
 loc_9916:
@@ -7824,7 +7824,7 @@ loc_9938:
 		bne.s	loc_9952
 		tst.b	1(a0)
 		bpl.s	loc_9952
-		move.w	#$C7,d0
+		move.w	#sfx_ChainRise,d0
 		jsr	(PlaySFX).l
 
 loc_9952:
@@ -7851,7 +7851,7 @@ loc_996E:
 		move.w	#$3C,$38(a0)
 		tst.b	1(a0)
 		bpl.s	loc_99B2
-		move.w	#$BD,d0
+		move.w	#sfx_ChainStomp,d0
 		jsr	(PlaySFX).l
 
 loc_99B2:
@@ -8351,7 +8351,7 @@ loc_A24C:
 		move.w	d1,$14(a1)
 		move.w	#0,$10(a1)
 		move.w	d0,-(sp)
-		move.w	#$A7,d0
+		move.w	#sfx_Push,d0
 		jsr	(PlaySFX).l
 		move.w	(sp)+,d0
 		tst.b	$28(a0)
@@ -9012,7 +9012,7 @@ loc_C254:
 		move.w	#0,yvel(a0)
 
 loc_C2BE:
-		move.w	#$AE,d0
+		move.w	#sfx_Fireball,d0
 		jsr	(PlaySFX).l
 
 loc_C2C8:
@@ -9325,7 +9325,7 @@ loc_C62C:
 		bset	#1,$22(a1)
 		clr.b	$3C(a1)
 		move.b	#1,$1C(a0)
-		move.w	#$B4,d0
+		move.w	#sfx_Bumper,d0
 		jsr	(PlaySFX).l
 
 loc_C684:
@@ -9519,7 +9519,7 @@ loc_CAA0:
 		move.b	#0,$28(a0)
 
 loc_CB00:
-		move.w	#$C8,d0
+		move.w	#sfx_Burning,d0
 		jsr	(PlaySFX).l
 
 loc_CB0A:
@@ -10247,7 +10247,7 @@ ObjBasaran_PlaySound:
 		move.b	(byte_FFFE0F).w,d0
 		andi.b	#$F,d0
 		bne.s	loc_D7EE
-		move.w	#$C0,d0
+		move.w	#sfx_Basaran,d0
 		jsr	(PlaySFX).l
 
 loc_D7EE:
@@ -10361,7 +10361,7 @@ loc_D912:
 		subq.w	#8,d0
 		bcs.s	ObjMovingBlocks_IsGone
 		lsl.w	#2,d0
-		lea	((oscValues+$2C)).w,a2
+		lea	(oscValues+$2C).w,a2
 		lea	(a2,d0.w),a2
 		tst.w	(a2)
 		bpl.s	ObjMovingBlocks_IsGone
@@ -11662,7 +11662,12 @@ loc_E892:
 
 off_E8C8:	dc.w sub_E96C-off_E8C8, sub_E98E-off_E8C8, loc_E9A8-off_E8C8, loc_E9C6-off_E8C8
 
-MusicList2:	dc.b $81, $82, $83, $84, $85, $86
+MusicList2:	dc.b bgm_GHZ
+                dc.b bgm_LZ
+                dc.b bgm_MZ
+                dc.b bgm_SLZ
+                dc.b bgm_SZ
+                dc.b bgm_CWZ
 ; ---------------------------------------------------------------------------
 
 sub_E8D6:
@@ -11706,7 +11711,7 @@ loc_E91C:
 		move.w	#$C,(unk_FFF762).w
 		move.w	#$40,(unk_FFF764).w
 		move.b	#0,(v_shoes).w
-		move.w	#$E3,d0
+		move.w	#bgm_Slowdown,d0
 		jmp	(PlaySFX).l
 ; ---------------------------------------------------------------------------
 
@@ -11987,7 +11992,7 @@ loc_EBCC:
 		blt.s	locret_EBFA
 		move.b	#$D,$1C(a0)
 		bclr	#0,$22(a0)
-		move.w	#$A4,d0
+		move.w	#sfx_Skid,d0
 		jsr	(PlaySFX).l
 
 locret_EBFA:
@@ -12029,7 +12034,7 @@ loc_EC32:
 		bgt.s	locret_EC60
 		move.b	#$D,$1C(a0)
 		bset	#0,$22(a0)
-		move.w	#$A4,d0
+		move.w	#sfx_Skid,d0
 		jsr	(PlaySFX).l
 
 locret_EC60:
@@ -12279,7 +12284,7 @@ Sonic_DoRoll:
 		move.b	#7,$17(a0)
 		move.b	#2,$1C(a0)
 		addq.w	#5,$C(a0)
-		move.w	#$BE,d0
+		move.w	#sfx_Roll,d0
 		jsr	(PlaySFX).l
 		tst.w	$14(a0)
 		bne.s	locret_EEAA
@@ -12313,7 +12318,7 @@ Sonic_Jump:
 		bclr	#5,$22(a0)
 		addq.l	#4,sp
 		move.b	#1,$3C(a0)
-		move.w	#$A0,d0
+		move.w	#sfx_Jump,d0
 		jsr	(PlaySFX).l
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
@@ -12487,7 +12492,7 @@ Sonic_Floor:
 		cmpi.b	#$C0,d0
 		beq.w	loc_F1BC
 
-loc_F07C:		
+loc_F07C:
 		bsr.w	Sonic_HitWall
 		tst.w	d1
 		bpl.s	loc_F08E
@@ -12758,9 +12763,9 @@ Sonic_GameOver:
 		move.b	#$39,(v_objspace+$80).w
 		move.b	#$39,(v_objspace+$C0).w
 		move.b	#1,(v_objspace+$DA).w
-		move.w	#$8F,d0
+		move.w	#bgm_GameOver,d0
 		jsr	(PlaySFX).l
-		moveq	#3,d0
+		moveq	#plcid_GameOver,d0
 		jmp	(plcAdd).l
 ; ---------------------------------------------------------------------------
 
@@ -13139,17 +13144,16 @@ loc_FB6E:
 		tst.b	1(a1)
 		bpl.s	loc_FB7A
 		move.b	$20(a1),d0
-		bne.s	loc_FBB8
+		bne.s	loc_FBB8	; if nonzero, branch
 
-loc_FB7A:
-		lea	$40(a1),a1
-		dbf	d6,loc_FB6E
+	loc_FB7A:
+		lea	$40(a1),a1	; next object RAM
+		dbf	d6,loc_FB6E	; repeat $5F more times
+
 		moveq	#0,d0
-
-locret_FB84:
 		rts
 ; ---------------------------------------------------------------------------
-RTI_sizes:		;   width, height
+RTI_sizes:	;   width, height
 		dc.b  $14, $14		; $01
 		dc.b   $C, $14		; $02
 		dc.b  $14,  $C		; $03
@@ -13348,10 +13352,10 @@ loc_FD48:
 		move.w	#0,$14(a0)
 		move.b	#$1A,$1C(a0)
 		move.w	#$258,$30(a0)
-		move.w	#$A3,d0
+		move.w	#sfx_Death,d0
 		cmpi.b	#$36,(a2)
 		bne.s	loc_FD68
-		move.w	#$A6,d0
+		move.w	#sfx_HitSpikes,d0
 
 loc_FD68:
 		jsr	(PlaySFX).l
@@ -13374,10 +13378,10 @@ loc_FD78:
 		move.w	#0,$14(a0)
 		move.w	$C(a0),$38(a0)
 		move.b	#$18,$1C(a0)
-		move.w	#$A3,d0
+		move.w	#sfx_Death,d0
 		cmpi.b	#$36,(a2)
 		bne.s	loc_FDBA
-		move.w	#$A6,d0
+		move.w	#sfx_HitSpikes,d0
 
 loc_FDBA:
 		jsr	(PlaySFX).l
@@ -13778,7 +13782,7 @@ Floor_ChkTile:
 		lsr.w	#8,d1
 		andi.w	#$7F,d1
 		add.w	d1,d0
-		moveq	#$FFFFFFFF,d1
+		moveq	#-1,d1
 		lea	(v_lvllayout).w,a1
 		move.b	(a1,d0.w),d1
 		beq.s	loc_10186
@@ -14746,7 +14750,7 @@ Special_VRAMSet:dc.w $142, $142, $142, $2142
 ; ---------------------------------------------------------------------------
 
 sub_10ACC:
-		lea	(($FF4400)&$FFFFFF).l,a2
+		lea	($FF4400).l,a2
 		move.w	#$1F,d0
 
 loc_10AD6:
@@ -14760,7 +14764,7 @@ locret_10AE0:
 ; ---------------------------------------------------------------------------
 
 GM_Special_AniItems:
-		lea	(($FF4400)&$FFFFFF).l,a0
+		lea	($FF4400).l,a0
 		move.w	#$1F,d7
 
 loc_10AEC:
@@ -14874,7 +14878,7 @@ loc_10BC8:
 
                 include "_inc\Special Stage Mappings & VRAM Pointers.asm"
 
-		lea	($FF1020).l,a1           ; Leftover from previous build?
+		lea	($FF1020).l,a1
 		lea	(SS_1).l,a0
 		moveq	#$3F,d1
 
@@ -15896,7 +15900,7 @@ ObjPos_Null:	dc.w $FFFF, 0, 0
 
 		align $2000,$FF ; Padding
 
-		include "s1.prototype.sounddriver.asm"
+		include "s1.proto.sounddriver.asm"
 
 		align $4000,$FF ; Padding
 

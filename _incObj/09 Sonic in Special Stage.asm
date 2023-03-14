@@ -33,8 +33,8 @@ Obj09_Load:
 		andi.w	#2,d0
 		move.w	Obj09_Modes(pc,d0.w),d1
 		jsr	Obj09_Modes(pc,d1.w)
-		jsr	Sonic_DynTiles
-		jmp	DisplaySprite
+		jsr	(Sonic_DynTiles).l
+		jmp	(DisplaySprite).l
 ; ---------------------------------------------------------------------------
 Obj09_Modes:	dc.w loc_10D32-Obj09_Modes
                 dc.w loc_10D40-Obj09_Modes
@@ -54,7 +54,7 @@ loc_10D40:
 Obj09_Display:
 		bsr.w	sub_1107C
 		bsr.w	sub_110DE
-		jsr	SpeedToPos
+		jsr	(SpeedToPos).l
 		bsr.w	SS_FixCamera
 		btst	#6,(v_jpadhold1).w
 		beq.s	loc_10D66
@@ -74,7 +74,7 @@ loc_10D80:
 		move.w	(unk_FFF780).w,d0
 		add.w	(unk_FFF782).w,d0
 		move.w	d0,(unk_FFF780).w
-		jsr	Sonic_Animate
+		jsr	(Sonic_Animate).l
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -249,9 +249,9 @@ loc_10F1C:
 		add.w	(unk_FFF782).w,d0
 		move.w	d0,(unk_FFF780).w
 		bsr.w	Sonic_Animate
-		jsr	Sonic_DynTiles
+		jsr	(Sonic_DynTiles).l
 		bsr.w	SS_FixCamera
-		jmp	DisplaySprite
+		jmp	(DisplaySprite).l
 ; ---------------------------------------------------------------------------
 
 Obj09_Exit2:
@@ -263,14 +263,14 @@ Obj09_Exit2:
 		move.w	#$4A0,(v_objspace+$C).w
 		clr.b	$24(a0)
 		move.l	a0,-(sp)
-		jsr	SS_Load
+		jsr	(SS_Load).l
 		movea.l	(sp)+,a0
 
 loc_10F66:
-		jsr	Sonic_Animate
-		jsr	Sonic_DynTiles
+		jsr	(Sonic_Animate).l
+		jsr	(Sonic_DynTiles).l
 		bsr.w	SS_FixCamera
-		jmp	DisplaySprite
+		jmp	(DisplaySprite).l
 ; ---------------------------------------------------------------------------
 
 Obj09_Fall:

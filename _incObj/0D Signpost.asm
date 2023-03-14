@@ -38,7 +38,7 @@ loc_C752:
 		bcs.s	locret_C77A
 		cmpi.w	#$20,d0
 		bcc.s	locret_C77A
-		move.w	#$CF,d0
+		move.w	#sfx_Signpost,d0
 		jsr	(PlayMusic).l
 		clr.b	(f_timecount).w
 		move.w	(unk_FFF72A).w,(unk_FFF728).w
@@ -110,7 +110,7 @@ sub_C81C:
 		clr.b	(v_invinc).w
 		clr.b	(f_timecount).w
 		move.b	#$3A,(v_objspace+$600).w
-		moveq	#$10,d0
+		moveq	#plcid_TitleCard,d0
 		jsr	(plcReplace).l
 		move.b	#1,(byte_FFFE58).w
 		moveq	#0,d0
@@ -131,7 +131,7 @@ loc_C862:
 		move.w	(v_rings).w,d0
 		mulu.w	#$A,d0
 		move.w	d0,(word_FFFE56).w
-		move.w	#$8E,d0
+		move.w	#bgm_GotThrough,d0
 		jsr	(PlaySFX).l
 
 locret_C880:

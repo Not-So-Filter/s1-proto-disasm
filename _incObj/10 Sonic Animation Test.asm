@@ -22,7 +22,7 @@ loc_111D8:
 loc_11202:
 		bsr.w	sub_11210
 		bsr.w	Sonic_DynTiles
-		jmp	DisplaySprite
+		jmp	(DisplaySprite).l
 ; ---------------------------------------------------------------------------
 
 sub_11210:
@@ -71,9 +71,9 @@ loc_11264:
 		move.b	#0,ani(a0)
 
 loc_1127E:
-		jsr	Sonic_Animate
+		jsr	(Sonic_Animate).l
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_11286:
-		jmp	DeleteObject
+		jmp	(DeleteObject).l
