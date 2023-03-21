@@ -3,12 +3,12 @@ UltraDebugMappings:
 		lea	(v_objspace+$280).w,a1
 		move.w	#$33,d1
 
-loc_2F32:
+.loop:
 		move.b	#5,(a1)
 		move.w	(a0)+,8(a1)
 		move.w	(a0)+,$A(a1)
 		lea	$40(a1),a1
-		dbf	d1,loc_2F32
+		dbf	d1,.loop
 		rts
 ; ---------------------------------------------------------------------------
 

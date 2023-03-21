@@ -18,9 +18,9 @@ zBankRegister:	equ 6000h
 
 
 StartOfZ80:
-                di                      ; disable interrupts
-                di                      ; twice
-                di                      ; thrice
+                di					; disable interrupts
+                di					; twice
+                di					; thrice
                 ld      sp, z80_stack
                 xor     a
                 ld      (zDAC_Status), a

@@ -3,17 +3,17 @@
 Obj02:
 		moveq	#0,d0
 		move.b	act(a0),d0
-		move.w	off_4B90(pc,d0.w),d1
-		jmp	off_4B90(pc,d1.w)
+		move.w	Obj02_Index(pc,d0.w),d1
+		jmp	Obj02_Index(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_4B90:	dc.w loc_4B98-off_4B90, loc_4BC8-off_4B90
-		dc.w loc_4BEC-off_4B90, loc_4BEC-off_4B90
+Obj02_Index:	dc.w	Obj02_Main-Obj02_Index, Obj02_Display-Obj02_Index
+		dc.w	Obj02_Delete-Obj02_Index, Obj02_Delete-Obj02_Index
 ; ---------------------------------------------------------------------------
 
-loc_4B98:
+Obj02_Main:
 		addq.b	#2,act(a0)
-		move.w	#$200,xpos(a0)
+		move.w	#$200,xpos(a0)			; Fixed positions
 		move.w	#$60,ypos(a0)
 		move.l	#Map02,map(a0)
 		move.w	#$64F0,tile(a0)
@@ -21,24 +21,24 @@ loc_4B98:
 		move.b	#1,colprop(a0)
 		move.b	#3,prio(a0)
 
-loc_4BC8:
+Obj02_Display:
 		bsr.w	DisplaySprite
-		subq.b	#1,anidelay(a0)
-		bpl.s	locret_4BEA
-		move.b	#$10,anidelay(a0)
-		move.b	frame(a0),d0
-		addq.b	#1,d0
+		subq.b	#1,anidelay(a0)			; Decrement delay timer
+		bpl.s	.wait				; Branch if it's not 0
+		move.b	#$10,anidelay(a0)		; Set delay
+		move.b	frame(a0),d0			; Set frame to d0
+		addq.b	#1,d0				; Increment d0
 		cmpi.b	#2,d0
-		bcs.s	loc_4BE6
+		bcs.s	.dontrevert
 		moveq	#0,d0
 
-loc_4BE6:
-		move.b	d0,frame(a0)
+.dontrevert:
+		move.b	d0,frame(a0)			; Make the frame what d0 is
 
-locret_4BEA:
+.wait:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_4BEC:
+Obj02_Delete:
 		bsr.w	DeleteObject
 		rts

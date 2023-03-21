@@ -12,11 +12,11 @@ oscInit:
 		moveq	#$20,d1
 
 	.loop:
-		move.w	(a2)+,(a1)+	; copy baseline values to RAM
+		move.w	(a2)+,(a1)+			; copy baseline values to RAM
 		dbf	d1,.loop
 		rts
 ; ===========================================================================
-.baselines:	dc.w %0000000001111100	; oscillation direction bitfield
+.baselines:	dc.w %0000000001111100			; oscillation direction bitfield
 		dc.w $80, 0
 		dc.w $80, 0
 		dc.w $80, 0
@@ -44,20 +44,20 @@ oscUpdate:
 		bcc.s	.end
 		lea	(oscValues).w,a1
 		lea	(.settings).l,a2
-		move.w	(a1)+,d3	; get oscillation direction bitfield
+		move.w	(a1)+,d3			; get oscillation direction bitfield
 		moveq	#$F,d1
 
 .loop:
-		move.w	(a2)+,d2	; get frequency
-		move.w	(a2)+,d4	; get amplitude
-		btst	d1,d3		; check oscillation direction
-		bne.s	.down		; branch if 1
+		move.w	(a2)+,d2			; get frequency
+		move.w	(a2)+,d4			; get amplitude
+		btst	d1,d3				; check oscillation direction
+		bne.s	.down				; branch if 1
 
 	.up:
-		move.w	2(a1),d0	; get current rate
-		add.w	d2,d0		; add frequency
+		move.w	2(a1),d0			; get current rate
+		add.w	d2,d0				; add frequency
 		move.w	d0,2(a1)
-		add.w	d0,0(a1)	; add rate to value
+		add.w	d0,0(a1)			; add rate to value
 		cmp.b	0(a1),d4
 		bhi.s	.next
 		bset	d1,d3
@@ -80,7 +80,7 @@ oscUpdate:
 .end:
 		rts
 ; ===========================================================================
-.settings:	dc.w 2,	$10	; frequency, amplitude
+.settings:	dc.w 2,	$10				; frequency, amplitude
 		dc.w 2,	$18
 		dc.w 2,	$20
 		dc.w 2,	$30

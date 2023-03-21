@@ -7,16 +7,19 @@ Obj07:
 		jmp	off_4E42(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_4E42:	dc.w loc_4E4A-off_4E42, locret_4E4E-off_4E42, loc_4E50-off_4E42, loc_4E50-off_4E42
+off_4E42:	dc.w loc_4E4A-off_4E42
+		dc.w locret_4E4E-off_4E42
+		dc.w Obj07_Delete-off_4E42
+		dc.w Obj07_Delete-off_4E42
 ; ---------------------------------------------------------------------------
 
 loc_4E4A:
-		addq.b	#2,act(a0)
+		addq.b	#2,act(a0)			; The code was nulled out at some point.
 
 locret_4E4E:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_4E50:
+Obj07_Delete:
 		bsr.w	DeleteObject
 		rts

@@ -20,14 +20,14 @@ loc_11E78:
 		add.w	d0,d0
 		adda.w	(a2,d0.w),a2
 		move.w	(a2)+,d6
-		cmp.b	(byte_FFFE06).w,d6
+		cmp.b	(v_debugitem).w,d6
 		bhi.s	loc_11EA8
-		move.b	#0,(byte_FFFE06).w
+		move.b	#0,(v_debugitem).w
 
 loc_11EA8:
 		bsr.w	sub_11FCE
-		move.b	#$C,(byte_FFFE0A).w
-		move.b	#1,(byte_FFFE0B).w
+		move.b	#$C,(v_debugxspeed).w
+		move.b	#1,(v_debugyspeed).w
 
 loc_11EB8:
 		moveq	#0,d0
@@ -47,25 +47,25 @@ sub_11ED6:
 		bne.s	loc_11F0E
 		tst.b	(v_jpadhold1).w
 		bne.s	loc_11EF6
-		move.b	#$C,(byte_FFFE0A).w
-		move.b	#$F,(byte_FFFE0B).w
+		move.b	#$C,(v_debugxspeed).w
+		move.b	#$F,(v_debugyspeed).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_11EF6:
-		subq.b	#1,(byte_FFFE0A).w
+		subq.b	#1,(v_debugxspeed).w
 		bne.s	loc_11F12
-		move.b	#1,(byte_FFFE0A).w
-		addq.b	#1,(byte_FFFE0B).w
+		move.b	#1,(v_debugxspeed).w
+		addq.b	#1,(v_debugyspeed).w
 		bne.s	loc_11F0E
-		move.b	#$FF,(byte_FFFE0B).w
+		move.b	#$FF,(v_debugyspeed).w
 
 loc_11F0E:
 		move.b	(v_jpadhold1).w,d4
 
 loc_11F12:
 		moveq	#0,d1
-		move.b	(byte_FFFE0B).w,d1
+		move.b	(v_debugyspeed).w,d1
 		addq.w	#1,d1
 		swap	d1
 		asr.l	#4,d1
@@ -102,10 +102,10 @@ loc_11F5C:
 		move.l	d3,xpos(a0)
 		btst	#6,(v_jpadpress2).w
 		beq.s	loc_11F80
-		addq.b	#1,(byte_FFFE06).w
-		cmp.b	(byte_FFFE06).w,d6
+		addq.b	#1,(v_debugitem).w
+		cmp.b	(v_debugitem).w,d6
 		bhi.s	loc_11F7C
-		move.b	#0,(byte_FFFE06).w
+		move.b	#0,(v_debugitem).w
 
 loc_11F7C:
 		bra.w	sub_11FCE
@@ -139,7 +139,7 @@ locret_11FCC:
 
 sub_11FCE:
 		moveq	#0,d0
-		move.b	(byte_FFFE06).w,d0
+		move.b	(v_debugitem).w,d0
 		lsl.w	#3,d0
 		move.l	(a2,d0.w),map(a0)
 		move.w	6(a2,d0.w),tile(a0)

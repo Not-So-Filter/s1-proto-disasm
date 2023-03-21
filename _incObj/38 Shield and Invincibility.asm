@@ -56,7 +56,7 @@ ObjShield_Stars:
 		subq.b	#1,d1
 		bra.s	ObjShield_StarTrail
 ; ---------------------------------------------------------------------------
-		lsl.b	#4,d1			; Unused code in the final game as well
+		lsl.b	#4,d1				; Unused code in the final game as well
 		addq.b	#4,d1
 		sub.b	d1,d0
 		move.b	$30(a0),d1

@@ -7,21 +7,24 @@ Obj05:
 		jmp	off_4D3C(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_4D3C:	dc.w loc_4D44-off_4D3C, loc_4D62-off_4D3C, loc_4D68-off_4D3C, loc_4D68-off_4D3C
+off_4D3C:	dc.w Obj05_Main-off_4D3C
+		dc.w Obj05_Display-off_4D3C
+		dc.w Obj05_Delete-off_4D3C
+		dc.w Obj05_Delete-off_4D3C
 ; ---------------------------------------------------------------------------
 
-loc_4D44:
+Obj05_Main:
 		addq.b	#2,act(a0)
 		move.l	#Map05,map(a0)
 		move.w	#$84F0,tile(a0)
 		move.b	#0,render(a0)
 		move.b	#7,prio(a0)
 
-loc_4D62:
+Obj05_Display:
 		bsr.w	DisplaySprite
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_4D68:
+Obj05_Delete:
 		bsr.w	DeleteObject
 		rts

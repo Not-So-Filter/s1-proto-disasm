@@ -2,57 +2,57 @@
 
 ObSize = $40 ; size for each object variables
 
-v_256x256:	        equ  $FFFF0000  ; 256x256 tile mappings ($A400 bytes)
+v_256x256:	        equ  $FFFF0000			; 256x256 tile mappings ($A400 bytes)
 v_lvllayout:	        equ  $FFFFA400
 v_bgscroll_buffer:      equ  $FFFFA800
 v_ngfx_buffer:          equ  $FFFFAA00
 v_spritequeue:	        equ  $FFFFAC00
-v_16x16:	        equ  $FFFFB000  ; 16x16 tile mappings ($1800 bytes)
-v_sgfx_buffer:	        equ  $FFFFC800  ; sonic graphics ram buffer ($300 bytes)
-v_tracksonic:	        equ  $FFFFCB00  ; sonic position table ($100 bytes)
+v_16x16:	        equ  $FFFFB000			; 16x16 tile mappings ($1800 bytes)
+v_sgfx_buffer:	        equ  $FFFFC800			; sonic graphics ram buffer ($300 bytes)
+v_tracksonic:	        equ  $FFFFCB00			; sonic position table ($100 bytes)
 v_hscrolltablebuffer:   equ  $FFFFCC00
-v_objspace:	        equ  $FFFFD000  ; RAM for object space ($600 bytes)
-f_victory:	        equ  $FFFFD600  ; flag for victory animation
+v_objspace:	        equ  $FFFFD000			; RAM for object space ($600 bytes)
+f_victory:	        equ  $FFFFD600			; flag for victory animation
 LevelObjectsList:       equ  $FFFFD800
 
 ; $FFFFF000
-v_snddriver_ram:        equ  $FFFFF000  ; start of RAM for the sound driver data ($600 bytes)
+v_snddriver_ram:        equ  $FFFFF000			; start of RAM for the sound driver data ($600 bytes)
 
 ; =================================================================================
 ; From here on, until otherwise stated, all offsets are relative to v_snddriver_ram
 ; =================================================================================
 v_startofvariables:	equ $000
-v_sndprio:		equ $000	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
-v_main_tempo_timeout:	equ $001	; Counts down to zero; when zero, resets to next value and delays song by 1 frame
-v_main_tempo:		equ $002	; Used for music only
-f_pausemusic:		equ $003	; flag set to stop music when paused
+v_sndprio:		equ $000			; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
+v_main_tempo_timeout:	equ $001			; Counts down to zero; when zero, resets to next value and delays song by 1 frame
+v_main_tempo:		equ $002			; Used for music only
+f_pausemusic:		equ $003			; flag set to stop music when paused
 v_fadeout_counter:	equ $004
 
 v_fadeout_delay:	equ $006
-v_communication_byte:	equ $007	; used in Ristar to sync with a boss' attacks; unused here
-f_updating_dac:		equ $008	; $80 if updating DAC, $00 otherwise
-v_sound_id:		equ $009	; sound or music copied from below
-v_soundqueue0:		equ $00A	; sound or music to play
-v_soundqueue1:		equ $00B	; special sound to play
-v_soundqueue2:		equ $00C	; unused sound to play
+v_communication_byte:	equ $007			; used in Ristar to sync with a boss' attacks; unused here
+f_updating_dac:		equ $008			; $80 if updating DAC, $00 otherwise
+v_sound_id:		equ $009			; sound or music copied from below
+v_soundqueue0:		equ $00A			; sound or music to play
+v_soundqueue1:		equ $00B			; special sound to play
+v_soundqueue2:		equ $00C			; unused sound to play
 
-f_voice_selector:	equ $00E	; $00 = use music voice pointer; $40 = use special voice pointer; $80 = use track voice pointer
+f_voice_selector:	equ $00E			; $00 = use music voice pointer; $40 = use special voice pointer; $80 = use track voice pointer
 
-v_voice_ptr:		equ $018	; voice data pointer (4 bytes)
+v_voice_ptr:		equ $018			; voice data pointer (4 bytes)
 
-v_special_voice_ptr:	equ $020	; voice data pointer for special SFX ($D0-$DF) (4 bytes)
+v_special_voice_ptr:	equ $020			; voice data pointer for special SFX ($D0-$DF) (4 bytes)
 
-f_fadein_flag:		equ $024	; Flag for fade in
+f_fadein_flag:		equ $024			; Flag for fade in
 v_fadein_delay:		equ $025
-v_fadein_counter:	equ $026	; Timer for fade in/out
-f_1up_playing:		equ $027	; flag indicating 1-up song is playing
-v_tempo_mod:		equ $028	; music - tempo modifier
-v_speeduptempo:		equ $029	; music - tempo modifier with speed shoes
-f_speedup:		equ $02A	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
-v_ring_speaker:		equ $02B	; which speaker the "ring" sound is played in (00 = right; 01 = left)
-f_push_playing:		equ $02C	; if set, prevents further push sounds from playing
+v_fadein_counter:	equ $026			; Timer for fade in/out
+f_1up_playing:		equ $027			; flag indicating 1-up song is playing
+v_tempo_mod:		equ $028			; music - tempo modifier
+v_speeduptempo:		equ $029			; music - tempo modifier with speed shoes
+f_speedup:		equ $02A			; flag indicating whether speed shoes tempo is on ($80) or off ($00)
+v_ring_speaker:		equ $02B			; which speaker the "ring" sound is played in (00 = right; 01 = left)
+f_push_playing:		equ $02C			; if set, prevents further push sounds from playing
 
-v_music_track_ram:	equ $040	; Start of music RAM
+v_music_track_ram:	equ $040			; Start of music RAM
 
 v_music_fmdac_tracks:	equ v_music_track_ram+TrackSz*0
 v_music_dac_track:	equ v_music_fmdac_tracks+TrackSz*0
@@ -86,7 +86,7 @@ v_sfx_psg3_track:	equ v_sfx_psg_tracks+TrackSz*2
 v_sfx_psg_tracks_end:	equ v_sfx_psg_tracks+TrackSz*3
 v_sfx_track_ram_end:	equ v_sfx_psg_tracks_end
 
-v_spcsfx_track_ram:	equ v_sfx_track_ram_end	; Start of special SFX RAM, straight after the end of SFX RAM
+v_spcsfx_track_ram:	equ v_sfx_track_ram_end		; Start of special SFX RAM, straight after the end of SFX RAM
 
 v_spcsfx_fm4_track:	equ v_spcsfx_track_ram+TrackSz*0
 v_spcsfx_psg3_track:	equ v_spcsfx_track_ram+TrackSz*1
@@ -106,16 +106,16 @@ v_jpadpress1:	        equ  $FFFFF605
 v_vdp_buffer1:	        equ  $FFFFF60C
 v_demolength:	        equ  $FFFFF614
 v_scrposy_dup:	        equ  $FFFFF616
-v_bgscrposy_dup:	equ  $FFFFF618  ; background screen position y (duplicate) (2 bytes)
+v_bgscrposy_dup:	equ  $FFFFF618			; background screen position y (duplicate) (2 bytes)
 v_scrposx_dup:	        equ  $FFFFF61A
-v_bgscreenposx_dup:	equ  $FFFFF61C  ; background screen position x (duplicate) (2 bytes)
+v_bgscreenposx_dup:	equ  $FFFFF61C			; background screen position x (duplicate) (2 bytes)
 word_FFF61E:	        equ  $FFFFF61E
 word_FFF620:	        equ  $FFFFF620
 word_FFF622:	        equ  $FFFFF622
-v_hbla_hreg:	        equ  $FFFFF624  ; VDP H.interrupt register buffer (8Axx)
-v_hbla_line:	        equ  $FFFFF625  ; screen line where water starts and palette is changed by HBlank
-v_pfade_start:	        equ  $FFFFF626  ; palette fading - start position in bytes
-v_pfade_size:	        equ  $FFFFF627  ; palette fading - number of colours
+v_hbla_hreg:	        equ  $FFFFF624			; VDP H.interrupt register buffer (8Axx)
+v_hbla_line:	        equ  $FFFFF625			; screen line where water starts and palette is changed by HBlank
+v_pfade_start:	        equ  $FFFFF626			; palette fading - start position in bytes
+v_pfade_size:	        equ  $FFFFF627			; palette fading - number of colours
 byte_FFF628:	        equ  $FFFFF628
 byte_FFF629:	        equ  $FFFFF629
 VBlankRoutine:	        equ  $FFFFF62A
@@ -195,7 +195,7 @@ unk_FFF783:	        equ  $FFFFF783
 unk_FFF790:	        equ  $FFFFF790
 unk_FFF792:	        equ  $FFFFF792
 unk_FFF794:	        equ  $FFFFF794
-Collision:	        equ  $FFFFF796
+v_collindex:	        equ  $FFFFF796
 unk_FFF79A:	        equ  $FFFFF79A
 unk_FFF79C:	        equ  $FFFFF79C
 unk_FFF79E:	        equ  $FFFFF79E
@@ -223,15 +223,15 @@ v_spritetablebuffer:	equ  $FFFFF800
 v_pal_dry:	        equ  $FFFFFB00
 v_pal_dry_dup:	        equ  $FFFFFB80
 v_regbuffer:	        equ  $FFFFFC00
-v_spbuffer:	        equ  $FFFFFC40	; stores most recent sp address (4 bytes)
-v_errortype:	        equ  $FFFFFC44	; error type
+v_spbuffer:	        equ  $FFFFFC40			; stores most recent sp address (4 bytes)
+v_errortype:	        equ  $FFFFFC44			; error type
 v_systemstack:	        equ  $FFFFFE00
 LevelRestart:	        equ  $FFFFFE02
 LevelFrames:	        equ  $FFFFFE04
-byte_FFFE06:	        equ  $FFFFFE06
+v_debugitem:	        equ  $FFFFFE06
 DebugRoutine:	        equ  $FFFFFE08
-byte_FFFE0A:	        equ  $FFFFFE0A
-byte_FFFE0B:	        equ  $FFFFFE0B
+v_debugxspeed:	        equ  $FFFFFE0A
+v_debugyspeed:	        equ  $FFFFFE0B
 unk_FFFE0C:	        equ  $FFFFFE0C
 byte_FFFE0F:	        equ  $FFFFFE0F
 v_zone:	                equ  $FFFFFE10

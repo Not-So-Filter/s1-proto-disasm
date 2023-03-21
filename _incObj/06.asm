@@ -7,10 +7,13 @@ Obj06:
 		jmp	off_4DFC(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_4DFC:	dc.w loc_4E04-off_4DFC, loc_4E28-off_4DFC, loc_4E2E-off_4DFC, loc_4E2E-off_4DFC
+off_4DFC:	dc.w Obj06_Main-off_4DFC
+		dc.w Obj06_Display-off_4DFC
+		dc.w Obj06_Delete-off_4DFC
+		dc.w Obj06_Delete-off_4DFC
 ; ---------------------------------------------------------------------------
 
-loc_4E04:
+Obj06_Main:
 		addq.b	#2,act(a0)
 		move.w	#$A0,xpix(a0)
 		move.l	#Map05,map(a0)
@@ -18,11 +21,11 @@ loc_4E04:
 		move.b	#0,render(a0)
 		move.b	#7,prio(a0)
 
-loc_4E28:
+Obj06_Display:
 		bsr.w	DisplaySprite
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_4E2E:
+Obj06_Delete:
 		bsr.w	DeleteObject
 		rts

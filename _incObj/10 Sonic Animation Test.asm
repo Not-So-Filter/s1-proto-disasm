@@ -7,10 +7,10 @@ ObjAniTest:
 		jmp	off_111D0(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_111D0:	dc.w loc_111D8-off_111D0, loc_11202-off_111D0, loc_11286-off_111D0, loc_11286-off_111D0
+off_111D0:	dc.w ObjAniTest_Init-off_111D0, loc_11202-off_111D0, loc_11286-off_111D0, loc_11286-off_111D0
 ; ---------------------------------------------------------------------------
 
-loc_111D8:
+ObjAniTest_Init:
 		addq.b	#2,act(a0)
 		move.b	#$12,yrad(a0)
 		move.b	#9,xrad(a0)

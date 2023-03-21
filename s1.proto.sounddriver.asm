@@ -35,14 +35,14 @@ ModulationIndex:dc.b $D, 1, 7, 4, 1, 1, 1, 4, 2, 1, 2, 4, 8, 1, 6, 4
 ; ---------------------------------------------------------------------------
 ; New tempos for songs during speed shoes
 ; ---------------------------------------------------------------------------
-SpeedUpIndex:   dc.b 7		; GHZ
-		dc.b $72	; LZ
-		dc.b $73	; MZ
-		dc.b $26	; SLZ
-		dc.b $15	; SYZ
-		dc.b 8		; SBZ
-		dc.b $FF	; Invincibility
-		dc.b 5		; Extra Life
+SpeedUpIndex:   dc.b 7					; GHZ
+		dc.b $72				; LZ
+		dc.b $73				; MZ
+		dc.b $26				; SLZ
+		dc.b $15				; SYZ
+		dc.b 8					; SBZ
+		dc.b $FF				; Invincibility
+		dc.b 5					; Extra Life
 		; All songs after will use their music index pointer instead
 
 ; ---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ ptr_mus8D:	dc.l Music8D
 ptr_mus8E:	dc.l Music8E
 ptr_mus8F:	dc.l Music8F
 ptr_mus90:	dc.l Music90
-ptr_mus91:	dc.l Music91	; Note the lack of a pointer for music $92
+ptr_mus91:	dc.l Music91				; Note the lack of a pointer for music $92
 ptr_musend:
 ; ---------------------------------------------------------------------------
 ; Priority of sound. New music or SFX must have a priority higher than or equal
@@ -77,13 +77,13 @@ ptr_musend:
 ; ---------------------------------------------------------------------------
 ; SoundTypes:
 SoundPriorities:
-                dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80    ; $81
-		dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$70    ; $90
-		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70    ; $A0
-		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70    ; $B0
-		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$80    ; $C0
-		dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80    ; $D0
-		dc.b $80,$80,$80,$80,$80                                                ; $E0
+                dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80 ; $81
+		dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$70 ; $90
+		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70 ; $A0
+		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70 ; $B0
+		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$80 ; $C0
+		dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80 ; $D0
+		dc.b $80,$80,$80,$80,$80		; $E0
 		even
 ; ---------------------------------------------------------------------------
 ; Updates SMPS
@@ -334,14 +334,14 @@ TrackSetRest:
 ; ---------------------------------------------------------------------------
 
 dFinishTrack:
-		move.l	a4,TrackDataPointer(a5)	; Store new track position
-		move.b	TrackSavedDuration(a5),TrackDurationTimeout(a5)	; Reset note timeout
+		move.l	a4,TrackDataPointer(a5)		; Store new track position
+		move.b	TrackSavedDuration(a5),TrackDurationTimeout(a5) ; Reset note timeout
 		btst	#4,(a5)				; Is track set to not attack note? (TrackPlaybackControl)
-		bne.s	locret_74426   			; If so, branch
-		move.b	TrackNoteTimeoutMaster(a5),TrackNoteTimeout(a5)	; Reset note fill timeout
+		bne.s	locret_74426			; If so, branch
+		move.b	TrackNoteTimeoutMaster(a5),TrackNoteTimeout(a5) ; Reset note fill timeout
 		clr.b	TrackVolEnvIndex(a5)		; Reset PSG volume envelope index (even on FM tracks...)
 		btst	#3,(a5)				; Is modulation on? (TrackPlaybackControl)
-		beq.s	locret_74426   			; If not, return (TrackPlaybackControl)
+		beq.s	locret_74426			; If not, return (TrackPlaybackControl)
 		movea.l	TrackModulationPtr(a5),a0	; Modulation data pointer
 		move.b	(a0)+,TrackModulationWait(a5)	; Reset wait
 		move.b	(a0)+,TrackModulationSpeed(a5)	; Reset speed
@@ -1019,8 +1019,8 @@ dMusicChanTbl:
 		dc.l (v_snddriver_ram+v_music_fm5_track)&$FFFFFF
 		dc.l (v_snddriver_ram+v_music_psg1_track)&$FFFFFF
 		dc.l (v_snddriver_ram+v_music_psg2_track)&$FFFFFF
-		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF	; Plain PSG3
-		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF	; Noise
+		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF ; Plain PSG3
+		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF ; Noise
 
 dSFXChanTbl:
 		dc.l (v_snddriver_ram+v_sfx_fm3_track)&$FFFFFF
@@ -1029,8 +1029,8 @@ dSFXChanTbl:
 		dc.l (v_snddriver_ram+v_sfx_fm5_track)&$FFFFFF
 		dc.l (v_snddriver_ram+v_sfx_psg1_track)&$FFFFFF
 		dc.l (v_snddriver_ram+v_sfx_psg2_track)&$FFFFFF
-		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF	; Plain PSG3
-		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF	; Noise
+		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF ; Plain PSG3
+		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF ; Noise
 ; ---------------------------------------------------------------------------
 
 dPlaySnd_SpecSFX:
@@ -2517,8 +2517,8 @@ ptr_sndend:
 ; ---------------------------------------------------------------------------
 SpecSoundIndex:
 ptr_sndD0:	dc.l SoundD0
-ptr_sndD1:	dc.l SoundD1 ; leftover from Michael Jackson's Moonwalker
-ptr_sndD2:	dc.l SoundD2 ; leftover from Michael Jackson's Moonwalker
+ptr_sndD1:	dc.l SoundD1				; leftover from Michael Jackson's Moonwalker
+ptr_sndD2:	dc.l SoundD2				; leftover from Michael Jackson's Moonwalker
 ptr_specend:
 
 SoundA0:	incbin "sound/sfx/A0.ssf"

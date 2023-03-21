@@ -3,12 +3,12 @@ EarlyDebugMappings:
 		lea	(v_objspace+$400).w,a1
 		move.w	#$B,d1
 
-loc_2EDE:
+.loop:
 		move.b	#5,(a1)
 		move.w	(a0)+,8(a1)
 		move.w	(a0)+,$A(a1)
 		lea	$40(a1),a1
-		dbf	d1,loc_2EDE
+		dbf	d1,.loop
 		rts
 ; ---------------------------------------------------------------------------
 

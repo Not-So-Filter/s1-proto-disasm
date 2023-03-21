@@ -7,10 +7,13 @@ Obj04:
 		jmp	off_4CCC(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_4CCC:	dc.w loc_4CD4-off_4CCC, loc_4D04-off_4CCC, loc_4D28-off_4CCC, loc_4D28-off_4CCC
+off_4CCC:	dc.w Obj04_Main-off_4CCC
+		dc.w Obj04_Display-off_4CCC
+		dc.w Obj04_Delete-off_4CCC
+		dc.w Obj04_Delete-off_4CCC
 ; ---------------------------------------------------------------------------
 
-loc_4CD4:
+Obj04_Main:
 		addq.b	#2,act(a0)
 		move.w	#$40,ypos(a0)
 		move.l	#Map02,map(a0)
@@ -20,7 +23,7 @@ loc_4CD4:
 		move.b	#tile,frame(a0)
 		move.b	#3,prio(a0)
 
-loc_4D04:
+Obj04_Display:
 		bsr.w	DisplaySprite
 		subq.b	#1,anidelay(a0)
 		bpl.s	locret_4D26
@@ -38,6 +41,6 @@ locret_4D26:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_4D28:
+Obj04_Delete:
 		bsr.w	DeleteObject
 		rts
