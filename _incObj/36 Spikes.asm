@@ -2,7 +2,7 @@
 
 ObjSpikes:
 		moveq	#0,d0
-		move.b	act(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_AB0A(pc,d0.w),d1
 		jmp	off_AB0A(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -18,28 +18,28 @@ byte_AB0E:	dc.b 0, $14
 ; ---------------------------------------------------------------------------
 
 loc_AB1A:
-		addq.b	#tile,act(a0)
-		move.l	#MapSpikes,map(a0)
-		move.w	#$51B,tile(a0)
-		ori.b	#4,render(a0)
-		move.b	#4,prio(a0)
-		move.b	arg(a0),d0
-		andi.b	#$F,arg(a0)
+		addq.b	#2,obRoutine(a0)
+		move.l	#MapSpikes,obMap(a0)
+		move.w	#$51B,obGfx(a0)
+		ori.b	#4,obRender(a0)
+		move.b	#4,obPriority(a0)
+		move.b	obSubtype(a0),d0
+		andi.b	#$F,obSubtype(a0)
 		andi.w	#$F0,d0
 		lea	(byte_AB0E).l,a1
 		lsr.w	#3,d0
 		adda.w	d0,a1
-		move.b	(a1)+,frame(a0)
-		move.b	(a1)+,xdisp(a0)
-		move.w	xpos(a0),$30(a0)
-		move.w	ypos(a0),$32(a0)
+		move.b	(a1)+,obFrame(a0)
+		move.b	(a1)+,obActWid(a0)
+		move.w	obX(a0),$30(a0)
+		move.w	obY(a0),$32(a0)
 
 loc_AB64:
 		bsr.w	sub_AC02
 		move.w	#4,d2
-		cmpi.b	#5,frame(a0)
+		cmpi.b	#5,obFrame(a0)
 		beq.s	loc_AB80
-		cmpi.b	#1,frame(a0)
+		cmpi.b	#1,obFrame(a0)
 		bne.s	loc_AB9E
 		move.w	#$14,d2
 
@@ -47,9 +47,9 @@ loc_AB80:
 		move.w	#$1B,d1
 		move.w	d2,d3
 		subq.w	#2,d3
-		move.w	xpos(a0),d4
+		move.w	obX(a0),d4
 		bsr.w	SolidObject
-		tst.b	subact(a0)
+		tst.b	ob2ndRout(a0)
 		bne.s	loc_ABDE
 		cmpi.w	#1,d4
 		beq.s	loc_ABBE
@@ -58,13 +58,13 @@ loc_AB80:
 
 loc_AB9E:
 		moveq	#0,d1
-		move.b	xdisp(a0),d1
+		move.b	obActWid(a0),d1
 		addi.w	#$B,d1
 		move.w	#$10,d2
 		bsr.w	sub_6936
 		tst.w	d4
 		bpl.s	loc_ABDE
-		tst.w	yvel(a1)
+		tst.w	obVelY(a1)
 		beq.s	loc_ABDE
 		tst.w	d3
 		bmi.s	loc_ABDE
@@ -73,12 +73,12 @@ loc_ABBE:
 		move.l	a0,-(sp)
 		movea.l	a0,a2
 		lea	(v_objspace).w,a0
-		move.l	ypos(a0),d3
-		move.w	yvel(a0),d0
+		move.l	obY(a0),d3
+		move.w	obVelY(a0),d0
 		ext.l	d0
 		asl.l	#8,d0
 		sub.l	d0,d3
-		move.l	d3,ypos(a0)
+		move.l	d3,obY(a0)
 		bsr.w	loc_FCF4
 		movea.l	(sp)+,a0
 
@@ -97,7 +97,7 @@ loc_ABDE:
 
 sub_AC02:
 		moveq	#0,d0
-		move.b	arg(a0),d0
+		move.b	obSubtype(a0),d0
 		add.w	d0,d0
 		move.w	off_AC12(pc,d0.w),d1
 		jmp	off_AC12(pc,d1.w)
@@ -116,7 +116,7 @@ loc_AC1A:
 		moveq	#0,d0
 		move.b	$34(a0),d0
 		add.w	$32(a0),d0
-		move.w	d0,ypos(a0)
+		move.w	d0,obY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ loc_AC2E:
 		moveq	#0,d0
 		move.b	$34(a0),d0
 		add.w	$30(a0),d0
-		move.w	d0,xpos(a0)
+		move.w	d0,obX(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -134,9 +134,9 @@ sub_AC42:
 		beq.s	loc_AC60
 		subq.w	#1,$38(a0)
 		bne.s	locret_ACA2
-		tst.b	render(a0)
+		tst.b	obRender(a0)
 		bpl.s	locret_ACA2
-		move.w	#$B6,d0
+		move.w	#sfx_SpikesMove,d0
 		jsr	(PlaySFX).l
 		bra.s	locret_ACA2
 ; ---------------------------------------------------------------------------

@@ -77,12 +77,12 @@ loc_BB4A:
 		move.b	#2,$24(a1)
 		bclr	#3,$22(a0)
 		clr.b	$25(a0)
-		move.w	#$CC,d0
+		move.w	#sfx_Spring,d0
 		jsr	(PlaySFX).l
 
 loc_BB84:
 		lea	(AniSpring).l,a1
-		bra.w	ObjectAnimate
+		bra.w	AnimateSprite
 ; ---------------------------------------------------------------------------
 
 sub_BB8E:
@@ -127,12 +127,12 @@ loc_BBE6:
 loc_BC06:
 		bclr	#5,$22(a0)
 		bclr	#5,$22(a1)
-		move.w	#$CC,d0
+		move.w	#sfx_Spring,d0
 		jsr	(PlaySFX).l
 
 loc_BC1C:
 		lea	(AniSpring).l,a1
-		bra.w	ObjectAnimate
+		bra.w	AnimateSprite
 ; ---------------------------------------------------------------------------
 
 sub_BC26:
@@ -171,12 +171,12 @@ loc_BC60:
 		move.b	#2,$24(a1)
 		bclr	#3,$22(a0)
 		clr.b	$25(a0)
-		move.w	#$CC,d0
+		move.w	#sfx_Spring,d0
 		jsr	(PlaySFX).l
 
 loc_BC98:
 		lea	(AniSpring).l,a1
-		bra.w	ObjectAnimate
+		bra.w	AnimateSprite
 ; ---------------------------------------------------------------------------
 
 loc_BCA2:

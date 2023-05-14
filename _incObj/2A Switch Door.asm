@@ -1,0 +1,53 @@
+; ---------------------------------------------------------------------------
+
+Obj2A:
+		moveq	#0,d0
+		move.b	$24(a0),d0
+		move.w	off_689E(pc,d0.w),d1
+		jmp	off_689E(pc,d1.w)
+; ---------------------------------------------------------------------------
+
+off_689E:	dc.w loc_68A4-off_689E, loc_68F0-off_689E, loc_6912-off_689E
+; ---------------------------------------------------------------------------
+
+loc_68A4:
+		addq.b	#2,$24(a0)
+		move.l	#Map2A,obMap(a0)
+		move.w	#0,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.w	obY(a0),d0
+		subi.w	#$20,d0
+		move.w	d0,$30(a0)
+		move.b	#$B,obActWid(a0)
+		move.b	#5,obPriority(a0)
+		tst.b	obSubtype(a0)
+		beq.s	loc_68F0
+		move.b	#1,obFrame(a0)
+		move.w	#$4000,obGfx(a0)
+		move.b	#4,obPriority(a0)
+		addq.b	#2,$24(a0)
+
+loc_68F0:
+		tst.w	(unk_FFF7E0).w
+		beq.s	loc_6906
+		subq.w	#1,obY(a0)
+		move.w	$30(a0),d0
+		cmp.w	obY(a0),d0
+		beq.w	DeleteObject
+
+loc_6906:
+		move.w	#$16,d1
+		move.w	#$10,d2
+		bsr.w	sub_6936
+
+loc_6912:
+		bsr.w	DisplaySprite
+		move.w	obX(a0),d0
+		andi.w	#$FF80,d0
+		move.w	(v_screenposx).w,d1
+		subi.w	#$80,d1
+		andi.w	#$FF80,d1
+		sub.w	d1,d0
+		cmpi.w	#640,d0
+		bhi.w	DeleteObject
+		rts

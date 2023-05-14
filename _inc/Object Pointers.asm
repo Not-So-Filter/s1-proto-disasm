@@ -76,7 +76,7 @@
                 dc.l ObjWaterfallSnd			; 49
 		dc.l ObjEntryRingBeta			; 4A
                 dc.l Obj4B				; 4B
-                dc.l ObjLavafallMalker			; 4C
+                dc.l ObjLavafallMaker			; 4C
                 dc.l ObjLavafall			; 4D
 		dc.l ObjLavaChase			; 4E
                 dc.l Obj4F				; 4F

@@ -1,5 +1,5 @@
-ObjectChkDespawn:
-		move.w	8(a0),d0
+RememberState:
+		move.w	obX(a0),d0
 		andi.w	#$FF80,d0
 		move.w	(v_screenposx).w,d1
 		subi.w	#$80,d1
@@ -14,7 +14,7 @@ ObjectChkDespawn:
 loc_B938:
 		lea	(v_regbuffer).w,a2
 		moveq	#0,d0
-		move.b	$23(a0),d0
+		move.b	obRespawnNo(a0),d0
 		beq.s	loc_B94A
 		bclr	#7,2(a2,d0.w)
 

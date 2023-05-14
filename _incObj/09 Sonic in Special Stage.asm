@@ -19,7 +19,7 @@ Obj09_Main:
 		move.b	#$E,$16(a0)
 		move.b	#7,$17(a0)
 		move.l	#MapSonic,4(a0)
-		move.w	#$780,2(a0)
+		move.w	#$780,obGfx(a0)
 		move.b	#4,1(a0)
 		move.b	#0,$19(a0)
 		move.b	#2,$1C(a0)

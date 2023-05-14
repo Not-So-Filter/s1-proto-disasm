@@ -2,13 +2,13 @@
 
 ObjSignpost:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_C726(pc,d0.w),d1
 		jsr	off_C726(pc,d1.w)
 		lea	(AniSignpost).l,a1
-		bsr.w	ObjectAnimate
+		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
-		move.w	8(a0),d0
+		move.w	obX(a0),d0
 		andi.w	#$FF80,d0
 		move.w	(v_screenposx).w,d1
 		subi.w	#$80,d1
@@ -25,16 +25,16 @@ off_C726:	dc.w loc_C72E-off_C726
 ; ---------------------------------------------------------------------------
 
 loc_C72E:
-		addq.b	#2,$24(a0)
-		move.l	#MapSignpost,4(a0)
-		move.w	#$680,2(a0)
-		move.b	#4,1(a0)
-		move.b	#$18,$18(a0)
-		move.b	#4,$19(a0)
+		addq.b	#2,obRoutine(a0)
+		move.l	#MapSignpost,obMap(a0)
+		move.w	#$680,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#$18,obActWid(a0)
+		move.b	#4,obPriority(a0)
 
 loc_C752:
-		move.w	(v_objspace+8).w,d0
-		sub.w	8(a0),d0
+		move.w	(v_objspace+obX).w,d0
+		sub.w	obX(a0),d0
 		bcs.s	locret_C77A
 		cmpi.w	#$20,d0
 		bcc.s	locret_C77A
@@ -42,7 +42,7 @@ loc_C752:
 		jsr	(PlayMusic).l
 		clr.b	(f_timecount).w
 		move.w	(unk_FFF72A).w,(unk_FFF728).w
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 
 locret_C77A:
 		rts
@@ -55,7 +55,7 @@ loc_C77C:
 		addq.b	#1,$1C(a0)
 		cmpi.b	#3,$1C(a0)
 		bne.s	loc_C798
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 
 loc_C798:
 		subq.w	#1,$32(a0)
@@ -69,20 +69,20 @@ loc_C798:
 		bsr.w	ObjectLoad
 		bne.s	locret_C802
 		move.b	#$25,0(a1)
-		move.b	#6,$24(a1)
+		move.b	#6,obRoutine(a1)
 		move.b	(a2)+,d0
 		ext.w	d0
-		add.w	8(a0),d0
-		move.w	d0,8(a1)
+		add.w	obX(a0),d0
+		move.w	d0,obX(a1)
 		move.b	(a2)+,d0
 		ext.w	d0
-		add.w	$C(a0),d0
-		move.w	d0,$C(a1)
-		move.l	#MapRing,4(a1)
-		move.w	#$27B2,2(a1)
-		move.b	#4,1(a1)
-		move.b	#2,$19(a1)
-		move.b	#8,$18(a1)
+		add.w	obY(a0),d0
+		move.w	d0,obY(a1)
+		move.l	#MapRing,obMap(a1)
+		move.w	#$27B2,obGfx(a1)
+		move.b	#4,obRender(a1)
+		move.b	#2,obPriority(a1)
+		move.b	#8,obActWid(a1)
 
 locret_C802:
 		rts

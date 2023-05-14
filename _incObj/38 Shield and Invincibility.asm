@@ -37,7 +37,7 @@ ObjShield_Shield:
 		move.w	(v_objspace+$C).w,$C(a0)
 		move.b	(v_objspace+$22).w,$22(a0)
 		lea	(AniShield).l,a1
-		jsr	(ObjectAnimate).l
+		jsr	(AnimateSprite).l
 		bsr.w	DisplaySprite
 
 locret_F7C0:
@@ -91,7 +91,7 @@ ObjShield_StarTrail2a:
 		move.w	(a1)+,$C(a0)
 		move.b	(v_objspace+$22).w,$22(a0)
 		lea	(AniShield).l,a1
-		jsr	(ObjectAnimate).l
+		jsr	(AnimateSprite).l
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 

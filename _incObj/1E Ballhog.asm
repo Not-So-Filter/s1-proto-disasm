@@ -37,8 +37,8 @@ loc_6F96:
 		move.w	off_6FB2(pc,d0.w),d1
 		jsr	off_6FB2(pc,d1.w)
 		lea	(AniBallhog).l,a1
-		bsr.w	ObjectAnimate
-		bra.w	ObjectChkDespawn
+		bsr.w	AnimateSprite
+		bra.w	RememberState
 ; ---------------------------------------------------------------------------
 
 off_6FB2:	dc.w loc_6FB6-off_6FB2, loc_701C-off_6FB2
@@ -87,7 +87,7 @@ loc_701C:
 		subq.w	#1,$30(a0)
 		bmi.s	loc_7032
 		bsr.w	SpeedToPos
-		jsr	ObjectHitFloor
+		jsr	(ObjectHitFloor).l
 		add.w	d1,$C(a0)
 		rts
 ; ---------------------------------------------------------------------------

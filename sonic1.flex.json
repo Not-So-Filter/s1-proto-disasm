@@ -1,34 +1,32 @@
 {
     "Flex": 2,
-    "name": "Sonic 1",
-    "node": "4d50d5df-3ff1-4200-a067-8beab9398e26",
+    "name": "",
+    "node": "f90e0e0e-748d-4fb1-bb0c-ae0496f521ee",
     "objects": [
         {
-            "uuid": "4d50d5df-3ff1-4200-a067-8beab9398e26",
             "format": "Sonic 1.js",
-            "name": "object",
-            "palettes": [],
+            "name": "Sonic Object",
+            "palettes": [
+                {
+                    "path": "palette\\Sonic.bin",
+                    "length": 1
+                }
+            ],
             "art": {
-                "path": "",
-                "compression": "Nemesis",
+                "path": "artunc\\Sonic.bin",
+                "compression": "Uncompressed",
                 "offset": 0
             },
             "mappings": {
-                "path": "",
+                "path": "_maps\\Sonic.asm",
                 "label": ""
             },
             "dplcs": {
-                "enabled": false,
-                "path": "",
+                "enabled": true,
+                "path": "_maps\\Sonic - Dynamic Gfx Script.asm",
                 "label": ""
-            }
-        },
-        {
-            "name": "Common",
-            "children": [],
-            "isDirectory": true,
-            "expanded": true,
-            "uuid": "14da472a-b9f3-4355-a6ce-e3a83fd70d6d"
+            },
+            "uuid": "f90e0e0e-748d-4fb1-bb0c-ae0496f521ee"
         }
     ]
 }

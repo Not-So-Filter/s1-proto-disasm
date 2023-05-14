@@ -45,7 +45,7 @@ loc_B8FA:
 		move.w	off_B94E(pc,d0.w),d1
 		jsr	off_B94E(pc,d1.w)
 		lea	(AniMotobug).l,a1
-		bsr.w	ObjectAnimate
+		bsr.w	AnimateSprite
 		
 		include "_incObj\sub RememberState.asm"
 ; ---------------------------------------------------------------------------
@@ -100,7 +100,7 @@ loc_B9C0:
 
 loc_B9D8:
 		lea	(AniMotobug).l,a1
-		bsr.w	ObjectAnimate
+		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 

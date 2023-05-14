@@ -11,6 +11,7 @@ v_16x16:	        equ  $FFFFB000			; 16x16 tile mappings ($1800 bytes)
 v_sgfx_buffer:	        equ  $FFFFC800			; sonic graphics ram buffer ($300 bytes)
 v_tracksonic:	        equ  $FFFFCB00			; sonic position table ($100 bytes)
 v_hscrolltablebuffer:   equ  $FFFFCC00
+v_player:	        equ  $FFFFD000
 v_objspace:	        equ  $FFFFD000			; RAM for object space ($600 bytes)
 f_victory:	        equ  $FFFFD600			; flag for victory animation
 LevelObjectsList:       equ  $FFFFD800
@@ -118,21 +119,21 @@ v_pfade_start:	        equ  $FFFFF626			; palette fading - start position in byt
 v_pfade_size:	        equ  $FFFFF627			; palette fading - number of colours
 byte_FFF628:	        equ  $FFFFF628
 byte_FFF629:	        equ  $FFFFF629
-VBlankRoutine:	        equ  $FFFFF62A
+v_vbla_routine:	        equ  $FFFFF62A
 byte_FFF62C:	        equ  $FFFFF62C
 word_FFF632:	        equ  $FFFFF632
 word_FFF634:	        equ  $FFFFF634
 RandomSeed:	        equ  $FFFFF636
 f_pause:	        equ  $FFFFF63A
 v_vdp_buffer2:	        equ  $FFFFF644
-word_FFF648:	        equ  $FFFFF648
+f_hblank:	        equ  $FFFFF648
 f_water:	        equ  $FFFFF64C
 word_FFF660:	        equ  $FFFFF660
 word_FFF662:	        equ  $FFFFF662
 word_FFF666:	        equ  $FFFFF666
 LevSelOption:	        equ  $FFFFF668
 LevSelSound:	        equ  $FFFFF66A
-plcList:	        equ  $FFFFF680
+v_plc_buffer:	        equ  $FFFFF680
 unk_FFF6E0:	        equ  $FFFFF6E0
 unk_FFF6E4:	        equ  $FFFFF6E4
 unk_FFF6E8:	        equ  $FFFFF6E8
@@ -179,7 +180,7 @@ unk_FFF75C:	        equ  $FFFFF75C
 unk_FFF760:	        equ  $FFFFF760
 unk_FFF762:	        equ  $FFFFF762
 unk_FFF764:	        equ  $FFFFF764
-unk_FFF766:	        equ  $FFFFF766
+v_sonframenum:	        equ  $FFFFF766	; frame to display for Sonic
 f_sonframechg:	        equ  $FFFFF767
 unk_FFF768:	        equ  $FFFFF768
 unk_FFF76A:	        equ  $FFFFF76A
@@ -269,4 +270,4 @@ DemoMode:	        equ  $FFFFFFF0
 DemoNum:	        equ  $FFFFFFF2
 v_megadrive:	        equ  $FFFFFFF8
 f_debugmode:	        equ  $FFFFFFFA
-ChecksumStr:	        equ  $FFFFFFFC
+v_init:	             	equ  $FFFFFFFC	; 'init' text string (4 bytes)

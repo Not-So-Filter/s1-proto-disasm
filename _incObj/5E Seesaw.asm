@@ -5,7 +5,7 @@ ObjSeeSaw:
 		move.b	$24(a0),d0
 		move.w	off_E6B0(pc,d0.w),d1
 		jsr	off_E6B0(pc,d1.w)
-		bra.w	ObjectChkDespawn
+		bra.w	RememberState
 ; ---------------------------------------------------------------------------
 
 off_E6B0:	dc.w loc_E6B6-off_E6B0, loc_E6DA-off_E6B0, loc_E706-off_E6B0
@@ -14,7 +14,7 @@ off_E6B0:	dc.w loc_E6B6-off_E6B0, loc_E6DA-off_E6B0, loc_E706-off_E6B0
 loc_E6B6:
 		addq.b	#2,$24(a0)
 		move.l	#MapSeesaw,4(a0)
-		move.w	#$374,2(a0)
+		move.w	#$374,obGfx(a0)
 		ori.b	#4,1(a0)
 		move.b	#4,$19(a0)
 		move.b	#$30,$18(a0)

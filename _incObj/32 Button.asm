@@ -58,7 +58,7 @@ loc_9DF4:
 loc_9DFE:
 		tst.b	(a3)
 		bne.s	loc_9E0C
-		move.w	#$CD,d0
+		move.w	#sfx_Switch,d0
 		jsr	(PlaySFX).l
 
 loc_9E0C:

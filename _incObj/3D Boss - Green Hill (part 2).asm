@@ -132,7 +132,7 @@ loc_B2FC:
 		move.w	$C(a1),$C(a0)
 		move.b	$22(a1),$22(a0)
 		lea	(AniGHZBoss).l,a1
-		bsr.w	ObjectAnimate
+		bsr.w	AnimateSprite
 		move.b	$22(a0),d0
 		andi.b	#3,d0
 		andi.b	#$FC,1(a0)

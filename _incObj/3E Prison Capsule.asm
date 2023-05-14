@@ -79,7 +79,7 @@ loc_B710:
 		move.w	8(a0),d4
 		bsr.w	SolidObject
 		lea	(AniCapsule).l,a1
-		bsr.w	ObjectAnimate
+		bsr.w	AnimateSprite
 		move.w	$30(a0),$C(a0)
 		tst.b	$25(a0)
 		beq.s	locret_B75E

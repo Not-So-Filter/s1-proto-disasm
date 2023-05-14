@@ -51,7 +51,7 @@ loc_B07C:
 		move.w	off_B0AA(pc,d0.w),d1
 		jsr	off_B0AA(pc,d1.w)
 		lea	(AniGHZBoss).l,a1
-		bsr.w	ObjectAnimate
+		bsr.w	AnimateSprite
 		move.b	$22(a0),d0
 		andi.b	#3,d0
 

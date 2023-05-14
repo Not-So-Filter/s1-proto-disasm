@@ -2,7 +2,7 @@
 
 ObjBridge:
 		moveq	#0,d0
-		move.b	act(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_4E64(pc,d0.w),d1
 		jmp	off_4E64(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -12,16 +12,16 @@ off_4E64:	dc.w ObjBridge_Init-off_4E64, loc_4F32-off_4E64, loc_50B2-off_4E64, Ob
 ; ---------------------------------------------------------------------------
 
 ObjBridge_Init:
-		addq.b	#2,act(a0)
-		move.l	#MapBridge,map(a0)
-		move.w	#$438E,tile(a0)
-		move.b	#4,render(a0)
-		move.b	#3,$19(a0)
-		move.b	#$80,xdisp(a0)
-		move.w	ypos(a0),d2
-		move.w	xpos(a0),d3
-		move.b	id(a0),d4
-		lea	arg(a0),a2
+		addq.b	#2,obRoutine(a0)
+		move.l	#MapBridge,obMap(a0)
+		move.w	#$438E,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#3,obPriority(a0)
+		move.b	#$80,obActWid(a0)
+		move.w	obY(a0),d2
+		move.w	obX(a0),d3
+		move.b	0(a0),d4
+		lea	obSubtype(a0),a2
 		moveq	#0,d1
 		move.b	(a2),d1
 		move.b	#0,(a2)+
@@ -35,18 +35,18 @@ ObjBridge_Init:
 ObjBridge_MakeLog:
 		bsr.w	ObjectLoad
 		bne.s	loc_4F32
-		addq.b	#1,arg(a0)
-		cmp.w	xpos(a0),d3
+		addq.b	#1,obSubtype(a0)
+		cmp.w	obX(a0),d3
 		bne.s	loc_4EE6
 		addi.w	#$10,d3
-		move.w	d2,ypos(a0)
+		move.w	d2,obY(a0)
 		move.w	d2,$3C(a0)
 		move.w	a0,d5
 		subi.w	#v_objspace,d5
 		lsr.w	#6,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
-		addq.b	#1,arg(a0)
+		addq.b	#1,obSubtype(a0)
 
 loc_4EE6:
 		move.w	a1,d5
@@ -54,16 +54,16 @@ loc_4EE6:
 		lsr.w	#6,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
-		move.b	#$A,act(a1)
-		move.b	d4,id(a1)
-		move.w	d2,ypos(a1)
+		move.b	#$A,obRoutine(a1)
+		move.b	d4,0(a1)
+		move.w	d2,obY(a1)
 		move.w	d2,$3C(a1)
-		move.w	d3,xpos(a1)
-		move.l	#MapBridge,map(a1)
-		move.w	#$438E,tile(a1)
-		move.b	#4,render(a1)
-		move.b	#3,prio(a1)
-		move.b	#8,xdisp(a1)
+		move.w	d3,obX(a1)
+		move.l	#MapBridge,obMap(a1)
+		move.w	#$438E,obGfx(a1)
+		move.b	#4,obRender(a1)
+		move.b	#3,obPriority(a1)
+		move.b	#8,obActWid(a1)
 		addi.w	#$10,d3
 		dbf	d1,ObjBridge_MakeLog
 

@@ -1,58 +1,95 @@
-; enum object, width 64 bytes
-id		equ 0
-render		equ 1
-tile		equ 2
-map		equ 4
-xpos		equ 8
-xpix		equ $A
-ypos		equ $C
-ypix		equ $E
-xvel		equ $10
-yvel		equ $12
-yrad		equ $16
-xrad		equ $17
-xdisp		equ $18
-prio		equ $19
-frame		equ $1A
-anipos		equ $1B
-ani		equ $1C
-anilast		equ $1D
-anidelay	equ $1E
-col		equ $20
-colprop		equ $21
-status		equ $22
-respawn		equ $23
-act		equ $24
-subact		equ $25
-angle		equ $26
-arg		equ $28
-size		equ $40
+; VRAM data
+vram_fg:	equ $C000	; foreground namespace
+vram_bg:	equ $E000	; background namespace
+vram_sonic:	equ $F000	; Sonic graphics
+vram_sprites:	equ $F800	; sprite table
+vram_hscroll:	equ $FC00	; horizontal scroll table
+
+; Game modes
+id_Sega:	equ ptr_GM_Sega-GameModeArray	; $00
+id_Title:	equ ptr_GM_Title-GameModeArray	; $04
+id_Demo:	equ ptr_GM_Demo-GameModeArray	; $08
+id_Level:	equ ptr_GM_Level-GameModeArray	; $0C
+id_Special:	equ ptr_GM_Special-GameModeArray; $10
+
+; Levels
+id_GHZ:		equ 0
+id_LZ:		equ 1
+id_MZ:		equ 2
+id_SLZ:		equ 3
+id_SZ:		equ 4
+id_CWZ:		equ 5
+id_Lvl06:	equ 6
+id_SS:		equ 7
+
+; Colours
+cBlack:		equ $000		; colour black
+cWhite:		equ $EEE		; colour white
+cBlue:		equ $E00		; colour blue
+cGreen:		equ $0E0		; colour green
+cRed:		equ $00E		; colour red
+cYellow:	equ cGreen+cRed		; colour yellow
+cAqua:		equ cGreen+cBlue	; colour aqua
+cMagenta:	equ cBlue+cRed		; colour magenta
+
+; Joypad input
+btnStart:	equ %10000000 ; Start button	($80)
+btnA:		equ %01000000 ; A		($40)
+btnC:		equ %00100000 ; C		($20)
+btnB:		equ %00010000 ; B		($10)
+btnR:		equ %00001000 ; Right		($08)
+btnL:		equ %00000100 ; Left		($04)
+btnDn:		equ %00000010 ; Down		($02)
+btnUp:		equ %00000001 ; Up		($01)
+btnDir:		equ %00001111 ; Any direction	($0F)
+btnABC:		equ %01110000 ; A, B or C	($70)
+bitStart:	equ 7
+bitA:		equ 6
+bitC:		equ 5
+bitB:		equ 4
+bitR:		equ 3
+bitL:		equ 2
+bitDn:		equ 1
+bitUp:		equ 0
+
+; Object variables
+obRender:	equ 1	; bitfield for x/y flip, display mode
+obGfx:		equ 2	; palette line & VRAM setting (2 bytes)
+obMap:		equ 4	; mappings address (4 bytes)
+obX:		equ 8	; x-axis position (2-4 bytes)
+obScreenY:	equ $A	; y-axis position for screen-fixed items (2 bytes)
+obY:		equ $C	; y-axis position (2-4 bytes)
+obScreenX:	equ $E	; x-axis position for screen-fixed items (2 bytes)
+obVelX:		equ $10	; x-axis velocity (2 bytes)
+obVelY:		equ $12	; y-axis velocity (2 bytes)
+obInertia:	equ $14	; potential speed (2 bytes)
+obHeight:	equ $16	; height/2
+obWidth:	equ $17	; width/2
+obActWid:	equ $18	; action width
+obPriority:	equ $19	; sprite stack priority -- 0 is front
+obFrame:	equ $1A	; current frame displayed
+obAniFrame:	equ $1B	; current frame in animation script
+obAnim:		equ $1C	; current animation
+obNextAni:	equ $1D	; next animation
+obTimeFrame:	equ $1E	; time to next frame
+obDelayAni:	equ $1F	; time to delay animation
+obColType:	equ $20	; collision response type
+obColProp:	equ $21	; collision extra property
+obStatus:	equ $22	; orientation or mode
+obRespawnNo:	equ $23	; respawn list index number
+obRoutine:	equ $24	; routine number
+ob2ndRout:	equ $25	; secondary routine number
+obAngle:	equ $26	; angle
+obSubtype:	equ $28	; object subtype
+obSolid:	equ ob2ndRout ; solid status flag
+
+; Object variables used by Sonic
+flashtime:	equ $30	; time between flashes after getting hit
+invtime:	equ $32	; time left for invincibility
+shoetime:	equ $34	; time left for speed shoes
+standonobject:	equ $3D	; object Sonic stands on
 
 ; ---------------------------------------------------------------------------
-
-; enum player, width 64 bytes
-inertia		equ $14
-air		equ $20
-invulnerable	equ $30
-invincible	equ $32
-speedshoes	equ $34
-sensorfront	equ $36
-sensorback	equ $37
-convex		equ $38
-jumping		equ $3C
-platform	equ $3D
-lock		equ $3E
-
-; ---------------------------------------------------------------------------
-
-; Taken from plutiedev.com for some convience
-VRAM_ADDR_CMD:  equ $40000000
-CRAM_ADDR_CMD:  equ $C0000000
-VSRAM_ADDR_CMD: equ $40000010
-
-VRAM_DMA_CMD:   equ $40000080
-CRAM_DMA_CMD:   equ $C0000080
-VSRAM_DMA_CMD:  equ $40000090
 
 ; VDP addressses
 vdp_data_port:		equ $C00000

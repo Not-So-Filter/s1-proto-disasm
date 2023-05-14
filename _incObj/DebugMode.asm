@@ -12,8 +12,8 @@ off_11E74:	dc.w loc_11E78-off_11E74, loc_11EB8-off_11E74
 
 loc_11E78:
 		addq.b	#2,(DebugRoutine).w
-		move.b	#0,frame(a0)
-		move.b	#0,ani(a0)
+		move.b	#0,obFrame(a0)
+		move.b	#0,obAnim(a0)
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lea	(DebugLists).l,a2
@@ -69,8 +69,8 @@ loc_11F12:
 		addq.w	#1,d1
 		swap	d1
 		asr.l	#4,d1
-		move.l	$C(a0),d2
-		move.l	8(a0),d3
+		move.l	obY(a0),d2
+		move.l	obX(a0),d3
 		btst	#0,d4
 		beq.s	loc_11F32
 		sub.l	d1,d2
@@ -98,8 +98,8 @@ loc_11F54:
 		add.l	d1,d3
 
 loc_11F5C:
-		move.l	d2,ypos(a0)
-		move.l	d3,xpos(a0)
+		move.l	d2,obY(a0)
+		move.l	d3,obX(a0)
 		btst	#6,(v_jpadpress2).w
 		beq.s	loc_11F80
 		addq.b	#1,(v_debugitem).w
@@ -116,9 +116,9 @@ loc_11F80:
 		beq.s	loc_11FA4
 		jsr	(ObjectLoad).l
 		bne.s	loc_11FA4
-		move.w	xpos(a0),xpos(a1)
-		move.w	ypos(a0),ypos(a1)
-		move.b	map(a0),id(a1)
+		move.w	obX(a0),obX(a1)
+		move.w	obY(a0),obY(a1)
+		move.b	obMap(a0),0(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -130,8 +130,8 @@ loc_11FA4:
 		move.l	#MapSonic,(v_objspace+4).w
 		move.w	#$780,(v_objspace+2).w
 		move.b	d0,(v_objspace+$1C).w
-		move.w	d0,xpix(a0)
-		move.w	d0,ypix(a0)
+		move.w	d0,obScreenY(a0)
+		move.w	d0,obScreenX(a0)
 
 locret_11FCC:
 		rts
@@ -141,7 +141,7 @@ sub_11FCE:
 		moveq	#0,d0
 		move.b	(v_debugitem).w,d0
 		lsl.w	#3,d0
-		move.l	(a2,d0.w),map(a0)
-		move.w	6(a2,d0.w),tile(a0)
-		move.b	5(a2,d0.w),frame(a0)
+		move.l	(a2,d0.w),obMap(a0)
+		move.w	6(a2,d0.w),obGfx(a0)
+		move.b	5(a2,d0.w),obFrame(a0)
 		rts

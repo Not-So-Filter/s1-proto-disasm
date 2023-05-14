@@ -426,9 +426,9 @@ dUpdateFreqFM2:
 		add.w	d0,d6
 		btst	#2,(a5)
 		bne.s	locret_744E0
-		tst.b	$F(a6)
+		tst.b	TrackSavedDuration(a6)
 		beq.s	.nofm3sm
-		cmpi.b	#2,1(a5)
+		cmpi.b	#2,TrackVoiceControl(a5)
 		beq.s	dUpdateFreqFM_FM3SM
 
 .nofm3sm:
@@ -592,8 +592,8 @@ PauseMusic:
 
 .resume:
 		clr.b	f_pausemusic(a6)
-		moveq	#$30,d3
-		lea	$40(a6),a5
+		moveq	#TrackSz,d3
+		lea	v_music_track_ram(a6),a5
 		moveq	#6,d4
 
 .enablemusic:
@@ -608,7 +608,7 @@ PauseMusic:
 .nextmusic:
 		adda.w	d3,a5
 		dbf	d4,.enablemusic
-		lea	$220(a6),a5
+		lea	v_sfx_track_ram(a6),a5
 		moveq	#2,d4
 
 .enablesfx:
@@ -720,16 +720,16 @@ dPlaySnd_DAC:
 dPlaySnd_Music:
 		cmpi.b	#bgm_ExtraLife,d7
 		bne.s	.notextralife
-		tst.b	$27(a6)
+		tst.b	f_1up_playing(a6)
 		bne.w	.exit
-		lea	$40(a6),a5
+		lea	v_music_track_ram(a6),a5
 		moveq	#9,d0
 
 .noint:
 		bclr	#2,(a5)
-		adda.w	#$30,a5
+		adda.w	#TrackSz,a5
 		dbf	d0,.noint
-		lea	$220(a6),a5
+		lea	v_sfx_track_ram(a6),a5
 		moveq	#5,d0
 
 .loop0:
@@ -737,38 +737,38 @@ dPlaySnd_Music:
 		adda.w	#TrackSz,a5
 		dbf	d0,.loop0
 		movea.l	a6,a0
-		lea	$3A0(a6),a1
+		lea	v_1up_ram_copy(a6),a1
 		move.w	#$87,d0
 
 .memcopy:
 		move.l	(a0)+,(a1)+
 		dbf	d0,.memcopy
-		move.b	#$80,$27(a6)
+		move.b	#$80,f_1up_playing(a6)
 		clr.b	0(a6)
 		bra.s	.initmusic
 ; ---------------------------------------------------------------------------
 
 .notextralife:
-		clr.b	$27(a6)
-		clr.b	$26(a6)
+		clr.b	f_1up_playing(a6)
+		clr.b	v_fadein_counter(a6)
 
 .initmusic:
 		jsr	dClearMemory(pc)
 		movea.l	(Go_SpeedUpIndex).l,a4
 		subi.b	#bgm__First,d7
-		move.b	(a4,d7.w),$29(a6)
+		move.b	(a4,d7.w),v_speeduptempo(a6)
 		movea.l	(Go_MusicIndex).l,a4
 		lsl.w	#2,d7
 		movea.l	(a4,d7.w),a4
 		moveq	#0,d0
 		move.w	(a4),d0
 		add.l	a4,d0
-		move.l	d0,$18(a6)
+		move.l	d0,v_voice_ptr(a6)
 		move.b	5(a4),d0
-		move.b	d0,$28(a6)
-		tst.b	$2A(a6)
+		move.b	d0,v_tempo_mod(a6)
+		tst.b	f_speedup(a6)
 		beq.s	.jump0
-		move.b	$29(a6),d0
+		move.b	v_speeduptempo(a6),d0
 
 .jump0:
 		move.b	d0,2(a6)
@@ -782,9 +782,9 @@ dPlaySnd_Music:
 		subq.b	#1,d7
 		move.b	#$C0,d1
 		move.b	4(a3),d4
-		moveq	#$30,d6
+		moveq	#TrackSz,d6
 		move.b	#1,d5
-		lea	$40(a6),a1
+		lea	v_music_track_ram(a6),a1
 		lea	dFMTypes(pc),a2
 
 .loadfm:
@@ -834,7 +834,7 @@ dPlaySnd_Music:
 		move.b	3(a3),d7
 		beq.s	.updatesfx
 		subq.b	#1,d7
-		lea	$190(a6),a1
+		lea	v_music_psg_tracks(a6),a1
 		lea	dPSGTypes(pc),a2
 
 .loadpsg:
@@ -854,7 +854,7 @@ dPlaySnd_Music:
 		dbf	d7,.loadpsg
 
 .updatesfx:
-		lea	$220(a6),a1
+		lea	v_sfx_track_ram(a6),a1
 		moveq	#5,d7
 
 .sfxloop:
@@ -879,17 +879,17 @@ dPlaySnd_Music:
 .nextsfx:
 		adda.w	d6,a1
 		dbf	d7,.sfxloop
-		tst.w	$340(a6)
+		tst.w	v_spcsfx_track_ram(a6)
 		bpl.s	.nospec1
-		bset	#2,$100(a6)
+		bset	#2,v_music_fm4_track(a6)
 
 .nospec1:
-		tst.w	$370(a6)
+		tst.w	v_spcsfx_psg3_track(a6)
 		bpl.s	.nospec2
-		bset	#2,$1F0(a6)
+		bset	#2,v_music_psg3_track(a6)
 
 .nospec2:
-		lea	$70(a6),a5
+		lea	v_music_fm_tracks(a6),a5
 		moveq	#5,d4
 
 .keyofffm:
