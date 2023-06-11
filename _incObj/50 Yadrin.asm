@@ -11,7 +11,7 @@ off_D334:	dc.w loc_D338-off_D334, loc_D38C-off_D334
 ; ---------------------------------------------------------------------------
 
 loc_D338:
-		move.l	#MapYadrin,4(a0)
+		move.l	#Map_Yadrin,4(a0)
 		move.w	#$247B,2(a0)
 		move.b	#4,1(a0)
 		move.b	#4,$19(a0)
@@ -37,7 +37,7 @@ loc_D38C:
 		move.b	$25(a0),d0
 		move.w	off_D3A8(pc,d0.w),d1
 		jsr	off_D3A8(pc,d1.w)
-		lea	(AniYardin).l,a1
+		lea	(Ani_Yadrin).l,a1
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ---------------------------------------------------------------------------

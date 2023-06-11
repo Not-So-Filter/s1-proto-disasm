@@ -16,7 +16,7 @@ off_4CCC:	dc.w Obj04_Main-off_4CCC
 Obj04_Main:
 		addq.b	#2,obRoutine(a0)
 		move.w	#$40,obY(a0)
-		move.l	#Map02,obMap(a0)
+		move.l	#Map_02,obMap(a0)
 		move.w	#$2680,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#1,obColProp(a0)

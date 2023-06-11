@@ -2,7 +2,7 @@
 
 Obj4F:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_D202(pc,d0.w),d1
 		jmp	off_D202(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,14 +11,14 @@ off_D202:	dc.w loc_D20A-off_D202, loc_D246-off_D202, loc_D274-off_D202, loc_D2C8
 ; ---------------------------------------------------------------------------
 
 loc_D20A:
-		addq.b	#2,$24(a0)
-		move.l	#Map4F,obMap(a0)
+		addq.b	#2,obRoutine(a0)
+		move.l	#Map_Splats,obMap(a0)
 		move.w	#$24E4,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
 		move.b	#$C,obActWid(a0)
-		move.b	#$14,$16(a0)
-		move.b	#2,$20(a0)
+		move.b	#$14,obHeight(a0)
+		move.b	#2,obColType(a0)
 		tst.b	obSubtype(a0)
 		beq.s	loc_D246
 		move.w	#$300,d2
@@ -31,7 +31,7 @@ loc_D246:
 loc_D24A:
 		move.w	#$100,d1
 		bset	#0,obRender(a0)
-		move.w	(v_objspace+8).w,d0
+		move.w	(v_objspace+obX).w,d0
 		sub.w	obX(a0),d0
 		bcc.s	loc_D268
 		neg.w	d0
@@ -42,7 +42,7 @@ loc_D268:
 		cmp.w	d2,d0
 		bcc.s	loc_D274
 		move.w	d1,obVelX(a0)
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 
 loc_D274:
 		bsr.w	ObjectFall
@@ -57,7 +57,7 @@ loc_D274:
 		andi.w	#$3FF,d0
 		cmpi.w	#$2D2,d0
 		bcs.s	loc_D2A4
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		bra.s	loc_D2AE
 ; ---------------------------------------------------------------------------
 

@@ -1,1 +1,1 @@
-The compression used here is different from the final, being Uncompressed rather than Enigma.
+The blocks here are Uncompressed rather than being compressed in Enigma.

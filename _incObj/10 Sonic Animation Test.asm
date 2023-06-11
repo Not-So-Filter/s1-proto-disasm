@@ -14,7 +14,7 @@ ObjAniTest_Init:
 		addq.b	#2,obRoutine(a0)
 		move.b	#$12,obHeight(a0)
 		move.b	#9,obWidth(a0)
-		move.l	#MapSonic,obMap(a0)
+		move.l	#Map_Sonic,obMap(a0)
 		move.w	#$780,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#2,obPriority(a0)

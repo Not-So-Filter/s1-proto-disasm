@@ -42,3 +42,4 @@ byte_D4A8:	dc.b 5
 		dc.b $EC, 4, 0, $F, $FC
 		dc.b $F4, 2, 0, $11, $C
 		dc.b 4, 9, 0, $37, $FC
+		even

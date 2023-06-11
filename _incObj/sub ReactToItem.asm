@@ -161,7 +161,7 @@ locret_FCA0:
 
 loc_FCA2:
 		bset	#7,$22(a1)
-		moveq	#$A,d0
+		moveq	#10,d0
 		bsr.w	ScoreAdd
 		move.b	#$27,0(a1)
 		move.b	#0,$24(a1)
@@ -232,7 +232,7 @@ loc_FD48:
 		move.w	#sfx_HitSpikes,d0
 
 loc_FD68:
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		moveq	#-1,d0
 		rts
 ; ---------------------------------------------------------------------------
@@ -258,7 +258,7 @@ loc_FD78:
 		move.w	#sfx_HitSpikes,d0
 
 loc_FDBA:
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_FDC0:
 		moveq	#-1,d0

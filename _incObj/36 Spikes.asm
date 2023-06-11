@@ -84,14 +84,7 @@ loc_ABBE:
 
 loc_ABDE:
 		bsr.w	DisplaySprite
-		move.w	$30(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#640,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject,$30(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -137,7 +130,7 @@ sub_AC42:
 		tst.b	obRender(a0)
 		bpl.s	locret_ACA2
 		move.w	#sfx_SpikesMove,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		bra.s	locret_ACA2
 ; ---------------------------------------------------------------------------
 

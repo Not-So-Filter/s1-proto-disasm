@@ -79,14 +79,7 @@ loc_CCB2:
 		bsr.w	DisplaySprite
 		tst.b	$36(a0)
 		bne.s	locret_CCE6
-		move.w	8(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.s	loc_CCE8
+		out_of_range.s	loc_CCE8
 
 locret_CCE6:
 		rts

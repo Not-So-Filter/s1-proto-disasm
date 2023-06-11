@@ -87,7 +87,7 @@ ObjBasaran_PlaySound:
 		andi.b	#$F,d0
 		bne.s	loc_D7EE
 		move.w	#sfx_Basaran,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_D7EE:
 		bsr.w	SpeedToPos

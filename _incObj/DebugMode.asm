@@ -127,9 +127,9 @@ loc_11FA4:
 		beq.s	locret_11FCC
 		moveq	#0,d0
 		move.w	d0,(DebugRoutine).w
-		move.l	#MapSonic,(v_objspace+4).w
-		move.w	#$780,(v_objspace+2).w
-		move.b	d0,(v_objspace+$1C).w
+		move.l	#Map_Sonic,(v_objspace+obMap).w
+		move.w	#$780,(v_objspace+obGfx).w
+		move.b	d0,(v_objspace+obAnim).w
 		move.w	d0,obScreenY(a0)
 		move.w	d0,obScreenX(a0)
 

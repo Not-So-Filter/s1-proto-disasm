@@ -45,4 +45,4 @@ loc_AF24:
 
 loc_AF28:
 		move.w	#sfx_WallSmash,d0
-		jmp	(PlaySFX).l
+		jmp	(PlaySound_Special).l

@@ -98,7 +98,7 @@ loc_A7C0:
 		tst.w	d0
 		bne.s	loc_A7DA
 		move.w	#sfx_Cash,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		addq.b	#2,obRoutine(a0)
 		move.w	#$B4,obTimeFrame(a0)
 
@@ -112,7 +112,7 @@ loc_A7DA:
 		andi.b	#3,d0
 		bne.s	locret_A7D8
 		move.w	#sfx_Switch,d0
-		jmp	(PlaySFX).l
+		jmp	(PlaySound_Special).l
 ; ---------------------------------------------------------------------------
 
 loc_A7F2:
@@ -127,7 +127,7 @@ loc_A7F2:
 		move.w	d0,(v_zone).w
 		tst.w	d0
 		bne.s	loc_A81C
-		move.b	#0,(v_gamemode).w
+		move.b	#id_Sega,(v_gamemode).w
 		bra.s	loc_A822
 ; ---------------------------------------------------------------------------
 
@@ -136,3 +136,45 @@ loc_A81C:
 
 loc_A822:
 		bra.w	DisplaySprite
+; ===========================================================================
+; Level Order
+; ===========================================================================
+word_A826:	dc.w $001				; GHZ2
+		dc.w $002				; GHZ3
+		dc.w $200				; MZ1
+		dc.w $000				; Sega Screen
+		dc.w $101				; LZ2
+		dc.w $102				; LZ3
+		dc.w $200				; MZ1
+		dc.w $000				; Sega Screen
+		dc.w $201				; MZ2
+		dc.w $202				; MZ3
+		dc.w $400				; SZ1
+		dc.w $000				; Sega Screen
+		dc.w $000				; Sega Screen
+		dc.w $302				; SLZ3
+		dc.w $200				; MZ1
+		dc.w $000				; Sega Screen
+		dc.w $300				; SLZ1
+		dc.w $402				; SZ3
+		dc.w $500				; CWZ1
+		dc.w $000				; Sega Screen
+		dc.w $501				; CWZ2
+		dc.w $502				; CWZ3
+		dc.w $000				; Sega Screen
+		dc.w $000				; Sega Screen
+
+word_A856:	dc.w 4, $124, $BC
+		dc.b 2, 0
+		dc.w $FEE0, $120, $D0
+		dc.b 2, 1
+		dc.w $40C, $14C, $D6
+		dc.b 2, 6
+		dc.w $520, $120, $EC
+		dc.b 2, 2
+		dc.w $540, $120, $FC
+		dc.b 2, 3
+		dc.w $560, $120, $10C
+		dc.b 2, 4
+		dc.w $20C, $14C, $CC
+		dc.b 2, 5

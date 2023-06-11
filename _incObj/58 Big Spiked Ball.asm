@@ -38,14 +38,7 @@ ObjGiantBalls_Move:
 		add.w	d0,d0
 		move.w	ObjGiantBalls_TypeIndex(pc,d0.w),d1
 		jsr	ObjGiantBalls_TypeIndex(pc,d1.w)
-		move.w	$3A(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject,$3A(a0)
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 

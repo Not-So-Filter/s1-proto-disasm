@@ -38,7 +38,7 @@ ObjEntryRingBeta_RmvSonic:
 		beq.s	ObjEntryRingBeta_Display
 		move.b	#0,(v_objspace).w
 		move.w	#sfx_SSGoal,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 ObjEntryRingBeta_Display:
 		bra.w	DisplaySprite

@@ -164,7 +164,7 @@ loc_CAA0:
 
 loc_CB00:
 		move.w	#sfx_Burning,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_CB0A:
 		moveq	#0,d0

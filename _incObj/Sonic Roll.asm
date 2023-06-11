@@ -31,7 +31,7 @@ Sonic_DoRoll:
 		move.b	#2,$1C(a0)
 		addq.w	#5,$C(a0)
 		move.w	#sfx_Roll,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		tst.w	$14(a0)
 		bne.s	locret_EEAA
 		move.w	#$200,$14(a0)

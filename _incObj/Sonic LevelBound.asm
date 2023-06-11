@@ -1,8 +1,8 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_LevelBound:
-		move.l	8(a0),d1
-		move.w	$10(a0),d0
+		move.l	obX(a0),d1
+		move.w	obVelX(a0),d0
 		ext.l	d0
 		asl.l	#8,d0
 		add.l	d0,d1
@@ -17,14 +17,14 @@ Sonic_LevelBound:
 		bls.s	Sonic_BoundSides
 		move.w	(unk_FFF72E).w,d0
 		addi.w	#$E0,d0
-		cmp.w	$C(a0),d0
+		cmp.w	obY(a0),d0
 		bcs.w	loc_FD78
 		rts
 ; ---------------------------------------------------------------------------
 
 Sonic_BoundSides:
-		move.w	d0,8(a0)
-		move.w	#0,$A(a0)
-		move.w	#0,$10(a0)
-		move.w	#0,$14(a0)
+		move.w	d0,obX(a0)
+		move.w	#0,obScreenY(a0)
+		move.w	#0,obVelX(a0)
+		move.w	#0,obInertia(a0)
 		rts

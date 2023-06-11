@@ -7,3 +7,4 @@ byte_D310:	dc.b 2
 byte_D31B:	dc.b 2
 		dc.b $EC, $B, 0, $F, $F4
 		dc.b $C, 4, 0, $1B, $FB
+		even

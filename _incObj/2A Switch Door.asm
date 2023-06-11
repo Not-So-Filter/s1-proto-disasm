@@ -2,7 +2,7 @@
 
 Obj2A:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_689E(pc,d0.w),d1
 		jmp	off_689E(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,7 +11,7 @@ off_689E:	dc.w loc_68A4-off_689E, loc_68F0-off_689E, loc_6912-off_689E
 ; ---------------------------------------------------------------------------
 
 loc_68A4:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.l	#Map2A,obMap(a0)
 		move.w	#0,obGfx(a0)
 		move.b	#4,obRender(a0)
@@ -25,7 +25,7 @@ loc_68A4:
 		move.b	#1,obFrame(a0)
 		move.w	#$4000,obGfx(a0)
 		move.b	#4,obPriority(a0)
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 
 loc_68F0:
 		tst.w	(unk_FFF7E0).w
@@ -42,12 +42,5 @@ loc_6906:
 
 loc_6912:
 		bsr.w	DisplaySprite
-		move.w	obX(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#640,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject
 		rts

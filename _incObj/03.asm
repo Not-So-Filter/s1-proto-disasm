@@ -17,7 +17,7 @@ Obj03_Main:
 		addq.b	#2,obRoutine(a0)
 		move.w	#$100,obX(a0)
 		move.w	#$40,obY(a0)
-		move.l	#Map02,obMap(a0)
+		move.l	#Map_02,obMap(a0)
 		move.w	#$64F0,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#1,obColProp(a0)

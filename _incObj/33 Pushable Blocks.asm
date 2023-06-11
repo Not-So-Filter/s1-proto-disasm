@@ -65,14 +65,7 @@ loc_9F84:
 
 loc_9FD4:
 		bsr.w	DisplaySprite
-		move.w	8(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.s	loc_9FF6
+		out_of_range.s	loc_9FF6
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -312,7 +305,7 @@ loc_A24C:
 		move.w	#0,$10(a1)
 		move.w	d0,-(sp)
 		move.w	#sfx_Push,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		move.w	(sp)+,d0
 		tst.b	$28(a0)
 		bmi.s	locret_A29A

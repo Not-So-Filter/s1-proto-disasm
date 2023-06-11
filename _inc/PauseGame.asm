@@ -17,7 +17,7 @@ loc_11D2:
 		bsr.w	WaitForVBla
 		btst	#bitA,(v_jpadpress1).w
 		beq.s	loc_11EE
-		move.b	#4,(v_gamemode).w
+		move.b	#id_Title,(v_gamemode).w
 		nop
 		bra.s	loc_1206
 ; ---------------------------------------------------------------------------

@@ -123,15 +123,15 @@ loc_4A3E:
 		bsr.w	ObjectLoad
 		bne.s	loc_4A5E
 		move.b	#$3D,0(a1)
-		move.w	#$2A60,8(a1)
-		move.w	#$280,$C(a1)
+		move.w	#$2A60,obX(a1)
+		move.w	#$280,obY(a1)
 
 loc_4A5E:
-		move.w	#$8C,d0
-		bsr.w	PlayMusic
+		move.w	#bgm_Boss,d0
+		bsr.w	PlaySound
 		move.b	#1,(unk_FFF7AA).w
 		addq.b	#2,(EventsRoutine).w
-		moveq	#$11,d0
+		moveq	#plcid_Boss,d0
 		bra.w	plcAdd
 ; ---------------------------------------------------------------------------
 
@@ -158,8 +158,6 @@ off_4A90:	dc.w EventsMZ1-off_4A90, EventsMZ2-off_4A90, EventsMZ3-off_4A90
 EventsMZ1:
 		moveq	#0,d0
 		move.b	(EventsRoutine).w,d0
-
-loc_4A9C:
 		move.w	off_4AA4(pc,d0.w),d0
 		jmp	off_4AA4(pc,d0.w)
 ; ---------------------------------------------------------------------------

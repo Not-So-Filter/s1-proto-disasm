@@ -37,7 +37,7 @@ loc_C254:
 
 loc_C2BE:
 		move.w	#sfx_Fireball,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_C2C8:
 		moveq	#0,d0
@@ -50,14 +50,7 @@ loc_C2C8:
 		bsr.w	AnimateSprite
 
 loc_C2E6:
-		move.w	obX(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#640,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject
 		rts
 ; ---------------------------------------------------------------------------
 

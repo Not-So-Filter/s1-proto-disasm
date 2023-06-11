@@ -3,7 +3,7 @@
 Sonic_Hurt:
 		bsr.w	Sonic_HurtStop
 		bsr.w	SpeedToPos
-		addi.w	#$30,$12(a0)
+		addi.w	#$30,obVelY(a0)
 		bsr.w	Sonic_LevelBound
 		bsr.w	sub_E952
 		bsr.w	Sonic_Animate
@@ -14,17 +14,17 @@ Sonic_Hurt:
 Sonic_HurtStop:
 		move.w	(unk_FFF72E).w,d0
 		addi.w	#$E0,d0
-		cmp.w	$C(a0),d0
+		cmp.w	obY(a0),d0
 		bcs.w	loc_FD78
 		bsr.w	loc_F07C
-		btst	#1,$22(a0)
+		btst	#1,obStatus(a0)
 		bne.s	locret_F318
 		moveq	#0,d0
-		move.w	d0,$12(a0)
-		move.w	d0,$10(a0)
-		move.w	d0,$14(a0)
-		move.b	#0,$1C(a0)
-		subq.b	#2,$24(a0)
+		move.w	d0,obVelY(a0)
+		move.w	d0,obVelX(a0)
+		move.w	d0,obInertia(a0)
+		move.b	#0,obAnim(a0)
+		subq.b	#2,obRoutine(a0)
 		move.w	#$78,$30(a0)
 
 locret_F318:
@@ -43,10 +43,10 @@ Sonic_Death:
 Sonic_GameOver:
 		move.w	(unk_FFF72E).w,d0
 		addi.w	#$100,d0
-		cmp.w	$C(a0),d0
+		cmp.w	obY(a0),d0
 		bcc.w	locret_F3AE
-		move.w	#$FFC8,$12(a0)
-		addq.b	#2,$24(a0)
+		move.w	#$FFC8,obVelY(a0)
+		addq.b	#2,obRoutine(a0)
 		addq.b	#1,(byte_FFFE1C).w
 		subq.b	#1,(v_lives).w
 		bne.s	loc_F380
@@ -55,7 +55,7 @@ Sonic_GameOver:
 		move.b	#$39,(v_objspace+$C0).w
 		move.b	#1,(v_objspace+$DA).w
 		move.w	#bgm_GameOver,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		moveq	#plcid_GameOver,d0
 		jmp	(plcAdd).l
 ; ---------------------------------------------------------------------------
@@ -66,13 +66,13 @@ loc_F380:
 ; ---------------------------------------------------------------------------
 loc_F388:
 		move.b	(v_jpadpress2).w,d0
-		andi.b	#$70,d0
+		andi.b	#btnABC,d0
 		beq.s	locret_F3AE
-		andi.b	#$40,d0
+		andi.b	#btnA,d0
 		bne.s	loc_F3B0
-		move.b	#0,$1C(a0)			; Respawns you after a death
-		subq.b	#4,$24(a0)			; The lines above seem to make the code do nothing
-		move.w	$38(a0),$C(a0)
+		move.b	#0,obAnim(a0)			; Respawns you after a death
+		subq.b	#4,obRoutine(a0)		; The lines above seem to make the code do nothing
+		move.w	$38(a0),obY(a0)
 		move.w	#$78,$30(a0)
 
 locret_F3AE:

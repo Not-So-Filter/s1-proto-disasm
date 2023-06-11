@@ -25,7 +25,7 @@ Sonic_Jump:
 		addq.l	#4,sp
 		move.b	#1,$3C(a0)
 		move.w	#sfx_Jump,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		move.b	#$13,$16(a0)
 		move.b	#9,$17(a0)
 		tst.b	(f_victory).w			; has the victory animation flag been set?

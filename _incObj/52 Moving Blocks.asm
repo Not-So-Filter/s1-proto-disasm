@@ -5,14 +5,7 @@ ObjMovingPtfm:
 		move.b	$24(a0),d0
 		move.w	off_D5FC(pc,d0.w),d1
 		jsr	off_D5FC(pc,d1.w)
-		move.w	$32(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject,$32(a0)
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 

@@ -79,8 +79,8 @@ locret_798A:
 		bsr.w	SpeedToPos
 		tst.b	$34(a0)
 		bne.s	locret_79E4
-		move.w	(v_objspace+8).w,d0
-		sub.w	8(a0),d0
+		move.w	(v_objspace+obX).w,d0
+		sub.w	obX(a0),d0
 		bpl.s	loc_79A8
 		neg.w	d0
 

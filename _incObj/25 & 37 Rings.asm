@@ -72,7 +72,7 @@ loc_7C74:
 		move.w	d2,obX(a1)
 		move.w	obX(a0),$32(a1)
 		move.w	d3,obY(a1)
-		move.l	#MapRing,obMap(a1)
+		move.l	#Map_Ring,obMap(a1)
 		move.w	#$27B2,obGfx(a1)
 		move.b	#4,obRender(a1)
 		move.b	#2,obPriority(a1)
@@ -95,14 +95,7 @@ loc_7CC8:
 loc_7CD0:
 		move.b	(RingFrame).w,obFrame(a0)
 		bsr.w	DisplaySprite
-		move.w	$32(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#640,d0
-		bhi.s	loc_7D2C
+		out_of_range.s	loc_7D2C,$32(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -118,7 +111,7 @@ loc_7CF8:
 		bset	d1,2(a2,d0.w)
 
 loc_7D1E:
-		lea	(AniRing).l,a1
+		lea	(Ani_Ring).l,a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
@@ -130,7 +123,7 @@ loc_7D2C:
 CollectRing:
 		addq.w	#1,(v_rings).w
 		ori.b	#1,(f_extralife).w
-		move.w	#$B5,d0
+		move.w	#sfx_Ring,d0
 		cmpi.w	#50,(v_rings).w
 		bcs.s	loc_7D6A
 		bset	#0,(byte_FFFE1B).w
@@ -146,7 +139,7 @@ loc_7D5E:
 		move.w	#bgm_ExtraLife,d0
 
 loc_7D6A:
-		jmp	(PlaySFX).l
+		jmp	(PlaySound_Special).l
 ; ---------------------------------------------------------------------------
 
 ObjRingLoss:
@@ -187,7 +180,7 @@ loc_7DA8:
 		move.b	#8,obWidth(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
-		move.l	#MapRing,obMap(a1)
+		move.l	#Map_Ring,obMap(a1)
 
 loc_7DD2:
 		move.w	#$27B2,obGfx(a1)
@@ -224,7 +217,7 @@ loc_7E2C:
 		move.b	#$80,(f_extralife).w
 		move.b	#0,(byte_FFFE1B).w
 		move.w	#sfx_RingLoss,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_7E48:
 		move.b	(RingLossFrame).w,obFrame(a0)
@@ -261,7 +254,7 @@ loc_7E9A:
 		bsr.w	CollectRing
 
 loc_7EAE:
-		lea	(AniRing).l,a1
+		lea	(Ani_Ring).l,a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------

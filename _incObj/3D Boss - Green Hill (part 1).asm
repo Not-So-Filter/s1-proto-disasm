@@ -54,8 +54,6 @@ loc_B07C:
 		bsr.w	AnimateSprite
 		move.b	$22(a0),d0
 		andi.b	#3,d0
-
-loc_B09C:
 		andi.b	#$FC,1(a0)
 		or.b	d0,1(a0)
 		bra.w	DisplaySprite
@@ -92,14 +90,14 @@ loc_B0D2:
 		bne.s	loc_B11A
 		move.b	#$20,$3E(a0)
 		move.w	#sfx_HitBoss,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_B11A:
 		lea	(v_pal_dry+$22).w,a1
 		moveq	#0,d0
 		tst.w	(a1)
 		bne.s	loc_B128
-		move.w	#$EEE,d0
+		move.w	#cWhite,d0
 
 loc_B128:
 		move.w	d0,(a1)

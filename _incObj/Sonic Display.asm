@@ -25,7 +25,7 @@ loc_E8E8:
 loc_E906:
 		lea	(MusicList2).l,a1
 		move.b	(a1,d0.w),d0
-		jsr	(PlayMusic).l
+		jsr	(PlaySound).l
 
 loc_E916:
 		move.b	#0,(v_invinc).w
@@ -42,7 +42,7 @@ loc_E91C:
 		move.w	#$40,(unk_FFF764).w
 		move.b	#0,(v_shoes).w
 		move.w	#bgm_Slowdown,d0
-		jmp	(PlaySFX).l
+		jmp	(PlaySound_Special).l
 ; ---------------------------------------------------------------------------
 
 locret_E950:

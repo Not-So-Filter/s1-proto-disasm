@@ -26,14 +26,7 @@ ObjScenery_Init:
 
 ObjScenery_Normal:
 		bsr.w	DisplaySprite
-		move.w	obX(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#640,d0
-		bhi.w	ObjScenery_Delete
+		out_of_range.w	ObjScenery_Delete
 		rts
 ; ---------------------------------------------------------------------------
 

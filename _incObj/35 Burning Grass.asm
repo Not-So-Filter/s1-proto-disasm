@@ -20,7 +20,7 @@ loc_91F8:
 		move.b	#$8B,$20(a0)
 		move.b	#8,$18(a0)
 		move.w	#sfx_Burning,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		tst.b	$28(a0)
 		beq.s	loc_9240
 		addq.b	#2,$24(a0)

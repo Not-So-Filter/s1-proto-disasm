@@ -217,14 +217,7 @@ loc_90C2:
 		bpl.s	loc_90EE
 
 loc_90CE:
-		move.w	$2A(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject,$2A(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

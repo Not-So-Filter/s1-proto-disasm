@@ -237,12 +237,5 @@ loc_E194:
 
 loc_E1BE:
 		addq.l	#4,sp
-		move.w	8(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject
 		rts

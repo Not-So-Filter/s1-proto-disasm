@@ -40,7 +40,7 @@ oscInit:
 ; Oscillate values
 
 oscUpdate:
-		cmpi.b	#6,(v_objspace+$24).w
+		cmpi.b	#6,(v_objspace+obRoutine).w
 		bcc.s	.end
 		lea	(oscValues).w,a1
 		lea	(.settings).l,a2

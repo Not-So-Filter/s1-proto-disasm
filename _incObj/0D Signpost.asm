@@ -8,14 +8,7 @@ ObjSignpost:
 		lea	(AniSignpost).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
-		move.w	obX(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject
 		rts
 ; ---------------------------------------------------------------------------
 off_C726:	dc.w loc_C72E-off_C726
@@ -39,7 +32,7 @@ loc_C752:
 		cmpi.w	#$20,d0
 		bcc.s	locret_C77A
 		move.w	#sfx_Signpost,d0
-		jsr	(PlayMusic).l
+		jsr	(PlaySound).l
 		clr.b	(f_timecount).w
 		move.w	(unk_FFF72A).w,(unk_FFF728).w
 		addq.b	#2,obRoutine(a0)
@@ -52,8 +45,8 @@ loc_C77C:
 		subq.w	#1,$30(a0)
 		bpl.s	loc_C798
 		move.w	#$3C,$30(a0)
-		addq.b	#1,$1C(a0)
-		cmpi.b	#3,$1C(a0)
+		addq.b	#1,obAnim(a0)
+		cmpi.b	#3,obAnim(a0)
 		bne.s	loc_C798
 		addq.b	#2,obRoutine(a0)
 
@@ -101,7 +94,6 @@ byte_C804:	dc.b $E8, $F0
 loc_C814:
 		tst.w	(DebugRoutine).w
 		bne.w	locret_C880
-; ---------------------------------------------------------------------------
 
 sub_C81C:
 		tst.b	(f_victory).w
@@ -132,7 +124,7 @@ loc_C862:
 		mulu.w	#$A,d0
 		move.w	d0,(word_FFFE56).w
 		move.w	#bgm_GotThrough,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 locret_C880:
 		rts

@@ -6,14 +6,7 @@ ObjGlassBlock:
 		move.w	off_93DE(pc,d0.w),d1
 		jsr	off_93DE(pc,d1.w)
 		bsr.w	DisplaySprite
-		move.w	8(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	loc_93D8
+		out_of_range.w	loc_93D8
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -122,7 +115,7 @@ loc_9500:
 		movea.l	$3C(a0),a1
 		move.w	$32(a1),$32(a0)
 		move.w	$C(a1),$30(a0)
-		bra.w	*+4
+		bra.w	sub_9514
 ; ---------------------------------------------------------------------------
 
 sub_9514:

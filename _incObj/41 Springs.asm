@@ -6,14 +6,7 @@ ObjSpring:
 		move.w	off_BAA0(pc,d0.w),d1
 		jsr	off_BAA0(pc,d1.w)
 		bsr.w	DisplaySprite
-		move.w	8(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -78,7 +71,7 @@ loc_BB4A:
 		bclr	#3,$22(a0)
 		clr.b	$25(a0)
 		move.w	#sfx_Spring,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_BB84:
 		lea	(AniSpring).l,a1
@@ -128,7 +121,7 @@ loc_BC06:
 		bclr	#5,$22(a0)
 		bclr	#5,$22(a1)
 		move.w	#sfx_Spring,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_BC1C:
 		lea	(AniSpring).l,a1
@@ -172,7 +165,7 @@ loc_BC60:
 		bclr	#3,$22(a0)
 		clr.b	$25(a0)
 		move.w	#sfx_Spring,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 loc_BC98:
 		lea	(AniSpring).l,a1

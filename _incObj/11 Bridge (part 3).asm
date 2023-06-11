@@ -129,14 +129,7 @@ byte_5306:	dc.b $FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ; ---------------------------------------------------------------------------
 
 ObjBridge_ChkDelete:
-		move.w	obX(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#640,d0
-		bhi.w	ObjBridge_DeleteAll
+		out_of_range.w	ObjBridge_DeleteAll
 		rts
 ; ---------------------------------------------------------------------------
 

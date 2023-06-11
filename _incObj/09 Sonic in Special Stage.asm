@@ -18,7 +18,7 @@ Obj09_Main:
 		addq.b	#2,$24(a0)
 		move.b	#$E,$16(a0)
 		move.b	#7,$17(a0)
-		move.l	#MapSonic,4(a0)
+		move.l	#Map_Sonic,4(a0)
 		move.w	#$780,obGfx(a0)
 		move.b	#4,1(a0)
 		move.b	#0,$19(a0)
@@ -209,7 +209,7 @@ Obj09_Jump:
 		move.w	d0,$12(a0)
 		bset	#1,$22(a0)
 		move.w	#$A0,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 
 locret_10ECC:
 		rts
@@ -416,7 +416,7 @@ loc_110AE:
 
 loc_110C2:
 		move.w	#$B5,d0
-		jsr	(PlaySFX).l
+		jsr	(PlaySound_Special).l
 		moveq	#0,d4
 		rts
 ; ---------------------------------------------------------------------------
@@ -482,7 +482,7 @@ loc_110FE:
 
 loc_1116C:
 		move.w	#$B4,d0
-		jmp	(PlaySFX).l
+		jmp	(PlaySound_Special).l
 ; ---------------------------------------------------------------------------
 
 loc_11176:

@@ -2,7 +2,7 @@
 
 ObjUnkSwitch:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_67C8(pc,d0.w),d1
 		jmp	off_67C8(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,8 +11,8 @@ off_67C8:	dc.w loc_67CE-off_67C8, loc_67F8-off_67C8, loc_6836-off_67C8
 ; ---------------------------------------------------------------------------
 
 loc_67CE:
-		addq.b	#2,$24(a0)
-		move.l	#MapUnkSwitch,obMap(a0)
+		addq.b	#2,obRoutine(a0)
+		move.l	#Map_UnkSwitch,obMap(a0)
 		move.w	#$4000,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.w	obY(a0),$30(a0)
@@ -30,14 +30,7 @@ loc_67F8:
 
 loc_6812:
 		bsr.w	DisplaySprite
-		move.w	obX(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#640,d0
-		bhi.w	loc_6836
+		out_of_range.w	loc_6836
 		rts
 ; ---------------------------------------------------------------------------
 

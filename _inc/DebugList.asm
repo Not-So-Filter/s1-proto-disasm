@@ -1,10 +1,10 @@
 DebugLists:
-                dc.w @GHZ-DebugLists
-                dc.w @LZ-DebugLists
-                dc.w @MZ-DebugLists
-                dc.w @SLZ-DebugLists
-		dc.w @SZ-DebugLists
-                dc.w @CWZ-DebugLists
+                dc.w .GHZ-DebugLists
+                dc.w .LZ-DebugLists
+                dc.w .MZ-DebugLists
+                dc.w .SLZ-DebugLists
+		dc.w .SZ-DebugLists
+                dc.w .CWZ-DebugLists
                 
 dbug:	macro map,object,subtype,frame,vram
 	dc.l map+(object<<24)
@@ -12,8 +12,8 @@ dbug:	macro map,object,subtype,frame,vram
 	dc.w vram
 	endm
 
-@GHZ:
-	dc.w (@GHZend-@GHZ-2)/8
+.GHZ:
+	dc.w (.GHZend-.GHZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
@@ -29,19 +29,19 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug	MapNewtron,	$42,	0,	0,	$249B
 	dbug	MapWall,	$44,	0,	0,	$434C
 	dbug	MapRollingBall,	$19,	0,	0,	$43AA
-	@GHZend:
+	.GHZend:
 
-@LZ:	
-        dc.w (@LZend-@LZ-2)/8
+.LZ:	
+        dc.w (.LZend-.LZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
 	dbug	MapMonitor,	$26,	0,	0,	$680
 	dbug	MapCrabmeat,	$1F,	0,	0,	$400
-	@LZend:
+	.LZend:
 
-@MZ:	
-        dc.w (@MZend-@MZ-2)/8
+.MZ:	
+        dc.w (.MZend-.MZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
@@ -61,10 +61,10 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapCollapseFloor,$53,   0,      0,      $62B8
 	dbug    MapLavaHurt,    $54,    0,      0,      $8680
 	dbug    MapBasaran,     $55,    0,      0,      $24B8
-	@MZend:
+	.MZend:
 
-@SLZ:	
-        dc.w (@SLZend-@SLZ-2)/8
+.SLZ:	
+        dc.w (.SLZend-.SLZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
@@ -80,10 +80,10 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapLavaball,    $13,    0,      0,      $345
 	dbug	MapCrabmeat,	$1F,	0,	0,	$400
 	dbug	MapBuzzbomber,	$22,	0,	0,	$444
-	@SLZend:
+	.SLZend:
 
-@SZ:	
-        dc.w (@SZend-@SZ-2)/8
+.SZ:	
+        dc.w (.SZend-.SZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
@@ -99,23 +99,23 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapPlatform2,   $18,    0,      0,      $4000
 	dbug    MapMovingBlocks,$56,    0,      0,      $4000
 	dbug    MapSwitch,      $32,    0,      0,      $513
-	@SZend:
+	.SZend:
 
-@CWZ:
-        dc.w (@CWZend-@CWZ-2)/8
+.CWZ:
+        dc.w (.CWZend-.CWZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
 	dbug	MapMonitor,	$26,	0,	0,	$680
 	dbug	MapCrabmeat,	$1F,	0,	0,	$400
-	@CWZend:
+	.CWZend:
 
 ; ===========================================================================
 ; As seen in the Korean Manual of Sonic 1, Green Hill Zone would've originally used these in an earlier point of development.
 ; ===========================================================================
-@GHZ_Early:
+.GHZ_Early:
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapBallhog,	$1E,	0,	0,	$2400
 	dbug	MapJaws,	$2C,	0,	0,	$47B
 	dbug	MapBurrobot,	$2D,	0,	0,	$247B
-	@GHZ_Earlyend:
+	.GHZ_Earlyend:
