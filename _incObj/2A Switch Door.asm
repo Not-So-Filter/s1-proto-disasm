@@ -6,13 +6,12 @@ Obj2A:
 		move.w	off_689E(pc,d0.w),d1
 		jmp	off_689E(pc,d1.w)
 ; ---------------------------------------------------------------------------
-
 off_689E:	dc.w loc_68A4-off_689E, loc_68F0-off_689E, loc_6912-off_689E
 ; ---------------------------------------------------------------------------
 
 loc_68A4:
 		addq.b	#2,obRoutine(a0)
-		move.l	#Map2A,obMap(a0)
+		move.l	#Map_2A,obMap(a0)
 		move.w	#0,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.w	obY(a0),d0

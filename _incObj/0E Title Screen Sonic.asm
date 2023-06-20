@@ -14,11 +14,11 @@ loc_6A6C:
 		addq.b	#2,obRoutine(a0)
 		move.w	#$F0,obX(a0)
 		move.w	#$DE,obScreenY(a0)
-		move.l	#MapTitleSonic,obMap(a0)
+		move.l	#Map_TitleSonic,obMap(a0)
 		move.w	#$2300,obGfx(a0)
 		move.b	#1,obPriority(a0)
 		move.b	#$1D,obDelayAni(a0)
-		lea	(AniTitleSonic).l,a1
+		lea	(Ani_TitleSonic).l,a1
 		bsr.w	AnimateSprite
 
 loc_6AA0:
@@ -45,7 +45,7 @@ loc_6AC0:
 ; ---------------------------------------------------------------------------
 
 loc_6AC6:
-		lea	(AniTitleSonic).l,a1
+		lea	(Ani_TitleSonic).l,a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------

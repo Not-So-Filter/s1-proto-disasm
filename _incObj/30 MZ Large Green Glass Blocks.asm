@@ -41,7 +41,7 @@ loc_9412:
 ; ---------------------------------------------------------------------------
 
 loc_9416:
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_9486
 
 loc_941C:

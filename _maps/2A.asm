@@ -10,3 +10,4 @@ byte_6A45:	dc.b 3
 		dc.b $F0, 8, 0, $F0, $F4
 		dc.b $F8, 8, $10, $F0, $F4
 		dc.b 0, 9, 0, $F3, $F4
+		even

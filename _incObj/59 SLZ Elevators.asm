@@ -228,7 +228,7 @@ loc_E194:
 		subq.w	#1,$3C(a0)
 		bne.s	loc_E1BE
 		move.w	$3E(a0),$3C(a0)
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_E1BE
 		move.b	#$59,0(a1)
 		move.w	8(a0),8(a1)

@@ -71,7 +71,7 @@ locret_7670:
 loc_7672:
 		move.w	#$3B,$30(a0)
 		move.b	#6,obAnim(a0)
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_76A8
 		move.b	#$1F,0(a1)
 		move.b	#6,obRoutine(a1)
@@ -81,7 +81,7 @@ loc_7672:
 		move.w	#$FF00,obVelX(a1)
 
 loc_76A8:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_76D2
 		move.b	#$1F,0(a1)
 		move.b	#6,obRoutine(a1)

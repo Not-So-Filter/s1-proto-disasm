@@ -122,7 +122,7 @@ AniArt_MZ_Lava:
 
 AniArt_MZ_Magma:
 		subq.b	#1,(unk_FFF7B3).w
-		bpl.s	AniArt_MZ_UFOs
+		bpl.s	AniArt_MZ_Saturns
 
 		move.b	#1,(unk_FFF7B3).w
 		moveq	#0,d0
@@ -152,7 +152,7 @@ AniArt_MZ_Magma:
 		rts
 ; ---------------------------------------------------------------------------
 
-AniArt_MZ_UFOs:
+AniArt_MZ_Saturns:
 		subq.b	#1,(unk_FFF7B5).w
 		bpl.w	locret_11480
 		move.b	#7,(unk_FFF7B5).w
@@ -160,8 +160,8 @@ AniArt_MZ_UFOs:
 		moveq	#0,d0
 		move.b	(unk_FFF7B4).w,d0
 		addq.b	#1,d0
-		cmpi.b	#5,d0
-		bne.s	AniArt_MZ_Torch
+		cmpi.b	#5,d0	; are we on frame 5? (this check should be 6, causing one of the frames for the saturns to be skipped)
+		bne.s	AniArt_MZ_Torch	; if not, then we move onto the MZ Torch
 		moveq	#0,d0
 
 AniArt_MZ_Torch:

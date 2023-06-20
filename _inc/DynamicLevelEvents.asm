@@ -120,7 +120,7 @@ loc_4A32:
 loc_4A3E:
 		cmpi.w	#$2960,(v_screenposx).w
 		bcs.s	locret_4A76
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_4A5E
 		move.b	#$3D,0(a1)
 		move.w	#$2A60,obX(a1)

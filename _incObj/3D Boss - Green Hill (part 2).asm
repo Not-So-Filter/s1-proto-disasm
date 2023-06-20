@@ -9,7 +9,7 @@ loc_B1AE:
 		move.w	#0,$10(a0)
 		move.w	#0,$12(a0)
 		addq.b	#2,$25(a0)
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_B1F2
 		move.b	#$48,0(a1)
 		move.w	$30(a0),8(a1)

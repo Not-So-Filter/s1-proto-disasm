@@ -48,7 +48,7 @@ ObjSwingPtfm_NotSZ:
 		subq.w	#1,d1
 
 ObjSwingPtfm_LoadLinks:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_5586
 		addq.b	#1,$28(a0)
 		move.w	a1,d5
@@ -179,7 +179,7 @@ loc_568E:
 		move.b	$26(a0),d0
 
 loc_5692:
-		bsr.w	GetSine
+		bsr.w	CalcSine
 		move.w	$38(a0),d2
 		move.w	$3A(a0),d3
 		lea	$28(a0),a2

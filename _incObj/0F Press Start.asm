@@ -15,7 +15,7 @@ loc_6AEE:
 		addq.b	#2,obRoutine(a0)
 		move.w	#$D0,obX(a0)
 		move.w	#$130,obScreenY(a0)
-		move.l	#MapTitleText,obMap(a0)
+		move.l	#Map_TitleText,obMap(a0)
 		move.w	#$200,obGfx(a0)
 		cmpi.b	#2,obFrame(a0)
 		bne.s	loc_6B1A
@@ -26,5 +26,5 @@ locret_6B18:
 ; ---------------------------------------------------------------------------
 
 loc_6B1A:
-		lea	(AniTitleText).l,a1
+		lea	(Ani_TitleText).l,a1
 		bra.w	AnimateSprite

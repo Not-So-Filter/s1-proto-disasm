@@ -3,8 +3,7 @@ MapShield:	dc.w byte_F953-MapShield, byte_F948-MapShield, byte_F95D-MapShield
 		dc.w byte_F9B1-MapShield, byte_F9C6-MapShield
 
 byte_F948:	dc.b 4
-
-byte_F949:	dc.b $E8, $A, 0, 0, $E8
+		dc.b $E8, $A, 0, 0, $E8
 		dc.b $E8, $A, 0, 9, 0
 
 byte_F953:	dc.b 0, $A, $10, 0, $E8

@@ -36,7 +36,7 @@ loc_E372:
 ; ---------------------------------------------------------------------------
 
 loc_E37C:
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.w	loc_E3DE
 		move.b	#4,$24(a1)
 

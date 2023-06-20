@@ -59,7 +59,7 @@ loc_73C6:
 		move.w	#-$400,obVelY(a0)
 		tst.b	(unk_FFF7A7).w
 		bne.s	loc_7438
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_7414
 		move.b	#$29,0(a1)
 		move.w	obX(a0),obX(a1)

@@ -19,7 +19,7 @@ ObjBridge_PlayerPos:
 
 ObjBridge_UpdateBend:
 		move.b	$3E(a0),d0
-		bsr.w	GetSine
+		bsr.w	CalcSine
 		move.w	d0,d4
 		lea	(byte_5306).l,a4
 		moveq	#0,d0

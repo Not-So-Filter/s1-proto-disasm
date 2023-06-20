@@ -10,8 +10,8 @@ SolidObject:
 		lea	(v_objspace).w,a1
 		btst	#1,obStatus(a1)
 		bne.s	loc_A2EE
-		move.w	8(a1),d0
-		sub.w	8(a0),d0
+		move.w	obX(a1),d0
+		sub.w	obX(a0),d0
 		add.w	d1,d0
 		bmi.s	loc_A2EE
 		cmp.w	d2,d0
@@ -142,7 +142,7 @@ loc_A400:
 		move.w	#0,obVelX(a1)
 
 loc_A40C:
-		sub.w	d0,8(a1)
+		sub.w	d0,obX(a1)
 		btst	#1,obStatus(a1)
 		bne.s	loc_A428
 		bset	#5,obStatus(a1)

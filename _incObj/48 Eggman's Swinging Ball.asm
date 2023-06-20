@@ -24,7 +24,7 @@ loc_B34A:
 ; ---------------------------------------------------------------------------
 
 loc_B376:
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_B3D6
 		move.w	8(a0),8(a1)
 		move.w	$C(a0),$C(a1)

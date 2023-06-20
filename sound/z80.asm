@@ -6,21 +6,21 @@ Size_of_DAC_driver_guess:	equ $1C5C
                 CPU Z80
                 listing purecode
 
-z80_stack:		equ 1FF4h
-zDAC_NoUpdate:  equ 1FF6h
+z80_stack:	equ 1FF4h
+zDAC_Update:	equ 1FF6h
 zDAC_Status:	equ 1FFDh				; Bit 7 set if the driver is not accepting new samples, it is clear otherwise
 zDAC_Sample:	equ 1FFFh				; Sample to play, the 68k will move into this locatiton whatever sample that's supposed to be played.
 
-zYM2612_A0:		equ 4000h
+zYM2612_A0:	equ 4000h
 zBankRegister:	equ 6000h
 
 ; =============== S U B R O U T I N E =======================================
 
 
 StartOfZ80:
-                di					; disable interrupts
-                di					; twice
-                di					; thrice
+                di	; disable interrupts
+                di
+                di
                 ld      sp, z80_stack
                 xor     a
                 ld      (zDAC_Status), a
@@ -62,7 +62,7 @@ loc_31:
                 ld      d, 0
                 exx
                 pop     hl
-                ld      (zDAC_NoUpdate), a
+                ld      (zDAC_Update), a
                 pop     af
                 ld      (1FF7h), a
                 sub     81h
@@ -72,7 +72,7 @@ loc_31:
                 cp      6
                 jr      c, loc_73
                 ld      (1FF7h), a
-                ld      (zDAC_NoUpdate), a
+                ld      (zDAC_Update), a
                 ld      iy, (1FF8h)
                 sub     7
 
@@ -216,7 +216,7 @@ loc_133:
 ; ---------------------------------------------------------------------------
 
 loc_153:
-                ld      hl, zDAC_NoUpdate
+                ld      hl, zDAC_Update
                 ld      a, (hl)
                 or      a
                 jp      m, loc_2E

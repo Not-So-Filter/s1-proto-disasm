@@ -33,7 +33,7 @@ ObjBridge_Init:
 		bcs.s	loc_4F32
 
 ObjBridge_MakeLog:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_4F32
 		addq.b	#1,obSubtype(a0)
 		cmp.w	obX(a0),d3

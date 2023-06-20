@@ -1,6 +1,6 @@
 ; ---------------------------------------------------------------------------
 
-Edit:
+DebugMode:
 		moveq	#0,d0
 		move.b	(DebugRoutine).w,d0
 		move.w	off_11E74(pc,d0.w),d1
@@ -114,7 +114,7 @@ loc_11F7C:
 loc_11F80:
 		btst	#5,(v_jpadpress2).w
 		beq.s	loc_11FA4
-		jsr	(ObjectLoad).l
+		jsr	(FindFreeObj).l
 		bne.s	loc_11FA4
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)

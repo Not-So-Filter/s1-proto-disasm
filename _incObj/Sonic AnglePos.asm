@@ -1,6 +1,6 @@
 ; ---------------------------------------------------------------------------
 
-Sonic_AnglePosition:
+Sonic_AnglePos:
 		btst	#3,$22(a0)
 		beq.s	loc_FE26
 		moveq	#0,d0

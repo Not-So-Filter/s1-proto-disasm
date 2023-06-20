@@ -117,7 +117,7 @@ loc_10DDC:
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		neg.b	d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		muls.w	$14(a0),d1
 		add.l	d1,8(a0)
 		muls.w	$14(a0),d0
@@ -200,7 +200,7 @@ Obj09_Jump:
 		andi.b	#$FC,d0
 		neg.b	d0
 		subi.b	#$40,d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		muls.w	#$700,d1
 		asr.l	#8,d1
 		move.w	d1,$10(a0)
@@ -208,7 +208,7 @@ Obj09_Jump:
 		asr.l	#8,d0
 		move.w	d0,$12(a0)
 		bset	#1,$22(a0)
-		move.w	#$A0,d0
+		move.w	#sfx_Jump,d0
 		jsr	(PlaySound_Special).l
 
 locret_10ECC:
@@ -278,7 +278,7 @@ Obj09_Fall:
 		move.l	8(a0),d3
 		move.b	(unk_FFF780).w,d0
 		andi.b	#$FC,d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		move.w	$10(a0),d4
 		ext.l	d4
 		asl.l	#8,d4
@@ -415,7 +415,7 @@ loc_110AE:
 		move.l	a1,4(a2)
 
 loc_110C2:
-		move.w	#$B5,d0
+		move.w	#sfx_Ring,d0
 		jsr	(PlaySound_Special).l
 		moveq	#0,d4
 		rts
@@ -465,7 +465,7 @@ loc_110FE:
 		sub.w	8(a0),d1
 		sub.w	$C(a0),d2
 		jsr	(CalcAngle).l
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		muls.w	#$FB00,d1
 		asr.l	#8,d1
 		move.w	d1,$10(a0)
@@ -481,7 +481,7 @@ loc_110FE:
 		move.l	d0,4(a2)
 
 loc_1116C:
-		move.w	#$B4,d0
+		move.w	#sfx_Bumper,d0
 		jmp	(PlaySound_Special).l
 ; ---------------------------------------------------------------------------
 

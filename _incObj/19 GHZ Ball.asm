@@ -65,7 +65,7 @@ loc_5D2C:
 		move.w	#$18,d3
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
-		jsr	(Sonic_AnglePosition).l
+		jsr	(Sonic_AnglePos).l
 		cmpi.w	#$20,obX(a0)
 		bcc.s	loc_5D70
 		move.w	#$20,obX(a0)
@@ -171,7 +171,7 @@ loc_5E4A:
 
 sub_5E50:
 		move.b	obAngle(a0),d0
-		bsr.w	GetSine
+		bsr.w	CalcSine
 		move.w	d0,d2
 		muls.w	#$38,d2
 		asr.l	#8,d2

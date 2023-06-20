@@ -14,9 +14,9 @@ off_C926:	dc.w loc_C932-off_C926, loc_C95C-off_C926, loc_C9CE-off_C926, loc_C982
 
 loc_C932:
 		addq.b	#2,$24(a0)
-		move.l	#MapLavafall,4(a0)
-		move.w	#$E3A8,2(a0)
-		move.b	#4,1(a0)
+		move.l	#MapLavafall,obMap(a0)
+		move.w	#$E3A8,obGfx(a0)
+		move.b	#4,obRender(a0)
 		move.b	#1,$19(a0)
 		move.b	#$38,$18(a0)
 		move.w	#$78,$34(a0)
@@ -40,10 +40,10 @@ locret_C980:
 
 loc_C982:
 		addq.b	#2,$24(a0)
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_C9A8
 		move.b	#$4D,0(a1)
-		move.w	8(a0),8(a1)
+		move.w	obX(a0),obX(a1)
 		move.w	$C(a0),$C(a1)
 		move.b	$28(a0),$28(a1)
 		move.l	a0,$3C(a1)
@@ -117,17 +117,17 @@ loc_CA34:
 ; ---------------------------------------------------------------------------
 
 sub_CA4A:
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_CA9A
 ; ---------------------------------------------------------------------------
 
 sub_CA50:
 		move.b	#$4D,0(a1)
-		move.l	#MapLavafall,4(a1)
-		move.w	#$63A8,2(a1)
-		move.b	#4,1(a1)
+		move.l	#MapLavafall,obMap(a1)
+		move.w	#$63A8,obGfx(a1)
+		move.b	#4,obRender(a1)
 		move.b	#$20,$18(a1)
-		move.w	8(a0),8(a1)
+		move.w	obX(a0),obX(a1)
 		move.w	$C(a0),$C(a1)
 		move.b	$28(a0),$28(a1)
 		move.b	#1,$19(a1)
@@ -147,7 +147,7 @@ loc_CAA0:
 		addi.w	#$60,$30(a1)
 		move.b	#$93,$20(a1)
 		move.b	#$80,$16(a1)
-		bset	#4,1(a1)
+		bset	#4,obRender(a1)
 		addq.b	#4,$24(a1)
 		move.l	a0,$3C(a1)
 		tst.b	$28(a0)
@@ -177,14 +177,7 @@ loc_CB0A:
 		bsr.w	AnimateSprite
 
 loc_CB28:
-		move.w	8(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject
 		rts
 ; ---------------------------------------------------------------------------
 

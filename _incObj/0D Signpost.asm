@@ -59,7 +59,7 @@ loc_C798:
 		addq.b	#2,$34(a0)
 		andi.b	#$E,$34(a0)
 		lea	byte_C804(pc,d0.w),a2
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_C802
 		move.b	#$25,0(a1)
 		move.b	#6,obRoutine(a1)

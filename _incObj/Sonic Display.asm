@@ -21,8 +21,6 @@ loc_E8E8:
 		bne.s	loc_E916
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
-
-loc_E906:
 		lea	(MusicList2).l,a1
 		move.b	(a1,d0.w),d0
 		jsr	(PlaySound).l

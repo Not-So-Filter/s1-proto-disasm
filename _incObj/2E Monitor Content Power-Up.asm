@@ -23,7 +23,7 @@ loc_8248:
 		move.b	obAnim(a0),d0
 		addq.b	#2,d0
 		move.b	d0,obFrame(a0)
-		movea.l	#MapMonitor,a1
+		movea.l	#Map_Monitor,a1
 		add.b	d0,d0
 		adda.w	(a1,d0.w),a1
 		addq.w	#1,a1

@@ -22,11 +22,11 @@ PalCycGHZ:
 		lea	(Cyc_GHZ).l,a0
 
 loc_1760:
-		subq.w	#1,(word_FFF634).w
+		subq.w	#1,(v_pcyc_time).w
 		bpl.s	locret_1786
-		move.w	#5,(word_FFF634).w
-		move.w	(word_FFF632).w,d0
-		addq.w	#1,(word_FFF632).w
+		move.w	#5,(v_pcyc_time).w
+		move.w	(v_pcyc_num).w,d0
+		addq.w	#1,(v_pcyc_num).w
 		andi.w	#3,d0
 		lsl.w	#3,d0
 		lea	(v_pal_dry+$50).w,a1
@@ -41,11 +41,11 @@ PalCycLZ:
 		rts
 ; ---------------------------------------------------------------------------
 PalCycUnused:
-		subq.w	#1,(word_FFF634).w
+		subq.w	#1,(v_pcyc_time).w
 		bpl.s	locret_17B8
-		move.w	#5,(word_FFF634).w
-		move.w	(word_FFF632).w,d0
-		addq.w	#1,(word_FFF632).w
+		move.w	#5,(v_pcyc_time).w
+		move.w	(v_pcyc_num).w,d0
+		addq.w	#1,(v_pcyc_num).w
 		andi.w	#3,d0
 		lsl.w	#3,d0
 		lea	(Cyc_LZ).l,a0
@@ -65,17 +65,17 @@ PalCycMZ:
 ; ---------------------------------------------------------------------------
 
 PalCycSLZ:
-		subq.w	#1,(word_FFF634).w
+		subq.w	#1,(v_pcyc_time).w
 		bpl.s	locret_17F6
-		move.w	#$F,(word_FFF634).w
-		move.w	(word_FFF632).w,d0
+		move.w	#$F,(v_pcyc_time).w
+		move.w	(v_pcyc_num).w,d0
 		addq.w	#1,d0
 		cmpi.w	#6,d0
 		bcs.s	loc_17D6
 		moveq	#0,d0
 
 loc_17D6:
-		move.w	d0,(word_FFF632).w
+		move.w	d0,(v_pcyc_num).w
 		move.w	d0,d1
 		add.w	d1,d1
 		add.w	d1,d0
@@ -90,12 +90,12 @@ locret_17F6:
 ; ---------------------------------------------------------------------------
 
 PalCycSZ:
-		subq.w	#1,(word_FFF634).w
+		subq.w	#1,(v_pcyc_time).w
 		bpl.s	locret_1846
-		move.w	#5,(word_FFF634).w
-		move.w	(word_FFF632).w,d0
+		move.w	#5,(v_pcyc_time).w
+		move.w	(v_pcyc_num).w,d0
 		move.w	d0,d1
-		addq.w	#1,(word_FFF632).w
+		addq.w	#1,(v_pcyc_num).w
 		andi.w	#3,d0
 		lsl.w	#3,d0
 		lea	(Cyc_SZ1).l,a0

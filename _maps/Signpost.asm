@@ -22,3 +22,4 @@ byte_C903:	dc.b 3
 		dc.b $F0, $B, 0, $20, $E8
 		dc.b $F0, $B, 0, $2C, 0
 		dc.b $10, 1, 0, $38, $FC
+		even

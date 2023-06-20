@@ -85,7 +85,7 @@ ObjGiantBalls_Type03:
 		move.w	$3E(a0),d0
 		add.w	d0,$26(a0)
 		move.b	$26(a0),d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		move.w	$38(a0),d2
 		move.w	$3A(a0),d3
 		moveq	#0,d4

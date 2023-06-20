@@ -6,7 +6,7 @@ Sonic_SlopeResist:
 		cmpi.b	#$C0,d0
 		bcc.s	locret_EFBC
 		move.b	$26(a0),d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		muls.w	#$20,d0
 		asr.l	#8,d0
 		tst.w	$14(a0)

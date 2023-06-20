@@ -49,7 +49,7 @@ loc_9240:
 		addi.l	#$80000,d0
 		andi.l	#$FFFFF,d0
 		bne.s	loc_92B8
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_92B8
 		move.b	#$35,0(a1)
 		move.w	8(a0),8(a1)

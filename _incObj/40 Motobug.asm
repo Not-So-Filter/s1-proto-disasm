@@ -78,7 +78,7 @@ loc_B976:
 		subq.b	#1,$33(a0)
 		bpl.s	locret_B9BE
 		move.b	#$F,$33(a0)
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_B9BE
 		move.b	#$40,0(a1)
 		move.w	8(a0),8(a1)

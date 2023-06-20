@@ -50,7 +50,7 @@ loc_ECB4:
 
 loc_ECD6:
 		move.b	$26(a0),d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		muls.w	$14(a0),d1
 		asr.l	#8,d1
 		move.w	d1,$10(a0)

@@ -29,7 +29,7 @@ loc_99FA:
 ; ---------------------------------------------------------------------------
 
 loc_9A12:
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_9A88
 
 loc_9A18:

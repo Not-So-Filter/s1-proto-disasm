@@ -285,7 +285,7 @@ loc_36A:
 loc_376:
 		move.l	d7,(a6)+
 		dbf	d6,loc_376
-		bsr.w	vdpInit
+		bsr.w	VDPSetupGame
 		bsr.w	SoundDriverLoad
 		bsr.w	padInit
 		move.b	#id_Sega,(v_gamemode).w
@@ -314,7 +314,7 @@ ptr_GM_Special:	bra.w	GM_Special
 
 ; Unused, as the checksum check doesn't care if the checksum is wrong.
 ChecksumError:
-		bsr.w	vdpInit
+		bsr.w	VDPSetupGame
 		move.l	#$C0000000,(vdp_control_port).l	; Set VDP to CRAM write
 		moveq	#$3F,d7
 
@@ -525,25 +525,25 @@ VBla_00:
 		rts
 ; ---------------------------------------------------------------------------
 
-VBla_Index:	dc.w VBla_00-VBla_Index
-                dc.w VBla_02-VBla_Index
-                dc.w VBla_04-VBla_Index
-                dc.w VBla_06-VBla_Index
-                dc.w VBla_08-VBla_Index
-                dc.w VBla_0A-VBla_Index
-                dc.w VBla_0C-VBla_Index
-                dc.w VBla_0E-VBla_Index
-                dc.w VBla_10-VBla_Index
-                dc.w VBla_12-VBla_Index
+VBla_Index:	dc.w	VBla_00-VBla_Index
+                dc.w	VBla_02-VBla_Index
+                dc.w	VBla_04-VBla_Index
+                dc.w	VBla_06-VBla_Index
+                dc.w	VBla_08-VBla_Index
+                dc.w	VBla_0A-VBla_Index
+                dc.w	VBla_0C-VBla_Index
+                dc.w	VBla_0E-VBla_Index
+                dc.w	VBla_10-VBla_Index
+                dc.w	VBla_12-VBla_Index
 ; ---------------------------------------------------------------------------
 
 VBla_02:
 		bsr.w	sub_E78
 		tst.w	(v_demolength).w
-		beq.w	.locret
+		beq.w	.end
 		subq.w	#1,(v_demolength).w
 
-.locret:
+.end:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -552,10 +552,10 @@ VBla_04:
 		bsr.w	sub_43B6
 		bsr.w	sub_1438
 		tst.w	(v_demolength).w
-		beq.w	.locret
+		beq.w	.end
 		subq.w	#1,(v_demolength).w
 
-.locret:
+.end:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -599,10 +599,10 @@ loc_C7A:
 loc_CA8:
 		move.b	#0,(byte_FFF628).w
 		tst.w	(v_demolength).w
-		beq.w	.locret
+		beq.w	.end
 		subq.w	#1,(v_demolength).w
 
-.locret:
+.end:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -622,10 +622,10 @@ VBla_0A:
 
 loc_D7A:
 		tst.w	(v_demolength).w
-		beq.w	.locret
+		beq.w	.end
 		subq.w	#1,(v_demolength).w
 
-.locret:
+.end:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -753,16 +753,16 @@ Joypad_Read:
 		rts
 ; ---------------------------------------------------------------------------
 
-vdpInit:
+VDPSetupGame:
 		lea	(vdp_control_port).l,a0
 		lea	(vdp_data_port).l,a1
-		lea	(vdpInitRegs).l,a2
+		lea	(VDPSetupArray).l,a2
 		moveq	#$12,d7
 
 loc_101E:
 		move.w	(a2)+,(a0)
 		dbf	d7,loc_101E
-		move.w	(vdpInitRegs+2).l,d0
+		move.w	(VDPSetupArray+2).l,d0
 		move.w	d0,(v_vdp_buffer1).w
 		moveq	#0,d0
 		move.l	#$C0000000,(vdp_control_port).l
@@ -784,8 +784,7 @@ loc_1070:
 		move.l	(sp)+,d1
 		rts
 ; ---------------------------------------------------------------------------
-
-vdpInitRegs:	dc.w $8004
+VDPSetupArray:	dc.w $8004
 		dc.w $8134
 		dc.w $8230
 		dc.w $8328
@@ -1240,12 +1239,12 @@ loc_1A36:
 ; ---------------------------------------------------------------------------
 
 PalCycSega:
-		subq.w	#1,(word_FFF634).w
+		subq.w	#1,(v_pcyc_time).w
 		bpl.s	.locret
-		move.w	#3,(word_FFF634).w
-		move.w	(word_FFF632).w,d0
+		move.w	#3,(v_pcyc_time).w
+		move.w	(v_pcyc_num).w,d0
 		bmi.s	.locret
-		subq.w	#2,(word_FFF632).w
+		subq.w	#2,(v_pcyc_num).w
 		lea	(Cyc_Sega).l,a0
 		lea	(v_pal_dry+4).w,a1
 		adda.w	d0,a0
@@ -1330,7 +1329,7 @@ WaitForVBla:
 ; ---------------------------------------------------------------------------
 
 RandomNumber:
-		move.l	(RandomSeed).w,d1
+		move.l	(v_random).w,d1
 		bne.s	.noreset
 		move.l	#$2A6D365A,d1
 
@@ -1345,11 +1344,11 @@ RandomNumber:
 		add.w	d1,d0
 		move.w	d0,d1
 		swap	d1
-		move.l	d1,(RandomSeed).w
+		move.l	d1,(v_random).w
 		rts
 ; ---------------------------------------------------------------------------
 
-GetSine:
+CalcSine:
 		andi.w	#$FF,d0
 		add.w	d0,d0
 		addi.w	#$80,d0
@@ -1481,7 +1480,7 @@ loc_24BC:
 
 		moveq	#palid_SegaBG,d0
 		bsr.w	PalLoad2
-		move.w	#$28,(word_FFF632).w
+		move.w	#$28,(v_pcyc_num).w
 		move.w	#0,(word_FFF662).w
 		move.w	#0,(word_FFF660).w
 		move.w	#$B4,(v_demolength).w
@@ -1539,6 +1538,7 @@ loc_2592:
 loc_25D8:
 		move.w	(a5)+,(a6)
 		dbf	d1,loc_25D8
+
 		lea	(Unc_Title).l,a1
 
                 copyTilemapUnc	$C206,$21,$15
@@ -1559,9 +1559,9 @@ loc_25D8:
 		move.l	(a0)+,(a4)+
 		dbf	d0,.loadblocks
 		lea	(Blk256_GHZ).l,a0
-		lea	(v_256x256&$FFFFFF).l,a1
+		lea	(v_256x256).l,a1
 		bsr.w	KosDec
-		bsr.w	LoadLayout
+		bsr.w	LevelLayoutLoad
 		lea	(vdp_control_port).l,a5
 		lea	(vdp_data_port).l,a6
 		lea	(v_bgscreenposx).w,a3
@@ -1684,7 +1684,6 @@ loc_27AA:
 		bsr.w	PlaySound_Special
 		rts
 ; ---------------------------------------------------------------------------
-
 LevSelOrder:	dc.w 0,    1,    2
 		dc.w $100, $101, $102
 		dc.w $200, $201, $202
@@ -1814,7 +1813,7 @@ LevSelTextLoad:
 		lea	(vdp_data_port).l,a6
 		move.l	#$62100003,d4
 		move.w	#$E680,d3
-		moveq	#$13,d1
+		moveq	#$13,d1	; Only load 13 lines.
 
 loc_2944:
 		move.l	d4,4(a6)
@@ -1838,8 +1837,8 @@ loc_2944:
 		move.l	d4,4(a6)
 		bsr.w	sub_29CC
 		move.w	#$E680,d3
-		cmpi.w	#$13,(LevSelOption).w
-		bne.s	loc_2996
+		cmpi.w	#$13,(LevSelOption).w	; are we on Sound Select?
+		bne.s	loc_2996	; if not, branch
 		move.w	#$C680,d3
 
 loc_2996:
@@ -1969,7 +1968,7 @@ loc_2C92:
 		bne.s	loc_2C92
 		tst.l	(v_plc_buffer).w
 		bne.s	loc_2C92
-		bsr.w	EarlyDebugLoadArt
+		bsr.w	DebugPosLoadArt
 		jsr	(sub_117C6).l
 		moveq	#palid_Sonic,d0
 		bsr.w	PalLoad1
@@ -2137,7 +2136,7 @@ sub_3018:
 
 loc_3028:
 		move.w	d2,d0
-		bsr.w	GetSine
+		bsr.w	CalcSine
 		asr.w	#4,d0
 		bpl.s	loc_3034
 		moveq	#0,d0
@@ -2224,13 +2223,13 @@ off_3100:	dc.l byte_614C6
 		dc.b 0, $21, 8, 3, $28, $30, 8, 8, 0, $2E, 8, $15, 0, $F, 8, $46
 		dc.b 0, $1A, 8, $FF, 8, $CA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ; ---------------------------------------------------------------------------
+;sub_314C:
 		cmpi.b	#id_Lvl06,(v_zone).w
 		bne.s	locret_3176
 		bsr.w	sub_3178
 		lea	($FF0900).l,a1
 		bsr.s	sub_3166
 		lea	($FF3380).l,a1
-; ---------------------------------------------------------------------------
 
 sub_3166:
 		lea	(Anim16Unk1).l,a0
@@ -2298,8 +2297,8 @@ Anim16MZ:	incbin "map16\Anim MZ.bin"
 Anim16MZ_end:	even
 ; ---------------------------------------------------------------------------
 
-EarlyDebugLoadArt:
-		rts					; this was rts'd out to stop it from overwriting the vram at $9E00
+DebugPosLoadArt:
+		rts
 ; ---------------------------------------------------------------------------
 		move.l	#$5E000002,(vdp_control_port).l
 		lea	(ArtText).l,a0
@@ -2495,8 +2494,8 @@ loc_3620:
 		move.w	(v_jpadhold1).w,(v_jpadhold2).w
 		bsr.w	ExecuteObjects
 		bsr.w	BuildSprites
-		jsr	(GM_Special_ShowLayout).l
-		bsr.w	GM_SpecialAnimateBG
+		jsr	(Special_ShowLayout).l
+		bsr.w	SpecialAnimateBG
 		tst.w	(DemoMode).w
 		beq.s	loc_3656
 		tst.w	(v_demolength).w
@@ -2676,7 +2675,7 @@ word_38E0:	incbin "palette\Cycle - SS.bin"
 		even
 ; ---------------------------------------------------------------------------
 
-GM_SpecialAnimateBG:
+SpecialAnimateBG:
 		move.w	(unk_FFF7A0).w,d0
 		bne.s	loc_39C4
 		move.w	#0,(v_bgscreenposy).w
@@ -2702,7 +2701,7 @@ loc_39DE:
 
 loc_39F4:
 		move.w	2(a3),d0
-		bsr.w	GetSine
+		bsr.w	CalcSine
 		moveq	#0,d2
 		move.b	(a1)+,d2
 		muls.w	d2,d0
@@ -3220,6 +3219,7 @@ loc_47B4:
 		dbf	d6,loc_47B4
 		rts
 ; ---------------------------------------------------------------------------
+;loc_47D8:
 		lea	(v_bg3screenposx).w,a3
 		move.w	#$6000,d2
 		move.w	#$B0,d4
@@ -3256,9 +3256,9 @@ LoadLevelData:
 		move.l	(a0)+,(a4)+
 		dbf	d0,.loadblocks
 		movea.l	(a2)+,a0
-		lea	(v_256x256&$FFFFFF).l,a1
+		lea	(v_256x256).l,a1
 		bsr.w	KosDec
-		bsr.w	LoadLayout
+		bsr.w	LevelLayoutLoad
 		move.w	(a2)+,d0
 		move.w	(a2),d0
 		andi.w	#$FF,d0
@@ -3273,7 +3273,7 @@ LoadLevelData:
 .locret:
 		rts
 ; ---------------------------------------------------------------------------
-sub_485C:
+;sub_485C:
 		moveq	#0,d0
 		move.b	(v_lives).w,d1
 		cmpi.b	#2,d1
@@ -3315,7 +3315,7 @@ locret_48B8:
 		rts
 ; ---------------------------------------------------------------------------
 
-LoadLayout:
+LevelLayoutLoad:
 		lea	(v_lvllayout).w,a3
 		move.w	#$1FF,d1
 		moveq	#0,d0
@@ -3578,7 +3578,7 @@ loc_613C:
 ; ---------------------------------------------------------------------------
 
 loc_6160:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_61A8
 		addq.w	#5,a3
 
@@ -3649,7 +3649,8 @@ ObjCollapsePtfm_Slope:dc.b $20, $20, $20, $20, $20, $20, $20, $20, $21, $21
 		dc.b $27, $27, $28, $28, $29, $29, $2A, $2A, $2B, $2B
 		dc.b $2C, $2C, $2D, $2D, $2E, $2E, $2F, $2F, $30, $30
 		dc.b $30, $30, $30, $30, $30, $30, $30, $30
-		include "_maps\06526.asm"
+		
+                include "_maps\06526.asm"
 		include "levels\GHZ\CollapsePtfm\Sprite.map"
 		include "levels\GHZ\CollapseFloor\Sprite.map"
 		even
@@ -3787,14 +3788,16 @@ loc_6A28:
 		moveq	#0,d4
 		rts
 ; ---------------------------------------------------------------------------
+Map_2A:
 		include "_maps\2A.asm"
-		even
 
 		include "_incObj\0E Title Screen Sonic.asm"
 		include "_incObj\0F Press Start.asm"
 ; ---------------------------------------------------------------------------
-		include "screens\title\TitleSonic\Sprite.ani"
-		include "screens\title\TitleText\Sprite.ani"
+Ani_TitleSonic:
+		include "_anim\Title Screen Sonic.asm"
+Ani_TitleText:
+		include "_anim\Press Start.asm"
 ; ---------------------------------------------------------------------------
 
 AnimateSprite:
@@ -3870,8 +3873,10 @@ loc_6BCC:
 locret_6BDA:
 		rts
 ; ---------------------------------------------------------------------------
-		include "screens\title\TitleText\Sprite.map"
-		include "screens\title\TitleSonic\Sprite.map"
+Map_TitleText:
+		include "_maps\Press Start.asm"
+Map_TitleSonic:
+		include "_maps\Title Screen Sonic.asm"
 
                 include "_incObj\1E Ballhog.asm"
                 include "_incObj\20 Ballhog's Bomb.asm"
@@ -3915,6 +3920,7 @@ Map_Ring:	include "_maps\Rings.asm"
 		include "_incObj\2E Monitor Content Power-Up.asm"
 		include "_incObj\26 Monitor (SolidSides subroutine).asm"
 		include "_anim\Monitor.asm"
+Map_Monitor:
 		include "_maps\Monitor.asm"
 ; ---------------------------------------------------------------------------
 
@@ -4414,7 +4420,7 @@ sub_8B22:
 ; ---------------------------------------------------------------------------
 
 loc_8B36:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_8B70
 		move.w	(a0)+,obX(a1)
 		move.w	(a0)+,d0
@@ -4439,8 +4445,8 @@ locret_8B70:
 		rts
 ; ---------------------------------------------------------------------------
 
-ObjectLoad:
-		lea	(LevelObjectsList).w,a1
+FindFreeObj:
+		lea	(v_objspace+$800).w,a1
 		move.w	#$5F,d0
 
 loc_8B7A:
@@ -4453,7 +4459,7 @@ locret_8B86:
 		rts
 ; ---------------------------------------------------------------------------
 
-LoadNextObject:
+FindNextFreeObj:
 		movea.l	a0,a1
 		move.w	#$F000,d0
 		sub.w	a0,d0
@@ -4670,7 +4676,7 @@ sub_B146:
 		move.b	(byte_FFFE0F).w,d0
 		andi.b	#7,d0
 		bne.s	locret_B186
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_B186
 		move.b	#$3F,0(a1)
 		move.w	obX(a0),obX(a1)
@@ -4772,7 +4778,6 @@ BossMove:
 
 		include "_anim\Signpost.asm"
 		include "_maps\Signpost.asm"
-		even
 
 		include "_incObj\4C & 4D Lava Geyser Maker.asm"
 
@@ -4859,7 +4864,7 @@ ObjSeeSaw_SlopeLine:dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 
 ObjSonic:
 		tst.w	(DebugRoutine).w
-		bne.w	Edit
+		bne.w	DebugMode
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	off_E826(pc,d0.w),d1
@@ -4930,7 +4935,7 @@ sub_E96C:
 		bsr.w	Sonic_Roll
 		bsr.w	Sonic_LevelBound
 		bsr.w	SpeedToPos
-		bsr.w	Sonic_AnglePosition
+		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
 		rts
 ; ---------------------------------------------------------------------------
@@ -4951,7 +4956,7 @@ loc_E9A8:
 		bsr.w	Sonic_RollSpeed
 		bsr.w	Sonic_LevelBound
 		bsr.w	SpeedToPos
-		bsr.w	Sonic_AnglePosition
+		bsr.w	Sonic_AnglePos
 		bsr.w	Sonic_SlopeRepel
 		rts
 ; ---------------------------------------------------------------------------
@@ -4998,7 +5003,7 @@ locret_EDF8:
 		include "_incObj\Sonic ResetOnFloor.asm"
 ; ---------------------------------------------------------------------------
 
-loc_F26A:
+;loc_F26A:
 		lea	(v_objspace+$400).w,a1
 		move.w	obX(a0),d0
 		bsr.w	sub_F290
@@ -5086,7 +5091,7 @@ AniSonic:
 LogCollision:
 		rts
 ; ---------------------------------------------------------------------------
-		lea	(colWidth).l,a1			; Logs the Collision.
+		lea	(colWidth).l,a1
 		lea	(colWidth).l,a2
 		move.w	#$FF,d3
 
@@ -5511,14 +5516,14 @@ locret_10870:
 		rts
 ; ---------------------------------------------------------------------------
 
-GM_Special_ShowLayout:
-		bsr.w	GM_Special_AniWallsandRings
-		bsr.w	GM_Special_AniItems
+Special_ShowLayout:
+		bsr.w	Special_AniWallsandRings
+		bsr.w	Special_AniItems
 		move.w	d5,-(sp)
 		lea	($FFFF8000).w,a1
 		move.b	(unk_FFF780).w,d0
 		andi.b	#$FC,d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		move.w	d0,d4
 		move.w	d1,d5
 		muls.w	#$18,d4
@@ -5633,7 +5638,7 @@ loc_109A6:
 		rts
 ; ---------------------------------------------------------------------------
 
-GM_Special_AniWallsandRings:
+Special_AniWallsandRings:
 		lea	($FF400C).l,a1
 		moveq	#0,d0
 		move.b	(unk_FFF780).w,d0
@@ -5661,7 +5666,7 @@ loc_109E0:
 		move.b	#7,(unk_FFFEC4).w
 		bra.s	loc_10A02
 ; ---------------------------------------------------------------------------
-		addq.b	#1,(unk_FFFEC5).w
+		addq.b	#1,(unk_FFFEC5).w	; apparently the GOAL blocks were meant to flash yellow
 		andi.b	#1,(unk_FFFEC5).w
 
 loc_10A02:
@@ -5724,7 +5729,7 @@ locret_10AE0:
 		rts
 ; ---------------------------------------------------------------------------
 
-GM_Special_AniItems:
+Special_AniItems:
 		lea	($FF4400).l,a0
 		move.w	#$1F,d7
 
@@ -6365,7 +6370,7 @@ ArtSonic:	incbin "artunc\Sonic.bin"
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-ArtSmoke:	incbin "artnem\Smoke.bin"		; Although this never gets used, it's loaded first in the VRAM at $F400
+ArtSmoke:	incbin "artnem\Smoke.bin"
 		even
 ArtShield:	incbin "artnem\Shield.bin"
 		even

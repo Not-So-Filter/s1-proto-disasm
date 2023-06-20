@@ -2,7 +2,7 @@
 
 ObjChopper:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_8BB6(pc,d0.w),d1
 		jsr	off_8BB6(pc,d1.w)
 		bra.w	RememberState
@@ -12,7 +12,7 @@ off_8BB6:	dc.w loc_8BBA-off_8BB6, loc_8BF0-off_8BB6
 ; ---------------------------------------------------------------------------
 
 loc_8BBA:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.l	#MapChopper,4(a0)
 		move.w	#$47B,2(a0)
 		move.b	#4,1(a0)

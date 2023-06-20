@@ -34,7 +34,7 @@ loc_5792:
 		moveq	#0,d6
 
 loc_57E2:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_5854
 		addq.b	#1,obSubtype(a0)
 		move.w	a1,d5

@@ -2,7 +2,7 @@
 
 ObjMonitor:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_8054(pc,d0.w),d1
 		jmp	off_8054(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -13,10 +13,10 @@ off_8054:	dc.w loc_805E-off_8054, loc_80C0-off_8054
 ; ---------------------------------------------------------------------------
 
 loc_805E:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.b	#$E,obHeight(a0)
 		move.b	#$E,obWidth(a0)
-		move.l	#MapMonitor,obMap(a0)
+		move.l	#Map_Monitor,obMap(a0)
 		move.w	#$680,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)
@@ -27,7 +27,7 @@ loc_805E:
 		bclr	#7,2(a2,d0.w)
 		btst	#0,2(a2,d0.w)
 		beq.s	loc_80B4
-		move.b	#8,$24(a0)
+		move.b	#8,obRoutine(a0)
 		move.b	#$B,obFrame(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -134,9 +134,9 @@ loc_81AE:
 ; ---------------------------------------------------------------------------
 
 sub_81D2:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.b	#0,obColType(a0)
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_81FA
 		move.b	#$2E,0(a1)
 		move.w	obX(a0),obX(a1)
@@ -144,10 +144,10 @@ sub_81D2:
 		move.b	obAnim(a0),obAnim(a1)
 
 loc_81FA:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_8216
 		move.b	#$27,0(a1)
-		addq.b	#2,$24(a1)
+		addq.b	#2,obRoutine(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 

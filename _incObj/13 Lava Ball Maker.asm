@@ -28,7 +28,7 @@ loc_C1FA:
 		move.b	$1F(a0),$1E(a0)
 		bsr.w	ObjectChkOffscreen
 		bne.s	locret_C22A
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_C22A
 		move.b	#$14,0(a1)
 		move.w	obX(a0),obX(a1)

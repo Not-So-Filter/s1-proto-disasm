@@ -22,7 +22,7 @@ loc_B010:
 ; ---------------------------------------------------------------------------
 
 loc_B01C:
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_B064
 
 loc_B022:
@@ -74,7 +74,7 @@ loc_B0B6:
 
 loc_B0D2:
 		move.b	$3F(a0),d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		asr.w	#6,d0
 		add.w	$38(a0),d0
 		move.w	d0,$C(a0)

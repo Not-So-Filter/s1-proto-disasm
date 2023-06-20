@@ -29,7 +29,7 @@ loc_C62C:
 		sub.w	8(a1),d1
 		sub.w	$C(a1),d2
 		jsr	(CalcAngle).l
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		muls.w	#$F900,d1
 		asr.l	#8,d1
 		move.w	d1,$10(a1)

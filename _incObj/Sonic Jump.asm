@@ -13,7 +13,7 @@ Sonic_Jump:
 		moveq	#0,d0
 		move.b	$26(a0),d0
 		subi.b	#$40,d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		muls.w	#$680,d1
 		asr.l	#8,d1
 		add.w	d1,$10(a0)

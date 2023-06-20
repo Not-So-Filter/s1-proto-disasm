@@ -132,7 +132,7 @@ loc_BE6C:
 		tst.b	$32(a0)
 		bne.s	locret_BEC4
 		move.b	#1,$32(a0)
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_BEC4
 		move.b	#$23,0(a1)
 		move.w	8(a0),8(a1)

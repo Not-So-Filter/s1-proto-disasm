@@ -126,7 +126,7 @@ loc_EB12:
 
 loc_EB16:
 		move.b	obAngle(a0),d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		muls.w	obInertia(a0),d1
 		asr.l	#8,d1
 		move.w	d1,obVelX(a0)

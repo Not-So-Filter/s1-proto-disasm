@@ -84,7 +84,7 @@ loc_59DE:
 
 sub_5A04:
 		move.b	$38(a0),d0
-		bsr.w	GetSine
+		bsr.w	CalcSine
 		move.w	#$400,d1
 		muls.w	d1,d0
 		swap	d0

@@ -63,7 +63,7 @@ loc_7C64:
 		lsr.b	#1,d4
 		bcs.s	loc_7CBC
 		bclr	#7,(a2)
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_7CC8
 
 loc_7C74:
@@ -170,7 +170,7 @@ loc_7D98:
 ; ---------------------------------------------------------------------------
 
 loc_7DA0:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.w	loc_7E2C
 
 loc_7DA8:
@@ -192,7 +192,7 @@ loc_7DD2:
 		tst.w	d4
 		bmi.s	loc_7E1C
 		move.w	d4,d0
-		bsr.w	GetSine
+		bsr.w	CalcSine
 		move.w	d4,d2
 		lsr.w	#8,d2
 		asl.w	d2,d0

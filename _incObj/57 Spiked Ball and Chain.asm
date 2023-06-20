@@ -44,7 +44,7 @@ ObjSpikedBalls_Init:
 		bcs.s	loc_DD5E
 
 ObjSpikedBalls_MakeChain:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_DD5E
 		addq.b	#1,$29(a0)
 		move.w	a1,d5
@@ -80,7 +80,7 @@ ObjSpikedBalls_MoveStub:
 		move.w	$3E(a0),d0
 		add.w	d0,$26(a0)
 		move.b	$26(a0),d0
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		move.w	$38(a0),d2
 		move.w	$3A(a0),d3
 		lea	$29(a0),a2

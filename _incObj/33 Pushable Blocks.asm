@@ -193,7 +193,7 @@ locret_A124:
 ; ---------------------------------------------------------------------------
 
 loc_A126:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_A14C
 		move.b	#$4C,0(a1)
 		move.w	8(a0),8(a1)

@@ -48,7 +48,7 @@ locret_7926:
 ; ---------------------------------------------------------------------------
 
 loc_7928:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_798A
 		move.b	#$23,0(a1)
 		move.w	8(a0),8(a1)

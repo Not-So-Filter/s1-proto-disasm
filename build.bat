@@ -1,4 +1,15 @@
 @echo off
 
+:: Backup both binaries.
+IF EXIST sound\z80built.bin move /Y sound\z80built.bin sound\z80built.prev.bin >NUL
 IF EXIST s1built.bin move /Y s1built.bin s1built.prev.bin >NUL
-asm68k.exe /k /p /o ae-,c+,l. sonic.asm, s1built.bin, , sonic.lst > log.txt
+
+:: Before anything, we build the z80 binary blob first.
+set USEANSI=n
+build_tools\asl -c -t 3 -L -A -xx sound\z80.asm
+build_tools\p2bin sound\z80.p sound\z80built.bin -r 0x-0x
+
+del sound\z80.p
+del sound\z80.h
+
+asm68k /k /p /o ae-,c+,l. sonic.asm, s1built.bin, , sonic.lst > log.txt

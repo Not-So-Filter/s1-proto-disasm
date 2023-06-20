@@ -101,7 +101,7 @@ psg_input:		equ $C00011
 ; Z80 addresses
 z80_ram:		equ $A00000			; start of Z80 RAM
 z80_dac3_pitch:		equ $A00183
-z80_dac_noupdate:	equ $A01FF6
+z80_dac_update:		equ $A01FF6
 z80_dac_status:		equ $A01FFD
 z80_dac_sample:		equ $A01FFF
 z80_ram_end:		equ $A02000			; end of non-reserved Z80 RAM
@@ -135,7 +135,7 @@ TrackSavedDuration:	equ $F				; All tracks
 TrackSavedDAC:		equ $10				; DAC only
 TrackFreq:		equ $10				; FM/PSG only (2 bytes)
 TrackNoteTimeout:	equ $12				; FM/PSG only
-TrackNoteTimeoutMaster:equ $13				; FM/PSG only
+TrackNoteTimeoutMaster:	equ $13				; FM/PSG only
 TrackModulationPtr:	equ $14				; FM/PSG only (4 bytes)
 TrackModulationWait:	equ $18				; FM/PSG only
 TrackModulationSpeed:	equ $19				; FM/PSG only

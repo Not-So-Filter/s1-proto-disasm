@@ -15,7 +15,7 @@ ObjectFragment:
 ; ---------------------------------------------------------------------------
 
 loc_AECE:
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	loc_AF28
 		addq.w	#5,a3
 

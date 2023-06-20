@@ -231,7 +231,7 @@ DACUpdateTrack:
 		beq.s	.nodelay
 		btst	#3,d0
 		bne.s	.timpani
-		tst.b	(z80_dac_noupdate).l
+		tst.b	(z80_dac_update).l
 		bne.s	.nodelay
 		move.b	d0,(z80_dac_sample).l
 
@@ -242,7 +242,7 @@ DACUpdateTrack:
 .timpani:
 		subi.b	#$88,d0
 		move.b	.timpanipitch(pc,d0.w),d0
-		tst.b	(z80_dac_noupdate).l
+		tst.b	(z80_dac_update).l
 		bne.s	.noupdate
 		move.b  d0,(z80_dac3_pitch).l
 		move.b	#$83,(z80_dac_sample).l
@@ -688,13 +688,12 @@ dPlaySnd:
 ; ---------------------------------------------------------------------------
 
 dPlaySnd_Cmd:
-		subi.b	#$E0,d7
+		subi.b	#flg__First,d7
 		lsl.w	#2,d7
 		jmp	Sound_ExIndex(pc,d7.w)
 ; ---------------------------------------------------------------------------
 
 Sound_ExIndex:
-
 ptr_flgE0:	bra.w	dPlaySnd_FadeOut
 ; ---------------------------------------------------------------------------
 ptr_flgE1:	bra.w	dStopSFX
@@ -704,11 +703,12 @@ ptr_flgE2:	bra.w	dPlaySnd_ShoesOn
 ptr_flgE3:	bra.w	dPlaySnd_ShoesOff
 ; ---------------------------------------------------------------------------
 ptr_flgE4:	bra.w	dStopSpecSFX
-ptr_flgend
+; ---------------------------------------------------------------------------
+ptr_flgend:
 ; ---------------------------------------------------------------------------
 
 dPlaySnd_DAC:
-		addi.b	#-$4F,d7
+		addi.b	#$B1,d7
 		move.b	d7,(z80_dac_sample).l
 		nop
 		nop
@@ -719,26 +719,28 @@ dPlaySnd_DAC:
 
 dPlaySnd_Music:
 		cmpi.b	#bgm_ExtraLife,d7
-		bne.s	.notextralife
+		bne.s	.bgmnot1up
 		tst.b	f_1up_playing(a6)
 		bne.w	.exit
 		lea	v_music_track_ram(a6),a5
-		moveq	#9,d0
+		moveq	#((v_music_track_ram_end-v_music_track_ram)/TrackSz)-1,d0	; 1 DAC + 6 FM + 3 PSG tracks
 
 .noint:
 		bclr	#2,(a5)
 		adda.w	#TrackSz,a5
 		dbf	d0,.noint
+
 		lea	v_sfx_track_ram(a6),a5
-		moveq	#5,d0
+		moveq	#((v_sfx_track_ram_end-v_sfx_track_ram)/TrackSz)-1,d0	; 3 FM + 3 PSG tracks (SFX)
 
 .loop0:
 		bclr	#7,(a5)
 		adda.w	#TrackSz,a5
 		dbf	d0,.loop0
-		movea.l	a6,a0
+		
+                movea.l	a6,a0
 		lea	v_1up_ram_copy(a6),a1
-		move.w	#$87,d0
+		move.w	#((v_music_track_ram_end-v_startofvariables)/4)-1,d0	; Backup $220 bytes: all variables and music track data
 
 .memcopy:
 		move.l	(a0)+,(a1)+
@@ -748,7 +750,7 @@ dPlaySnd_Music:
 		bra.s	.initmusic
 ; ---------------------------------------------------------------------------
 
-.notextralife:
+.bgmnot1up:
 		clr.b	f_1up_playing(a6)
 		clr.b	v_fadein_counter(a6)
 
@@ -2425,7 +2427,7 @@ dOpSSGEG:	dc.b $90, $50, $98, $58
 		dc.b $94, $54, $9C, $5C
 		even
 
-Unc_Z80:        incbin "sound/Z80.bin"
+Unc_Z80:        incbin "sound/z80built.bin"
 Unc_Z80_End:	even
 Music81:	incbin "sound/music/Mus81 - GHZ.bin"
 		even

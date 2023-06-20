@@ -47,7 +47,7 @@ off_7172:	dc.w ObjExplode_Load-off_7172, ObjExplode_Init-off_7172, ObjExplode_Ac
 
 ObjExplode_Load:
 		addq.b	#2,obRoutine(a0)
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	ObjExplode_Init
 		move.b	#$28,0(a1)
 		move.w	obX(a0),obX(a1)

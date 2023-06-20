@@ -18,7 +18,7 @@ loc_CC06:
 ; ---------------------------------------------------------------------------
 
 loc_CC10:
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_CC58
 
 loc_CC16:

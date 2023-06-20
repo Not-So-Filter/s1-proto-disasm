@@ -50,7 +50,7 @@ loc_9718:
 ; ---------------------------------------------------------------------------
 
 loc_9724:
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.w	loc_97B0
 
 loc_972C:

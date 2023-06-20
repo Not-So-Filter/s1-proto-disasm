@@ -72,7 +72,7 @@ locret_6FF4:
 
 loc_6FF6:
 		move.b	#1,$32(a0)
-		bsr.w	ObjectLoad
+		bsr.w	FindFreeObj
 		bne.s	locret_701A
 		move.b	#$20,0(a1)
 		move.w	obX(a0),obX(a1)

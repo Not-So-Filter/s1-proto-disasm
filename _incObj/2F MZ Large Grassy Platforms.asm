@@ -153,7 +153,7 @@ loc_9018:
 
 loc_9024:
 		move.b	d0,$34(a0)
-		jsr	(GetSine).l
+		jsr	(CalcSine).l
 		lsr.w	#4,d0
 		move.w	d0,d1
 		add.w	$2C(a0),d0
@@ -163,7 +163,7 @@ loc_9024:
 		tst.b	$35(a0)
 		bne.s	loc_9082
 		move.b	#1,$35(a0)
-		bsr.w	LoadNextObject
+		bsr.w	FindNextFreeObj
 		bne.s	loc_9082
 		move.b	#$35,0(a1)
 		move.w	8(a0),8(a1)
