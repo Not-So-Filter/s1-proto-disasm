@@ -413,7 +413,7 @@ loc_472:
 ErrorPrint:
 		lea	(vdp_data_port).l,a6
 		locVRAM	$F800
-		lea	(ArtText).l,a0
+		lea	(Art_Text).l,a0
 		move.w	#$27F,d1
 
 .loadart:
@@ -490,7 +490,7 @@ ErrorWaitInput:
 		bne.w	ErrorWaitInput
 		rts
 ; ---------------------------------------------------------------------------
-ArtText:	incbin "artunc\menutext.bin"
+Art_Text:	incbin "artunc\menutext.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -1532,7 +1532,7 @@ loc_2592:
 		bsr.w	NemDec
 		lea	(vdp_data_port).l,a6
 		locVRAM $D000,4(a6)
-		lea	(ArtText).l,a5
+		lea	(Art_Text).l,a5
 		move.w	#$28F,d1
 
 loc_25D8:
@@ -1574,10 +1574,10 @@ loc_25D8:
 		bsr.w	PlaySound_Special
 		move.b	#0,(f_debugmode).w
 		move.w	#$178,(v_demolength).w		; run title screen for $178 frames
-		move.b	#$E,(v_objspace+$40).w		; load big sonic object
-		move.b	#$F,(v_objspace+$80).w		; load press start button text
-		move.b	#$F,(v_objspace+$C0).w		; load object which hides sonic
-		move.b	#2,(v_objspace+$DA).w
+		move.b	#$E,(v_objspace+obSize).w		; load big sonic object
+		move.b	#$F,(v_objspace+obSize*2).w		; load press start button text
+		move.b	#$F,(v_objspace+obSize*3).w		; load object which hides sonic
+		move.b	#2,(v_objspace+obSize*3+obFrame).w
 		moveq	#plcid_Main,d0
 		bsr.w	plcReplace
 		move.w	(v_vdp_buffer1).w,d0
@@ -1955,7 +1955,7 @@ loc_2C6C:
 		lea	(MusicList).l,a1
 		move.b	(a1,d0.w),d0
 		bsr.w	PlaySound
-		move.b	#$34,(v_objspace+$80).w
+		move.b	#$34,(v_objspace+obSize*2).w ; load title card object
 
 loc_2C92:
 		move.b	#$C,(v_vbla_routine).w
@@ -2004,8 +2004,8 @@ loc_2D2A:
 		move.l	#colCWZ,(v_collindex).w		; Load Clock Work's collision
 
 loc_2D3A:
-		move.b	#1,(v_objspace).w
-		move.b	#$21,(v_objspace+$40).w
+		move.b	#1,(v_player).w
+		move.b	#$21,(v_objspace+obSize).w
 		btst	#bitA,(v_jpadhold1).w
 		beq.s	loc_2D54
 		move.b	#1,(f_debugmode).w
@@ -2044,10 +2044,10 @@ loc_2D54:
 		bsr.w	WaitForVBla
 		move.w	#$202F,(v_pfade_start).w
 		bsr.w	PaletteWhiteIn_Sub
-		addq.b	#2,(v_objspace+$A4).w
-		addq.b	#4,(v_objspace+$E4).w
-		addq.b	#4,(v_objspace+$124).w
-		addq.b	#4,(v_objspace+$164).w
+		addq.b	#2,(v_objspace+obSize*2+obRoutine).w
+		addq.b	#4,(v_objspace+obSize*3+obRoutine).w
+		addq.b	#4,(v_objspace+obSize*4+obRoutine).w
+		addq.b	#4,(v_objspace+obSize*5+obRoutine).w
 
 GM_LevelLoop:
 		bsr.w	PauseGame
@@ -2060,7 +2060,7 @@ GM_LevelLoop:
 		bsr.w	ExecuteObjects
 		tst.w	(DebugRoutine).w
 		bne.s	loc_2E2A
-		cmpi.b	#6,(v_objspace+obRoutine).w
+		cmpi.b	#6,(v_player+obRoutine).w
 		bcc.s	loc_2E2E
 
 loc_2E2A:
@@ -2301,10 +2301,10 @@ DebugPosLoadArt:
 		rts
 ; ---------------------------------------------------------------------------
 		move.l	#$5E000002,(vdp_control_port).l
-		lea	(ArtText).l,a0
+		lea	(Art_Text).l,a0
 		move.w	#$9F,d1
 		bsr.s	.loadtext
-		lea	(ArtText).l,a0
+		lea	(Art_Text).l,a0
 		adda.w	#$220,a0
 		move.w	#$5F,d1
 ; ---------------------------------------------------------------------------
@@ -3571,7 +3571,7 @@ loc_613C:
 		adda.w	(a3,d0.w),a3
 		addq.w	#1,a3
 		bset	#5,obRender(a0)
-		move.b	0(a0),d4
+		move.b	obId(a0),d4
 		move.b	obRender(a0),d5
 		movea.l	a0,a1
 		bra.s	loc_6168
@@ -3584,7 +3584,7 @@ loc_6160:
 
 loc_6168:
 		move.b	#6,obRoutine(a1)
-		move.b	d4,0(a1)
+		move.b	d4,obId(a1)
 		move.l	a3,obMap(a1)
 		move.b	d5,obRender(a1)
 		move.w	obX(a0),obX(a1)
@@ -3649,7 +3649,7 @@ ObjCollapsePtfm_Slope:dc.b $20, $20, $20, $20, $20, $20, $20, $20, $21, $21
 		dc.b $27, $27, $28, $28, $29, $29, $2A, $2A, $2B, $2B
 		dc.b $2C, $2C, $2D, $2D, $2E, $2E, $2F, $2F, $30, $30
 		dc.b $30, $30, $30, $30, $30, $30, $30, $30
-		
+
                 include "_maps\06526.asm"
 		include "levels\GHZ\CollapsePtfm\Sprite.map"
 		include "levels\GHZ\CollapseFloor\Sprite.map"
@@ -3671,7 +3671,7 @@ Map_UnkSwitch:	include "_maps\Unknown Switch.asm"
 sub_6936:
 		tst.w	(DebugRoutine).w
 		bne.w	locret_69A6
-		cmpi.b	#6,(v_objspace+obRoutine).w
+		cmpi.b	#6,(v_player+obRoutine).w
 		bcc.s	locret_69A6
 		bsr.w	sub_69CE
 		beq.s	loc_698C
@@ -3897,9 +3897,8 @@ Map_TitleSonic:
 		even
 
 		include "_incObj\1F Crabmeat.asm"
-		include "levels\GHZ\Crabmeat\Sprite.ani"
-		include "levels\GHZ\Crabmeat\Sprite.map"
-		even
+Ani_Crabmeat:	include "_anim\Crabmeat.asm"
+Map_Crabmeat:	include "_maps\Crabmeat.asm"
 
 		include "_incObj\22 Buzz Bomber.asm"
 		include "_incObj\23 Buzz Bomber Missile.asm"
@@ -3920,8 +3919,7 @@ Map_Ring:	include "_maps\Rings.asm"
 		include "_incObj\2E Monitor Content Power-Up.asm"
 		include "_incObj\26 Monitor (SolidSides subroutine).asm"
 		include "_anim\Monitor.asm"
-Map_Monitor:
-		include "_maps\Monitor.asm"
+Map_Monitor:	include "_maps\Monitor.asm"
 ; ---------------------------------------------------------------------------
 
 ExecuteObjects:
@@ -3941,7 +3939,7 @@ sub_8546:
 		moveq	#0,d0
 
 loc_8556:
-		lea	$40(a0),a0
+		lea	obSize(a0),a0
 		dbf	d7,sub_8546
 		rts
 ; ---------------------------------------------------------------------------
@@ -3960,7 +3958,7 @@ loc_8566:
 		bsr.w	DisplaySprite
 
 loc_8576:
-		lea	$40(a0),a0
+		lea	obSize(a0),a0
 
 loc_857A:
 		dbf	d7,loc_8566
@@ -4437,7 +4435,7 @@ loc_8B36:
 		move.b	d2,obRespawnNo(a1)
 
 loc_8B66:
-		move.b	d0,0(a1)
+		move.b	d0,obId(a1)
 		move.b	(a0)+,obSubtype(a1)
 		moveq	#0,d0
 
@@ -4452,7 +4450,7 @@ FindFreeObj:
 loc_8B7A:
 		tst.b	(a1)
 		beq.s	locret_8B86
-		lea	$40(a1),a1
+		lea	obSize(a1),a1
 		dbf	d0,loc_8B7A
 
 locret_8B86:
@@ -4470,7 +4468,7 @@ FindNextFreeObj:
 loc_8B96:
 		tst.b	(a1)
 		beq.s	locret_8BA2
-		lea	$40(a1),a1
+		lea	obSize(a1),a1
 		dbf	d0,loc_8B96
 
 locret_8BA2:
@@ -4515,7 +4513,7 @@ locret_8BA2:
 
 		include "_incObj\32 Button.asm"
 
-		include "levels\shared\Switch\Sprite.map"
+		include "_maps\Button.asm"
 		even
 
 		include "_incObj\33 Pushable Blocks.asm"
@@ -6052,16 +6050,16 @@ sub_1181E:
 		move.l	#$5C400003,(vdp_control_port).l
 		move.w	(v_screenposx).w,d1
 		swap	d1
-		move.w	(v_objspace+obX).w,d1
+		move.w	(v_player+obX).w,d1
 		bsr.s	sub_1183E
 		move.w	(v_screenposy).w,d1
 		swap	d1
-		move.w	(v_objspace+obY).w,d1
+		move.w	(v_player+obY).w,d1
 ; ---------------------------------------------------------------------------
 
 sub_1183E:
 		moveq	#7,d6
-		lea	(ArtText).l,a1
+		lea	(Art_Text).l,a1
 
 loc_11846:
 		rol.w	#4,d1
@@ -6409,7 +6407,7 @@ ArtWall:	incbin "levels\GHZ\Wall\Art.nem"
 ; ---------------------------------------------------------------------------
 ArtChainPtfm:	incbin "levels\MZ\ChainPtfm\Art.nem"
 		even
-ArtButtonMZ:	incbin "levels\shared\Switch\Art MZ.nem"
+ArtButtonMZ:	incbin "artnem\MZ Switch.bin"
 		even
 byte_2816E:	incbin "artnem\mz piston.nem"
 		even
@@ -6443,7 +6441,7 @@ ArtBumper:	incbin "levels\SZ\Bumper\Art.nem"
 		even
 byte_29FC0:	incbin "artnem\SZ small spiked ball.nem"
 		even
-ArtButton:	incbin "levels\shared\Switch\Art.nem"
+ArtButton:	incbin "artnem\Switch.bin"
 		even
 byte_2A104:	incbin "artnem\swinging spiked ball.nem"
 		even

@@ -23,7 +23,7 @@ loc_A702:
 		moveq	#6,d1
 
 loc_A70C:
-		move.b	#$3A,0(a1)
+		move.b	#$3A,obId(a1)
 		move.w	(a2)+,obX(a1)
 		move.w	(a2)+,$30(a1)
 		move.w	(a2)+,obScreenY(a1)

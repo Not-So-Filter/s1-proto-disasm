@@ -18,7 +18,7 @@ dbug:	macro map,object,subtype,frame,vram
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
 	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug	MapCrabmeat,	$1F,	0,	0,	$400
+	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
 	dbug	MapBuzzbomber,	$22,	0,	0,	$444
 	dbug	MapChopper,	$2B,	0,	0,	$47B
 	dbug	MapSpikes,	$36,	0,	0,	$51B
@@ -37,7 +37,7 @@ dbug:	macro map,object,subtype,frame,vram
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
 	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug	MapCrabmeat,	$1F,	0,	0,	$400
+	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
 	.LZend:
 
 .MZ:	
@@ -78,7 +78,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapSeesaw,      $5E,    0,      0,      $374
 	dbug    MapSpring,      $41,    0,      0,      $523
 	dbug    MapLavaball,    $13,    0,      0,      $345
-	dbug	MapCrabmeat,	$1F,	0,	0,	$400
+	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
 	dbug	MapBuzzbomber,	$22,	0,	0,	$444
 	.SLZend:
 
@@ -93,7 +93,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapRoller,      $43,    0,      0,      $24B8
 	dbug    MapSceneryLamp, $12,    0,      0,      0
 	dbug    MapBumper,      $47,    0,      0,      $380
-	dbug	MapCrabmeat,	$1F,	0,	0,	$400
+	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
 	dbug	MapBuzzbomber,	$22,	0,	0,	$444
 	dbug    MapYadrin,      $50,    0,      0,      $47B
 	dbug    MapPlatform2,   $18,    0,      0,      $4000
@@ -107,7 +107,7 @@ dbug:	macro map,object,subtype,frame,vram
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
 	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug	MapCrabmeat,	$1F,	0,	0,	$400
+	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
 	.CWZend:
 
 ; ===========================================================================

@@ -5,12 +5,16 @@ PaletteCycle:
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		add.w	d0,d0
-		move.w	.levels(pc,d0.w),d0
-		jmp	.levels(pc,d0.w)
+		move.w	PCycle_Index(pc,d0.w),d0
+		jmp	PCycle_Index(pc,d0.w)
 ; ---------------------------------------------------------------------------
-
-.levels:	dc.w PalCycGHZ-.levels, PalCycLZ-.levels, PalCycMZ-.levels, PalCycSLZ-.levels
-                dc.w PalCycSZ-.levels, PalCycCWZ-.levels, PalCycEnding-.levels
+PCycle_Index:	dc.w PalCycGHZ-PCycle_Index
+		dc.w PalCycLZ-PCycle_Index
+		dc.w PalCycMZ-PCycle_Index
+		dc.w PalCycSLZ-PCycle_Index
+		dc.w PalCycSZ-PCycle_Index
+		dc.w PalCycCWZ-PCycle_Index
+		dc.w PalCycEnding-PCycle_Index
 ; ---------------------------------------------------------------------------
 
 PalCycTitle:
@@ -40,7 +44,7 @@ locret_1786:
 PalCycLZ:
 		rts
 ; ---------------------------------------------------------------------------
-PalCycUnused:
+;PalCycUnused:
 		subq.w	#1,(v_pcyc_time).w
 		bpl.s	locret_17B8
 		move.w	#5,(v_pcyc_time).w

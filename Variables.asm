@@ -1,7 +1,5 @@
 ; Variables (v) and Flags (f)
 
-ObSize = $40 ; size for each object variables
-
 v_256x256:	        equ  $FF0000			; 256x256 tile mappings ($A400 bytes)
 v_lvllayout:	        equ  $FFFFA400
 v_bgscroll_buffer:      equ  $FFFFA800

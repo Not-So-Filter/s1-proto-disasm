@@ -122,7 +122,7 @@ loc_4A3E:
 		bcs.s	locret_4A76
 		bsr.w	FindFreeObj
 		bne.s	loc_4A5E
-		move.b	#$3D,0(a1)
+		move.b	#$3D,obId(a1)
 		move.w	#$2A60,obX(a1)
 		move.w	#$280,obY(a1)
 

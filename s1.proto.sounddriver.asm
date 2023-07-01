@@ -127,51 +127,51 @@ UpdateMusic:
 		jsr	CycleSoundQueue(pc)
 
 .noqueue:
-		lea	$40(a6),a5
+		lea	v_music_dac_track(a6),a5
 		tst.b	(a5)
 		bpl.s	.nodac
 		jsr	DACUpdateTrack(pc)
 
 .nodac:
 		clr.b	f_updating_dac(a6)
-		moveq	#5,d7
+		moveq	#((v_music_fm_tracks_end-v_music_fm_tracks)/TrackSz)-1,d7	; 6 FM tracks
 
 .loopfm1:
 		adda.w	#TrackSz,a5
 		tst.b	(a5)
 		bpl.s	.nofm1
-		jsr	dUpdateFM(pc)
+		jsr	FMUpdateTrack(pc)
 
 .nofm1:
 		dbf	d7,.loopfm1
-		moveq	#2,d7
+		moveq	#((v_music_psg_tracks_end-v_music_psg_tracks)/TrackSz)-1,d7 ; 3 PSG tracks
 
 .looppsg1:
 		adda.w	#TrackSz,a5
 		tst.b	(a5)
 		bpl.s	.nopsg1
-		jsr	dUpdatePSG(pc)
+		jsr	PSGUpdateTrack(pc)
 
 .nopsg1:
 		dbf	d7,.looppsg1
 		move.b	#$80,f_voice_selector(a6)
-		moveq	#2,d7
+		moveq	#((v_sfx_fm_tracks_end-v_sfx_fm_tracks)/TrackSz)-1,d7	; 3 FM tracks (SFX)
 
 .loopfm2:
 		adda.w	#TrackSz,a5
 		tst.b	(a5)
 		bpl.s	.nofm2
-		jsr	dUpdateFM(pc)
+		jsr	FMUpdateTrack(pc)
 
 .nofm2:
 		dbf	d7,.loopfm2
-		moveq	#2,d7
+		moveq	#((v_sfx_psg_tracks_end-v_sfx_psg_tracks)/TrackSz)-1,d7 ; 3 PSG tracks (SFX)
 
 .looppsg2:
 		adda.w	#TrackSz,a5
 		tst.b	(a5)
 		bpl.s	.nopsg2
-		jsr	dUpdatePSG(pc)
+		jsr	PSGUpdateTrack(pc)
 
 .nopsg2:
 		dbf	d7,.looppsg2
@@ -179,15 +179,15 @@ UpdateMusic:
 		adda.w	#TrackSz,a5
 		tst.b	(a5)
 		bpl.s	.nofm3
-		jsr	dUpdateFM(pc)
+		jsr	FMUpdateTrack(pc)
 
 .nofm3:
 		adda.w	#TrackSz,a5
 		tst.b	(a5)
-		bpl.s	dExit
-		jsr	dUpdatePSG(pc)
+		bpl.s	DoStartZ80
+		jsr	PSGUpdateTrack(pc)
 
-dExit:
+DoStartZ80:
 		startZ80
 		rts
 ; ---------------------------------------------------------------------------
@@ -254,7 +254,7 @@ DACUpdateTrack:
 .timpanipitch:	dc.b $12, $15, $1C, $1D, $FF, $FF, $FF, $FF
 ; ---------------------------------------------------------------------------
 
-dUpdateFM:
+FMUpdateTrack:
 		subq.b	#1,TrackDurationTimeout(a5)
 		bne.s	.notegoing
 		bclr	#4,(a5)
@@ -546,7 +546,7 @@ loc_7457E:
 		andi.b	#$37,d0
 		or.b	d0,d1
 		move.b	#$B4,d0
-		jsr	dChkWriteYMch(pc)
+		jsr	WriteFMIorIIMain(pc)
 		addq.b	#1,$24(a5)
 
 locret_745AE:
@@ -587,7 +587,7 @@ PauseMusic:
 		jsr	WriteFMI(pc)
 		dbf	d2,.keyoff
 		jsr	dMutePSG(pc)
-		bra.w	dExit
+		bra.w	DoStartZ80
 ; ---------------------------------------------------------------------------
 
 .resume:
@@ -633,14 +633,14 @@ PauseMusic:
 		jsr	dWriteYMch(pc)
 
 dPauseExit:
-		bra.w	dExit
+		bra.w	DoStartZ80
 ; ---------------------------------------------------------------------------
 
 CycleSoundQueue:
 		movea.l	(Go_SoundPriorities).l,a0
 		lea	v_soundqueue0(a6),a1
 		move.b	v_sndprio(a6),d3
-		moveq	#2,d4
+		moveq	#v_soundqueue2-v_soundqueue0,d4
 
 loc_74688:
 		move.b	(a1),d0
@@ -737,7 +737,7 @@ dPlaySnd_Music:
 		bclr	#7,(a5)
 		adda.w	#TrackSz,a5
 		dbf	d0,.loop0
-		
+
                 movea.l	a6,a0
 		lea	v_1up_ram_copy(a6),a1
 		move.w	#((v_music_track_ram_end-v_startofvariables)/4)-1,d0	; Backup $220 bytes: all variables and music track data
@@ -1485,7 +1485,7 @@ locret_74E42:
 		rts
 ; ---------------------------------------------------------------------------
 
-dChkWriteYMch:
+WriteFMIorIIMain:
 		btst	#2,(a5)
 		bne.s	locret_74E4E
 		bra.w	dWriteYMch
@@ -1554,7 +1554,7 @@ FMFrequencies:	dc.w $25E, $284, $2AB, $2D3, $2FE, $32D, $35C, $38F, $3C5
 		dc.w $3B5C,$3B8F,$3BC5,$3BFF,$3C3C,$3C7C
 ; ---------------------------------------------------------------------------
 
-dUpdatePSG:
+PSGUpdateTrack:
 		subq.b	#1,TrackDurationTimeout(a5)
 		bne.s	.noupdate
 		bclr	#4,(a5)
@@ -1847,7 +1847,7 @@ cfE0_Pan:
 		or.b	d0,d1
 		move.b	d1,TrackAMSFMSPan(a5)
 		move.b	#$B4,d0
-		bra.w	dChkWriteYMch
+		bra.w	WriteFMIorIIMain
 ; ---------------------------------------------------------------------------
 
 .locret:
@@ -1952,7 +1952,7 @@ dcPanAni:
 .disable:
 		move.b	#$B4,d0
 		move.b	$A(a5),d1
-		bra.w	dChkWriteYMch
+		bra.w	WriteFMIorIIMain
 ; ---------------------------------------------------------------------------
 
 dcaVolFMP:
@@ -1998,7 +1998,7 @@ dcsLFO:
 		btst	#7,d3
 		beq.s	.skipop
 		bset	#7,d1
-		jsr	dChkWriteYMch(pc)
+		jsr	WriteFMIorIIMain(pc)
 
 .skipop:
 		lsl.w	#1,d3
@@ -2012,7 +2012,7 @@ dcsLFO:
 		or.b	d0,d1
 		move.b	d1,$A(a5)
 		move.b	#$B4,d0
-		bra.w	dChkWriteYMch
+		bra.w	WriteFMIorIIMain
 ; ---------------------------------------------------------------------------
 
 dOpLFO:		dc.b $60, $68, $64, $6C
@@ -2408,22 +2408,22 @@ dcFM3SM:
 ; ---------------------------------------------------------------------------
 
 dcSSGEG:
-		lea	dOpSSGEG(pc),a1
+		lea	.OpSSGEG(pc),a1
 		moveq	#3,d3
 
 .oploop:
 		move.b	(a1)+,d0
 		move.b	(a4)+,d1
 		bset	#3,d1
-		jsr	dChkWriteYMch(pc)
+		jsr	WriteFMIorIIMain(pc)
 		move.b	(a1)+,d0
 		moveq	#$1F,d1
-		jsr	dChkWriteYMch(pc)
+		jsr	WriteFMIorIIMain(pc)
 		dbf	d3,.oploop
 		rts
 ; ---------------------------------------------------------------------------
 
-dOpSSGEG:	dc.b $90, $50, $98, $58
+.OpSSGEG:	dc.b $90, $50, $98, $58
 		dc.b $94, $54, $9C, $5C
 		even
 

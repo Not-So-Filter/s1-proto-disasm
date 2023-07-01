@@ -53,6 +53,7 @@ bitDn:		equ 1
 bitUp:		equ 0
 
 ; Object variables
+obId:		equ 0	; id of object (this is put here for readability, this actually makes routines slower by 4 cycles)
 obRender:	equ 1	; bitfield for x/y flip, display mode
 obGfx:		equ 2	; palette line & VRAM setting (2 bytes)
 obMap:		equ 4	; mappings address (4 bytes)
@@ -82,12 +83,21 @@ ob2ndRout:	equ $25	; secondary routine number
 obAngle:	equ $26	; angle
 obSubtype:	equ $28	; object subtype
 obSolid:	equ ob2ndRout ; solid status flag
+obSize:		equ $40 ; size for each object variables
 
 ; Object variables used by Sonic
 flashtime:	equ $30	; time between flashes after getting hit
 invtime:	equ $32	; time left for invincibility
 shoetime:	equ $34	; time left for speed shoes
 standonobject:	equ $3D	; object Sonic stands on
+
+; Animation flags
+afEnd:		equ $FF	; return to beginning of animation
+afBack:		equ $FE	; go back (specified number) bytes
+afChange:	equ $FD	; run specified animation
+afRoutine:	equ $FC	; increment routine counter
+afReset:	equ $FB	; reset animation and 2nd object routine counter
+af2ndRoutine:	equ $FA	; increment 2nd routine counter
 
 ; ---------------------------------------------------------------------------
 
