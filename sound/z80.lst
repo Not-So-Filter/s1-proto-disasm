@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 1 - 7/1/2023 9:39:34
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 1 - 7/1/2023 22:55:51
 
 
        1/       0 :                     
@@ -61,7 +61,7 @@
       56/      42 : 23                  		inc     hl
       57/      43 : 36 80               		ld      (hl), 80h
       58/      45 : AF                  		xor     a
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 2 - 7/1/2023 9:39:34
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 2 - 7/1/2023 22:55:51
 
 
       59/      46 : 32 FD 1F            		ld      (zDAC_Status), a
@@ -124,7 +124,7 @@
      116/      AC : 5F                  		ld      e, a
      117/      AD : 1A                  		ld      a, (de)
      118/      AE : 81                  		add     a, c
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 3 - 7/1/2023 9:39:34
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 3 - 7/1/2023 22:55:51
 
 
      119/      AF : 4F                  		ld      c, a
@@ -187,7 +187,7 @@
      176/     103 : D9                  		exx
      177/     104 : F2 0C 01            		jp      p, loc_10C
      178/     107 : E6 7F               		and     7Fh
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 4 - 7/1/2023 9:39:34
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 4 - 7/1/2023 22:55:51
 
 
      179/     109 : DD 71 00            		ld      (ix+0), c
@@ -250,7 +250,7 @@
      236/     16C : D6 04               		dw zDAC_Sample2
      237/     16E : 70 07               		dw (zDAC_Sample2_End-zDAC_Sample2)
      238/     170 : 00 00               		dw 0
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 5 - 7/1/2023 9:39:34
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 5 - 7/1/2023 22:55:51
 
 
      239/     172 : 00 00               		dw 0
@@ -277,7 +277,7 @@
      260/    1C5C : ALL                 		restore
      261/    1C5C :                     		padding off
      262/    1C5C :                     		!org (StartOfZ80+Size_of_DAC_driver_guess)
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 6 - 7/1/2023 9:39:34
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 6 - 7/1/2023 22:55:51
 
 
   Symbol Table (* = unused):
@@ -301,7 +301,7 @@
 *NESTMAX :                      100 - |  OFF_160 :                      160 C |
 *PADDING :                        0 - | *RELAXED :                        0 - |
  SIZE_OF_DAC_DRIVER_GUESS :    1C5C - |  STARTOFZ80 :                     0 C |
-*TIME :                   "9:39:34" - | *TRUE :                           1 - |
+*TIME :                  "22:55:51" - | *TRUE :                           1 - |
 *VERSION :                     142F - |  Z80_STACK :                   1FF4 - |
  ZBANKREGISTER :               6000 - |  ZDAC_SAMPLE :                 1FFF - |
  ZDAC_SAMPLE1 :                 184 C |  ZDAC_SAMPLE1_END :             4D6 C |
@@ -313,7 +313,7 @@
      50 symbols
      22 unused symbols
 
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 7 - 7/1/2023 9:39:34
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 7 - 7/1/2023 22:55:51
 
 
   Code Pages:

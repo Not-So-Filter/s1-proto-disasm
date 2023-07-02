@@ -6,7 +6,6 @@ ObjBuzzbomber:
 		move.w	off_78A6(pc,d0.w),d1
 		jmp	off_78A6(pc,d1.w)
 ; ---------------------------------------------------------------------------
-
 off_78A6:	dc.w loc_78AC-off_78A6, loc_78D6-off_78A6, loc_79E6-off_78A6
 ; ---------------------------------------------------------------------------
 
@@ -22,15 +21,18 @@ loc_78AC:
 loc_78D6:
 		moveq	#0,d0
 		move.b	$25(a0),d0
-		move.w	loc_78F2(pc,d0.w),d1
-		jsr	loc_78F2(pc,d1.w)
+		move.w	off_78F2(pc,d0.w),d1
+		jsr	off_78F2(pc,d1.w)
 		lea	(AniBuzzbomber).l,a1
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ---------------------------------------------------------------------------
+off_78F2:
+		dc.w loc_78F6-off_78F2
+		dc.w loc_798C-off_78F2
+; ---------------------------------------------------------------------------
 
-loc_78F2:
-		ori.b	#$9A,d4
+loc_78F6:
 		subq.w	#1,$32(a0)
 		bpl.s	locret_7926
 		btst	#1,$34(a0)
@@ -74,6 +76,8 @@ loc_7964:
 locret_798A:
 		rts
 ; ---------------------------------------------------------------------------
+
+loc_798C:
 		subq.w	#1,$32(a0)
 		bmi.s	loc_79C2
 		bsr.w	SpeedToPos

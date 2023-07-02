@@ -1,13 +1,13 @@
 EarlyDebugMappings:
 		lea	(word_2EF4).l,a0
-		lea	(v_objspace+$400).w,a1
+		lea	(v_objspace+obSize*$10).w,a1
 		move.w	#$B,d1
 
 .loop:
 		move.b	#5,(a1)
-		move.w	(a0)+,8(a1)
-		move.w	(a0)+,$A(a1)
-		lea	$40(a1),a1
+		move.w	(a0)+,obX(a1)
+		move.w	(a0)+,obScreenY(a1)
+		lea	obSize(a1),a1
 		dbf	d1,.loop
 		rts
 ; ---------------------------------------------------------------------------
