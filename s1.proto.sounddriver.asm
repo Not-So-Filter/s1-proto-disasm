@@ -203,7 +203,7 @@ DACUpdateTrack:
 		move.b	(a4)+,d5
 		cmpi.b	#$E0,d5
 		bcs.s	.notcommand
-		jsr	dCommands(pc)
+		jsr	CoordFlag(pc)
 		bra.s	.command
 ; ---------------------------------------------------------------------------
 
@@ -279,7 +279,7 @@ dTrackerFM:
 		move.b	(a4)+,d5
 		cmpi.b	#$E0,d5
 		bcs.s	.notcommand
-		jsr	dCommands(pc)
+		jsr	CoordFlag(pc)
 		bra.s	.command
 ; ---------------------------------------------------------------------------
 
@@ -1580,7 +1580,7 @@ dTrackerPSG:
 		move.b	(a4)+,d5
 		cmpi.b	#$E0,d5
 		bcs.s	.notcommand
-		jsr	dCommands(pc)
+		jsr	CoordFlag(pc)
 		bra.s	.command
 ; ---------------------------------------------------------------------------
 
@@ -1757,7 +1757,7 @@ dFreqPSG:	dc.w $356,$326,$2F9,$2CE,$2A5,$280,$25C,$23A,$21A,$1FB
 		dc.w $1B, $1A, $18, $17, $16, $15, $13, $12, $11,   0
 ; ---------------------------------------------------------------------------
 
-dCommands:
+CoordFlag:
 		subi.w	#$E0,d5
 		lsl.w	#2,d5
 		jmp	.commands(pc,d5.w)

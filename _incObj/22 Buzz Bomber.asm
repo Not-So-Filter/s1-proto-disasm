@@ -11,7 +11,7 @@ off_78A6:	dc.w loc_78AC-off_78A6, loc_78D6-off_78A6, loc_79E6-off_78A6
 
 loc_78AC:
 		addq.b	#2,$24(a0)
-		move.l	#MapBuzzbomber,4(a0)
+		move.l	#Map_Buzz,4(a0)
 		move.w	#$444,2(a0)
 		move.b	#4,1(a0)
 		move.b	#3,$19(a0)
@@ -23,7 +23,7 @@ loc_78D6:
 		move.b	$25(a0),d0
 		move.w	off_78F2(pc,d0.w),d1
 		jsr	off_78F2(pc,d1.w)
-		lea	(AniBuzzbomber).l,a1
+		lea	(Ani_Buzz).l,a1
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ---------------------------------------------------------------------------

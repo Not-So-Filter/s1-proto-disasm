@@ -13,7 +13,7 @@ off_6F3E:	dc.w loc_6F46-off_6F3E, loc_6F96-off_6F3E, loc_7056-off_6F3E, loc_705C
 loc_6F46:
 		move.b	#$13,obHeight(a0)
 		move.b	#8,obWidth(a0)
-		move.l	#MapBallhog,obMap(a0)
+		move.l	#Map_Hog,obMap(a0)
 		move.w	#$2400,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
@@ -36,7 +36,7 @@ loc_6F96:
 		move.b	ob2ndRout(a0),d0
 		move.w	off_6FB2(pc,d0.w),d1
 		jsr	off_6FB2(pc,d1.w)
-		lea	(AniBallhog).l,a1
+		lea	(Ani_Hog).l,a1
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ---------------------------------------------------------------------------
@@ -74,7 +74,7 @@ loc_6FF6:
 		move.b	#1,$32(a0)
 		bsr.w	FindFreeObj
 		bne.s	locret_701A
-		move.b	#$20,0(a1)
+		move.b	#$20,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		addi.w	#$10,obY(a1)

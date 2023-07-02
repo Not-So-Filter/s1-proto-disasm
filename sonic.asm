@@ -1565,7 +1565,7 @@ loc_25D8:
 		lea	(vdp_control_port).l,a5
 		lea	(vdp_data_port).l,a6
 		lea	(v_bgscreenposx).w,a3
-		lea	(v_lvllayout+$40).w,a4
+		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
 		bsr.w	sub_47B0
 		moveq	#palid_Title,d0
@@ -1658,7 +1658,7 @@ loc_2780:
 		add.w	d0,d0
 		move.w	LevSelOrder(pc,d0.w),d0
 		bmi.s	LevelSelect
-		cmpi.w	#$700,d0
+		cmpi.w	#id_SS*$100,d0
 		bne.s	loc_2796
 		move.b	#id_Special,(v_gamemode).w
 		rts
@@ -1668,7 +1668,7 @@ loc_2796:
 		andi.w	#$3FFF,d0
 		btst	#bitB,(v_jpadhold1).w		; Is B pressed?
 		beq.s	loc_27A6			; If not, ignore below
-		move.w	#3,d0				; Set the zone to Green Hill Act 4
+		move.w	#id_GHZ+3,d0			; Set the zone to Green Hill Act 4
 
 loc_27A6:
 		move.w	d0,(v_zone).w
@@ -1684,13 +1684,27 @@ loc_27AA:
 		bsr.w	PlaySound_Special
 		rts
 ; ---------------------------------------------------------------------------
-LevSelOrder:	dc.w 0,    1,    2
-		dc.w $100, $101, $102
-		dc.w $200, $201, $202
-		dc.w $300, $301, $302
-		dc.w $400, $401, $402
-		dc.w $500, $501,$8500
-		dc.w $700, $700,$8000
+LevSelOrder:	dc.b id_GHZ, 0	; GHZ1
+		dc.b id_GHZ, 1	; GHZ2
+		dc.b id_GHZ, 2	; GHZ3
+		dc.b id_LZ, 0	; LZ1
+		dc.b id_LZ, 1	; LZ2
+		dc.b id_LZ, 2	; LZ3
+		dc.b id_MZ, 0	; MZ1
+		dc.b id_MZ, 1	; MZ2
+		dc.b id_MZ, 2	; MZ3
+		dc.b id_SLZ, 0	; SLZ1
+		dc.b id_SLZ, 1	; SLZ2
+		dc.b id_SLZ, 2	; SLZ3
+		dc.b id_SZ, 0	; SZ1
+		dc.b id_SZ, 1	; SZ2
+		dc.b id_SZ, 2	; SZ3
+		dc.b id_CWZ, 0	; CWZ1
+		dc.b id_CWZ, 1	; CWZ2
+		dc.b id_CWZ+$80, 0 ; CWZ3
+		dc.b id_SS, 0	; SS
+		dc.b id_SS, 0	; SS (Sound Select)
+		dc.w $8000
 ; ---------------------------------------------------------------------------
 
 loc_27F8:
@@ -2782,7 +2796,7 @@ sub_43B6:
 		lea	(vdp_data_port).l,a6
 		lea	(unk_FFF756).w,a2
 		lea	(v_bgscreenposx).w,a3
-		lea	(v_lvllayout+$40).w,a4
+		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
 		bsr.w	sub_4484
 		lea	(unk_FFF758).w,a2
@@ -2795,7 +2809,7 @@ mapLevelLoad:
 		lea	(vdp_data_port).l,a6
 		lea	(unk_FFF756).w,a2
 		lea	(v_bgscreenposx).w,a3
-		lea	(v_lvllayout+$40).w,a4
+		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
 		bsr.w	sub_4484
 		lea	(unk_FFF758).w,a2
@@ -3198,7 +3212,7 @@ mapLevelLoadFull:
 		move.w	#$4000,d2
 		bsr.s	sub_47B0
 		lea	(v_bgscreenposx).w,a3
-		lea	(v_lvllayout+$40).w,a4
+		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
 
 sub_47B0:
@@ -3326,7 +3340,7 @@ loc_48C4:
 		lea	(v_lvllayout).w,a3
 		moveq	#0,d1
 		bsr.w	sub_48DA
-		lea	(v_lvllayout+$40).w,a3
+		lea	(v_lvllayoutbg).w,a3
 		moveq	#2,d1
 
 sub_48DA:
@@ -3352,7 +3366,7 @@ loc_4900:
 loc_4904:
 		move.b	(a1)+,(a0)+
 		dbf	d0,loc_4904
-		lea	$80(a3),a3
+		lea	lvllayoutsize*2(a3),a3
 		dbf	d2,loc_4900
 		rts
 ; ---------------------------------------------------------------------------
@@ -3881,8 +3895,8 @@ Map_TitleSonic:
                 include "_incObj\1E Ballhog.asm"
                 include "_incObj\20 Ballhog's Bomb.asm"
                 include "_incObj\24, 27 & 3F Explosions.asm"
-		include "_anim\BallHog.asm"
-		include "_maps\BallHog.asm"
+Ani_Hog:	include "_anim\BallHog.asm"
+Map_Hog:	include "_maps\BallHog.asm"
 		include "_maps\BallHog's Bomb.asm"
 		include "_maps\BallHog's Bomb Explosion.asm"
 		include "levels\shared\Explosion\Sprite.map"
@@ -3902,9 +3916,9 @@ Map_Crabmeat:	include "_maps\Crabmeat.asm"
 
 		include "_incObj\22 Buzz Bomber.asm"
 		include "_incObj\23 Buzz Bomber Missile.asm"
-		include "levels\GHZ\Buzzbomber\Sprite.ani"
+Ani_Buzz:	include "levels\GHZ\Buzzbomber\Sprite.ani"
 		include "levels\GHZ\Buzzbomber\Missile.ani"
-		include "levels\GHZ\Buzzbomber\Sprite.map"
+Map_Buzz:	include "levels\GHZ\Buzzbomber\Sprite.map"
 		include "levels\GHZ\Buzzbomber\Missile.map"
 		even
 
@@ -4444,7 +4458,7 @@ locret_8B70:
 ; ---------------------------------------------------------------------------
 
 FindFreeObj:
-		lea	(v_objspace+$800).w,a1
+		lea	(v_objspace+obSize*32).w,a1
 		move.w	#$5F,d0
 
 loc_8B7A:

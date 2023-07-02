@@ -1,21 +1,24 @@
 ; Variables (v) and Flags (f)
 
-v_256x256:	        equ  $FF0000			; 256x256 tile mappings ($A400 bytes)
-v_lvllayout:	        equ  $FFFFA400
-v_bgscroll_buffer:      equ  $FFFFA800
-v_ngfx_buffer:          equ  $FFFFAA00
-v_spritequeue:	        equ  $FFFFAC00
-v_16x16:	        equ  $FFFFB000			; 16x16 tile mappings ($1800 bytes)
-v_sgfx_buffer:	        equ  $FFFFC800			; sonic graphics ram buffer ($300 bytes)
-v_tracksonic:	        equ  $FFFFCB00			; sonic position table ($100 bytes)
-v_hscrolltablebuffer:   equ  $FFFFCC00
-v_player:	        equ  $FFFFD000
-v_objspace:	        equ  $FFFFD000			; RAM for object space ($600 bytes)
-f_victory:	        equ  $FFFFD600			; flag for victory animation
-LevelObjectsList:       equ  $FFFFD800
+v_256x256:		equ  $FF0000			; 256x256 tile mappings ($A400 bytes)
+v_lvllayout:		equ  $FFFFA400
+v_lvllayoutbg:		equ  v_lvllayout+lvllayoutsize
+lvllayoutsize:		equ  $40
+
+v_bgscroll_buffer:	equ  $FFFFA800
+v_ngfx_buffer:		equ  $FFFFAA00
+v_spritequeue:		equ  $FFFFAC00
+v_16x16:		equ  $FFFFB000			; 16x16 tile mappings ($1800 bytes)
+v_sgfx_buffer:		equ  $FFFFC800			; sonic graphics ram buffer ($300 bytes)
+v_tracksonic:		equ  $FFFFCB00			; sonic position table ($100 bytes)
+v_hscrolltablebuffer:	equ  $FFFFCC00
+v_player:		equ  $FFFFD000
+v_objspace:		equ  $FFFFD000			; RAM for object space ($600 bytes)
+f_victory:		equ  $FFFFD600			; flag for victory animation
+LevelObjectsList:	equ  $FFFFD800
 
 ; $FFFFF000
-v_snddriver_ram:        equ  $FFFFF000			; start of RAM for the sound driver data ($600 bytes)
+v_snddriver_ram:	equ  $FFFFF000			; start of RAM for the sound driver data ($600 bytes)
 
 ; =================================================================================
 ; From here on, until otherwise stated, all offsets are relative to v_snddriver_ram
