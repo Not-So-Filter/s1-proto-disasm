@@ -6,12 +6,12 @@ Sonic_Move:
 		move.w	(unk_FFF764).w,d4
 		tst.w	$3E(a0)
 		bne.w	Sonic_LookUp
-		btst	#2,(v_jpadhold2).w
+		btst	#bitL,(v_jpadhold2).w
 		beq.s	Sonic_NoLeft
 		bsr.w	Sonic_MoveLeft
 
 Sonic_NoLeft:
-		btst	#3,(v_jpadhold2).w
+		btst	#bitR,(v_jpadhold2).w
 		beq.s	Sonic_NoRight
 		bsr.w	Sonic_MoveRight
 
@@ -102,7 +102,7 @@ loc_EAE6:
 
 loc_EAEA:
 		move.b	(v_jpadhold2).w,d0
-		andi.b	#$C,d0
+		andi.b	#btnL+btnR,d0
 		bne.s	loc_EB16
 		move.w	obInertia(a0),d0
 		beq.s	loc_EB16
@@ -208,7 +208,7 @@ loc_EBB8:
 loc_EBC4:
 		sub.w	d4,d0
 		bcc.s	loc_EBCC
-		move.w	#$FF80,d0
+		move.w	#-$80,d0
 
 loc_EBCC:
 		move.w	d0,obInertia(a0)
@@ -258,7 +258,7 @@ loc_EC32:
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		bne.s	locret_EC60
-		cmpi.w	#$FC00,d0
+		cmpi.w	#-$400,d0
 		bgt.s	locret_EC60
 		move.b	#$D,obAnim(a0)
 		bset	#0,obStatus(a0)

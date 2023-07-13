@@ -41,7 +41,7 @@ loc_E37C:
 		move.b	#4,obRoutine(a1)
 
 loc_E38A:
-		move.b	#$5B,0(a1)
+		move.b	#id_Staircase,obId(a1)
 		move.l	#MapStaircasePtfm,obMap(a1)
 		move.w	#$4480,obGfx(a1)
 		move.b	#4,obRender(a1)

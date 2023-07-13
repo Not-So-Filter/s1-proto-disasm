@@ -2,7 +2,7 @@
 
 ObjMZPlatforms:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_8ECE(pc,d0.w),d1
 		jmp	off_8ECE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -18,7 +18,7 @@ off_8ED2:	dc.w ObjMZPlatforms_Slope1-off_8ED2
 ; ---------------------------------------------------------------------------
 
 loc_8EDE:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.l	#MapMZPlatforms,4(a0)
 		move.w	#$C000,2(a0)
 		move.b	#4,1(a0)
@@ -246,7 +246,7 @@ loc_9118:
 		move.b	#0,$34(a0)
 
 locret_911E:
-		rts 
+		rts
 ; ---------------------------------------------------------------------------
 
 ObjMZPlatforms_Slope1:dc.b $20, $20, $20, $20, $20

@@ -47,13 +47,13 @@ Sonic_GameOver:
 		bcc.w	locret_F3AE
 		move.w	#$FFC8,obVelY(a0)
 		addq.b	#2,obRoutine(a0)
-		addq.b	#1,(byte_FFFE1C).w
+		addq.b	#1,(f_lifecount).w
 		subq.b	#1,(v_lives).w
 		bne.s	loc_F380
 		move.w	#0,$3A(a0)
-		move.b	#$39,(v_objspace+$80).w
-		move.b	#$39,(v_objspace+$C0).w
-		move.b	#1,(v_objspace+$DA).w
+		move.b	#$39,(v_objspace+obSize*2).w
+		move.b	#$39,(v_objspace+obSize*3).w
+		move.b	#1,(v_objspace+obSize*3+obFrame).w
 		move.w	#bgm_GameOver,d0
 		jsr	(PlaySound_Special).l
 		moveq	#plcid_GameOver,d0

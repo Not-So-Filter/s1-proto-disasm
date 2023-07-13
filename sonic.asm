@@ -1574,9 +1574,9 @@ loc_25D8:
 		bsr.w	PlaySound_Special
 		move.b	#0,(f_debugmode).w
 		move.w	#$178,(v_demolength).w		; run title screen for $178 frames
-		move.b	#$E,(v_objspace+obSize).w		; load big sonic object
-		move.b	#$F,(v_objspace+obSize*2).w		; load press start button text
-		move.b	#$F,(v_objspace+obSize*3).w		; load object which hides sonic
+		move.b	#id_TitleSonic,(v_objspace+obSize).w	; load big sonic object
+		move.b	#id_PSBTM,(v_objspace+obSize*2).w	; load press start button text
+		move.b	#id_PSBTM,(v_objspace+obSize*3).w	; load object which hides sonic
 		move.b	#2,(v_objspace+obSize*3+obFrame).w
 		moveq	#plcid_Main,d0
 		bsr.w	plcReplace
@@ -1756,8 +1756,18 @@ loc_2878:
 		rts
 ; ---------------------------------------------------------------------------
 
-DemoLevels:	dc.w 0, $600, $200, $600, $400, $600, $300, $600, $200
-		dc.w $600, $400, $600
+DemoLevels:	dc.w 0
+		dc.w $600
+		dc.w $200
+		dc.w $600
+		dc.w $400
+		dc.w $600
+		dc.w $300
+		dc.w $600
+		dc.w $200
+		dc.w $600
+		dc.w $400
+		dc.w $600
 ; ---------------------------------------------------------------------------
 
 sub_28A6:
@@ -1773,14 +1783,14 @@ loc_28B6:
 		andi.b	#btnUp+btnDn,d1
 		beq.s	loc_28F0
 		move.w	(LevSelOption).w,d0
-		btst	#0,d1
+		btst	#bitUp,d1
 		beq.s	loc_28D6
 		subq.w	#1,d0
 		bcc.s	loc_28D6
 		moveq	#$13,d0
 
 loc_28D6:
-		btst	#1,d1
+		btst	#bitDn,d1
 		beq.s	loc_28E6
 		addq.w	#1,d0
 		cmpi.w	#$14,d0
@@ -1800,14 +1810,14 @@ loc_28F0:
 		andi.b	#$C,d1
 		beq.s	locret_292A
 		move.w	(LevSelSound).w,d0
-		btst	#2,d1
+		btst	#bitL,d1
 		beq.s	loc_2912
 		subq.w	#1,d0
 		bcc.s	loc_2912
 		moveq	#$4F,d0
 
 loc_2912:
-		btst	#3,d1
+		btst	#bitR,d1
 		beq.s	loc_2922
 		addq.w	#1,d0
 		cmpi.w	#$50,d0
@@ -1856,7 +1866,7 @@ loc_2944:
 		move.w	#$C680,d3
 
 loc_2996:
-		move.l	#$6BB00003,(vdp_control_port).l
+		locVRAM $EBB0
 		move.w	(LevSelSound).w,d0
 		addi.w	#$80,d0
 		move.b	d0,d2
@@ -1969,7 +1979,7 @@ loc_2C6C:
 		lea	(MusicList).l,a1
 		move.b	(a1,d0.w),d0
 		bsr.w	PlaySound
-		move.b	#$34,(v_objspace+obSize*2).w ; load title card object
+		move.b	#id_TitleCard,(v_objspace+obSize*2).w ; load title card object
 
 loc_2C92:
 		move.b	#$C,(v_vbla_routine).w
@@ -1977,8 +1987,8 @@ loc_2C92:
 		bsr.w	ExecuteObjects
 		bsr.w	BuildSprites
 		bsr.w	RunPLC
-		move.w	(v_objspace+$108).w,d0
-		cmp.w	(v_objspace+$130).w,d0
+		move.w	(v_objspace+obSize*4+obX).w,d0
+		cmp.w	(v_objspace+obSize*4+card_mainX).w,d0
 		bne.s	loc_2C92
 		tst.l	(v_plc_buffer).w
 		bne.s	loc_2C92
@@ -2018,8 +2028,8 @@ loc_2D2A:
 		move.l	#colCWZ,(v_collindex).w		; Load Clock Work's collision
 
 loc_2D3A:
-		move.b	#1,(v_player).w
-		move.b	#$21,(v_objspace+obSize).w
+		move.b	#id_SonicPlayer,(v_player).w
+		move.b	#id_HUD,(v_objspace+obSize).w
 		btst	#bitA,(v_jpadhold1).w
 		beq.s	loc_2D54
 		move.b	#1,(f_debugmode).w
@@ -2032,7 +2042,7 @@ loc_2D54:
 		bsr.w	BuildSprites
 		moveq	#0,d0
 		move.w	d0,(v_rings).w
-		move.b	d0,(byte_FFFE1B).w
+		move.b	d0,(v_lifecount).w
 		move.l	d0,(v_time).w
 		move.b	d0,(v_shield).w
 		move.b	d0,(v_invinc).w
@@ -2042,7 +2052,7 @@ loc_2D54:
 		move.w	d0,(LevelRestart).w
 		move.w	d0,(LevelFrames).w
 		bsr.w	oscInit
-		move.b	#1,(byte_FFFE1F).w
+		move.b	#1,(f_scorecount).w
 		move.b	#1,(f_extralife).w
 		move.b	#1,(f_timecount).w
 		move.w	#0,(unk_FFF790).w
@@ -2142,7 +2152,7 @@ loc_2EC8:
 ; buffer, only seemingly needing to be called once.
 ; Discovered by Filter, reconstructed by KatKuriN, Rivet, and ProjectFM
 ; ---------------------------------------------------------------------------
-sub_3018:
+;sub_3018:
 		lea	(v_ngfx_buffer).w,a0
 		move.w	(f_water).w,d2
 		move.w	#$9100,d3
@@ -2174,7 +2184,7 @@ DemoPlayback:
 		rts
 ; ---------------------------------------------------------------------------
 
-DemoRecord:
+;DemoRecord:
 		lea	($80000).l,a1
 		move.w	(unk_FFF790).w,d0
 		adda.w	d0,a1
@@ -2314,14 +2324,13 @@ Anim16MZ_end:	even
 DebugPosLoadArt:
 		rts
 ; ---------------------------------------------------------------------------
-		move.l	#$5E000002,(vdp_control_port).l
-		lea	(Art_Text).l,a0
+		locVRAM $9E00
+                lea	(Art_Text).l,a0
 		move.w	#$9F,d1
 		bsr.s	.loadtext
 		lea	(Art_Text).l,a0
 		adda.w	#$220,a0
 		move.w	#$5F,d1
-; ---------------------------------------------------------------------------
 
 .loadtext:
 		move.w	(a0)+,(vdp_data_port).l
@@ -2354,39 +2363,39 @@ DebugPosLoadArt:
 ; ---------------------------------------------------------------------------
 
 UpdateTimers:
-		subq.b	#1,(unk_FFFEC0).w
+		subq.b	#1,(v_ani0_time).w
 		bpl.s	loc_3464
-		move.b	#$B,(unk_FFFEC0).w
-		subq.b	#1,(unk_FFFEC1).w
-		andi.b	#7,(unk_FFFEC1).w
+		move.b	#$B,(v_ani0_time).w
+		subq.b	#1,(v_ani0_frame).w
+		andi.b	#7,(v_ani0_frame).w
 
 loc_3464:
-		subq.b	#1,(RingTimer).w
+		subq.b	#1,(v_ani1_time).w
 		bpl.s	loc_347A
-		move.b	#7,(RingTimer).w
-		addq.b	#1,(RingFrame).w
-		andi.b	#3,(RingFrame).w
+		move.b	#7,(v_ani1_time).w
+		addq.b	#1,(v_ani1_frame).w
+		andi.b	#3,(v_ani1_frame).w
 
 loc_347A:
-		subq.b	#1,(unk_FFFEC4).w
+		subq.b	#1,(v_ani2_time).w
 		bpl.s	loc_3498
-		move.b	#7,(unk_FFFEC4).w
-		addq.b	#1,(unk_FFFEC5).w
-		cmpi.b	#6,(unk_FFFEC5).w
+		move.b	#7,(v_ani2_time).w
+		addq.b	#1,(v_ani2_frame).w
+		cmpi.b	#6,(v_ani2_frame).w
 		bcs.s	loc_3498
-		move.b	#0,(unk_FFFEC5).w
+		move.b	#0,(v_ani2_frame).w
 
 loc_3498:
-		tst.b	(RingLossTimer).w
+		tst.b	(v_ani3_time).w
 		beq.s	locret_34BA
 		moveq	#0,d0
-		move.b	(RingLossTimer).w,d0
-		add.w	(RingLossAccumulator).w,d0
-		move.w	d0,(RingLossAccumulator).w
+		move.b	(v_ani3_time).w,d0
+		add.w	(v_ani3_buf).w,d0
+		move.w	d0,(v_ani3_buf).w
 		rol.w	#7,d0
 		andi.w	#3,d0
-		move.b	d0,(RingLossFrame).w
-		subq.b	#1,(RingLossTimer).w
+		move.b	d0,(v_ani3_frame).w
+		subq.b	#1,(v_ani3_time).w
 
 locret_34BA:
 		rts
@@ -2395,7 +2404,7 @@ locret_34BA:
 LoadSignpostPLC:
 		tst.w	(DebugRoutine).w
 		bne.w	locret_34FA
-		cmpi.w	#$202,(v_zone).w
+		cmpi.w	#id_MZ*$100+2,(v_zone).w
 		beq.s	loc_34D4
 		cmpi.b	#2,(v_act).w
 		beq.s	locret_34FA
@@ -2473,17 +2482,17 @@ loc_3584:
 		jsr	(SS_Load).l
 		move.l	#0,(v_screenposx).w
 		move.l	#0,(v_screenposy).w
-		move.b	#9,(v_objspace).w
-		move.w	#$458,(v_objspace+obX).w
-		move.w	#$4A0,(v_objspace+obY).w
+		move.b	#id_SonicSpecial,(v_player).w
+		move.w	#$458,(v_player+obX).w
+		move.w	#$4A0,(v_player+obY).w
 		lea	(vdp_control_port).l,a6
 		move.w	#$8B03,(a6)
 		move.w	#$8004,(a6)
 		move.w	#$8AAF,(v_hbla_hreg).w
 		move.w	#$9011,(a6)
 		bsr.w	SS_PalCycle
-		clr.w	(unk_FFF780).w
-		move.w	#$40,(unk_FFF782).w
+		clr.w	(v_ssangle).w
+		move.w	#$40,(v_ssrotate).w
 		move.w	#bgm_SS,d0
 		bsr.w	PlaySound_Special
 		move.w	#0,(unk_FFF790).w
@@ -3300,10 +3309,10 @@ LoadLevelData:
 
 loc_4876:
 		lea	(vdp_data_port).l,a6
-		move.l	#$6CBE0002,(vdp_control_port).l
+		locVRAM $ACBE
 		move.l	#$8579857A,d2
 		bsr.s	sub_489E
-		move.l	#$6D3E0002,(vdp_control_port).l
+		locVRAM $AD3E
 		move.l	#$857B857C,d2
 
 sub_489E:
@@ -3366,7 +3375,7 @@ loc_4900:
 loc_4904:
 		move.b	(a1)+,(a0)+
 		dbf	d0,loc_4904
-		lea	lvllayoutsize*2(a3),a3
+		lea	layoutsize*2(a3),a3
 		dbf	d2,loc_4900
 		rts
 ; ---------------------------------------------------------------------------
@@ -4101,7 +4110,6 @@ sub_8898:
 		bne.s	loc_88DE
 		btst	#1,d4
 		bne.w	loc_892C
-; ---------------------------------------------------------------------------
 
 sub_88AA:
 		cmpi.b	#$50,d5
@@ -4458,7 +4466,7 @@ locret_8B70:
 ; ---------------------------------------------------------------------------
 
 FindFreeObj:
-		lea	(v_objspace+obSize*32).w,a1
+		lea	(v_lvlobjspace).w,a1
 		move.w	#$5F,d0
 
 loc_8B7A:
@@ -4690,7 +4698,7 @@ sub_B146:
 		bne.s	locret_B186
 		bsr.w	FindFreeObj
 		bne.s	locret_B186
-		move.b	#$3F,0(a1)
+		move.b	#id_ExplosionBomb,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		jsr	(RandomNumber).l
@@ -4874,7 +4882,7 @@ ObjSeeSaw_SlopeLine:dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		even
 ; ---------------------------------------------------------------------------
 
-ObjSonic:
+SonicPlayer:
 		tst.w	(DebugRoutine).w
 		bne.w	DebugMode
 		moveq	#0,d0
@@ -4883,7 +4891,10 @@ ObjSonic:
 		jmp	off_E826(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_E826:	dc.w loc_E830-off_E826, loc_E872-off_E826, Sonic_Hurt-off_E826, Sonic_Death-off_E826
+off_E826:	dc.w loc_E830-off_E826
+		dc.w loc_E872-off_E826
+		dc.w Sonic_Hurt-off_E826
+		dc.w Sonic_Death-off_E826
 		dc.w Sonic_ResetLevel-off_E826
 ; ---------------------------------------------------------------------------
 
@@ -4926,7 +4937,10 @@ loc_E892:
 		rts
 ; ---------------------------------------------------------------------------
 
-off_E8C8:	dc.w sub_E96C-off_E8C8, sub_E98E-off_E8C8, loc_E9A8-off_E8C8, loc_E9C6-off_E8C8
+off_E8C8:	dc.w sub_E96C-off_E8C8
+		dc.w sub_E98E-off_E8C8
+		dc.w loc_E9A8-off_E8C8
+		dc.w loc_E9C6-off_E8C8
 
 MusicList2:	dc.b bgm_GHZ
                 dc.b bgm_LZ
@@ -5016,13 +5030,13 @@ locret_EDF8:
 ; ---------------------------------------------------------------------------
 
 ;loc_F26A:
-		lea	(v_objspace+$400).w,a1
+		lea	(v_objspace+obSize*16).w,a1
 		move.w	obX(a0),d0
 		bsr.w	sub_F290
-		lea	(v_objspace+$500).w,a1
+		lea	(v_objspace+obSize*20).w,a1
 		move.w	obY(a0),d0
 		bsr.w	sub_F290
-		lea	(v_objspace+$600).w,a1
+		lea	(v_objspace+obSize*24).w,a1
 		move.w	obInertia(a0),d0
 		bsr.w	sub_F290
 		rts
@@ -5533,7 +5547,7 @@ Special_ShowLayout:
 		bsr.w	Special_AniItems
 		move.w	d5,-(sp)
 		lea	($FFFF8000).w,a1
-		move.b	(unk_FFF780).w,d0
+		move.b	(v_ssangle).w,d0
 		andi.b	#$FC,d0
 		jsr	(CalcSine).l
 		move.w	d0,d4
@@ -5653,7 +5667,7 @@ loc_109A6:
 Special_AniWallsandRings:
 		lea	($FF400C).l,a1
 		moveq	#0,d0
-		move.b	(unk_FFF780).w,d0
+		move.b	(v_ssangle).w,d0
 		lsr.b	#2,d0
 		andi.w	#$F,d0
 		moveq	#$F,d1
@@ -5663,39 +5677,39 @@ loc_109C2:
 		addq.w	#8,a1
 		dbf	d1,loc_109C2
 
-		subq.b	#1,(RingTimer).w
+		subq.b	#1,(v_ani1_time).w
 		bpl.s	loc_109E0
-		move.b	#7,(RingTimer).w
-		addq.b	#1,(RingFrame).w
-		andi.b	#3,(RingFrame).w
+		move.b	#7,(v_ani1_time).w
+		addq.b	#1,(v_ani1_frame).w
+		andi.b	#3,(v_ani1_frame).w
 
 loc_109E0:
-		move.b	(RingFrame).w,1(a1)
+		move.b	(v_ani1_frame).w,1(a1)
 		addq.w	#8,a1
 		addq.w	#8,a1
-		subq.b	#1,(unk_FFFEC4).w
+		subq.b	#1,(v_ani2_time).w
 		bpl.s	loc_10A02
-		move.b	#7,(unk_FFFEC4).w
+		move.b	#7,(v_ani2_time).w
 		bra.s	loc_10A02
 ; ---------------------------------------------------------------------------
-		addq.b	#1,(unk_FFFEC5).w	; apparently the GOAL blocks were meant to flash yellow
-		andi.b	#1,(unk_FFFEC5).w
+		addq.b	#1,(v_ani2_frame).w	; apparently the GOAL blocks were meant to flash yellow
+		andi.b	#1,(v_ani2_frame).w
 
 loc_10A02:
-		move.b	(unk_FFFEC5).w,1(a1)
+		move.b	(v_ani2_frame).w,1(a1)
 		addq.w	#8,a1
-		move.b	(unk_FFFEC5).w,1(a1)
-		subq.b	#1,(unk_FFFEC0).w
+		move.b	(v_ani2_frame).w,1(a1)
+		subq.b	#1,(v_ani0_time).w
 		bpl.s	loc_10A26
-		move.b	#7,(unk_FFFEC0).w
-		subq.b	#1,(unk_FFFEC1).w
-		andi.b	#3,(unk_FFFEC1).w
+		move.b	#7,(v_ani0_time).w
+		subq.b	#1,(v_ani0_frame).w
+		andi.b	#3,(v_ani0_frame).w
 
 loc_10A26:
 		lea	($FF402E).l,a1
 		lea	(Special_VRAMSet).l,a0
 		moveq	#0,d0
-		move.b	(unk_FFFEC1).w,d0
+		move.b	(v_ani0_frame).w,d0
 		add.w	d0,d0
 		lea	(a0,d0.w),a0
 		move.w	(a0),(a1)
@@ -5867,7 +5881,7 @@ loc_10CA6:
 loc_10CA8:
 		move.l	(a0)+,(a1)+
 		dbf	d2,loc_10CA8
-		lea	$40(a1),a1
+		lea	layoutsize(a1),a1
 		dbf	d1,loc_10CA6
 		rts
 
@@ -5881,8 +5895,8 @@ loc_10CA8:
 ; ---------------------------------------------------------------------------
 
 ScoreAdd:
-		move.b	#1,(byte_FFFE1F).w
-		lea	(unk_FFFE50).w,a2
+		move.b	#1,(f_scorecount).w
+		lea	(v_scorecopy).w,a2
 		lea	(v_score).w,a3
 		add.l	d0,(a3)
 		move.l	#999999,d1
@@ -5900,14 +5914,23 @@ loc_1166E:
 locret_11678:
 		rts
 ; ---------------------------------------------------------------------------
+; Subroutine to	update the HUD
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+hudVRAM:	macro loc
+		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),d0
+		endm
+
 
 UpdateHUD:
 		tst.w	(f_debugmode).w
 		bne.w	loc_11746
-		tst.b	(byte_FFFE1F).w
+		tst.b	(f_scorecount).w
 		beq.s	loc_1169A
-		clr.b	(byte_FFFE1F).w
-		move.l	#$5C800003,d0
+		clr.b	(f_scorecount).w
+		hudVRAM $DC80
 		move.l	(v_score).w,d1
 		bsr.w	sub_1187E
 
@@ -5919,7 +5942,7 @@ loc_1169A:
 
 loc_116A6:
 		clr.b	(f_extralife).w
-		move.l	#$5F400003,d0
+		hudVRAM $DF40
 		moveq	#0,d1
 		move.w	(v_rings).w,d1
 		bsr.w	sub_11874
@@ -5944,26 +5967,26 @@ loc_116BA:
 		move.b	#9,(a1)
 
 loc_116EE:
-		move.l	#$5E400003,d0
+		hudVRAM $DE40
 		moveq	#0,d1
-		move.b	(v_time+1).w,d1
+		move.b	(v_timemin).w,d1
 		bsr.w	sub_118F4
-		move.l	#$5EC00003,d0
+		hudVRAM $DEC0
 		moveq	#0,d1
-		move.b	(v_time+2).w,d1
+		move.b	(v_timesec).w,d1
 		bsr.w	sub_118FE
 
 loc_1170E:
-		tst.b	(byte_FFFE1C).w
+		tst.b	(f_lifecount).w
 		beq.s	loc_1171C
-		clr.b	(byte_FFFE1C).w
+		clr.b	(f_lifecount).w
 		bsr.w	sub_119BA
 
 loc_1171C:
 		tst.b	(byte_FFFE58).w
 		beq.s	locret_11744
 		clr.b	(byte_FFFE58).w
-		move.l	#$6E000002,(vdp_control_port).l
+		locVRAM $AE00
 		moveq	#0,d1
 		move.w	(word_FFFE54).w,d1
 		bsr.w	sub_11958
@@ -5984,26 +6007,26 @@ loc_11746:
 
 loc_11756:
 		clr.b	(f_extralife).w
-		move.l	#$5F400003,d0
+		hudVRAM $DF40
 		moveq	#0,d1
 		move.w	(v_rings).w,d1
 		bsr.w	sub_11874
 
 loc_1176A:
-		move.l	#$5EC00003,d0
+		hudVRAM $DEC0
 		moveq	#0,d1
 		move.b	(byte_FFF62C).w,d1
 		bsr.w	sub_118FE
-		tst.b	(byte_FFFE1C).w
+		tst.b	(f_lifecount).w
 		beq.s	loc_11788
-		clr.b	(byte_FFFE1C).w
+		clr.b	(f_lifecount).w
 		bsr.w	sub_119BA
 
 loc_11788:
 		tst.b	(byte_FFFE58).w
 		beq.s	locret_117B0
 		clr.b	(byte_FFFE58).w
-		move.l	#$6E000002,(vdp_control_port).l
+		locVRAM $AE00
 		moveq	#0,d1
 		move.w	(word_FFFE54).w,d1
 		bsr.w	sub_11958
@@ -6016,7 +6039,7 @@ locret_117B0:
 ; ---------------------------------------------------------------------------
 
 sub_117B2:
-		move.l	#$5F400003,(vdp_control_port).l
+		locVRAM $DF40
 		lea	byte_1181A(pc),a2
 		move.w	#2,d2
 		bra.s	loc_117E2
@@ -6025,7 +6048,7 @@ sub_117B2:
 sub_117C6:
 		lea	(vdp_data_port).l,a6
 		bsr.w	sub_119BA
-		move.l	#$5C400003,(vdp_control_port).l
+		locVRAM $DC40
 		lea	byte_1180E(pc),a2
 		move.w	#$E,d2
 
@@ -6061,7 +6084,7 @@ byte_1181A:	dc.b $FF, $FF, 0, 0
 ; ---------------------------------------------------------------------------
 
 sub_1181E:
-		move.l	#$5C400003,(vdp_control_port).l
+		locVRAM $DC40
 		move.w	(v_screenposx).w,d1
 		swap	d1
 		move.w	(v_player+obX).w,d1
@@ -6069,7 +6092,6 @@ sub_1181E:
 		move.w	(v_screenposy).w,d1
 		swap	d1
 		move.w	(v_player+obY).w,d1
-; ---------------------------------------------------------------------------
 
 sub_1183E:
 		moveq	#7,d6
@@ -6283,7 +6305,7 @@ loc_119AE:
 ; ---------------------------------------------------------------------------
 
 sub_119BA:
-		move.l	#$7BA00003,d0
+		hudVRAM $FBA0
 		moveq	#0,d1
 		move.b	(v_lives).w,d1
 		lea	(Hud_10).l,a2

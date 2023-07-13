@@ -4,7 +4,7 @@ UltraDebugMappings:
 		move.w	#$33,d1
 
 .loop:
-		move.b	#5,(a1)
+		move.b	#id_Obj05,(a1)
 		move.w	(a0)+,obX(a1)
 		move.w	(a0)+,obScreenY(a1)
 		lea	obSize(a1),a1

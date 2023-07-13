@@ -9,6 +9,8 @@ ObjLevelResults:
 
 off_A6EE:	dc.w loc_A6FA-off_A6EE, loc_A74E-off_A6EE, loc_A786-off_A6EE, loc_A794-off_A6EE, loc_A786-off_A6EE
 		dc.w loc_A7F2-off_A6EE
+
+got_mainX:	equ $30		; position for card to display on
 ; ---------------------------------------------------------------------------
 
 loc_A6FA:
@@ -23,9 +25,9 @@ loc_A702:
 		moveq	#6,d1
 
 loc_A70C:
-		move.b	#$3A,obId(a1)
+		move.b	#id_GotThroughCard,obId(a1)
 		move.w	(a2)+,obX(a1)
-		move.w	(a2)+,$30(a1)
+		move.w	(a2)+,got_mainX(a1)
 		move.w	(a2)+,obScreenY(a1)
 		move.b	(a2)+,obRoutine(a1)
 		move.b	(a2)+,d0
@@ -38,12 +40,12 @@ loc_A72E:
 		move.l	#MapLevelResults,obMap(a1)
 		move.w	#$8580,obGfx(a1)
 		move.b	#0,obRender(a1)
-		lea	$40(a1),a1
+		lea	obSize(a1),a1
 		dbf	d1,loc_A70C
 
 loc_A74E:
 		moveq	#$10,d1
-		move.w	$30(a0),d0
+		move.w	got_mainX(a0),d0
 		cmp.w	obX(a0),d0
 		beq.s	loc_A774
 		bge.s	loc_A75E

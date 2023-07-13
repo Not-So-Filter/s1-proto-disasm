@@ -47,7 +47,7 @@ ObjEntryRingBeta_Display:
 ObjEntryRingBeta_LoadSonic:
 		subq.w	#1,$30(a0)
 		bne.s	ObjEntryRingBeta_Wait
-		move.b	#1,(v_objspace).w
+		move.b	#id_SonicPlayer,(v_objspace).w
 		bra.w	DeleteObject
 ; ---------------------------------------------------------------------------
 

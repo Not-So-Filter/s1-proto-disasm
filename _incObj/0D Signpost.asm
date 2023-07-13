@@ -1,6 +1,6 @@
 ; ---------------------------------------------------------------------------
 
-ObjSignpost:
+Signpost:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	off_C726(pc,d0.w),d1
@@ -61,7 +61,7 @@ loc_C798:
 		lea	byte_C804(pc,d0.w),a2
 		bsr.w	FindFreeObj
 		bne.s	locret_C802
-		move.b	#$25,0(a1)
+		move.b	#id_Rings,obId(a1)
 		move.b	#6,obRoutine(a1)
 		move.b	(a2)+,d0
 		ext.w	d0
@@ -101,7 +101,7 @@ sub_C81C:
 		move.w	(unk_FFF72A).w,(unk_FFF728).w
 		clr.b	(v_invinc).w
 		clr.b	(f_timecount).w
-		move.b	#$3A,(v_objspace+$600).w
+		move.b	#id_GotThroughCard,(v_objspace+obSize*24).w
 		moveq	#plcid_TitleCard,d0
 		jsr	(plcReplace).l
 		move.b	#1,(byte_FFFE58).w
@@ -121,7 +121,7 @@ loc_C862:
 		add.w	d0,d0
 		move.w	word_C882(pc,d0.w),(word_FFFE54).w
 		move.w	(v_rings).w,d0
-		mulu.w	#$A,d0
+		mulu.w	#10,d0
 		move.w	d0,(word_FFFE56).w
 		move.w	#bgm_GotThrough,d0
 		jsr	(PlaySound_Special).l

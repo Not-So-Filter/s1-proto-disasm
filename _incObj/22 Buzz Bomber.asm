@@ -2,7 +2,7 @@
 
 ObjBuzzbomber:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_78A6(pc,d0.w),d1
 		jmp	off_78A6(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -10,17 +10,17 @@ off_78A6:	dc.w loc_78AC-off_78A6, loc_78D6-off_78A6, loc_79E6-off_78A6
 ; ---------------------------------------------------------------------------
 
 loc_78AC:
-		addq.b	#2,$24(a0)
-		move.l	#Map_Buzz,4(a0)
-		move.w	#$444,2(a0)
-		move.b	#4,1(a0)
-		move.b	#3,$19(a0)
-		move.b	#8,$20(a0)
-		move.b	#$18,$18(a0)
+		addq.b	#2,obRoutine(a0)
+		move.l	#Map_Buzz,obMap(a0)
+		move.w	#$444,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#3,obPriority(a0)
+		move.b	#8,obColType(a0)
+		move.b	#$18,obActWid(a0)
 
 loc_78D6:
 		moveq	#0,d0
-		move.b	$25(a0),d0
+		move.b	ob2ndRout(a0),d0
 		move.w	off_78F2(pc,d0.w),d1
 		jsr	off_78F2(pc,d1.w)
 		lea	(Ani_Buzz).l,a1
@@ -37,13 +37,13 @@ loc_78F6:
 		bpl.s	locret_7926
 		btst	#1,$34(a0)
 		bne.s	loc_7928
-		addq.b	#2,$25(a0)
+		addq.b	#2,ob2ndRout(a0)
 		move.w	#$7F,$32(a0)
-		move.w	#$400,$10(a0)
-		move.b	#1,$1C(a0)
-		btst	#0,$22(a0)
+		move.w	#$400,obVelX(a0)
+		move.b	#1,obAnim(a0)
+		btst	#0,obStatus(a0)
 		bne.s	locret_7926
-		neg.w	$10(a0)
+		neg.w	obVelX(a0)
 
 locret_7926:
 		rts
@@ -52,26 +52,26 @@ locret_7926:
 loc_7928:
 		bsr.w	FindFreeObj
 		bne.s	locret_798A
-		move.b	#$23,0(a1)
-		move.w	8(a0),8(a1)
-		move.w	$C(a0),$C(a1)
-		addi.w	#$1C,$C(a1)
-		move.w	#$200,$12(a1)
-		move.w	#$200,$10(a1)
+		move.b	#$23,obId(a1)
+		move.w	obX(a0),obX(a1)
+		move.w	obY(a0),obY(a1)
+		addi.w	#$1C,obY(a1)
+		move.w	#$200,obVelY(a1)
+		move.w	#$200,obVelX(a1)
 		move.w	#$18,d0
-		btst	#0,$22(a0)
+		btst	#0,obStatus(a0)
 		bne.s	loc_7964
 		neg.w	d0
-		neg.w	$10(a1)
+		neg.w	obVelX(a1)
 
 loc_7964:
-		add.w	d0,8(a1)
-		move.b	$22(a0),$22(a1)
+		add.w	d0,obX(a1)
+		move.b	obStatus(a0),obStatus(a1)
 		move.w	#$E,$32(a1)
 		move.l	a0,$3C(a1)
 		move.b	#1,$34(a0)
 		move.w	#$3B,$32(a0)
-		move.b	#2,$1C(a0)
+		move.b	#2,obAnim(a0)
 
 locret_798A:
 		rts
@@ -100,13 +100,13 @@ loc_79A8:
 
 loc_79C2:
 		move.b	#0,$34(a0)
-		bchg	#0,$22(a0)
+		bchg	#0,obStatus(a0)
 		move.w	#$3B,$32(a0)
 
 loc_79D4:
-		subq.b	#2,$25(a0)
-		move.w	#0,$10(a0)
-		move.b	#0,$1C(a0)
+		subq.b	#2,ob2ndRout(a0)
+		move.w	#0,obVelX(a0)
+		move.b	#0,obAnim(a0)
 
 locret_79E4:
 		rts

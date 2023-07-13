@@ -16,7 +16,7 @@ TouchObjects:
 		sub.w	d5,d3
 		move.w	#$10,d4
 		add.w	d5,d5
-		lea	(v_objspace+$800).w,a1
+		lea	(v_lvlobjspace).w,a1
 		move.w	#$5F,d6
 
 loc_FB6E:
@@ -26,7 +26,7 @@ loc_FB6E:
 		bne.s	loc_FBB8			; if nonzero, branch
 
 	loc_FB7A:
-		lea	$40(a1),a1			; next object RAM
+		lea	obSize(a1),a1			; next object RAM
 		dbf	d6,loc_FB6E			; repeat $5F more times
 
 		moveq	#0,d0
@@ -168,7 +168,7 @@ loc_FCA2:
 		bset	#7,obStatus(a1)
 		moveq	#10,d0
 		bsr.w	ScoreAdd
-		move.b	#$27,0(a1)
+		move.b	#$27,obId(a1)
 		move.b	#0,obRoutine(a1)
 		tst.w	obVelY(a0)
 		bmi.s	loc_FCD0

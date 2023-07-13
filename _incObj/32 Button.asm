@@ -91,7 +91,7 @@ sub_9E58:
 		subq.w	#8,d3
 		move.w	#$20,d4
 		move.w	#$10,d5
-		lea	(LevelObjectsList).w,a1
+		lea	(v_lvlobjspace).w,a1
 		move.w	#$5F,d6
 
 loc_9E76:

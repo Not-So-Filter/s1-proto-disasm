@@ -1,6 +1,6 @@
 ; ---------------------------------------------------------------------------
 
-ObjBridge_PlayerPos:
+Bridge_PlayerPos:
 		moveq	#0,d0
 		move.b	$3F(a0),d0
 		move.b	$29(a0,d0.w),d0
@@ -17,7 +17,7 @@ ObjBridge_PlayerPos:
 		rts
 ; ---------------------------------------------------------------------------
 
-ObjBridge_UpdateBend:
+Bridge_UpdateBend:
 		move.b	$3E(a0),d0
 		bsr.w	CalcSine
 		move.w	d0,d4
@@ -128,17 +128,17 @@ byte_5306:	dc.b $FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		dc.b $FE, $FF
 ; ---------------------------------------------------------------------------
 
-ObjBridge_ChkDelete:
-		out_of_range.w	ObjBridge_DeleteAll
+Bridge_ChkDelete:
+		out_of_range.w	Bridge_DeleteAll
 		rts
 ; ---------------------------------------------------------------------------
 
-ObjBridge_DeleteAll:
+Bridge_DeleteAll:
 		moveq	#0,d2
 		lea	obSubtype(a0),a2
 		move.b	(a2)+,d2
 		subq.b	#1,d2
-		bcs.s	ObjBridge_GoDelete
+		bcs.s	Bridge_GoDelete
 
 loc_5432:
 		moveq	#0,d0
@@ -153,16 +153,16 @@ loc_5432:
 loc_5448:
 		dbf	d2,loc_5432
 
-ObjBridge_GoDelete:
+Bridge_GoDelete:
 		bsr.w	DeleteObject
 		rts
 ; ---------------------------------------------------------------------------
 
-ObjBridge_Delete:
+Bridge_Delete:
 		bsr.w	DeleteObject
 		rts
 ; ---------------------------------------------------------------------------
 
-ObjBridge_Display:
+Bridge_Display:
 		bsr.w	DisplaySprite
 		rts

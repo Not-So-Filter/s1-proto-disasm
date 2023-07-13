@@ -2,7 +2,7 @@
 ; Object 09 - Sonic (special stage)
 ; ---------------------------------------------------------------------------
 
-ObjSonicSpecial:
+SonicSpecial:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	Obj09_Index(pc,d0.w),d1
@@ -56,41 +56,41 @@ Obj09_Display:
 		bsr.w	sub_110DE
 		jsr	(SpeedToPos).l
 		bsr.w	SS_FixCamera
-		btst	#6,(v_jpadhold1).w
-		beq.s	loc_10D66
-		subq.w	#2,(unk_FFF782).w
+		btst	#bitA,(v_jpadhold1).w	; is button A held?
+		beq.s	loc_10D66	; if not, branch
+		subq.w	#2,(v_ssrotate).w	; reverse rotation of the special stage
 
 loc_10D66:
-		btst	#4,(v_jpadhold1).w
-		beq.s	loc_10D72
-		addq.w	#2,(unk_FFF782).w
+		btst	#bitB,(v_jpadhold1).w	; is button B held?
+		beq.s	loc_10D72	; if not, branch
+		addq.w	#2,(v_ssrotate).w	; increase rotation of the special stage
 
 loc_10D72:
-		btst	#7,(v_jpadpress1).w
-		beq.s	loc_10D80
-		move.w	#0,(unk_FFF782).w
+		btst	#bitStart,(v_jpadpress1).w	; is Start Button pressed?
+		beq.s	loc_10D80	; if not, branch
+		move.w	#0,(v_ssrotate).w	; stop rotation of the special stage
 
 loc_10D80:
-		move.w	(unk_FFF780).w,d0
-		add.w	(unk_FFF782).w,d0
-		move.w	d0,(unk_FFF780).w
+		move.w	(v_ssangle).w,d0
+		add.w	(v_ssrotate).w,d0
+		move.w	d0,(v_ssangle).w
 		jsr	(Sonic_Animate).l
 		rts
 ; ---------------------------------------------------------------------------
 
 Obj09_Move:
-		btst	#2,(v_jpadhold2).w
+		btst	#bitL,(v_jpadhold2).w
 		beq.s	loc_10DA0
 		bsr.w	sub_10E2C
 
 loc_10DA0:
-		btst	#3,(v_jpadhold2).w
+		btst	#bitR,(v_jpadhold2).w
 		beq.s	loc_10DAC
 		bsr.w	sub_10E5C
 
 loc_10DAC:
 		move.b	(v_jpadhold2).w,d0
-		andi.b	#$C,d0
+		andi.b	#btnL+btnR,d0
 		bne.s	loc_10DDC
 		move.w	obInertia(a0),d0
 		beq.s	loc_10DDC
@@ -113,7 +113,7 @@ loc_10DD8:
 		move.w	d0,obInertia(a0)
 
 loc_10DDC:
-		move.b	(unk_FFF780).w,d0
+		move.b	(v_ssangle).w,d0
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		neg.b	d0
@@ -194,9 +194,9 @@ locret_10E88:
 
 Obj09_Jump:
 		move.b	(v_jpadpress2).w,d0
-		andi.b	#$20,d0
+		andi.b	#btnC,d0
 		beq.s	locret_10ECC
-		move.b	(unk_FFF780).w,d0
+		move.b	(v_ssangle).w,d0
 		andi.b	#$FC,d0
 		neg.b	d0
 		subi.b	#$40,d0
@@ -236,18 +236,18 @@ locret_10EF6:
 ; ---------------------------------------------------------------------------
 
 Obj09_ExitStage:
-		addi.w	#$40,(unk_FFF782).w
-		cmpi.w	#$3000,(unk_FFF782).w
+		addi.w	#$40,(v_ssrotate).w
+		cmpi.w	#$3000,(v_ssrotate).w
 		blt.s	loc_10F1C
-		move.w	#0,(unk_FFF782).w
-		move.w	#$4000,(unk_FFF780).w
+		move.w	#0,(v_ssrotate).w
+		move.w	#$4000,(v_ssangle).w
 		addq.b	#2,obRoutine(a0)
 		move.w	#$12C,$38(a0)
 
 loc_10F1C:
-		move.w	(unk_FFF780).w,d0
-		add.w	(unk_FFF782).w,d0
-		move.w	d0,(unk_FFF780).w
+		move.w	(v_ssangle).w,d0
+		add.w	(v_ssrotate).w,d0
+		move.w	d0,(v_ssangle).w
 		bsr.w	Sonic_Animate
 		jsr	(Sonic_DynTiles).l
 		bsr.w	SS_FixCamera
@@ -257,8 +257,8 @@ loc_10F1C:
 Obj09_Exit2:
 		subq.w	#1,$38(a0)
 		bne.s	loc_10F66
-		clr.w	(unk_FFF780).w
-		move.w	#$40,(unk_FFF782).w
+		clr.w	(v_ssangle).w
+		move.w	#$40,(v_ssrotate).w
 		move.w	#$458,(v_objspace+obX).w
 		move.w	#$4A0,(v_objspace+obY).w
 		clr.b	obRoutine(a0)
@@ -276,7 +276,7 @@ loc_10F66:
 Obj09_Fall:
 		move.l	obY(a0),d2
 		move.l	obX(a0),d3
-		move.b	(unk_FFF780).w,d0
+		move.b	(v_ssangle).w,d0
 		andi.b	#$FC,d0
 		jsr	(CalcSine).l
 		move.w	obVelX(a0),d4
@@ -500,12 +500,12 @@ loc_11182:
 		move.b	#$1E,$36(a0)
 		btst	#6,(unk_FFF783).w
 		beq.s	loc_111A2
-		asl	(unk_FFF782).w
+		asl	(v_ssrotate).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_111A2:
-		asr	(unk_FFF782).w
+		asr	(v_ssrotate).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -515,7 +515,7 @@ loc_111A8:
 		tst.b	$37(a0)
 		bne.s	locret_111C0
 		move.b	#$1E,$37(a0)
-		neg.w	(unk_FFF782).w
+		neg.w	(v_ssrotate).w
 		rts
 ; ---------------------------------------------------------------------------
 

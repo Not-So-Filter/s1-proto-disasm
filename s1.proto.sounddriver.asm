@@ -629,7 +629,7 @@ PauseMusic:
 		btst	#2,(a5)
 		bne.s	dPauseExit
 		move.b	#$B4,d0
-		move.b	$A(a5),d1
+		move.b	TrackAMSFMSPan(a5),d1
 		jsr	dWriteYMch(pc)
 
 dPauseExit:
@@ -695,15 +695,10 @@ dPlaySnd_Cmd:
 
 Sound_ExIndex:
 ptr_flgE0:	bra.w	dPlaySnd_FadeOut
-; ---------------------------------------------------------------------------
 ptr_flgE1:	bra.w	dStopSFX
-; ---------------------------------------------------------------------------
 ptr_flgE2:	bra.w	dPlaySnd_ShoesOn
-; ---------------------------------------------------------------------------
 ptr_flgE3:	bra.w	dPlaySnd_ShoesOff
-; ---------------------------------------------------------------------------
 ptr_flgE4:	bra.w	dStopSpecSFX
-; ---------------------------------------------------------------------------
 ptr_flgend:
 ; ---------------------------------------------------------------------------
 
@@ -755,7 +750,7 @@ dPlaySnd_Music:
 		clr.b	v_fadein_counter(a6)
 
 .initmusic:
-		jsr	dClearMemory(pc)
+		jsr	InitMusicPlayback(pc)
 		movea.l	(Go_SpeedUpIndex).l,a4
 		subi.b	#bgm__First,d7
 		move.b	(a4,d7.w),v_speeduptempo(a6)
@@ -1131,7 +1126,7 @@ dPlaySnd_SpecSFX:
 ; ---------------------------------------------------------------------------
 
 dStopSFX:
-		clr.b	0(a6)
+		clr.b	v_sndprio(a6)
 		moveq	#$27,d0
 		moveq	#0,d1
 		jsr	WriteFMI(pc)
@@ -1352,37 +1347,37 @@ dStopAll:
 		moveq	#0,d1
 		jsr	WriteFMI(pc)
 		movea.l	a6,a0
-		move.w	#$E3,d0
+		move.w	#((v_spcsfx_track_ram_end-v_startofvariables-$10)/4)-1,d0	; Clear $390 bytes: all variables and most track data
 
 .memclr:
 		clr.l	(a0)+
 		dbf	d0,.memclr
-		move.b	#$80,9(a6)
+		move.b	#$80,v_sound_id(a6)
 		jsr	dMuteFM(pc)
 		bra.w	dMutePSG
 ; ---------------------------------------------------------------------------
 
-dClearMemory:
+InitMusicPlayback:
 		movea.l	a6,a0
 		move.b	v_sndprio(a6),d1
-		move.b	$27(a6),d2
-		move.b	$2A(a6),d3
-		move.b	$26(a6),d4
-		move.w	#$87,d0
+		move.b	f_1up_playing(a6),d2
+		move.b	f_speedup(a6),d3
+		move.b	v_fadein_counter(a6),d4
+		move.w	#((v_music_track_ram_end-v_startofvariables)/4)-1,d0
 
 .clear:
 		clr.l	(a0)+
 		dbf	d0,.clear
 		move.b	d1,v_sndprio(a6)
-		move.b	d2,$27(a6)
-		move.b	d3,$2A(a6)
-		move.b	d4,$26(a6)
-		move.b	#$80,9(a6)
+		move.b	d2,f_1up_playing(a6)
+		move.b	d3,f_speedup(a6)
+		move.b	d4,v_fadein_counter(a6)
+		move.b	#$80,v_sound_id(a6)
 		bra.w	dMutePSG
 ; ---------------------------------------------------------------------------
 
 TempoWait:
-		move.b	2(a6),1(a6)
+		move.b	v_main_tempo(a6),v_main_tempo_timeout(a6)
 		addq.b	#1,$4E(a6)
 		addq.b	#1,$7E(a6)
 		addq.b	#1,$AE(a6)

@@ -94,7 +94,7 @@ loc_B760:
 		bne.s	loc_B7A0
 		bsr.w	FindFreeObj
 		bne.s	loc_B7A0
-		move.b	#$3F,0(a1)
+		move.b	#id_ExplosionBomb,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		jsr	(RandomNumber).l
@@ -127,7 +127,7 @@ loc_B7C6:
 		bne.s	VBla_028
 		bsr.w	FindFreeObj
 		bne.s	VBla_028
-		move.b	#$28,0(a1)
+		move.b	#id_Animals,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 

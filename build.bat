@@ -1,7 +1,5 @@
 @echo off
 
-:: Backup both binaries.
-IF EXIST sound\z80built.bin move /Y sound\z80built.bin sound\z80built.prev.bin >NUL
 IF EXIST s1built.bin move /Y s1built.bin s1built.prev.bin >NUL
 
 :: Before anything, we build the z80 binary blob first.

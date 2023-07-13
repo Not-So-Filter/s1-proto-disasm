@@ -43,7 +43,7 @@ AniArt_GHZ_Waterfall:
 		lea	$100(a1),a1
 
 	.isframe0:
-		move.l	#$6F000001,(vdp_control_port).l
+		locVRAM $6F00
 		move.w	#7,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ AniArt_GHZ_Bigflower:
 		lea	$200(a1),a1
 
 	.isframe0:
-		move.l	#$6B800001,(vdp_control_port).l
+		locVRAM $6B80
 		move.w	#$F,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ AniArt_GHZ_Smallflower:
 		move.w	d0,d1
 		add.w	d0,d0
 		add.w	d1,d0
-		move.l	#$6D800001,(vdp_control_port).l
+		locVRAM $6D80
 		lea	(Art_GhzFlower2).l,a1
 		lea	(a1,d0.w),a1
 		move.w	#$B,d1
@@ -116,7 +116,7 @@ AniArt_MZ_Lava:
 		move.b	d0,(unk_FFF7B0).w
 		mulu.w	#$100,d0
 		adda.w	d0,a1
-		move.l	#$5C400001,(vdp_control_port).l
+		locVRAM $5C40
 		move.w	#7,d1
 		bsr.w	LoadTiles
 
@@ -130,7 +130,7 @@ AniArt_MZ_Magma:
 		lea	(Art_MzLava2).l,a4
 		ror.w	#7,d0
 		adda.w	d0,a4
-		move.l	#$5A400001,(vdp_control_port).l
+		locVRAM $5A40
 		moveq	#0,d3
 		move.b	(unk_FFF7B2).w,d3
 		addq.b	#1,(unk_FFF7B2).w
@@ -168,7 +168,7 @@ AniArt_MZ_Torch:
 		move.b	d0,(unk_FFF7B4).w
 		mulu.w	#$100,d0
 		adda.w	d0,a1
-		move.l	#$5D400001,(vdp_control_port).l
+		locVRAM $5D40
 		move.w	#7,d1
 		bsr.w	LoadTiles
 		lea	(Art_MzTorch).l,a1
@@ -178,7 +178,7 @@ AniArt_MZ_Torch:
 		andi.b	#3,(unk_FFF7B6).w
 		mulu.w	#$C0,d0
 		adda.w	d0,a1
-		move.l	#$5E400001,(vdp_control_port).l
+		locVRAM $5E40
 		move.w	#5,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------

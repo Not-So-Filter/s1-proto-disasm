@@ -75,7 +75,7 @@ loc_5854:
 ; ---------------------------------------------------------------------------
 
 sub_5860:
-		move.b	(unk_FFFEC1).w,d0
+		move.b	(v_ani0_frame).w,d0
 		move.b	#0,obColType(a0)
 		add.b	$3E(a0),d0
 		andi.b	#7,d0

@@ -73,7 +73,7 @@ loc_7672:
 		move.b	#6,obAnim(a0)
 		bsr.w	FindFreeObj
 		bne.s	loc_76A8
-		move.b	#$1F,0(a1)
+		move.b	#id_Crabmeat,obId(a1)
 		move.b	#6,obRoutine(a1)
 		move.w	obX(a0),obX(a1)
 		subi.w	#$10,obX(a1)
@@ -83,7 +83,7 @@ loc_7672:
 loc_76A8:
 		bsr.w	FindFreeObj
 		bne.s	locret_76D2
-		move.b	#$1F,0(a1)
+		move.b	#id_Crabmeat,obId(a1)
 		move.b	#6,obRoutine(a1)
 		move.w	obX(a0),obX(a1)
 		addi.w	#$10,obX(a1)

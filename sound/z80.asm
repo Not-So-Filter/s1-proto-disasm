@@ -1,8 +1,4 @@
 
-Size_of_DAC_driver_guess:	equ $1C5C
-
-		save
-		!org	0
 		CPU Z80
 		listing purecode
 
@@ -256,7 +252,3 @@ zDAC_Sample2_End:
 
 zDAC_Sample3:	binclude       "dac\timpani.dpcm"
 zDAC_Sample3_End:
-
-		restore
-		padding off
-		!org (StartOfZ80+Size_of_DAC_driver_guess)

@@ -2,7 +2,7 @@
 
 Sonic_DynTiles:
 		moveq	#0,d0
-		move.b	$1A(a0),d0
+		move.b	obFrame(a0),d0
 		cmp.b	(v_sonframenum).w,d0
 		beq.s	locret_F744
 		move.b	d0,(v_sonframenum).w

@@ -2,7 +2,7 @@
 
 ObjRings:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_7BEE(pc,d0.w),d1
 		jmp	off_7BEE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -67,8 +67,8 @@ loc_7C64:
 		bne.s	loc_7CC8
 
 loc_7C74:
-		move.b	#$25,0(a1)
-		addq.b	#2,$24(a1)
+		move.b	#id_Rings,0(a1)
+		addq.b	#2,obRoutine(a1)
 		move.w	d2,obX(a1)
 		move.w	obX(a0),$32(a1)
 		move.w	d3,obY(a1)
@@ -93,14 +93,14 @@ loc_7CC8:
 		bne.w	DeleteObject
 
 loc_7CD0:
-		move.b	(RingFrame).w,obFrame(a0)
+		move.b	(v_ani1_frame).w,obFrame(a0)
 		bsr.w	DisplaySprite
 		out_of_range.s	loc_7D2C,$32(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_7CF8:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.b	#0,obColType(a0)
 		move.b	#1,obPriority(a0)
 		bsr.w	CollectRing
@@ -126,16 +126,16 @@ CollectRing:
 		move.w	#sfx_Ring,d0
 		cmpi.w	#50,(v_rings).w
 		bcs.s	loc_7D6A
-		bset	#0,(byte_FFFE1B).w
+		bset	#0,(v_lifecount).w
 		beq.s	loc_7D5E
 		cmpi.w	#100,(v_rings).w
 		bcs.s	loc_7D6A
-		bset	#1,(byte_FFFE1B).w
+		bset	#1,(v_lifecount).w
 		bne.s	loc_7D6A
 
 loc_7D5E:
 		addq.b	#1,(v_lives).w
-		addq.b	#1,(byte_FFFE1C).w
+		addq.b	#1,(f_lifecount).w
 		move.w	#bgm_ExtraLife,d0
 
 loc_7D6A:
@@ -144,7 +144,7 @@ loc_7D6A:
 
 ObjRingLoss:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_7D7E(pc,d0.w),d1
 		jmp	off_7D7E(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -174,8 +174,8 @@ loc_7DA0:
 		bne.w	loc_7E2C
 
 loc_7DA8:
-		move.b	#$37,0(a1)
-		addq.b	#2,$24(a1)
+		move.b	#id_RingLoss,0(a1)
+		addq.b	#2,obRoutine(a1)
 		move.b	#8,obHeight(a1)
 		move.b	#8,obWidth(a1)
 		move.w	obX(a0),obX(a1)
@@ -188,7 +188,7 @@ loc_7DD2:
 		move.b	#2,obPriority(a1)
 		move.b	#$47,obColType(a1)
 		move.b	#8,obActWid(a1)
-		move.b	#$FF,(RingLossTimer).w
+		move.b	#$FF,(v_ani3_time).w
 		tst.w	d4
 		bmi.s	loc_7E1C
 		move.w	d4,d0
@@ -215,12 +215,12 @@ loc_7E1C:
 loc_7E2C:
 		move.w	#0,(v_rings).w
 		move.b	#$80,(f_extralife).w
-		move.b	#0,(byte_FFFE1B).w
+		move.b	#0,(v_lifecount).w
 		move.w	#sfx_RingLoss,d0
 		jsr	(PlaySound_Special).l
 
 loc_7E48:
-		move.b	(RingLossFrame).w,obFrame(a0)
+		move.b	(v_ani3_frame).w,obFrame(a0)
 		bsr.w	SpeedToPos
 		addi.w	#$18,obVelY(a0)
 		bmi.s	loc_7E82
@@ -238,7 +238,7 @@ loc_7E48:
 		neg.w	obVelY(a0)
 
 loc_7E82:
-		tst.b	(RingLossTimer).w
+		tst.b	(v_ani3_time).w
 		beq.s	loc_7EBC
 		move.w	(unk_FFF72E).w,d0
 		addi.w	#224,d0
@@ -248,7 +248,7 @@ loc_7E82:
 ; ---------------------------------------------------------------------------
 
 loc_7E9A:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.b	#0,obColType(a0)
 		move.b	#1,obPriority(a0)
 		bsr.w	CollectRing

@@ -25,7 +25,7 @@ loc_7ED6:
 		move.b	#$C,obActWid(a0)
 
 loc_7F12:
-		move.b	(RingFrame).w,obFrame(a0)
+		move.b	(v_ani1_frame).w,obFrame(a0)
 		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject
 		rts
@@ -37,7 +37,7 @@ loc_7F3C:
 		move.b	#1,obPriority(a0)
 
 loc_7F4C:
-		move.b	#$4A,(v_objspace+$1C0).w
+		move.b	#id_VanishSonic,(v_objspace+obSize*7).w
 		moveq	#plcid_Warp,d0
 		bsr.w	plcAdd
 		bra.w	DeleteObject

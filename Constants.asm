@@ -91,6 +91,10 @@ invtime:	equ $32	; time left for invincibility
 shoetime:	equ $34	; time left for speed shoes
 standonobject:	equ $3D	; object Sonic stands on
 
+; Object variables used by the title card
+card_mainX:	equ $30		; position for card to display on
+card_finalX:	equ $32		; position for card to finish on
+
 ; Animation flags
 afEnd:		equ $FF	; return to beginning of animation
 afBack:		equ $FE	; go back (specified number) bytes

@@ -2,7 +2,7 @@
 
 ObjLavaball:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_C23E(pc,d0.w),d1
 		jsr	off_C23E(pc,d1.w)
 		bra.w	DisplaySprite
@@ -14,7 +14,7 @@ word_C244:	dc.w $FC00, $FB00, $FA00, $F900, $FE00, $200, $FE00, $200
 ; ---------------------------------------------------------------------------
 
 loc_C254:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.b	#8,obHeight(a0)
 		move.b	#8,obWidth(a0)
 		move.l	#MapLavaball,obMap(a0)
@@ -63,7 +63,7 @@ loc_C318:
 		move.w	$30(a0),d0
 		cmp.w	obY(a0),d0
 		bcc.s	loc_C32C
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 
 loc_C32C:
 		bclr	#1,obStatus(a0)

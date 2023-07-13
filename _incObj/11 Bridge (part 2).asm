@@ -1,12 +1,12 @@
 ; ---------------------------------------------------------------------------
 
 loc_50B2:
-		bsr.s	ObjBridge_ChkExit
+		bsr.s	Bridge_ChkExit
 		bsr.w	DisplaySprite
-		bra.w	ObjBridge_ChkDelete
+		bra.w	Bridge_ChkDelete
 ; ---------------------------------------------------------------------------
 
-ObjBridge_ChkExit:
+Bridge_ChkExit:
 		moveq	#0,d1
 		move.b	obSubtype(a0),d1
 		lsl.w	#3,d1
@@ -22,8 +22,8 @@ ObjBridge_ChkExit:
 		addq.b	#4,$3E(a0)
 
 loc_50E0:
-		bsr.w	ObjBridge_UpdateBend
-		bsr.w	ObjBridge_PlayerPos
+		bsr.w	Bridge_UpdateBend
+		bsr.w	Bridge_PlayerPos
 
 locret_50E8:
 		rts

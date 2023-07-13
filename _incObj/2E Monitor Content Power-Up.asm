@@ -52,7 +52,7 @@ loc_82B2:
 
 loc_82B8:
 		addq.b	#1,(v_lives).w
-		addq.b	#1,(byte_FFFE1C).w
+		addq.b	#1,(f_lifecount).w
 		move.w	#bgm_ExtraLife,d0
 		jmp	(PlaySound).l
 ; ---------------------------------------------------------------------------
@@ -73,7 +73,7 @@ loc_82F8:
 		cmpi.b	#4,d0
 		bne.s	loc_8314
 		move.b	#1,(v_shield).w
-		move.b	#$38,(v_objspace+$180).w
+		move.b	#id_ShieldItem,(v_objspace+obSize*6).w
 		move.w	#sfx_Shield,d0
 		jmp	(PlaySound).l
 ; ---------------------------------------------------------------------------
@@ -83,14 +83,14 @@ loc_8314:
 		bne.s	loc_8360
 		move.b	#1,(v_invinc).w
 		move.w	#$4B0,(v_objspace+invtime).w
-		move.b	#$38,(v_objspace+$200).w
-		move.b	#1,(v_objspace+$21C).w
-		move.b	#$38,(v_objspace+$240).w
-		move.b	#2,(v_objspace+$25C).w
-		move.b	#$38,(v_objspace+$280).w
-		move.b	#3,(v_objspace+$29C).w
-		move.b	#$38,(v_objspace+$2C0).w
-		move.b	#4,(v_objspace+$2DC).w
+		move.b	#id_ShieldItem,(v_objspace+obSize*8).w
+		move.b	#1,(v_objspace+obSize*8+obAnim).w
+		move.b	#id_ShieldItem,(v_objspace+obSize*9).w
+		move.b	#2,(v_objspace+obSize*9+obAnim).w
+		move.b	#id_ShieldItem,(v_objspace+obSize*10).w
+		move.b	#3,(v_objspace+obSize*10+obAnim).w
+		move.b	#id_ShieldItem,(v_objspace+obSize*11).w
+		move.b	#4,(v_objspace+obSize*11+obAnim).w
 		move.w	#bgm_Invincible,d0
 		jmp	(PlaySound).l
 ; ---------------------------------------------------------------------------
@@ -102,11 +102,11 @@ loc_8360:
 		ori.b	#1,(f_extralife).w
 		cmpi.w	#50,(v_rings).w
 		bcs.s	loc_8396
-		bset	#0,(byte_FFFE1B).w
+		bset	#0,(v_lifecount).w
 		beq.w	loc_82B8
 		cmpi.w	#100,(v_rings).w
 		bcs.s	loc_8396
-		bset	#1,(byte_FFFE1B).w
+		bset	#1,(v_lifecount).w
 		beq.w	loc_82B8
 
 loc_8396:

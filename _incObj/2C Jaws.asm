@@ -19,7 +19,7 @@ loc_8C74:
 		move.b	#$A,obColType(a0)
 		move.b	#4,obPriority(a0)
 		move.b	#$10,obActWid(a0)
-		move.w	#$FFC0,obVelX(a0)
+		move.w	#-$40,obVelX(a0)
 
 loc_8CA4:
 		lea	(AniJaws).l,a1

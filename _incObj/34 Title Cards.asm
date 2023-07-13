@@ -21,10 +21,10 @@ loc_A4DE:
 		moveq	#3,d1
 
 loc_A4F8:
-		move.b	#$34,0(a1)
+		move.b	#id_TitleCard,obId(a1)
 		move.w	(a3),obX(a1)
-		move.w	(a3)+,$32(a1)
-		move.w	(a3)+,$30(a1)
+		move.w	(a3)+,card_finalX(a1)
+		move.w	(a3)+,card_mainX(a1)
 		move.w	(a2)+,obScreenY(a1)
 		move.b	(a2)+,obRoutine(a1)
 		move.b	(a2)+,d0
@@ -44,12 +44,12 @@ loc_A524:
 		move.b	#0,obRender(a1)
 		move.b	#0,obPriority(a1)
 		move.w	#$3C,obTimeFrame(a1)
-		lea	$40(a1),a1
+		lea	obSize(a1),a1
 		dbf	d1,loc_A4F8
 
 loc_A556:
 		moveq	#$10,d1
-		move.w	$30(a0),d0
+		move.w	card_mainX(a0),d0
 		cmp.w	obX(a0),d0
 		beq.s	loc_A56A
 		bge.s	loc_A566
@@ -79,7 +79,7 @@ loc_A57C:
 
 loc_A58A:
 		moveq	#$20,d1
-		move.w	$32(a0),d0
+		move.w	card_finalX(a0),d0
 		cmp.w	obX(a0),d0
 		beq.s	loc_A5B0
 		bge.s	loc_A59A

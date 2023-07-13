@@ -1,6 +1,6 @@
 ; ---------------------------------------------------------------------------
 
-ObjTitleSonic:
+TitleSonic:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	off_6A64(pc,d0.w),d1

@@ -110,12 +110,9 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
 	.CWZend:
 
-; ===========================================================================
-; As seen in the Korean Manual of Sonic 1, Green Hill Zone would've originally used these in an earlier point of development.
-; ===========================================================================
-.GHZ_Early:
+;.DebugUnk:
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapBallhog,	$1E,	0,	0,	$2400
 	dbug	MapJaws,	$2C,	0,	0,	$47B
 	dbug	MapBurrobot,	$2D,	0,	0,	$247B
-	.GHZ_Earlyend:
+;	.DebugUnkend:

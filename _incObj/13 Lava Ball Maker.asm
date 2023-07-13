@@ -2,7 +2,7 @@
 
 ObjLavaMaker:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_C1D0(pc,d0.w),d1
 		jsr	off_C1D0(pc,d1.w)
 		bra.w	loc_C2E6
@@ -14,7 +14,7 @@ byte_C1D4:	dc.b $1E, $3C, $5A, $78, $96, $B4
 ; ---------------------------------------------------------------------------
 
 loc_C1DA:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.b	obSubtype(a0),d0
 		lsr.w	#4,d0
 		andi.w	#$F,d0
