@@ -2,7 +2,7 @@
 
 ObjLavaHurt:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_CD2E(pc,d0.w),d1
 		jmp	off_CD2E(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -13,16 +13,16 @@ byte_CD32:	dc.b $96, $94, $95, 0
 ; ---------------------------------------------------------------------------
 
 loc_CD36:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		moveq	#0,d0
-		move.b	$28(a0),d0
-		move.b	byte_CD32(pc,d0.w),$20(a0)
-		move.l	#MapLavaHurt,4(a0)
-		move.w	#$8680,2(a0)
-		move.b	#4,1(a0)
-		move.b	#$80,$18(a0)
-		move.b	#4,$19(a0)
-		move.b	$28(a0),$1A(a0)
+		move.b	obSubtype(a0),d0
+		move.b	byte_CD32(pc,d0.w),obColType(a0)
+		move.l	#MapLavaHurt,obMap(a0)
+		move.w	#$8680,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#$80,obActWid(a0)
+		move.b	#4,obPriority(a0)
+		move.b	obSubtype(a0),obFrame(a0)
 
 loc_CD6C:
 		tst.w	(DebugRoutine).w
@@ -30,12 +30,12 @@ loc_CD6C:
 		bsr.w	DisplaySprite
 
 loc_CD76:
-		cmpi.b	#6,(v_objspace+$24).w
+		cmpi.b	#6,(v_player+obRoutine).w
 		bcc.s	loc_CD84
-		bset	#7,1(a0)
+		bset	#7,obRender(a0)
 
 loc_CD84:
-		move.w	8(a0),d0
+		move.w	obX(a0),d0
 		andi.w	#$FF80,d0
 		move.w	(v_screenposx).w,d1
 		subi.w	#$80,d1

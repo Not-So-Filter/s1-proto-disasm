@@ -2,7 +2,7 @@
 
 ObjBuzzMissile:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_79FA(pc,d0.w),d1
 		jmp	off_79FA(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -13,18 +13,18 @@ off_79FA:	dc.w loc_7A04-off_79FA, loc_7A4E-off_79FA, loc_7A6C-off_79FA, loc_7AB2
 loc_7A04:
 		subq.w	#1,$32(a0)
 		bpl.s	sub_7A5E
-		addq.b	#2,$24(a0)
-		move.l	#MapBuzzMissile,4(a0)
-		move.w	#$2444,2(a0)
-		move.b	#4,1(a0)
-		move.b	#3,$19(a0)
-		move.b	#8,$18(a0)
-		andi.b	#3,$22(a0)
-		tst.b	$28(a0)
+		addq.b	#2,obRoutine(a0)
+		move.l	#MapBuzzMissile,obMap(a0)
+		move.w	#$2444,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#3,obPriority(a0)
+		move.b	#8,obActWid(a0)
+		andi.b	#3,obStatus(a0)
+		tst.b	obSubtype(a0)
 		beq.s	loc_7A4E
-		move.b	#8,$24(a0)
-		move.b	#$87,$20(a0)
-		move.b	#1,$1C(a0)
+		move.b	#8,obRoutine(a0)
+		move.b	#$87,obColType(a0)
+		move.b	#1,obAnim(a0)
 		bra.s	loc_7AC2
 ; ---------------------------------------------------------------------------
 
@@ -37,30 +37,30 @@ loc_7A4E:
 
 sub_7A5E:
 		movea.l	$3C(a0),a1
-		cmpi.b	#$27,0(a1)
+		cmpi.b	#id_ExplosionItem,obId(a1)
 		beq.s	loc_7AB2
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_7A6C:
-		btst	#7,$22(a0)
+		btst	#7,obStatus(a0)
 		bne.s	loc_7AA2
-		move.b	#$87,$20(a0)
-		move.b	#1,$1C(a0)
+		move.b	#$87,obColType(a0)
+		move.b	#1,obAnim(a0)
 		bsr.w	SpeedToPos
 		lea	(AniBuzzMissile).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
 		move.w	(unk_FFF72E).w,d0
 		addi.w	#$E0,d0
-		cmp.w	$C(a0),d0
+		cmp.w	obY(a0),d0
 		bcs.s	loc_7AB2
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_7AA2:
-		move.b	#$24,0(a0)
-		move.b	#0,$24(a0)
+		move.b	#id_MissileDissolve,obId(a0)
+		move.b	#0,obRoutine(a0)
 		bra.w	ObjCannonballExplode
 ; ---------------------------------------------------------------------------
 
@@ -70,7 +70,7 @@ loc_7AB2:
 ; ---------------------------------------------------------------------------
 
 loc_7AB8:
-		tst.b	1(a0)
+		tst.b	obRender(a0)
 		bpl.s	loc_7AB2
 		bsr.w	SpeedToPos
 

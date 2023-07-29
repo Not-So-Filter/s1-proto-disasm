@@ -2,7 +2,7 @@
 
 ObjAnimals:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_732C(pc,d0.w),d1
 		jmp	off_732C(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -29,7 +29,7 @@ word_734A:	dc.w $FE00, $FC00
 ; ---------------------------------------------------------------------------
 
 loc_7382:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		bsr.w	RandomNumber
 		andi.w	#1,d0
 		moveq	#0,d1
@@ -61,7 +61,7 @@ loc_73C6:
 		bne.s	loc_7438
 		bsr.w	FindFreeObj
 		bne.s	loc_7414
-		move.b	#$29,0(a1)
+		move.b	#id_Points,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 
@@ -87,7 +87,7 @@ loc_7438:
 		move.b	$30(a0),d0
 		add.b	d0,d0
 		addq.b	#4,d0
-		move.b	d0,$24(a0)
+		move.b	d0,obRoutine(a0)
 		tst.b	(unk_FFF7A7).w
 		beq.s	loc_746E
 		btst	#4,(byte_FFFE0F).w

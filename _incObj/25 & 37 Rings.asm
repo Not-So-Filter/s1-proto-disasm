@@ -67,7 +67,7 @@ loc_7C64:
 		bne.s	loc_7CC8
 
 loc_7C74:
-		move.b	#id_Rings,0(a1)
+		move.b	#id_Rings,obId(a1)
 		addq.b	#2,obRoutine(a1)
 		move.w	d2,obX(a1)
 		move.w	obX(a0),$32(a1)
@@ -174,7 +174,7 @@ loc_7DA0:
 		bne.w	loc_7E2C
 
 loc_7DA8:
-		move.b	#id_RingLoss,0(a1)
+		move.b	#id_RingLoss,obId(a1)
 		addq.b	#2,obRoutine(a1)
 		move.b	#8,obHeight(a1)
 		move.b	#8,obWidth(a1)

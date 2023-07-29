@@ -4735,7 +4735,7 @@ BossMove:
                 include "_incObj\48 Eggman's Swinging Ball.asm"
 
 		include "levels\GHZ\Boss\Sprite.ani"
-		include "levels\GHZ\Boss\Sprite.map"
+		include "_maps\Boss Items.asm"
 		even
 
 		include "_maps\GHZ Ball.asm"

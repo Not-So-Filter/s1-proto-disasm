@@ -159,7 +159,7 @@ TrackModulationVal:	equ $1C				; FM/PSG only (2 bytes)
 TrackDetune:		equ $1E				; FM/PSG only
 TrackPSGNoise:		equ $1F				; PSG only
 TrackFeedbackAlgo:	equ $1F				; FM only
-TrackVoicePtr:		equ $20				; FM SFX only (4 bytes)
+TrackVoicePtr:		equ $1C				; FM SFX only (4 bytes)
 TrackLoopCounters:	equ $24				; All tracks (multiple bytes)
 TrackGoSubStack:	equ TrackSz			; All tracks (multiple bytes. This constant won't get to be used because of an optimisation that just uses TrackSz)
 

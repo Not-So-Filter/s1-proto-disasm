@@ -18,19 +18,19 @@ loc_C1DA:
 		move.b	obSubtype(a0),d0
 		lsr.w	#4,d0
 		andi.w	#$F,d0
-		move.b	byte_C1D4(pc,d0.w),$1F(a0)
-		move.b	$1F(a0),$1E(a0)
+		move.b	byte_C1D4(pc,d0.w),obDelayAni(a0)
+		move.b	obDelayAni(a0),obTimeFrame(a0)
 		andi.b	#$F,obSubtype(a0)
 
 loc_C1FA:
-		subq.b	#1,$1E(a0)
+		subq.b	#1,obTimeFrame(a0)
 		bne.s	locret_C22A
-		move.b	$1F(a0),$1E(a0)
+		move.b	obDelayAni(a0),obTimeFrame(a0)
 		bsr.w	ObjectChkOffscreen
 		bne.s	locret_C22A
 		bsr.w	FindFreeObj
 		bne.s	locret_C22A
-		move.b	#$14,0(a1)
+		move.b	#$14,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		move.b	obSubtype(a0),obSubtype(a1)

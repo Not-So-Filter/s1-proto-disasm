@@ -25,13 +25,13 @@ ObjCannonballExplode_Init:
 
 ObjCannonballExplode_Act:
 		subq.b	#1,obTimeFrame(a0)
-		bpl.s	.disp
+		bpl.s	.display
 		move.b	#9,obTimeFrame(a0)
 		addq.b	#1,obFrame(a0)
 		cmpi.b	#4,obFrame(a0)
 		beq.w	DeleteObject
 
-.disp:
+.display:
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 
@@ -49,12 +49,12 @@ ObjExplode_Load:
 		addq.b	#2,obRoutine(a0)
 		bsr.w	FindFreeObj
 		bne.s	ObjExplode_Init
-		move.b	#$28,0(a1)
+		move.b	#id_Animals,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 
 ObjExplode_Init:
-		addq.b	#2,$24(a0)
+		addq.b	#2,obRoutine(a0)
 		move.l	#MapExplode,obMap(a0)
 		move.w	#$5A0,obGfx(a0)
 		move.b	#4,obRender(a0)

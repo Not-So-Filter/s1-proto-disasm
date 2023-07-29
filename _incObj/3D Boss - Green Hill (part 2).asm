@@ -11,7 +11,7 @@ loc_B1AE:
 		addq.b	#2,ob2ndRout(a0)
 		bsr.w	FindNextFreeObj
 		bne.s	loc_B1F2
-		move.b	#$48,obId(a1)
+		move.b	#id_BossBall,obId(a1)
 		move.w	$30(a0),obX(a1)
 		move.w	$38(a0),obY(a1)
 		move.l	a0,$34(a1)

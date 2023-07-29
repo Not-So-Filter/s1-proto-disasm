@@ -50,7 +50,7 @@ loc_A6AC:
 
 loc_A6B8:
 		move.b	(v_jpadpress2).w,d0
-		andi.b	#$70,d0
+		andi.b	#btnABC,d0
 		bne.s	loc_A6D6
 		tst.b	obFrame(a0)
 		bne.s	loc_A6DC

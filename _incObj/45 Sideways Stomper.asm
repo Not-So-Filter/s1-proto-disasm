@@ -2,7 +2,7 @@
 
 Obj45:
 		moveq	#0,d0
-		move.b	$24(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_99DE(pc,d0.w),d1
 		jmp	off_99DE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -33,8 +33,8 @@ loc_9A12:
 		bne.s	loc_9A88
 
 loc_9A18:
-		move.b	(a2)+,$24(a1)
-		move.b	#$45,0(a1)
+		move.b	(a2)+,obRoutine(a1)
+		move.b	#id_SideStomp,obId(a1)
 		move.w	obY(a0),obY(a1)
 		move.b	(a2)+,d0
 		ext.w	d0

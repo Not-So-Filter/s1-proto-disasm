@@ -52,7 +52,7 @@ locret_7926:
 loc_7928:
 		bsr.w	FindFreeObj
 		bne.s	locret_798A
-		move.b	#$23,obId(a1)
+		move.b	#id_Missile,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		addi.w	#$1C,obY(a1)

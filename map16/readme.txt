@@ -1,1 +1,1 @@
-The blocks here are Uncompressed rather than being compressed in Enigma.
+The blocks here are Uncompressed rather than being compressed in Enigma, and for some odd reason the animated tiles are split instead of being combined like the final game.

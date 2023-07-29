@@ -2,7 +2,7 @@
 
 IF EXIST s1built.bin move /Y s1built.bin s1built.prev.bin >NUL
 
-:: Before anything, we build the z80 binary blob first.
+: Before anything, we build the z80 binary blob first.
 set USEANSI=n
 build_tools\asl -q -L -A -E -xx sound\z80.asm
 build_tools\p2bin sound\z80.p sound\z80built.bin -r 0x-0x

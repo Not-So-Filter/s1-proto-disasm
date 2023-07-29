@@ -138,7 +138,7 @@ sub_81D2:
 		move.b	#0,obColType(a0)
 		bsr.w	FindFreeObj
 		bne.s	loc_81FA
-		move.b	#$2E,0(a1)
+		move.b	#id_PowerUp,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		move.b	obAnim(a0),obAnim(a1)
@@ -146,7 +146,7 @@ sub_81D2:
 loc_81FA:
 		bsr.w	FindFreeObj
 		bne.s	loc_8216
-		move.b	#$27,0(a1)
+		move.b	#id_ExplosionItem,obId(a1)
 		addq.b	#2,obRoutine(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)

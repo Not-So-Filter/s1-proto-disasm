@@ -1392,31 +1392,31 @@ TempoWait:
 ; ---------------------------------------------------------------------------
 
 dPlaySnd_ShoesOn:
-		move.b	$29(a6),2(a6)
-		move.b	$29(a6),1(a6)
-		move.b	#$80,$2A(a6)
+		move.b	v_speeduptempo(a6),v_main_tempo(a6)
+		move.b	v_speeduptempo(a6),v_main_tempo_timeout(a6)
+		move.b	#$80,f_speedup(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
 dPlaySnd_ShoesOff:
-		move.b	$28(a6),2(a6)
-		move.b	$28(a6),1(a6)
-		clr.b	$2A(a6)
+		move.b	$28(a6),v_main_tempo(a6)
+		move.b	$28(a6),v_main_tempo_timeout(a6)
+		clr.b	f_speedup(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
 DoFadeIn:
-		tst.b	$25(a6)
+		tst.b	v_fadein_delay(a6)
 		beq.s	.dotick
-		subq.b	#1,$25(a6)
+		subq.b	#1,v_fadein_delay(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
 .dotick:
-		tst.b	$26(a6)
+		tst.b	v_fadein_counter(a6)
 		beq.s	.disable
-		subq.b	#1,$26(a6)
-		move.b	#2,$25(a6)
+		subq.b	#1,v_fadein_counter(a6)
+		move.b	#2,v_fadein_delay(a6)
 		lea	$70(a6),a5
 		moveq	#5,d7
 
@@ -1445,7 +1445,7 @@ DoFadeIn:
 
 .disable:
 		bclr	#2,$40(a6)
-		clr.b	$24(a6)
+		clr.b	f_fadein_flag(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1614,7 +1614,7 @@ dLoadFreqPSG:
 ; ---------------------------------------------------------------------------
 
 dUpdateFreqPSG:
-		move.w	$10(a5),d6
+		move.w	TrackFreq(a5),d6
 		bmi.s	dRestPSG
 ; ---------------------------------------------------------------------------
 
@@ -1699,9 +1699,9 @@ dUpdateVolPSG_Rts:
 ; ---------------------------------------------------------------------------
 
 dUpdateVolPSG_ChkGate:
-		tst.b	$13(a5)
+		tst.b	TrackNoteTimeoutMaster(a5)
 		beq.s	dUpdateVolPSG_DoIt
-		tst.b	$12(a5)
+		tst.b	TrackNoteTimeout(a5)
 		bne.s	dUpdateVolPSG_DoIt
 		rts
 ; ---------------------------------------------------------------------------
@@ -1717,7 +1717,7 @@ dVolEnvCmd_Loop:
 ; ---------------------------------------------------------------------------
 
 dVolEnvCmd_Reset:
-		clr.b	$C(a5)
+		clr.b	TrackVolEnvIndex(a5)
 		bra.w	dVolEnvProg
 ; ---------------------------------------------------------------------------
 
@@ -1767,7 +1767,7 @@ CoordFlag:
 ; ---------------------------------------------------------------------------
 		bra.w	cfE3_GlobalMod	; E3
 ; ---------------------------------------------------------------------------
-		bra.w	loc_7527A	; E4
+		bra.w	cfFadeInToPrevious	; E4
 ; ---------------------------------------------------------------------------
 		bra.w	dcaVolFMP	; E5
 ; ---------------------------------------------------------------------------
@@ -1855,7 +1855,7 @@ cfE1_Detune:
 ; ---------------------------------------------------------------------------
 
 cfE2_SetComm:
-		move.b	(a4)+,7(a6)
+		move.b	(a4)+,v_communication_byte(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1878,53 +1878,57 @@ cfE3_GlobalMod:
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_7527A:
+; loc_7527A:
+cfFadeInToPrevious:
 		movea.l	a6,a0
-		lea	$3A0(a6),a1
-		move.w	#$87,d0
-
-loc_75284:
+		lea	v_1up_ram_copy(a6),a1
+		move.w	#((v_music_track_ram_end-v_startofvariables)/4)-1,d0	; $220 bytes to restore: all variables and music track data
+; loc_75284:
+.restoreramloop:
 		move.l	(a1)+,(a0)+
-		dbf	d0,loc_75284
-		bset	#2,$40(a6)
+		dbf	d0,.restoreramloop
+
+		bset	#2,v_music_dac_track(a6)
 		movea.l	a5,a3
 		move.b	#$28,d6
-		sub.b	$26(a6),d6
-		moveq	#5,d7
-		lea	$70(a6),a5
+		sub.b	v_fadein_counter(a6),d6			; If fade already in progress, this adjusts track volume accordingly
+		moveq	#((v_music_fm_tracks_end-v_music_fm_tracks)/TrackSz)-1,d7	; 6 FM tracks
+		lea	v_music_fm_tracks(a6),a5
 
 loc_752A0:
 		btst	#7,(a5)
 		beq.s	loc_752C2
 		bset	#1,(a5)
-		add.b	d6,9(a5)
+		add.b	d6,TrackVolume(a5)
 		btst	#2,(a5)
 		bne.s	loc_752C2
 		moveq	#0,d0
-		move.b	$B(a5),d0
-		movea.l	$18(a6),a1
+		move.b	TrackVoiceIndex(a5),d0	; Get voice
+		movea.l	v_voice_ptr(a6),a1	; Voice pointer
 		jsr	dUpdateVoice(pc)
 
 loc_752C2:
 		adda.w	#TrackSz,a5
 		dbf	d7,loc_752A0
-		moveq	#2,d7
+
+		moveq	#((v_music_psg_tracks_end-v_music_psg_tracks)/TrackSz)-1,d7	; 3 PSG tracks
 
 loc_752CC:
 		btst	#7,(a5)
 		beq.s	loc_752DE
 		bset	#1,(a5)
 		jsr	sMutePSG(pc)
-		add.b	d6,9(a5)
+		add.b	d6,TrackVolume(a5)	; Apply current volume fade-in
 
 loc_752DE:
 		adda.w	#TrackSz,a5
 		dbf	d7,loc_752CC
+
 		movea.l	a3,a5
-		move.b	#$80,$24(a6)
-		move.b	#$28,$26(a6)
-		clr.b	$27(a6)
-		addq.w	#8,sp
+		move.b	#$80,f_fadein_flag(a6)		; Trigger fade-in
+		move.b	#$28,v_fadein_counter(a6)	; Fade-in delay
+		clr.b	f_1up_playing(a6)
+		addq.w	#8,sp		; Tamper return value so we don't return to caller
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -2058,143 +2062,151 @@ dcVoice:
 
 dUpdateVoice:
 		subq.w	#1,d0
-		bmi.s	.gotvoice
-		move.w	#$19,d1
+		bmi.s	.havevoiceptr
+		move.w	#25,d1
 
-.count:
+.voicemultiply:
 		adda.w	d1,a1
-		dbf	d0,.count
+		dbf	d0,.voicemultiply
 
-.gotvoice:
-		move.b	(a1)+,d1
-		move.b	d1,$25(a5)
+.havevoiceptr:
+		move.b	(a1)+,d1		; feedback/algorithm
+		move.b	d1,$25(a5) ; Save it to track RAM
 		move.b	d1,d4
-		move.b	#$B0,d0
+		move.b	#$B0,d0			; Command to write feedback/algorithm
 		jsr	dWriteYMch(pc)
-		lea	dOpVoice(pc),a2
-		moveq	#$13,d3
+		lea	FMInstrumentOperatorTable(pc),a2
+		moveq	#(FMInstrumentOperatorTable_End-FMInstrumentOperatorTable)-1,d3		; Don't want to send TL yet
 
-.writeregs:
+.sendvoiceloop:
 		move.b	(a2)+,d0
 		move.b	(a1)+,d1
 		jsr	dWriteYMch(pc)
-		dbf	d3,.writeregs
-		moveq	#3,d5
-		andi.w	#7,d4
-		move.b	dAlgoMasks(pc,d4.w),d4
-		move.b	9(a5),d3
+		dbf	d3,.sendvoiceloop
 
-.updatetl:
+		moveq	#(FMInstrumentTLTable_End-FMInstrumentTLTable)-1,d5
+		andi.w	#7,d4			; Get algorithm
+		move.b	FMSlotMask(pc,d4.w),d4	; Get slot mask for algorithm
+		move.b	TrackVolume(a5),d3	; Track volume attenuation
+
+.sendtlloop:
 		move.b	(a2)+,d0
 		move.b	(a1)+,d1
-		lsr.b	#1,d4
-		bcc.s	.nonslot
-		add.b	d3,d1
+		lsr.b	#1,d4		; Is bit set for this operator in the mask?
+		bcc.s	.sendtl		; Branch if not
+		add.b	d3,d1		; Include additional attenuation
 
-.nonslot:
+.sendtl:
 		jsr	dWriteYMch(pc)
-		dbf	d5,.updatetl
-		move.b	#$B4,d0
-		move.b	$A(a5),d1
+		dbf	d5,.sendtlloop
+
+		move.b	#$B4,d0			; Register for AMS/FMS/Panning
+		move.b	TrackAMSFMSPan(a5),d1	; Value to send
 		jsr	dWriteYMch(pc)
 
 locret_75454:
 		rts
 ; ---------------------------------------------------------------------------
 
-dAlgoMasks:	dc.b 8, 8, 8, 8, $A, $E, $E, $F
+FMSlotMask:	dc.b 8,	8, 8, 8, $A, $E, $E, $F
 ; ---------------------------------------------------------------------------
 
 dUpdateVolFM:
 		btst	#2,(a5)
 		bne.s	.locret
 		moveq	#0,d0
-		move.b	$B(a5),d0
-		movea.l	$18(a6),a1
-		tst.b	$E(a6)
-		beq.s	.gotvoices
-		movea.l	$1C(a6),a1
-		tst.b	$E(a6)
-		bmi.s	.gotvoices
-		movea.l	$20(a6),a1
+		move.b	TrackVoiceIndex(a5),d0	; Current voice
+		movea.l	v_voice_ptr(a6),a1	; Voice pointer
+		tst.b	f_voice_selector(a6)
+		beq.s	.gotvoiceptr
+		; DANGER! This uploads the wrong voice! It should have been a5 instead
+		; of a6!
+		movea.l	TrackVoicePtr(a6),a1
+		tst.b	f_voice_selector(a6)
+		bmi.s	.gotvoiceptr
+		movea.l	v_special_voice_ptr(a6),a1
 
-.gotvoices:
+.gotvoiceptr:
 		subq.w	#1,d0
-		bmi.s	.gotaddr
-		move.w	#$19,d1
+		bmi.s	.gotvoice
+		move.w	#25,d1
 
-.count:
+.voicemultiply:
 		adda.w	d1,a1
-		dbf	d0,.count
+		dbf	d0,.voicemultiply
 
-.gotaddr:
-		adda.w	#$15,a1
-		lea	dOpTL(pc),a2
-		move.b	$25(a5),d0
-		andi.w	#7,d0
-		move.b	dAlgoMasks(pc,d0.w),d4
-		move.b	9(a5),d3
-		bmi.s	.locret
-		moveq	#3,d5
+.gotvoice:
+		adda.w	#21,a1				; Want TL
+		lea	FMInstrumentTLTable(pc),a2
+		move.b	$25(a5),d0	; Get feedback/algorithm
+		andi.w	#7,d0				; Want only algorithm
+		move.b	FMSlotMask(pc,d0.w),d4		; Get slot mask
+		move.b	TrackVolume(a5),d3		; Get track volume attenuation
+		bmi.s	.locret				; If negative, stop
+		moveq	#(FMInstrumentTLTable_End-FMInstrumentTLTable)-1,d5
 
-.nextop:
+.sendtlloop:
 		move.b	(a2)+,d0
 		move.b	(a1)+,d1
-		lsr.b	#1,d4
-		bcc.s	.nextch
-		add.b	d3,d1
-		bcs.s	.nextch
+		lsr.b	#1,d4		; Is bit set for this operator in the mask?
+		bcc.s	.senttl		; Branch if not
+		add.b	d3,d1		; Include additional attenuation
+		bcs.s	.senttl		; Branch on overflow
 		jsr	dWriteYMch(pc)
 
-.nextch:
-		dbf	d5,.nextop
+.senttl:
+		dbf	d5,.sendtlloop
 
 .locret:
 		rts
 ; ---------------------------------------------------------------------------
 
-dOpVoice:	dc.b $30
-                dc.b $38
-                dc.b $34
-                dc.b $3C
-		dc.b $50
-                dc.b $58
-                dc.b $54
-                dc.b $5C
-		dc.b $60
-                dc.b $68
-                dc.b $64
-                dc.b $6C
-		dc.b $70
-                dc.b $78
-                dc.b $74
-                dc.b $7C
-		dc.b $80
-                dc.b $88
-                dc.b $84
-                dc.b $8C
+FMInstrumentOperatorTable:
+		dc.b  $30		; Detune/multiple operator 1
+		dc.b  $38		; Detune/multiple operator 3
+		dc.b  $34		; Detune/multiple operator 2
+		dc.b  $3C		; Detune/multiple operator 4
+		dc.b  $50		; Rate scalling/attack rate operator 1
+		dc.b  $58		; Rate scalling/attack rate operator 3
+		dc.b  $54		; Rate scalling/attack rate operator 2
+		dc.b  $5C		; Rate scalling/attack rate operator 4
+		dc.b  $60		; Amplitude modulation/first decay rate operator 1
+		dc.b  $68		; Amplitude modulation/first decay rate operator 3
+		dc.b  $64		; Amplitude modulation/first decay rate operator 2
+		dc.b  $6C		; Amplitude modulation/first decay rate operator 4
+		dc.b  $70		; Secondary decay rate operator 1
+		dc.b  $78		; Secondary decay rate operator 3
+		dc.b  $74		; Secondary decay rate operator 2
+		dc.b  $7C		; Secondary decay rate operator 4
+		dc.b  $80		; Secondary amplitude/release rate operator 1
+		dc.b  $88		; Secondary amplitude/release rate operator 3
+		dc.b  $84		; Secondary amplitude/release rate operator 2
+		dc.b  $8C		; Secondary amplitude/release rate operator 4
+FMInstrumentOperatorTable_End
 
-dOpTL:		dc.b $40
-                dc.b $48
-                dc.b $44
-                dc.b $4C
+FMInstrumentTLTable:
+		dc.b  $40		; Total level operator 1
+		dc.b  $48		; Total level operator 3
+		dc.b  $44		; Total level operator 2
+		dc.b  $4C		; Total level operator 4
+FMInstrumentTLTable_End
 ; ---------------------------------------------------------------------------
 
 dcMod68k:
-		bset	#3,(a5)
-		move.l	a4,$14(a5)
-		move.b	(a4)+,$18(a5)
-		move.b	(a4)+,$19(a5)
-		move.b	(a4)+,$1A(a5)
-		move.b	(a4)+,d0
-		lsr.b	#1,d0
-		move.b	d0,$1B(a5)
-		clr.w	$1C(a5)
+		bset	#3,(a5)				; Turn on modulation (TrackPlaybackControl)
+		move.l	a4,TrackModulationPtr(a5)	; Save pointer to modulation data
+		move.b	(a4)+,TrackModulationWait(a5)	; Modulation delay
+		move.b	(a4)+,TrackModulationSpeed(a5)	; Modulation speed
+		move.b	(a4)+,TrackModulationDelta(a5)	; Modulation delta
+		move.b	(a4)+,d0			; Modulation steps...
+		lsr.b	#1,d0				; ... divided by 2...
+		move.b	d0,TrackModulationSteps(a5)	; ... before being stored
+		clr.w	TrackModulationVal(a5)		; Total accumulated modulation frequency change
 		rts
 ; ---------------------------------------------------------------------------
 
 dcModOn:
-		bset	#3,(a5)
+		bset	#3,(a5)		; Turn on modulation (TrackPlaybackControl)
 		rts
 ; ---------------------------------------------------------------------------
 

@@ -27,7 +27,7 @@ loc_B01C:
 
 loc_B022:
 		move.b	(a2)+,obRoutine(a1)
-		move.b	#$3D,obId(a1)
+		move.b	#id_BossGreenHill,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		move.l	#MapGHZBoss,obMap(a1)
