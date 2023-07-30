@@ -52,7 +52,7 @@ loc_B07C:
 		jsr	off_B0AA(pc,d1.w)
 		lea	(AniGHZBoss).l,a1
 		bsr.w	AnimateSprite
-		move.b	$22(a0),d0
+		move.b	obStatus(a0),d0
 		andi.b	#3,d0
 		andi.b	#$FC,obRender(a0)
 		or.b	d0,obRender(a0)

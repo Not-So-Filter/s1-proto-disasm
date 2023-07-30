@@ -28,7 +28,7 @@ loc_B376:
 		bne.s	loc_B3D6
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
-		move.b	#$48,obId(a1)
+		move.b	#id_BossBall,obId(a1)
 		move.b	#6,obRoutine(a1)
 		move.l	#MapSwingPtfm,obMap(a1)
 		move.w	#$380,obGfx(a1)
@@ -113,7 +113,7 @@ sub_B46E:
 		move.b	obStatus(a1),obStatus(a0)
 		tst.b	obStatus(a1)
 		bpl.s	locret_B49C
-		move.b	#$3F,obId(a0)
+		move.b	#id_ExplosionBomb,obId(a0)
 		move.b	#0,obRoutine(a0)
 
 locret_B49C:
@@ -124,7 +124,7 @@ loc_B49E:
 		movea.l	$34(a0),a1
 		tst.b	obStatus(a1)
 		bpl.s	loc_B4B4
-		move.b	#$3F,obId(a0)
+		move.b	#id_ExplosionBomb,obId(a0)
 		move.b	#0,obRoutine(a0)
 
 loc_B4B4:
@@ -146,7 +146,7 @@ loc_B4C2:
 		bsr.w	sub_B146
 		subq.b	#1,$3C(a0)
 		bpl.s	loc_B4EE
-		move.b	#$3F,obId(a0)
+		move.b	#id_ExplosionBomb,obId(a0)
 		move.b	#0,obRoutine(a0)
 
 loc_B4EE:

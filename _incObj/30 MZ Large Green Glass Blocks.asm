@@ -46,7 +46,7 @@ loc_9416:
 
 loc_941C:
 		move.b	(a2)+,obRoutine(a1)
-		move.b	#$30,obId(a1)
+		move.b	#id_GlassBlock,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.b	(a2)+,d0
 		ext.w	d0

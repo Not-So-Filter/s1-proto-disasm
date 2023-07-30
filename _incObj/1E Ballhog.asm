@@ -74,7 +74,7 @@ loc_6FF6:
 		move.b	#1,$32(a0)
 		bsr.w	FindFreeObj
 		bne.s	locret_701A
-		move.b	#$20,obId(a1)
+		move.b	#id_Cannonball,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		addi.w	#$10,obY(a1)

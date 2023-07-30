@@ -19,14 +19,14 @@ off_8ED2:	dc.w ObjMZPlatforms_Slope1-off_8ED2
 
 loc_8EDE:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapMZPlatforms,4(a0)
-		move.w	#$C000,2(a0)
-		move.b	#4,1(a0)
-		move.b	#5,$19(a0)
-		move.w	$C(a0),$2C(a0)
-		move.w	8(a0),$2A(a0)
+		move.l	#MapMZPlatforms,obMap(a0)
+		move.w	#$C000,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#5,obPriority(a0)
+		move.w	obY(a0),$2C(a0)
+		move.w	obX(a0),$2A(a0)
 		moveq	#0,d0
-		move.b	$28(a0),d0
+		move.b	obSubtype(a0),d0
 		lsr.w	#2,d0
 
 loc_8F10:
@@ -35,42 +35,42 @@ loc_8F10:
 		move.w	(a1)+,d0
 		lea	off_8ED2(pc,d0.w),a2
 		move.l	a2,$30(a0)
-		move.b	(a1)+,$1A(a0)
-		move.b	(a1),$18(a0)
-		andi.b	#$F,$28(a0)
-		move.b	#$40,$16(a0)
-		bset	#4,1(a0)
+		move.b	(a1)+,obFrame(a0)
+		move.b	(a1),obActWid(a0)
+		andi.b	#$F,obSubtype(a0)
+		move.b	#$40,obHeight(a0)
+		bset	#4,obRender(a0)
 
 loc_8F3C:
 		bsr.w	sub_8FA6
-		tst.b	$25(a0)
+		tst.b	ob2ndRout(a0)
 		beq.s	loc_8F7C
 		moveq	#0,d1
-		move.b	$18(a0),d1
+		move.b	obActWid(a0),d1
 		addi.w	#$B,d1
 		bsr.w	PtfmCheckExit
-		btst	#3,$22(a1)
+		btst	#3,obStatus(a1)
 		bne.w	loc_8F64
-		clr.b	$25(a0)
+		clr.b	ob2ndRout(a0)
 		bra.s	loc_8F9E
 ; ---------------------------------------------------------------------------
 
 loc_8F64:
 		moveq	#0,d1
-		move.b	$18(a0),d1
+		move.b	obActWid(a0),d1
 		addi.w	#$B,d1
 		movea.l	$30(a0),a2
-		move.w	8(a0),d2
+		move.w	obX(a0),d2
 		bsr.w	sub_61E0
 		bra.s	loc_8F9E
 ; ---------------------------------------------------------------------------
 
 loc_8F7C:
 		moveq	#0,d1
-		move.b	$18(a0),d1
+		move.b	obActWid(a0),d1
 		addi.w	#$B,d1
 		move.w	#$20,d2
-		cmpi.b	#2,$1A(a0)
+		cmpi.b	#2,obFrame(a0)
 		bne.s	loc_8F96
 		move.w	#$30,d2
 
@@ -85,7 +85,7 @@ loc_8F9E:
 
 sub_8FA6:
 		moveq	#0,d0
-		move.b	$28(a0),d0
+		move.b	obSubtype(a0),d0
 		andi.w	#7,d0
 		add.w	d0,d0
 		move.w	off_8FBA(pc,d0.w),d1
@@ -123,7 +123,7 @@ loc_8FE6:
 		move.w	#$60,d1
 
 loc_8FEE:
-		btst	#3,$28(a0)
+		btst	#3,obSubtype(a0)
 		beq.s	loc_8FFA
 		neg.w	d0
 		add.w	d1,d0
@@ -131,13 +131,13 @@ loc_8FEE:
 loc_8FFA:
 		move.w	$2C(a0),d1
 		sub.w	d0,d1
-		move.w	d1,$C(a0)
+		move.w	d1,obY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_9006:
 		move.b	$34(a0),d0
-		tst.b	$25(a0)
+		tst.b	ob2ndRout(a0)
 		bne.s	loc_9018
 		subq.b	#2,d0
 		bcc.s	loc_9024
@@ -157,7 +157,7 @@ loc_9024:
 		lsr.w	#4,d0
 		move.w	d0,d1
 		add.w	$2C(a0),d0
-		move.w	d0,$C(a0)
+		move.w	d0,obY(a0)
 		cmpi.b	#$20,$34(a0)
 		bne.s	loc_9082
 		tst.b	$35(a0)
@@ -165,12 +165,12 @@ loc_9024:
 		move.b	#1,$35(a0)
 		bsr.w	FindNextFreeObj
 		bne.s	loc_9082
-		move.b	#$35,0(a1)
-		move.w	8(a0),8(a1)
+		move.b	#$35,obId(a1)
+		move.w	obX(a0),obX(a1)
 		move.w	$2C(a0),$2C(a1)
 		addq.w	#8,$2C(a1)
 		subq.w	#3,$2C(a1)
-		subi.w	#$40,8(a1)
+		subi.w	#$40,obX(a1)
 		move.l	$30(a0),$30(a1)
 		move.l	a0,$38(a1)
 		movea.l	a0,a2
@@ -213,7 +213,7 @@ sub_90A4:
 loc_90C2:
 		tst.b	$35(a0)
 		beq.s	loc_90CE
-		tst.b	1(a0)
+		tst.b	obRender(a0)
 		bpl.s	loc_90EE
 
 loc_90CE:

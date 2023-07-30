@@ -32,7 +32,7 @@ ObjSwingPtfm_Init:
 ObjSwingPtfm_NotSZ:
 		move.b	obId(a0),d4
 		moveq	#0,d1
-		lea	$28(a0),a2
+		lea	obSubtype(a0),a2
 		move.b	(a2),d1
 		move.w	d1,-(sp)
 		andi.w	#$F,d1
@@ -50,7 +50,7 @@ ObjSwingPtfm_NotSZ:
 ObjSwingPtfm_LoadLinks:
 		bsr.w	FindFreeObj
 		bne.s	loc_5586
-		addq.b	#1,$28(a0)
+		addq.b	#1,obSubtype(a0)
 		move.w	a1,d5
 		subi.w	#$D000,d5
 		lsr.w	#6,d5
@@ -182,7 +182,7 @@ loc_5692:
 		bsr.w	CalcSine
 		move.w	$38(a0),d2
 		move.w	$3A(a0),d3
-		lea	$28(a0),a2
+		lea	obSubtype(a0),a2
 		moveq	#0,d6
 		move.b	(a2)+,d6
 
@@ -214,7 +214,7 @@ ObjSwingPtfm_ChkDelete:
 
 ObjSwingPtfm_DeleteAll:
 		moveq	#0,d2
-		lea	$28(a0),a2
+		lea	obSubtype(a0),a2
 		move.b	(a2)+,d2
 
 loc_56FE:

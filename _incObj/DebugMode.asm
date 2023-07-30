@@ -118,7 +118,7 @@ loc_11F80:
 		bne.s	loc_11FA4
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
-		move.b	obMap(a0),0(a1)
+		move.b	obMap(a0),obId(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
