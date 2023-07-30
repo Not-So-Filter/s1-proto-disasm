@@ -31,7 +31,7 @@ ObjCannonball_Act:
 		add.w	d1,obY(a0)
 
 loc_70C2:
-		move.b	#$24,0(a0)
+		move.b	#id_MissileDissolve,obId(a0)
 		move.b	#0,obRoutine(a0)
 		bra.w	ObjCannonballExplode
 ; ---------------------------------------------------------------------------

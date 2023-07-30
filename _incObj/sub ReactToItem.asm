@@ -168,7 +168,7 @@ loc_FCA2:
 		bset	#7,obStatus(a1)
 		moveq	#10,d0
 		bsr.w	ScoreAdd
-		move.b	#$27,obId(a1)
+		move.b	#id_ExplosionItem,obId(a1)
 		move.b	#0,obRoutine(a1)
 		tst.w	obVelY(a0)
 		bmi.s	loc_FCD0
@@ -211,7 +211,7 @@ loc_FCF4:
 		beq.s	loc_FD72
 		bsr.w	FindFreeObj
 		bne.s	loc_FD18
-		move.b	#$37,0(a1)
+		move.b	#id_RingLoss,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 

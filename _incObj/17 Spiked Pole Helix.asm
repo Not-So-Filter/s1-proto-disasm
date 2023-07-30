@@ -20,7 +20,7 @@ loc_5792:
 		move.b	#8,obActWid(a0)
 		move.w	obY(a0),d2
 		move.w	obX(a0),d3
-		move.b	0(a0),d4
+		move.b	obId(a0),d4
 		lea	obSubtype(a0),a2
 		moveq	#0,d1
 		move.b	(a2),d1
@@ -45,7 +45,7 @@ loc_57E2:
 
 loc_57FA:
 		move.b	#8,obRoutine(a1)
-		move.b	d4,0(a1)
+		move.b	d4,obId(a1)
 		move.w	d2,obY(a1)
 		move.w	d3,obX(a1)
 		move.l	obMap(a0),obMap(a1)
@@ -57,7 +57,7 @@ loc_57FA:
 		addq.b	#1,d6
 		andi.b	#7,d6
 		addi.w	#$10,d3
-		cmp.w	8(a0),d3
+		cmp.w	obX(a0),d3
 		bne.s	loc_5850
 		move.b	d6,$3E(a0)
 		addq.b	#1,d6

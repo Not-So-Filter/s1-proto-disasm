@@ -223,7 +223,7 @@ loc_E194:
 		move.w	$3E(a0),$3C(a0)
 		bsr.w	FindFreeObj
 		bne.s	loc_E1BE
-		move.b	#$59,obId(a1)
+		move.b	#id_Elevator,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		move.b	#$E,obSubtype(a1)

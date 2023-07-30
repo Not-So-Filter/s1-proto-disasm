@@ -165,7 +165,7 @@ loc_9024:
 		move.b	#1,$35(a0)
 		bsr.w	FindNextFreeObj
 		bne.s	loc_9082
-		move.b	#$35,obId(a1)
+		move.b	#id_GrassFire,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	$2C(a0),$2C(a1)
 		addq.w	#8,$2C(a1)
