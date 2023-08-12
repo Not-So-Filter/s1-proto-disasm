@@ -1807,7 +1807,7 @@ loc_28F0:
 		cmpi.w	#$13,(v_levselitem).w
 		bne.s	locret_292A
 		move.b	(v_jpadpress1).w,d1
-		andi.b	#$C,d1
+		andi.b	#btnL+btnR,d1
 		beq.s	locret_292A
 		move.w	(v_levselsound).w,d0
 		btst	#bitL,d1
@@ -4916,7 +4916,7 @@ loc_E872:
 		andi.w	#$7FF,(v_screenposy).w
 		tst.w	(f_debugmode).w
 		beq.s	loc_E892
-		btst	#4,(v_jpadpress2).w
+		btst	#bitB,(v_jpadpress2).w
 		beq.s	loc_E892
 		move.w	#1,(v_debuguse).w
 
