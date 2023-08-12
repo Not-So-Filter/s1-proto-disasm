@@ -251,9 +251,9 @@ v_invinc:		equ $FFFFFE2D
 v_shoes:		equ $FFFFFE2E
 byte_FFFE2F:		equ $FFFFFE2F
 v_scorecopy:		equ $FFFFFE50
-word_FFFE54:		equ $FFFFFE54
-word_FFFE56:		equ $FFFFFE56
-byte_FFFE58:		equ $FFFFFE58
+v_timebonus:		equ $FFFFFE54
+v_ringbonus:		equ $FFFFFE56
+f_endactbonus:		equ $FFFFFE58
 v_oscillate:		equ $FFFFFE5E
 v_ani0_time:		equ $FFFFFEC0	; synchronised sprite animation 0 - time until next frame (used for synchronised animations)
 v_ani0_frame:		equ $FFFFFEC1	; synchronised sprite animation 0 - current frame

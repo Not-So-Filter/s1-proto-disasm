@@ -83,18 +83,18 @@ loc_A790:
 
 loc_A794:
 		bsr.w	DisplaySprite
-		move.b	#1,(byte_FFFE58).w
+		move.b	#1,(f_endactbonus).w
 		moveq	#0,d0
-		tst.w	(word_FFFE54).w
+		tst.w	(v_timebonus).w
 		beq.s	loc_A7B0
 		addi.w	#10,d0
-		subi.w	#10,(word_FFFE54).w
+		subi.w	#10,(v_timebonus).w
 
 loc_A7B0:
-		tst.w	(word_FFFE56).w
+		tst.w	(v_ringbonus).w
 		beq.s	loc_A7C0
 		addi.w	#10,d0
-		subi.w	#10,(word_FFFE56).w
+		subi.w	#10,(v_ringbonus).w
 
 loc_A7C0:
 		tst.w	d0

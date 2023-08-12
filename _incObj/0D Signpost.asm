@@ -104,7 +104,7 @@ sub_C81C:
 		move.b	#id_GotThroughCard,(v_objspace+obSize*24).w
 		moveq	#plcid_TitleCard,d0
 		jsr	(plcReplace).l
-		move.b	#1,(byte_FFFE58).w
+		move.b	#1,(f_endactbonus).w
 		moveq	#0,d0
 		move.b	(v_time+1).w,d0
 		mulu.w	#$3C,d0
@@ -119,10 +119,10 @@ sub_C81C:
 
 loc_C862:
 		add.w	d0,d0
-		move.w	word_C882(pc,d0.w),(word_FFFE54).w
+		move.w	word_C882(pc,d0.w),(v_timebonus).w
 		move.w	(v_rings).w,d0
 		mulu.w	#10,d0
-		move.w	d0,(word_FFFE56).w
+		move.w	d0,(v_ringbonus).w
 		move.w	#bgm_GotThrough,d0
 		jsr	(PlaySound_Special).l
 

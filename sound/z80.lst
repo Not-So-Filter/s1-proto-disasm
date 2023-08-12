@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 1 - 8/11/2023 22:17:3
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 1 - 8/11/2023 22:24:56
 
 
        1/       0 :                     
@@ -61,7 +61,7 @@
       56/      49 : 2B                  		dec	hl
       57/      4A : DD 21 FC 1F         		ld	ix, 1FFCh
       58/      4E : 16 00               		ld	d, 0
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 2 - 8/11/2023 22:17:3
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 2 - 8/11/2023 22:24:56
 
 
       59/      50 : D9                  		exx
@@ -124,7 +124,7 @@
      116/      B0 : 3E 80               		ld	a, 80h
      117/      B2 : 32 FD 1F            		ld	(zDAC_Status), a
      118/      B5 : FD 46 0B            		ld	b, (iy+0Bh)
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 3 - 8/11/2023 22:17:3
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 3 - 8/11/2023 22:24:56
 
 
      119/      B8 :                     
@@ -187,7 +187,7 @@
      176/     10C :                     
      177/     10C :                     loc_10C:
      178/     10C : 3D                  		dec	a
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 4 - 8/11/2023 22:17:3
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 4 - 8/11/2023 22:24:56
 
 
      179/     10D : 32 FE 1F            		ld	(1FFEh), a
@@ -250,7 +250,7 @@
      236/     174 : 00 00               		dw 0
      237/     176 : 00                  		db 0
      238/     177 : 01                  		db 1
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 5 - 8/11/2023 22:17:3
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 5 - 8/11/2023 22:24:56
 
 
      239/     178 : 46 0C               		dw zDAC_Sample3
@@ -269,7 +269,7 @@
      252/     C46 :                     
      253/     C46 :                     zDAC_Sample3:	binclude       "dac\timpani.dpcm"
      254/    1C5C :                     zDAC_Sample3_End:
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 6 - 8/11/2023 22:17:3
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 6 - 8/11/2023 22:24:56
 
 
   Symbol Table (* = unused):
@@ -292,7 +292,7 @@
 *MOMCPU :                        80 - | *MOMCPUNAME :                 "Z80" - |
 *NESTMAX :                      100 - |  OFF_160 :                      160 C |
 *PADDING :                        1 - | *RELAXED :                        0 - |
-*STARTOFZ80 :                     0 C | *TIME :                   "22:17:3" - |
+*STARTOFZ80 :                     0 C | *TIME :                  "22:24:56" - |
 *TRUE :                           1 - | *VERSION :                     142F - |
  Z80_STACK :                   1FF4 - |  ZBANKREGISTER :               6000 - |
  ZDAC_SAMPLE :                 1FFF - |  ZDAC_SAMPLE1 :                 184 C |
@@ -304,7 +304,7 @@
      49 symbols
      23 unused symbols
 
- AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 7 - 8/11/2023 22:17:3
+ AS V1.42 Beta [Bld 246] - Source File z80.asm - Page 7 - 8/11/2023 22:24:56
 
 
   Code Pages:
@@ -314,7 +314,7 @@ STANDARD (0 changed characters)
 
 1 code page
 
-0.03 seconds assembly time
+0.02 seconds assembly time
 
     254 lines source file
       2 passes

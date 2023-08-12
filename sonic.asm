@@ -5983,15 +5983,15 @@ loc_1170E:
 		bsr.w	sub_119BA
 
 loc_1171C:
-		tst.b	(byte_FFFE58).w
+		tst.b	(f_endactbonus).w
 		beq.s	locret_11744
-		clr.b	(byte_FFFE58).w
+		clr.b	(f_endactbonus).w
 		locVRAM $AE00
 		moveq	#0,d1
-		move.w	(word_FFFE54).w,d1
+		move.w	(v_timebonus).w,d1
 		bsr.w	sub_11958
 		moveq	#0,d1
-		move.w	(word_FFFE56).w,d1
+		move.w	(v_ringbonus).w,d1
 		bsr.w	sub_11958
 
 locret_11744:
@@ -6023,15 +6023,15 @@ loc_1176A:
 		bsr.w	sub_119BA
 
 loc_11788:
-		tst.b	(byte_FFFE58).w
+		tst.b	(f_endactbonus).w
 		beq.s	locret_117B0
-		clr.b	(byte_FFFE58).w
+		clr.b	(f_endactbonus).w
 		locVRAM $AE00
 		moveq	#0,d1
-		move.w	(word_FFFE54).w,d1
+		move.w	(v_timebonus).w,d1
 		bsr.w	sub_11958
 		moveq	#0,d1
-		move.w	(word_FFFE56).w,d1
+		move.w	(v_ringbonus).w,d1
 		bsr.w	sub_11958
 
 locret_117B0:
