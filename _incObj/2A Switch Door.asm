@@ -27,7 +27,7 @@ loc_68A4:
 		addq.b	#2,obRoutine(a0)
 
 loc_68F0:
-		tst.w	(unk_FFF7E0).w
+		tst.w	(f_switch).w
 		beq.s	loc_6906
 		subq.w	#1,obY(a0)
 		move.w	$30(a0),d0

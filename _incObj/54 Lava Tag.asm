@@ -25,7 +25,7 @@ loc_CD36:
 		move.b	obSubtype(a0),obFrame(a0)
 
 loc_CD6C:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		beq.s	loc_CD76
 		bsr.w	DisplaySprite
 

@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 
 sub_83B4:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.w	loc_8400
 		lea	(v_objspace).w,a1
 		move.w	obX(a1),d0

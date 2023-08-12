@@ -64,7 +64,7 @@ loc_C4A6:
 
 loc_C4B2:
 		moveq	#0,d0
-		move.b	(oscValues+$16).w,d0
+		move.b	(v_oscillate+$16).w,d0
 		btst	#3,obSubtype(a0)
 		beq.s	loc_C4C6
 		neg.w	d0
@@ -101,7 +101,7 @@ loc_C50E:
 		moveq	#0,d0
 
 loc_C510:
-		move.b	(oscValues+$12).w,d0
+		move.b	(v_oscillate+$12).w,d0
 		lsr.w	#3,d0
 		move.w	$30(a0),d1
 		sub.w	d0,d1

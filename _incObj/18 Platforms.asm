@@ -133,7 +133,7 @@ loc_5A6A:
 
 loc_5A76:
 		move.w	$34(a0),d0
-		move.b	(oscValues+$E).w,d1
+		move.b	(v_oscillate+$E).w,d1
 		neg.b	d1
 		addi.b	#$30,d1
 		bra.s	loc_5AB0
@@ -141,7 +141,7 @@ loc_5A76:
 
 loc_5A86:
 		move.w	$34(a0),d0
-		move.b	(oscValues+$E).w,d1
+		move.b	(v_oscillate+$E).w,d1
 		subi.b	#$30,d1
 		bra.s	loc_5AB0
 ; ---------------------------------------------------------------------------
@@ -210,7 +210,7 @@ loc_5B20:
 		add.l	d0,d3
 		move.l	d3,$2C(a0)
 		addi.w	#$38,obVelY(a0)
-		move.w	(unk_FFF72E).w,d0
+		move.w	(v_limitbtm2).w,d0
 		addi.w	#$E0,d0
 		cmp.w	$2C(a0),d0
 		bcc.s	locret_5B4C
@@ -223,7 +223,7 @@ locret_5B4C:
 loc_5B4E:
 		tst.w	$3A(a0)
 		bne.s	loc_5B6E
-		lea	(unk_FFF7E0).w,a2
+		lea	(f_switch).w,a2
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
 		lsr.w	#4,d0
@@ -264,7 +264,7 @@ loc_5B92:
 		move.w	d0,$2C(a0)
 
 loc_5BA8:
-		move.b	(oscValues+$1A).w,obAngle(a0)
+		move.b	(v_oscillate+$1A).w,obAngle(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

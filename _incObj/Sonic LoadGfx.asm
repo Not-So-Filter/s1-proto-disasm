@@ -24,7 +24,7 @@ Sonic_DynReadEntry:
 		lsl.w	#8,d2
 		move.b	(a2)+,d2
 		lsl.w	#5,d2
-		lea	(ArtSonic).l,a1
+		lea	(Art_Sonic).l,a1
 		adda.l	d2,a1
 
 loc_F730:

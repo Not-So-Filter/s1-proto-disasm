@@ -14,7 +14,7 @@ loc_9D76:
 		addq.b	#2,obRoutine(a0)
 		move.l	#MapSwitch,obMap(a0)
 		move.w	#$4513,obGfx(a0)
-		cmpi.b	#2,(v_zone).w
+		cmpi.b	#id_MZ,(v_zone).w
 		beq.s	loc_9D96
 		move.w	#$513,obGfx(a0)
 
@@ -35,7 +35,7 @@ loc_9DAC:
 		bclr	#0,obFrame(a0)
 		move.b	obSubtype(a0),d0
 		andi.w	#$F,d0
-		lea	(unk_FFF7E0).w,a3
+		lea	(f_switch).w,a3
 		lea	(a3,d0.w),a3
 		tst.b	obSubtype(a0)
 		bpl.s	loc_9DE8

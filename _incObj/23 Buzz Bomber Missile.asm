@@ -51,7 +51,7 @@ loc_7A6C:
 		lea	(AniBuzzMissile).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
-		move.w	(unk_FFF72E).w,d0
+		move.w	(v_limitbtm2).w,d0
 		addi.w	#$E0,d0
 		cmp.w	obY(a0),d0
 		bcs.s	loc_7AB2

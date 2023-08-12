@@ -49,7 +49,7 @@ loc_D912:
 		subq.w	#8,d0
 		bcs.s	ObjMovingBlocks_IsGone
 		lsl.w	#2,d0
-		lea	(oscValues+$2C).w,a2
+		lea	(v_oscillate+$2C).w,a2
 		lea	(a2,d0.w),a2
 		tst.w	(a2)
 		bpl.s	ObjMovingBlocks_IsGone
@@ -117,14 +117,14 @@ ObjBasaran_Type00:
 ObjBasaran_Type01:
 		move.w	#$40,d1
 		moveq	#0,d0
-		move.b	(oscValues+$A).w,d0
+		move.b	(v_oscillate+$A).w,d0
 		bra.s	loc_DA38
 ; ---------------------------------------------------------------------------
 
 ObjBasaran_Type02:
 		move.w	#$80,d1
 		moveq	#0,d0
-		move.b	(oscValues+$1E).w,d0
+		move.b	(v_oscillate+$1E).w,d0
 
 loc_DA38:
 		btst	#0,obStatus(a0)
@@ -142,13 +142,13 @@ loc_DA44:
 ObjBasaran_Type03:
 		move.w	#$40,d1
 		moveq	#0,d0
-		move.b	(oscValues+$A).w,d0
+		move.b	(v_oscillate+$A).w,d0
 		bra.s	loc_DA62
 ; ---------------------------------------------------------------------------
 
 ObjBasaran_Type04:
 		moveq	#0,d0
-		move.b	(oscValues+$1E).w,d0
+		move.b	(v_oscillate+$1E).w,d0
 
 loc_DA62:
 		btst	#0,obStatus(a0)
@@ -166,7 +166,7 @@ loc_DA70:
 ObjBasaran_Type05:
 		tst.b	$38(a0)
 		bne.s	loc_DA9A
-		lea	(unk_FFF7E0).w,a2
+		lea	(f_switch).w,a2
 		moveq	#0,d0
 		move.b	$3C(a0),d0
 		btst	#0,(a2,d0.w)
@@ -200,7 +200,7 @@ loc_DAB4:
 ObjBasaran_Type06:
 		tst.b	$38(a0)
 		bne.s	loc_DAEC
-		lea	(unk_FFF7E0).w,a2
+		lea	(f_switch).w,a2
 		moveq	#0,d0
 		move.b	$3C(a0),d0
 		tst.b	(a2,d0.w)
@@ -237,7 +237,7 @@ loc_DB0E:
 ObjBasaran_Type07:
 		tst.b	$38(a0)
 		bne.s	loc_DB40
-		tst.b	(unk_FFF7EF).w
+		tst.b	(f_switch+$F).w
 		beq.s	locret_DB5A
 		move.b	#1,$38(a0)
 		clr.w	$3A(a0)
@@ -257,33 +257,33 @@ locret_DB5A:
 ObjBasaran_Type08:
 		move.w	#$10,d1
 		moveq	#0,d0
-		move.b	(oscValues+$2A).w,d0
+		move.b	(v_oscillate+$2A).w,d0
 		lsr.w	#1,d0
-		move.w	(oscValues+$2C).w,d3
+		move.w	(v_oscillate+$2C).w,d3
 		bra.s	ObjBasaran_MoveSquare
 ; ---------------------------------------------------------------------------
 
 ObjBasaran_Type09:
 		move.w	#$30,d1
 		moveq	#0,d0
-		move.b	(oscValues+$2E).w,d0
-		move.w	(oscValues+$30).w,d3
+		move.b	(v_oscillate+$2E).w,d0
+		move.w	(v_oscillate+$30).w,d3
 		bra.s	ObjBasaran_MoveSquare
 ; ---------------------------------------------------------------------------
 
 ObjBasaran_Type0A:
 		move.w	#$50,d1
 		moveq	#0,d0
-		move.b	(oscValues+$32).w,d0
-		move.w	(oscValues+$34).w,d3
+		move.b	(v_oscillate+$32).w,d0
+		move.w	(v_oscillate+$34).w,d3
 		bra.s	ObjBasaran_MoveSquare
 ; ---------------------------------------------------------------------------
 
 ObjBasaran_Type0B:
 		move.w	#$70,d1
 		moveq	#0,d0
-		move.b	(oscValues+$36).w,d0
-		move.w	(oscValues+$38).w,d3
+		move.b	(v_oscillate+$36).w,d0
+		move.w	(v_oscillate+$38).w,d3
 
 ObjBasaran_MoveSquare:
 		tst.w	d3

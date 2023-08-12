@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_JumpAngle:
-		move.b	$26(a0),d0
+		move.b	obAngle(a0),d0
 		beq.s	locret_F04C
 		bpl.s	loc_F042
 		addq.b	#2,d0
@@ -18,7 +18,7 @@ loc_F042:
 		moveq	#0,d0
 
 loc_F048:
-		move.b	d0,$26(a0)
+		move.b	d0,obAngle(a0)
 
 locret_F04C:
 		rts

@@ -72,18 +72,18 @@ loc_B266:
 		move.w	#$400,obVelX(a0)
 		move.w	#$FFC0,obVelY(a0)
 		addq.b	#2,ob2ndRout(a0)
-		tst.b	(unk_FFF7A7).w
+		tst.b	(v_bossstatus).w
 		bne.s	locret_B28E
-		move.b	#1,(unk_FFF7A7).w
+		move.b	#1,(v_bossstatus).w
 
 locret_B28E:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_B290:
-		cmpi.w	#$2AC0,(unk_FFF72A).w
+		cmpi.w	#$2AC0,(v_limitright2).w
 		beq.s	loc_B29E
-		addq.w	#2,(unk_FFF72A).w
+		addq.w	#2,(v_limitright2).w
 		bra.s	loc_B2A6
 ; ---------------------------------------------------------------------------
 

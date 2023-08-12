@@ -110,7 +110,7 @@ locret_A7D8:
 
 loc_A7DA:
 		bsr.w	ScoreAdd
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		andi.b	#3,d0
 		bne.s	locret_A7D8
 		move.w	#sfx_Switch,d0
@@ -134,7 +134,7 @@ loc_A7F2:
 ; ---------------------------------------------------------------------------
 
 loc_A81C:
-		move.w	#1,(LevelRestart).w
+		move.w	#1,(f_restart).w
 
 loc_A822:
 		bra.w	DisplaySprite

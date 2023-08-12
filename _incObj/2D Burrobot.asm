@@ -86,7 +86,7 @@ loc_8DD4:
 ; ---------------------------------------------------------------------------
 
 loc_8DDE:
-		btst	#2,(byte_FFFE0F).w
+		btst	#2,(v_vbla_byte).w
 		beq.s	loc_8DFE
 		subq.b	#2,ob2ndRout(a0)
 		move.w	#$3B,$30(a0)

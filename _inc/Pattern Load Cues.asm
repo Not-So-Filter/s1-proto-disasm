@@ -43,19 +43,19 @@ plcm:	macro gfx,vram
 ; Pattern load cues - standard block 1
 ; ---------------------------------------------------------------------------
 PLC_Main:	dc.w ((PLC_Mainend-PLC_Main-2)/6)-1
-		plcm    ArtSmoke, $F400
-		plcm    ArtHUD, $D940
-		plcm    ArtLives, $FA80
-		plcm    ArtRings, $F640
+		plcm    Nem_Smoke, $F400
+		plcm    Nem_HUD, $D940
+		plcm    Nem_Lives, $FA80
+		plcm    Nem_Rings, $F640
 		plcm    byte_2E6C8, $F2E0
 	PLC_Mainend:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - standard block 2
 ; ---------------------------------------------------------------------------
 PLC_Main2:	dc.w ((PLC_Main2end-PLC_Main2-2)/6)-1
-		plcm    ArtMonitors, $D000
-		plcm    ArtShield, $A820
-		plcm    ArtInvinStars, $AB80
+		plcm    Nem_Monitors, $D000
+		plcm    Nem_Shield, $A820
+		plcm    Nem_Stars, $AB80
 	PLC_Main2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - explosion
@@ -199,7 +199,7 @@ PLC_Signpost:	dc.w ((PLC_Signpostend-PLC_Signpost-2)/6)-1
 ; Pattern load cues - special stage warp effect
 ; ---------------------------------------------------------------------------
 PLC_Warp:	dc.w ((PLC_Warpend-PLC_Warp-2)/6)-1
-		plcm    ArtFlash, $A820
+		plcm    Nem_Flash, $A820
 	PLC_Warpend:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - special stage

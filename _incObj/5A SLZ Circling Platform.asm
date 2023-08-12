@@ -52,10 +52,10 @@ off_E298:	dc.w loc_E29C-off_E298, loc_E2DA-off_E298
 ; ---------------------------------------------------------------------------
 
 loc_E29C:
-		move.b	(oscValues+$22).w,d1
+		move.b	(v_oscillate+$22).w,d1
 		subi.b	#$50,d1
 		ext.w	d1
-		move.b	(oscValues+$26).w,d2
+		move.b	(v_oscillate+$26).w,d2
 		subi.b	#$50,d2
 		ext.w	d2
 		btst	#0,obSubtype(a0)
@@ -78,10 +78,10 @@ loc_E2C8:
 ; ---------------------------------------------------------------------------
 
 loc_E2DA:
-		move.b	(oscValues+$22).w,d1
+		move.b	(v_oscillate+$22).w,d1
 		subi.b	#$50,d1
 		ext.w	d1
-		move.b	(oscValues+$26).w,d2
+		move.b	(v_oscillate+$26).w,d2
 		subi.b	#$50,d2
 		ext.w	d2
 		btst	#0,obSubtype(a0)

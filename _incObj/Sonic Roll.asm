@@ -11,7 +11,7 @@ loc_EE54:
 		move.b	(v_jpadhold2).w,d0
 		andi.b	#$C,d0
 		bne.s	locret_EE6C
-		btst	#1,(v_jpadhold2).w
+		btst	#bitDn,(v_jpadhold2).w
 		bne.s	Sonic_CheckRoll
 
 locret_EE6C:

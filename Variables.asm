@@ -111,9 +111,9 @@ v_scrposy_dup:		equ $FFFFF616
 v_bgscrposy_dup:	equ $FFFFF618	; background screen position y (duplicate) (2 bytes)
 v_scrposx_dup:		equ $FFFFF61A
 v_bgscreenposx_dup:	equ $FFFFF61C	; background screen position x (duplicate) (2 bytes)
-word_FFF61E:		equ $FFFFF61E
-word_FFF620:		equ $FFFFF620
-word_FFF622:		equ $FFFFF622
+v_bg3scrposy_vdp:	equ $FFFFF61E
+v_bg3scrposx_vdp:	equ $FFFFF620
+v_bg3scrposy_vdp_dup:	equ $FFFFF622
 v_hbla_hreg:		equ $FFFFF624	; VDP H.interrupt register buffer (8Axx)
 v_hbla_line:		equ $FFFFF625	; screen line where water starts and palette is changed by HBlank
 v_pfade_start:		equ $FFFFF626	; palette fading - start position in bytes
@@ -121,7 +121,7 @@ v_pfade_size:		equ $FFFFF627	; palette fading - number of colours
 byte_FFF628:		equ $FFFFF628
 byte_FFF629:		equ $FFFFF629
 v_vbla_routine:		equ $FFFFF62A
-byte_FFF62C:		equ $FFFFF62C
+v_spritecount:		equ $FFFFF62C
 v_pcyc_num:		equ $FFFFF632	; palette cycling - current reference number (2 bytes)
 v_pcyc_time:		equ $FFFFF634	; palette cycling - time until the next change (2 bytes)
 v_random:		equ $FFFFF636
@@ -129,19 +129,18 @@ f_pause:		equ $FFFFF63A
 v_vdp_buffer2:		equ $FFFFF644
 f_hblank:		equ $FFFFF648
 f_water:		equ $FFFFF64C
-word_FFF660:		equ $FFFFF660
-word_FFF662:		equ $FFFFF662
-word_FFF666:		equ $FFFFF666
-LevSelOption:		equ $FFFFF668
-LevSelSound:		equ $FFFFF66A
-v_plc_buffer:		equ $FFFFF680
-unk_FFF6E0:		equ $FFFFF6E0
+v_pal_buffer:		equ $FFFFF650	; palette data buffer (used for palette cycling) ($30 bytes)
+v_levseldelay:		equ $FFFFF666	; level select - time until change when up/down is held (2 bytes)
+v_levselitem:		equ $FFFFF668	; level select - item selected (2 bytes)
+v_levselsound:		equ $FFFFF66A	; level select - sound selected (2 bytes)
+v_plc_buffer:		equ $FFFFF680	; pattern load cues buffer (maximum $10 PLCs) ($60 bytes)
+v_ptrnemcode:		equ $FFFFF6E0	; pointer for nemesis decompression code ($1502 or $150C) (4 bytes)
 unk_FFF6E4:		equ $FFFFF6E4
 unk_FFF6E8:		equ $FFFFF6E8
 unk_FFF6EC:		equ $FFFFF6EC
 unk_FFF6F0:		equ $FFFFF6F0
 unk_FFF6F4:		equ $FFFFF6F4
-unk_FFF6F8:		equ $FFFFF6F8
+f_plc_execute:		equ $FFFFF6F8	; flag set for pattern load cue execution (2 bytes)
 unk_FFF6FA:		equ $FFFFF6FA
 v_screenposx:		equ $FFFFF700
 v_screenposy:		equ $FFFFF704
@@ -151,76 +150,71 @@ v_bg2screenposx:	equ $FFFFF710
 v_bg2screenposy:	equ $FFFFF714
 v_bg3screenposx:	equ $FFFFF718
 v_bg3screenposy:	equ $FFFFF71C
-unk_FFF720:		equ $FFFFF720
-unk_FFF724:		equ $FFFFF724
-unk_FFF726:		equ $FFFFF726
-unk_FFF728:		equ $FFFFF728
-unk_FFF72A:		equ $FFFFF72A
-unk_FFF72C:		equ $FFFFF72C
-unk_FFF72E:		equ $FFFFF72E
+v_limitleft1:		equ $FFFFF720
+v_limittop1:		equ $FFFFF724
+v_limitbtm1:		equ $FFFFF726
+v_limitleft2:		equ $FFFFF728
+v_limitright2:		equ $FFFFF72A
+v_limittop2:		equ $FFFFF72C
+v_limitbtm2:		equ $FFFFF72E
 unk_FFF730:		equ $FFFFF730
-unk_FFF732:		equ $FFFFF732
-unk_FFF73A:		equ $FFFFF73A
-unk_FFF73C:		equ $FFFFF73C
+v_limitleft3:		equ $FFFFF732
+v_scrshiftx:		equ $FFFFF73A
+v_scrshifty:		equ $FFFFF73C
 unk_FFF73E:		equ $FFFFF73E
 f_res_hscroll:		equ $FFFFF740
 f_res_vscroll:		equ $FFFFF741
-EventsRoutine:		equ $FFFFF742
+v_dle_routine:		equ $FFFFF742
 f_nobgscroll:		equ $FFFFF744
 unk_FFF746:		equ $FFFFF746
 unk_FFF748:		equ $FFFFF748
-unk_FFF74A:		equ $FFFFF74A
-unk_FFF74B:		equ $FFFFF74B
-unk_FFF74C:		equ $FFFFF74C
-unk_FFF74D:		equ $FFFFF74D
-unk_FFF74E:		equ $FFFFF74E
-unk_FFF754:		equ $FFFFF754
-unk_FFF756:		equ $FFFFF756
-unk_FFF758:		equ $FFFFF758
-unk_FFF75C:		equ $FFFFF75C
-unk_FFF760:		equ $FFFFF760
-unk_FFF762:		equ $FFFFF762
-unk_FFF764:		equ $FFFFF764
+v_fg_xblock:		equ $FFFFF74A
+v_fg_yblock:		equ $FFFFF74B
+v_bg1_xblock:		equ $FFFFF74C
+v_bg1_yblock:		equ $FFFFF74D
+v_bg2_xblock:		equ $FFFFF74E
+v_fg_scroll_flags:	equ $FFFFF754
+v_bg1_scroll_flags:	equ $FFFFF756
+v_bg2_scroll_flags:	equ $FFFFF758
+f_bgscrollvert:		equ $FFFFF75C
+v_sonspeedmax:		equ $FFFFF760
+v_sonspeedacc:		equ $FFFFF762
+v_sonspeeddec:		equ $FFFFF764
 v_sonframenum:		equ $FFFFF766	; frame to display for Sonic
 f_sonframechg:		equ $FFFFF767
-unk_FFF768:		equ $FFFFF768
+v_anglebuffer:		equ $FFFFF768
 unk_FFF76A:		equ $FFFFF76A
-unk_FFF76C:		equ $FFFFF76C
-unk_FFF76E:		equ $FFFFF76E
-unk_FFF770:		equ $FFFFF770
-unk_FFF774:		equ $FFFFF774
-unk_FFF778:		equ $FFFFF778
-unk_FFF77C:		equ $FFFFF77C
+v_opl_routine:		equ $FFFFF76C	; ObjPosLoad - routine counter (2 bytes)
+v_opl_screen:		equ $FFFFF76E	; ObjPosLoad - screen variable (2 bytes)
+v_opl_data:		equ $FFFFF770	; ObjPosLoad - data buffer ($10 bytes)
 v_ssangle:		equ $FFFFF780	; Special Stage angle (2 bytes)
 v_ssrotate:		equ $FFFFF782	; Special Stage rotation speed (2 bytes)
-unk_FFF783:		equ $FFFFF783
-unk_FFF790:		equ $FFFFF790
-unk_FFF792:		equ $FFFFF792
-unk_FFF794:		equ $FFFFF794
+v_btnpushtime1:		equ $FFFFF790
+v_btnpushtime2:		equ $FFFFF792
+v_palchgspeed:		equ $FFFFF794
 v_collindex:		equ $FFFFF796
-unk_FFF79A:		equ $FFFFF79A
-unk_FFF79C:		equ $FFFFF79C
+v_palss_num:		equ $FFFFF79A
+v_palss_time:		equ $FFFFF79C
 unk_FFF79E:		equ $FFFFF79E
 unk_FFF7A0:		equ $FFFFF7A0
-unk_FFF7A4:		equ $FFFFF7A4
-unk_FFF7A7:		equ $FFFFF7A7
-unk_FFF7A8:		equ $FFFFF7A8
-unk_FFF7A9:		equ $FFFFF7A9
-unk_FFF7AA:		equ $FFFFF7AA
+v_obj31ypos:		equ $FFFFF7A4	; y-position of object 31 (MZ stomper) (2 bytes)
+v_bossstatus:		equ $FFFFF7A7
+v_trackpos:		equ $FFFFF7A8
+v_trackbyte:		equ $FFFFF7A9
+f_lockscreen:		equ $FFFFF7AA
 unk_FFF7AC:		equ $FFFFF7AC
 unk_FFF7AD:		equ $FFFFF7AD
 unk_FFF7AE:		equ $FFFFF7AE
 unk_FFF7AF:		equ $FFFFF7AF
-unk_FFF7B0:		equ $FFFFF7B0
-unk_FFF7B1:		equ $FFFFF7B1
-unk_FFF7B2:		equ $FFFFF7B2
-unk_FFF7B3:		equ $FFFFF7B3
-unk_FFF7B4:		equ $FFFFF7B4
-unk_FFF7B5:		equ $FFFFF7B5
-unk_FFF7B6:		equ $FFFFF7B6
-unk_FFF7E0:		equ $FFFFF7E0
-unk_FFF7EF:		equ $FFFFF7EF
-unk_FFF7F0:		equ $FFFFF7F0
+v_lani0_frame:		equ $FFFFF7B0
+v_lani0_time:		equ $FFFFF7B1
+v_lani1_frame:		equ $FFFFF7B2
+v_lani1_time:		equ $FFFFF7B3
+v_lani2_frame:		equ $FFFFF7B4
+v_lani2_time:		equ $FFFFF7B5
+v_lani3_frame:		equ $FFFFF7B6
+f_switch:		equ $FFFFF7E0
+v_scroll_block_1_size:	equ $FFFFF7F0
 v_spritetablebuffer:	equ $FFFFF800
 v_pal_dry:		equ $FFFFFB00
 v_pal_dry_dup:		equ $FFFFFB80
@@ -228,14 +222,16 @@ v_regbuffer:		equ $FFFFFC00
 v_spbuffer:		equ $FFFFFC40	; stores most recent sp address (4 bytes)
 v_errortype:		equ $FFFFFC44	; error type
 v_systemstack:		equ $FFFFFE00
-LevelRestart:		equ $FFFFFE02
-LevelFrames:		equ $FFFFFE04
+f_restart:		equ $FFFFFE02	; restart level flag (2 bytes)
+v_framecount:		equ $FFFFFE04	; frame counter (adds 1 every frame) (2 bytes)
+v_framebyte:		equ v_framecount+1 ; low byte for frame counter
 v_debugitem:		equ $FFFFFE06
-DebugRoutine:		equ $FFFFFE08
+v_debuguse:		equ $FFFFFE08
 v_debugxspeed:		equ $FFFFFE0A
 v_debugyspeed:		equ $FFFFFE0B
-unk_FFFE0C:		equ $FFFFFE0C
-byte_FFFE0F:		equ $FFFFFE0F
+v_vbla_count:		equ $FFFFFE0C
+v_vbla_word:		equ v_vbla_count+2 ; low word for vertical interrupt counter (2 bytes)
+v_vbla_byte:		equ v_vbla_word+1	; low byte for vertical interrupt counter
 v_zone:			equ $FFFFFE10
 v_act:			equ $FFFFFE11
 v_lives:		equ $FFFFFE12
@@ -258,7 +254,7 @@ v_scorecopy:		equ $FFFFFE50
 word_FFFE54:		equ $FFFFFE54
 word_FFFE56:		equ $FFFFFE56
 byte_FFFE58:		equ $FFFFFE58
-oscValues:		equ $FFFFFE5E
+v_oscillate:		equ $FFFFFE5E
 v_ani0_time:		equ $FFFFFEC0	; synchronised sprite animation 0 - time until next frame (used for synchronised animations)
 v_ani0_frame:		equ $FFFFFEC1	; synchronised sprite animation 0 - current frame
 v_ani1_time:		equ $FFFFFEC2	; synchronised sprite animation 1 - time until next frame
@@ -268,7 +264,7 @@ v_ani2_frame:		equ $FFFFFEC5	; synchronised sprite animation 2 - current frame
 v_ani3_time:		equ $FFFFFEC6	; synchronised sprite animation 3 - time until next frame
 v_ani3_frame:		equ $FFFFFEC7	; synchronised sprite animation 3 - current frame
 v_ani3_buf:		equ $FFFFFEC8	; synchronised sprite animation 3 - info buffer (2 bytes)
-word_FFFFE0:		equ $FFFFFFE0
+word_FFFFE0:		equ $FFFFFFE0	; value that's set to 1 during initation, unused elsewhere (2 bytes)
 word_FFFFE8:		equ $FFFFFFE8
 DemoMode:		equ $FFFFFFF0
 DemoNum:		equ $FFFFFFF2

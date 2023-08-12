@@ -498,7 +498,7 @@ loc_11182:
 		tst.b	$36(a0)
 		bne.s	locret_111C0
 		move.b	#$1E,$36(a0)
-		btst	#6,(unk_FFF783).w
+		btst	#6,(v_ssrotate+1).w
 		beq.s	loc_111A2
 		asl	(v_ssrotate).w
 		rts

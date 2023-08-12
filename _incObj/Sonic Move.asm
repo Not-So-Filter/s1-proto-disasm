@@ -1,9 +1,9 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_Move:
-		move.w	(unk_FFF760).w,d6
-		move.w	(unk_FFF762).w,d5
-		move.w	(unk_FFF764).w,d4
+		move.w	(v_sonspeedmax).w,d6
+		move.w	(v_sonspeedacc).w,d5
+		move.w	(v_sonspeeddec).w,d4
 		tst.w	$3E(a0)
 		bne.w	Sonic_LookUp
 		btst	#bitL,(v_jpadhold2).w

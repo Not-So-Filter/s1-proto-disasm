@@ -247,7 +247,7 @@ loc_FD72:
 		bne.s	loc_FD18
 
 loc_FD78:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.s	loc_FDC0
 		move.b	#6,obRoutine(a0)
 		bsr.w	Sonic_ResetOnFloor

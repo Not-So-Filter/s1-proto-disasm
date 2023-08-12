@@ -44,7 +44,7 @@ locret_B6D4:
 ; ---------------------------------------------------------------------------
 
 loc_B6D6:
-		cmpi.b	#2,(unk_FFF7A7).w
+		cmpi.b	#2,(v_bossstatus).w
 		beq.s	loc_B6F2
 		move.w	#$2B,d1
 		move.w	#$18,d2
@@ -89,7 +89,7 @@ locret_B75E:
 ; ---------------------------------------------------------------------------
 
 loc_B760:
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		andi.b	#7,d0
 		bne.s	loc_B7A0
 		bsr.w	FindFreeObj
@@ -111,7 +111,7 @@ loc_B760:
 loc_B7A0:
 		subq.w	#1,obTimeFrame(a0)
 		bne.s	locret_B7C4
-		move.b	#2,(unk_FFF7A7).w
+		move.b	#2,(v_bossstatus).w
 		move.b	#$C,obRoutine(a0)
 		move.b	#9,obFrame(a0)
 		move.w	#$B4,obTimeFrame(a0)
@@ -122,7 +122,7 @@ locret_B7C4:
 ; ---------------------------------------------------------------------------
 
 loc_B7C6:
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		andi.b	#7,d0
 		bne.s	VBla_028
 		bsr.w	FindFreeObj

@@ -2,7 +2,7 @@
 
 DebugMode:
 		moveq	#0,d0
-		move.b	(DebugRoutine).w,d0
+		move.b	(v_debuguse).w,d0
 		move.w	off_11E74(pc,d0.w),d1
 		jmp	off_11E74(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,7 +11,7 @@ off_11E74:	dc.w loc_11E78-off_11E74, loc_11EB8-off_11E74
 ; ---------------------------------------------------------------------------
 
 loc_11E78:
-		addq.b	#2,(DebugRoutine).w
+		addq.b	#2,(v_debuguse).w
 		move.b	#0,obFrame(a0)
 		move.b	#0,obAnim(a0)
 		moveq	#0,d0
@@ -71,14 +71,14 @@ loc_11F12:
 		asr.l	#4,d1
 		move.l	obY(a0),d2
 		move.l	obX(a0),d3
-		btst	#0,d4
+		btst	#bitUp,d4
 		beq.s	loc_11F32
 		sub.l	d1,d2
 		bcc.s	loc_11F32
 		moveq	#0,d2
 
 loc_11F32:
-		btst	#1,d4
+		btst	#bitDn,d4
 		beq.s	loc_11F48
 		add.l	d1,d2
 		cmpi.l	#$7FF0000,d2
@@ -86,21 +86,21 @@ loc_11F32:
 		move.l	#$7FF0000,d2
 
 loc_11F48:
-		btst	#2,d4
+		btst	#bitL,d4
 		beq.s	loc_11F54
 		sub.l	d1,d3
 		bcc.s	loc_11F54
 		moveq	#0,d3
 
 loc_11F54:
-		btst	#3,d4
+		btst	#bitR,d4
 		beq.s	loc_11F5C
 		add.l	d1,d3
 
 loc_11F5C:
 		move.l	d2,obY(a0)
 		move.l	d3,obX(a0)
-		btst	#6,(v_jpadpress2).w
+		btst	#bitA,(v_jpadpress2).w
 		beq.s	loc_11F80
 		addq.b	#1,(v_debugitem).w
 		cmp.b	(v_debugitem).w,d6
@@ -112,7 +112,7 @@ loc_11F7C:
 ; ---------------------------------------------------------------------------
 
 loc_11F80:
-		btst	#5,(v_jpadpress2).w
+		btst	#bitC,(v_jpadpress2).w
 		beq.s	loc_11FA4
 		jsr	(FindFreeObj).l
 		bne.s	loc_11FA4
@@ -123,13 +123,13 @@ loc_11F80:
 ; ---------------------------------------------------------------------------
 
 loc_11FA4:
-		btst	#4,(v_jpadpress2).w
+		btst	#bitB,(v_jpadpress2).w
 		beq.s	locret_11FCC
 		moveq	#0,d0
-		move.w	d0,(DebugRoutine).w
-		move.l	#Map_Sonic,(v_objspace+obMap).w
-		move.w	#$780,(v_objspace+obGfx).w
-		move.b	d0,(v_objspace+obAnim).w
+		move.w	d0,(v_debuguse).w
+		move.l	#Map_Sonic,(v_player+obMap).w
+		move.w	#$780,(v_player+obGfx).w
+		move.b	d0,(v_player+obAnim).w
 		move.w	d0,obScreenY(a0)
 		move.w	d0,obScreenX(a0)
 

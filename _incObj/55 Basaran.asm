@@ -44,9 +44,9 @@ ObjBasaran_ChkDrop:
 		bcs.s	ObjBasaran_NotDropped
 		cmpi.w	#$80,d0
 		bcc.s	ObjBasaran_NotDropped
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.s	ObjBasaran_NotDropped
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		add.b	d7,d0
 		andi.b	#7,d0
 		bne.s	ObjBasaran_NotDropped
@@ -83,7 +83,7 @@ ObjBasaran_Delete:
 ; ---------------------------------------------------------------------------
 
 ObjBasaran_PlaySound:
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		andi.b	#$F,d0
 		bne.s	loc_D7EE
 		move.w	#sfx_Basaran,d0
@@ -99,7 +99,7 @@ loc_D7EE:
 loc_D7FE:
 		cmpi.w	#$80,d0
 		bcs.s	locret_D814
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		add.b	d7,d0
 		andi.b	#7,d0
 		bne.s	locret_D814

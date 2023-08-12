@@ -57,10 +57,10 @@ loc_9F84:
 		bcs.s	loc_9FD4
 		cmpi.w	#$AA1,d0
 		bcc.s	loc_9FD4
-		move.w	(unk_FFF7A4).w,d0
+		move.w	(v_obj31ypos).w,d0
 		subi.w	#$1C,d0
 		move.w	d0,obY(a0)
-		bset	#7,(unk_FFF7A4).w
+		bset	#7,(v_obj31ypos).w
 		bset	#7,obSubtype(a0)
 
 loc_9FD4:

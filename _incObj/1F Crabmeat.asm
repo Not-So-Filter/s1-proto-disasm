@@ -184,7 +184,7 @@ loc_77AE:
 		bsr.w	AnimateSprite
 		bsr.w	ObjectFall
 		bsr.w	DisplaySprite
-		move.w	(unk_FFF72E).w,d0
+		move.w	(v_limitbtm2).w,d0
 		addi.w	#$E0,d0
 		cmp.w	obY(a0),d0
 		bcs.s	loc_77D0

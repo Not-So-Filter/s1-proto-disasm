@@ -52,7 +52,7 @@ ObjGiantBalls_Type00:
 ObjGiantBalls_Type01:
 		move.w	#$60,d1
 		moveq	#0,d0
-		move.b	(oscValues+$E).w,d0
+		move.b	(v_oscillate+$E).w,d0
 		btst	#0,obStatus(a0)
 		beq.s	loc_DED6
 		neg.w	d0
@@ -68,7 +68,7 @@ loc_DED6:
 ObjGiantBalls_Type02:
 		move.w	#$60,d1	; this line is not used as d1 is replaced with $80
 		moveq	#0,d0
-		move.b	(oscValues+$E).w,d0
+		move.b	(v_oscillate+$E).w,d0
 		btst	#0,obStatus(a0)
 		beq.s	loc_DEFA
 		neg.w	d0

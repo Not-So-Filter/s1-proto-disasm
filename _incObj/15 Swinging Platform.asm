@@ -21,7 +21,7 @@ ObjSwingPtfm_Init:
 		move.b	#8,obHeight(a0)
 		move.w	obY(a0),$38(a0)
 		move.w	obX(a0),$3A(a0)
-		cmpi.b	#3,(v_zone).w
+		cmpi.b	#id_SLZ,(v_zone).w
 		bne.s	ObjSwingPtfm_NotSZ
 		move.l	#MapSwingPtfmSZ,obMap(a0)
 		move.w	#$43DC,obGfx(a0)
@@ -142,7 +142,7 @@ loc_5626:
 ; ---------------------------------------------------------------------------
 
 sub_563C:
-		move.b	(oscValues+$1A).w,d0
+		move.b	(v_oscillate+$1A).w,d0
 		move.w	#$80,d1
 		btst	#0,obStatus(a0)
 		beq.s	loc_5650

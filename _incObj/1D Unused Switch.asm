@@ -26,7 +26,7 @@ loc_67F8:
 		beq.s	loc_6812
 		addq.w	#2,obY(a0)
 		moveq	#1,d0
-		move.w	d0,(unk_FFF7E0).w
+		move.w	d0,(f_switch).w
 
 loc_6812:
 		bsr.w	DisplaySprite

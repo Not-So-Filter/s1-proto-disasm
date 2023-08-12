@@ -24,8 +24,8 @@ loc_3E18:
 		move.w	(v_screenposy).w,(v_scrposy_dup).w
 		move.w	(v_bgscreenposx).w,(v_bgscreenposx_dup).w
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
-		move.w	(v_bg3screenposx).w,(word_FFF620).w
-		move.w	(v_bg3screenposy).w,(word_FFF61E).w
+		move.w	(v_bg3screenposx).w,(v_bg3scrposx_vdp).w
+		move.w	(v_bg3screenposy).w,(v_bg3scrposy_vdp).w
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		add.w	d0,d0
@@ -38,7 +38,7 @@ Deform_Index:	dc.w Deform_GHZ-Deform_Index, Deform_LZ-Deform_Index, Deform_MZ-De
 ; ---------------------------------------------------------------------------
 
 Deform_GHZ:
-		move.w	(unk_FFF73A).w,d4
+		move.w	(v_scrshiftx).w,d4
 		ext.l	d4
 		asl.l	#5,d4
 		move.l	d4,d1
@@ -123,7 +123,7 @@ loc_3F1C:
 ; ---------------------------------------------------------------------------
 
 Deform_MZ:
-		move.w	(unk_FFF73A).w,d4
+		move.w	(v_scrshiftx).w,d4
 		ext.l	d4
 		asl.l	#6,d4
 		move.l	d4,d1
@@ -160,10 +160,10 @@ loc_3F74:
 ; ---------------------------------------------------------------------------
 
 Deform_SLZ:
-		move.w	(unk_FFF73A).w,d4
+		move.w	(v_scrshiftx).w,d4
 		ext.l	d4
 		asl.l	#7,d4
-		move.w	(unk_FFF73C).w,d5
+		move.w	(v_scrshifty).w,d5
 		ext.l	d5
 		asl.l	#7,d5
 		bsr.w	sub_4302
@@ -259,10 +259,10 @@ loc_404C:
 ; ---------------------------------------------------------------------------
 
 Deform_SZ:
-		move.w	(unk_FFF73A).w,d4
+		move.w	(v_scrshiftx).w,d4
 		ext.l	d4
 		asl.l	#6,d4
-		move.w	(unk_FFF73C).w,d5
+		move.w	(v_scrshifty).w,d5
 		ext.l	d5
 		asl.l	#4,d5
 		move.l	d5,d1
@@ -305,60 +305,60 @@ ScrollHoriz:
 		bsr.s	sub_40E8
 		move.w	(v_screenposx).w,d0
 		andi.w	#$10,d0
-		move.b	(unk_FFF74A).w,d1
+		move.b	(v_fg_xblock).w,d1
 		eor.b	d1,d0
 		bne.s	locret_40E6
-		eori.b	#$10,(unk_FFF74A).w
+		eori.b	#$10,(v_fg_xblock).w
 		move.w	(v_screenposx).w,d0
 		sub.w	d4,d0
 		bpl.s	loc_40E0
-		bset	#2,(unk_FFF754).w
+		bset	#2,(v_fg_scroll_flags).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_40E0:
-		bset	#3,(unk_FFF754).w
+		bset	#3,(v_fg_scroll_flags).w
 
 locret_40E6:
 		rts
 ; ---------------------------------------------------------------------------
 
 sub_40E8:
-		move.w	(v_objspace+8).w,d0
+		move.w	(v_player+obX).w,d0
 		sub.w	(v_screenposx).w,d0
 		subi.w	#$90,d0
 		bcs.s	loc_412C
 		subi.w	#$10,d0
 		bcc.s	loc_4102
-		clr.w	(unk_FFF73A).w
+		clr.w	(v_scrshiftx).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_4102:
-		cmpi.w	#$10,d0
+		cmpi.w	#16,d0
 		bcs.s	loc_410C
-		move.w	#$10,d0
+		move.w	#16,d0
 
 loc_410C:
 		add.w	(v_screenposx).w,d0
-		cmp.w	(unk_FFF72A).w,d0
+		cmp.w	(v_limitright2).w,d0
 		blt.s	loc_411A
-		move.w	(unk_FFF72A).w,d0
+		move.w	(v_limitright2).w,d0
 
 loc_411A:
 		move.w	d0,d1
 		sub.w	(v_screenposx).w,d1
 		asl.w	#8,d1
 		move.w	d0,(v_screenposx).w
-		move.w	d1,(unk_FFF73A).w
+		move.w	d1,(v_scrshiftx).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_412C:
 		add.w	(v_screenposx).w,d0
-		cmp.w	(unk_FFF728).w,d0
+		cmp.w	(v_limitleft2).w,d0
 		bgt.s	loc_411A
-		move.w	(unk_FFF728).w,d0
+		move.w	(v_limitleft2).w,d0
 		bra.s	loc_411A
 ; ---------------------------------------------------------------------------
 		tst.w	d0
@@ -374,21 +374,21 @@ loc_4146:
 
 ScrollVertical:
 		moveq	#0,d1
-		move.w	(v_objspace+$C).w,d0
+		move.w	(v_player+obY).w,d0
 		sub.w	(v_screenposy).w,d0
-		btst	#2,(v_objspace+$22).w
+		btst	#2,(v_objspace+obStatus).w
 		beq.s	loc_4160
 		subq.w	#5,d0
 
 loc_4160:
-		btst	#1,(v_objspace+$22).w
+		btst	#1,(v_player+obStatus).w
 		beq.s	loc_4180
 		addi.w	#$20,d0
 		sub.w	(unk_FFF73E).w,d0
 		bcs.s	loc_41BE
 		subi.w	#$40,d0
 		bcc.s	loc_41BE
-		tst.b	(unk_FFF75C).w
+		tst.b	(f_bgscrollvert).w
 		bne.s	loc_41D0
 		bra.s	loc_418C
 ; ---------------------------------------------------------------------------
@@ -396,11 +396,11 @@ loc_4160:
 loc_4180:
 		sub.w	(unk_FFF73E).w,d0
 		bne.s	loc_4192
-		tst.b	(unk_FFF75C).w
+		tst.b	(f_bgscrollvert).w
 		bne.s	loc_41D0
 
 loc_418C:
-		clr.w	(unk_FFF73C).w
+		clr.w	(v_scrshifty).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -435,7 +435,7 @@ loc_41BE:
 
 loc_41D0:
 		moveq	#0,d0
-		move.b	d0,(unk_FFF75C).w
+		move.b	d0,(f_bgscrollvert).w
 
 loc_41D6:
 		moveq	#0,d1
@@ -454,9 +454,9 @@ loc_41E8:
 		swap	d1
 
 loc_41F4:
-		cmp.w	(unk_FFF72C).w,d1
+		cmp.w	(v_limittop2).w,d1
 		bgt.s	loc_4214
-		move.w	(unk_FFF72C).w,d1
+		move.w	(v_limittop2).w,d1
 		bra.s	loc_4214
 ; ---------------------------------------------------------------------------
 
@@ -467,9 +467,9 @@ loc_4200:
 		swap	d1
 
 loc_420A:
-		cmp.w	(unk_FFF72E).w,d1
+		cmp.w	(v_limitbtm2).w,d1
 		blt.s	loc_4214
-		move.w	(unk_FFF72E).w,d1
+		move.w	(v_limitbtm2).w,d1
 
 loc_4214:
 		move.w	(v_screenposy).w,d4
@@ -477,30 +477,30 @@ loc_4214:
 		move.l	d1,d3
 		sub.l	(v_screenposy).w,d3
 		ror.l	#8,d3
-		move.w	d3,(unk_FFF73C).w
+		move.w	d3,(v_scrshifty).w
 		move.l	d1,(v_screenposy).w
 		move.w	(v_screenposy).w,d0
 		andi.w	#$10,d0
-		move.b	(unk_FFF74B).w,d1
+		move.b	(v_fg_yblock).w,d1
 		eor.b	d1,d0
 		bne.s	locret_4256
-		eori.b	#$10,(unk_FFF74B).w
+		eori.b	#$10,(v_fg_yblock).w
 		move.w	(v_screenposy).w,d0
 		sub.w	d4,d0
 		bpl.s	loc_4250
-		bset	#0,(unk_FFF754).w
+		bset	#0,(v_fg_scroll_flags).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_4250:
-		bset	#1,(unk_FFF754).w
+		bset	#1,(v_fg_scroll_flags).w
 
 locret_4256:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_4258:
-		move.w	(unk_FFF728).w,d0
+		move.w	(v_limitleft2).w,d0
 		moveq	#1,d1
 		sub.w	(v_screenposx).w,d0
 		beq.s	loc_426E
@@ -512,12 +512,12 @@ loc_4268:
 		move.w	d1,d0
 
 loc_426E:
-		move.w	d0,(unk_FFF73A).w
+		move.w	d0,(v_scrshiftx).w
 		bra.w	loc_3E08
 ; ---------------------------------------------------------------------------
 
 loc_4276:
-		move.w	(unk_FFF72C).w,d0
+		move.w	(v_limittop2).w,d0
 		addi.w	#$20,d0
 		moveq	#1,d1
 		sub.w	(v_screenposy).w,d0
@@ -530,7 +530,7 @@ loc_428A:
 		move.w	d1,d0
 
 loc_4290:
-		move.w	d0,(unk_FFF73C).w
+		move.w	d0,(v_scrshifty).w
 		bra.w	loc_3E14
 ; ---------------------------------------------------------------------------
 
@@ -542,18 +542,18 @@ sub_4298:
 		move.l	d0,d1
 		swap	d1
 		andi.w	#$10,d1
-		move.b	(unk_FFF74C).w,d3
+		move.b	(v_bg1_xblock).w,d3
 		eor.b	d3,d1
 		bne.s	loc_42CC
-		eori.b	#$10,(unk_FFF74C).w
+		eori.b	#$10,(v_bg1_xblock).w
 		sub.l	d2,d0
 		bpl.s	loc_42C6
-		bset	#2,(unk_FFF756).w
+		bset	#2,(v_bg1_scroll_flags).w
 		bra.s	loc_42CC
 ; ---------------------------------------------------------------------------
 
 loc_42C6:
-		bset	#3,(unk_FFF756).w
+		bset	#3,(v_bg1_scroll_flags).w
 
 loc_42CC:
 		move.l	(v_bgscreenposy).w,d3
@@ -563,18 +563,18 @@ loc_42CC:
 		move.l	d0,d1
 		swap	d1
 		andi.w	#$10,d1
-		move.b	(unk_FFF74D).w,d2
+		move.b	(v_bg1_yblock).w,d2
 		eor.b	d2,d1
 		bne.s	locret_4300
-		eori.b	#$10,(unk_FFF74D).w
+		eori.b	#$10,(v_bg1_yblock).w
 		sub.l	d3,d0
 		bpl.s	loc_42FA
-		bset	#0,(unk_FFF756).w
+		bset	#0,(v_bg1_scroll_flags).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_42FA:
-		bset	#1,(unk_FFF756).w
+		bset	#1,(v_bg1_scroll_flags).w
 
 locret_4300:
 		rts
@@ -592,18 +592,18 @@ sub_4302:
 		move.l	d0,d1
 		swap	d1
 		andi.w	#$10,d1
-		move.b	(unk_FFF74D).w,d2
+		move.b	(v_bg1_yblock).w,d2
 		eor.b	d2,d1
 		bne.s	locret_4342
-		eori.b	#$10,(unk_FFF74D).w
+		eori.b	#$10,(v_bg1_yblock).w
 		sub.l	d3,d0
 		bpl.s	loc_433C
-		bset	#0,(unk_FFF756).w
+		bset	#0,(v_bg1_scroll_flags).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_433C:
-		bset	#1,(unk_FFF756).w
+		bset	#1,(v_bg1_scroll_flags).w
 
 locret_4342:
 		rts
@@ -614,18 +614,18 @@ sub_4344:
 		move.w	d0,(v_bgscreenposy).w
 		move.w	d0,d1
 		andi.w	#$10,d1
-		move.b	(unk_FFF74D).w,d2
+		move.b	(v_bg1_yblock).w,d2
 		eor.b	d2,d1
 		bne.s	locret_4372
-		eori.b	#$10,(unk_FFF74D).w
+		eori.b	#$10,(v_bg1_yblock).w
 		sub.w	d3,d0
 		bpl.s	loc_436C
-		bset	#0,(unk_FFF756).w
+		bset	#0,(v_bg1_scroll_flags).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_436C:
-		bset	#1,(unk_FFF756).w
+		bset	#1,(v_bg1_scroll_flags).w
 
 locret_4372:
 		rts
@@ -634,25 +634,25 @@ locret_4372:
 sub_4374:
 		move.w	(v_bg2screenposx).w,d2
 		move.w	(v_bg2screenposy).w,d3
-		move.w	(unk_FFF73A).w,d0
+		move.w	(v_scrshiftx).w,d0
 		ext.l	d0
 		asl.l	#7,d0
 		add.l	d0,(v_bg2screenposx).w
 		move.w	(v_bg2screenposx).w,d0
 		andi.w	#$10,d0
-		move.b	(unk_FFF74E).w,d1
+		move.b	(v_bg2_xblock).w,d1
 		eor.b	d1,d0
 		bne.s	locret_43B4
-		eori.b	#$10,(unk_FFF74E).w
+		eori.b	#$10,(v_bg2_xblock).w
 		move.w	(v_bg2screenposx).w,d0
 		sub.w	d2,d0
 		bpl.s	loc_43AE
-		bset	#2,(unk_FFF758).w
+		bset	#2,(v_bg2_scroll_flags).w
 		bra.s	locret_43B4
 ; ---------------------------------------------------------------------------
 
 loc_43AE:
-		bset	#3,(unk_FFF758).w
+		bset	#3,(v_bg2_scroll_flags).w
 
 locret_43B4:
 		rts

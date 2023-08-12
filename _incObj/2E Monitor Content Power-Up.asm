@@ -62,9 +62,9 @@ loc_82CA:
 		bne.s	loc_82F8
 		move.b	#1,(v_shoes).w
 		move.w	#$4B0,(v_objspace+shoetime).w
-		move.w	#$C00,(unk_FFF760).w
-		move.w	#$18,(unk_FFF762).w
-		move.w	#$80,(unk_FFF764).w
+		move.w	#$C00,(v_sonspeedmax).w
+		move.w	#$18,(v_sonspeedacc).w
+		move.w	#$80,(v_sonspeeddec).w
 		move.w	#bgm_Speedup,d0
 		jmp	(PlaySound).l
 ; ---------------------------------------------------------------------------

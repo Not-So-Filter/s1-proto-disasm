@@ -104,7 +104,7 @@ byte_97CA:	dc.b $38, 0
 
 loc_97D0:
 		bsr.w	sub_986A
-		move.w	obY(a0),(unk_FFF7A4).w
+		move.w	obY(a0),(v_obj31ypos).w
 		moveq	#0,d1
 		move.b	obActWid(a0),d1
 		addi.w	#$B,d1
@@ -170,12 +170,12 @@ off_987C:	dc.w loc_988A-off_987C, loc_9926-off_987C, loc_9926-off_987C, loc_99B6
 ; ---------------------------------------------------------------------------
 
 loc_988A:
-		lea	(unk_FFF7E0).w,a2
+		lea	(f_switch).w,a2
 		moveq	#0,d0
 		move.b	$3A(a0),d0
 		tst.b	(a2,d0.w)
 		beq.s	loc_98DE
-		tst.w	(unk_FFF7A4).w
+		tst.w	(v_obj31ypos).w
 		bpl.s	loc_98A8
 		cmpi.b	#$10,$32(a0)
 		beq.s	loc_98D6
@@ -183,7 +183,7 @@ loc_988A:
 loc_98A8:
 		tst.w	$32(a0)
 		beq.s	loc_98D6
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		andi.b	#$F,d0
 		bne.s	loc_98C8
 		tst.b	obRender(a0)
@@ -235,7 +235,7 @@ loc_9926:
 ; ---------------------------------------------------------------------------
 
 loc_9938:
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		andi.b	#$F,d0
 		bne.s	loc_9952
 		tst.b	obRender(a0)

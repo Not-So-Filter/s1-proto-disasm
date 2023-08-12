@@ -4,7 +4,7 @@ LoadLevelBounds:
 		move.b	d0,(f_res_vscroll).w
 		move.b	d0,(unk_FFF746).w
 		move.b	d0,(unk_FFF748).w
-		move.b	d0,(EventsRoutine).w
+		move.b	d0,(v_dle_routine).w
 		move.w	(v_zone).w,d0
 		lsl.b	#6,d0
 		lsr.w	#4,d0
@@ -15,24 +15,24 @@ LoadLevelBounds:
 		move.w	(a0)+,d0
 		move.w	d0,(unk_FFF730).w
 		move.l	(a0)+,d0
-		move.l	d0,(unk_FFF728).w
-		move.l	d0,(unk_FFF720).w
-		cmp.w	(unk_FFF728).w,d0
+		move.l	d0,(v_limitleft2).w
+		move.l	d0,(v_limitleft1).w
+		cmp.w	(v_limitleft2).w,d0
 		bne.s	loc_3AF2
 		move.b	#1,(f_res_hscroll).w
 
 loc_3AF2:
 		move.l	(a0)+,d0
-		move.l	d0,(unk_FFF72C).w
-		move.l	d0,(unk_FFF724).w
-		cmp.w	(unk_FFF72C).w,d0
+		move.l	d0,(v_limittop2).w
+		move.l	d0,(v_limittop1).w
+		cmp.w	(v_limittop2).w,d0
 		bne.s	loc_3B08
 		move.b	#1,(f_res_vscroll).w
 
 loc_3B08:
-		move.w	(unk_FFF728).w,d0
+		move.w	(v_limitleft2).w,d0
 		addi.w	#$240,d0
-		move.w	d0,(unk_FFF732).w
+		move.w	d0,(v_limitleft3).w
 		move.w	(a0)+,d0
 		move.w	d0,(unk_FFF73E).w
 		bra.w	loc_3C6E
@@ -87,7 +87,7 @@ loc_3C7C:
 		lea	StartPosArray(pc,d0.w),a1
 		moveq	#0,d1
 		move.w	(a1)+,d1
-		move.w	d1,(v_objspace+obX).w
+		move.w	d1,(v_player+obX).w
 		subi.w	#$A0,d1
 		bcc.s	loc_3C94
 		moveq	#0,d1
@@ -96,15 +96,15 @@ loc_3C94:
 		move.w	d1,(v_screenposx).w
 		moveq	#0,d0
 		move.w	(a1),d0
-		move.w	d0,(v_objspace+obY).w
+		move.w	d0,(v_player+obY).w
 		subi.w	#$60,d0
 		bcc.s	loc_3CA8
 		moveq	#0,d0
 
 loc_3CA8:
-		cmp.w	(unk_FFF72E).w,d0
+		cmp.w	(v_limitbtm2).w,d0
 		blt.s	loc_3CB2
-		move.w	(unk_FFF72E).w,d0
+		move.w	(v_limitbtm2).w,d0
 
 loc_3CB2:
 		move.w	d0,(v_screenposy).w
@@ -131,7 +131,7 @@ LoadLevelUnk:
 		move.b	(v_zone).w,d0
 		lsl.w	#3,d0
 		lea	dword_3D6A(pc,d0.w),a1
-		lea	(unk_FFF7F0).w,a2
+		lea	(v_scroll_block_1_size).w,a2
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 		rts

@@ -101,25 +101,25 @@ locret_8FC6:
 ; ---------------------------------------------------------------------------
 
 loc_8FC8:
-		move.b	(oscValues+2).w,d0
+		move.b	(v_oscillate+2).w,d0
 		move.w	#$20,d1
 		bra.s	loc_8FEE
 ; ---------------------------------------------------------------------------
 
 loc_8FD2:
-		move.b	(oscValues+6).w,d0
+		move.b	(v_oscillate+6).w,d0
 		move.w	#$30,d1
 		bra.s	loc_8FEE
 ; ---------------------------------------------------------------------------
 
 loc_8FDC:
-		move.b	(oscValues+$A).w,d0
+		move.b	(v_oscillate+$A).w,d0
 		move.w	#$40,d1
 		bra.s	loc_8FEE
 ; ---------------------------------------------------------------------------
 
 loc_8FE6:
-		move.b	(oscValues+$E).w,d0
+		move.b	(v_oscillate+$E).w,d0
 		move.w	#$60,d1
 
 loc_8FEE:

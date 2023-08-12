@@ -515,7 +515,7 @@ loc_B3C:
 		jsr	VBla_Index(pc,d0.w)
 
 loc_B58:
-		addq.l	#1,(unk_FFFE0C).w
+		addq.l	#1,(v_vbla_count).w
 		jsr	(UpdateMusic).l
 		movem.l	(sp)+,d0-a6
 		rte
@@ -576,7 +576,7 @@ VBla_08:
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		move.w	#$8407,(a5)
 		move.w	(v_hbla_hreg).w,(a5)
-		move.w	(word_FFF61E).w,(word_FFF622).w
+		move.w	(v_bg3scrposy_vdp).w,(v_bg3scrposy_vdp_dup).w
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
 		tst.b	(f_sonframechg).w
 		beq.s	loc_C7A
@@ -972,7 +972,7 @@ loc_13DA:
 RunPLC:
 		tst.l	(v_plc_buffer).w
 		beq.s	locret_1436
-		tst.w	(unk_FFF6F8).w
+		tst.w	(f_plc_execute).w
 		bne.s	locret_1436
 		movea.l	(v_plc_buffer).w,a0
 		lea	(NemPCD_WriteRowToVDP).l,a3
@@ -983,7 +983,7 @@ RunPLC:
 
 loc_1404:
 		andi.w	#$7FFF,d2
-		move.w	d2,(unk_FFF6F8).w
+		move.w	d2,(f_plc_execute).w
 		bsr.w	NemDec_BuildCodeTable
 		move.b	(a0)+,d5
 		asl.w	#8,d5
@@ -991,7 +991,7 @@ loc_1404:
 		moveq	#$10,d6
 		moveq	#0,d0
 		move.l	a0,(v_plc_buffer).w
-		move.l	a3,(unk_FFF6E0).w
+		move.l	a3,(v_ptrnemcode).w
 		move.l	d0,(unk_FFF6E4).w
 		move.l	d0,(unk_FFF6E8).w
 		move.l	d0,(unk_FFF6EC).w
@@ -1003,7 +1003,7 @@ locret_1436:
 ; ---------------------------------------------------------------------------
 
 sub_1438:
-		tst.w	(unk_FFF6F8).w
+		tst.w	(f_plc_execute).w
 		beq.w	locret_14D0
 		move.w	#9,(unk_FFF6FA).w
 		moveq	#0,d0
@@ -1013,7 +1013,7 @@ sub_1438:
 ; ---------------------------------------------------------------------------
 
 loc_1454:
-		tst.w	(unk_FFF6F8).w
+		tst.w	(f_plc_execute).w
 		beq.s	locret_14D0
 		move.w	#3,(unk_FFF6FA).w
 		moveq	#0,d0
@@ -1029,7 +1029,7 @@ loc_146C:
 		move.l	d0,(a4)
 		subq.w	#4,a4
 		movea.l	(v_plc_buffer).w,a0
-		movea.l	(unk_FFF6E0).w,a3
+		movea.l	(v_ptrnemcode).w,a3
 		move.l	(unk_FFF6E4).w,d0
 		move.l	(unk_FFF6E8).w,d1
 		move.l	(unk_FFF6EC).w,d2
@@ -1040,14 +1040,14 @@ loc_146C:
 loc_14A0:
 		movea.w	#8,a5
 		bsr.w	NemPCD_NewRow
-		subq.w	#1,(unk_FFF6F8).w
+		subq.w	#1,(f_plc_execute).w
 		beq.s	ShiftPLC
 		subq.w	#1,(unk_FFF6FA).w
 		bne.s	loc_14A0
 		move.l	a0,(v_plc_buffer).w
 
 loc_14B8:
-		move.l	a3,(unk_FFF6E0).w
+		move.l	a3,(v_ptrnemcode).w
 		move.l	d0,(unk_FFF6E4).w
 		move.l	d1,(unk_FFF6E8).w
 		move.l	d2,(unk_FFF6EC).w
@@ -1481,8 +1481,8 @@ loc_24BC:
 		moveq	#palid_SegaBG,d0
 		bsr.w	PalLoad2
 		move.w	#$28,(v_pcyc_num).w
-		move.w	#0,(word_FFF662).w
-		move.w	#0,(word_FFF660).w
+		move.w	#0,(v_pal_buffer+$12).w
+		move.w	#0,(v_pal_buffer+$10).w
 		move.w	#$B4,(v_demolength).w
 		move.w	(v_vdp_buffer1).w,d0
 		ori.b	#$40,d0
@@ -1543,7 +1543,7 @@ loc_25D8:
 
                 copyTilemapUnc	$C206,$21,$15
 
-		move.w	#0,(DebugRoutine).w
+		move.w	#0,(v_debuguse).w
 		move.w	#0,(DemoMode).w
 		move.w	#0,(v_zone).w
 		bsr.w	LoadLevelBounds
@@ -1639,10 +1639,10 @@ LevelSelect:
 		bne.s	LevelSelect
 		andi.b	#btnABC+btnStart,(v_jpadpress1).w
 		beq.s	LevelSelect
-		move.w	(LevSelOption).w,d0
+		move.w	(v_levselitem).w,d0
 		cmpi.w	#$13,d0
 		bne.s	loc_2780
-		move.w	(LevSelSound).w,d0
+		move.w	(v_levselsound).w,d0
 		addi.w	#$80,d0
 		cmpi.w	#$93,d0				; There's no pointer for music $92 or $93
 		bcs.s	loc_277A			; So the game crashes when played
@@ -1774,15 +1774,15 @@ sub_28A6:
 		move.b	(v_jpadpress1).w,d1
 		andi.b	#btnUp+btnDn,d1
 		bne.s	loc_28B6
-		subq.w	#1,(word_FFF666).w
+		subq.w	#1,(v_levseldelay).w
 		bpl.s	loc_28F0
 
 loc_28B6:
-		move.w	#$B,(word_FFF666).w
+		move.w	#$B,(v_levseldelay).w
 		move.b	(v_jpadhold1).w,d1
 		andi.b	#btnUp+btnDn,d1
 		beq.s	loc_28F0
-		move.w	(LevSelOption).w,d0
+		move.w	(v_levselitem).w,d0
 		btst	#bitUp,d1
 		beq.s	loc_28D6
 		subq.w	#1,d0
@@ -1798,18 +1798,18 @@ loc_28D6:
 		moveq	#0,d0
 
 loc_28E6:
-		move.w	d0,(LevSelOption).w
+		move.w	d0,(v_levselitem).w
 		bsr.w	LevSelTextLoad
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_28F0:
-		cmpi.w	#$13,(LevSelOption).w
+		cmpi.w	#$13,(v_levselitem).w
 		bne.s	locret_292A
 		move.b	(v_jpadpress1).w,d1
 		andi.b	#$C,d1
 		beq.s	locret_292A
-		move.w	(LevSelSound).w,d0
+		move.w	(v_levselsound).w,d0
 		btst	#bitL,d1
 		beq.s	loc_2912
 		subq.w	#1,d0
@@ -1825,7 +1825,7 @@ loc_2912:
 		moveq	#0,d0
 
 loc_2922:
-		move.w	d0,(LevSelSound).w
+		move.w	d0,(v_levselsound).w
 		bsr.w	LevSelTextLoad
 
 locret_292A:
@@ -1845,7 +1845,7 @@ loc_2944:
 		addi.l	#$800000,d4
 		dbf	d1,loc_2944
 		moveq	#0,d0
-		move.w	(LevSelOption).w,d0
+		move.w	(v_levselitem).w,d0
 		move.w	d0,d1
 		move.l	#$62100003,d4
 		lsl.w	#7,d0
@@ -1861,13 +1861,13 @@ loc_2944:
 		move.l	d4,4(a6)
 		bsr.w	sub_29CC
 		move.w	#$E680,d3
-		cmpi.w	#$13,(LevSelOption).w	; are we on Sound Select?
+		cmpi.w	#$13,(v_levselitem).w	; are we on Sound Select?
 		bne.s	loc_2996	; if not, branch
 		move.w	#$C680,d3
 
 loc_2996:
 		locVRAM $EBB0
-		move.w	(LevSelSound).w,d0
+		move.w	(v_levselsound).w,d0
 		addi.w	#$80,d0
 		move.b	d0,d2
 		lsr.b	#4,d0
@@ -1965,7 +1965,7 @@ loc_2C4C:
 loc_2C5C:
 		move.l	d0,(a1)+
 		dbf	d1,loc_2C5C
-		lea	(oscValues+2).w,a1
+		lea	(v_oscillate+2).w,a1
 		moveq	#0,d0
 		move.w	#$27,d1
 
@@ -2048,21 +2048,21 @@ loc_2D54:
 		move.b	d0,(v_invinc).w
 		move.b	d0,(v_shoes).w
 		move.b	d0,($FFFFFE2F).w
-		move.w	d0,(DebugRoutine).w
-		move.w	d0,(LevelRestart).w
-		move.w	d0,(LevelFrames).w
+		move.w	d0,(v_debuguse).w
+		move.w	d0,(f_restart).w
+		move.w	d0,(v_framecount).w
 		bsr.w	oscInit
 		move.b	#1,(f_scorecount).w
 		move.b	#1,(f_extralife).w
 		move.b	#1,(f_timecount).w
-		move.w	#0,(unk_FFF790).w
+		move.w	#0,(v_btnpushtime1).w
 		lea	(off_3100).l,a1
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lsl.w	#2,d0
 		movea.l	(a1,d0.w),a1
-		move.b	1(a1),(unk_FFF792).w
-		subq.b	#1,(unk_FFF792).w
+		move.b	1(a1),(v_btnpushtime2).w
+		subq.b	#1,(v_btnpushtime2).w
 		move.w	#$708,(v_demolength).w
 		move.b	#8,(v_vbla_routine).w
 		bsr.w	WaitForVBla
@@ -2077,12 +2077,12 @@ GM_LevelLoop:
 		bsr.w	PauseGame
 		move.b	#8,(v_vbla_routine).w
 		bsr.w	WaitForVBla
-		addq.w	#1,(LevelFrames).w
+		addq.w	#1,(v_framecount).w
 		bsr.w	LZWaterFeatures
 		bsr.w	DemoPlayback
 		move.w	(v_jpadhold1).w,(v_jpadhold2).w
 		bsr.w	ExecuteObjects
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.s	loc_2E2A
 		cmpi.b	#6,(v_player+obRoutine).w
 		bcc.s	loc_2E2E
@@ -2100,7 +2100,7 @@ loc_2E2E:
 		bsr.w	LoadSignpostPLC
 		cmpi.b	#id_Demo,(v_gamemode).w
 		beq.s	loc_2E66
-		tst.w	(LevelRestart).w
+		tst.w	(f_restart).w
 		bne.w	GM_Level
 		cmpi.b	#id_Level,(v_gamemode).w
 		beq.w	GM_LevelLoop
@@ -2108,7 +2108,7 @@ loc_2E2E:
 ; ---------------------------------------------------------------------------
 
 loc_2E66:
-		tst.w	(LevelRestart).w
+		tst.w	(f_restart).w
 		bne.s	loc_2E84
 		tst.w	(v_demolength).w
 		beq.s	loc_2E84
@@ -2134,9 +2134,9 @@ loc_2E9E:
 		bsr.w	ExecuteObjects
 		bsr.w	BuildSprites
 		bsr.w	ObjPosLoad
-		subq.w	#1,(unk_FFF794).w
+		subq.w	#1,(v_palchgspeed).w
 		bpl.s	loc_2EC8
-		move.w	#2,(unk_FFF794).w
+		move.w	#2,(v_palchgspeed).w
 		bsr.w	FadeOut_ToBlack
 
 loc_2EC8:
@@ -2186,7 +2186,7 @@ DemoPlayback:
 
 ;DemoRecord:
 		lea	($80000).l,a1
-		move.w	(unk_FFF790).w,d0
+		move.w	(v_btnpushtime1).w,d0
 		adda.w	d0,a1
 		move.b	(v_jpadhold1).w,d0
 		cmp.b	(a1),d0
@@ -2200,8 +2200,8 @@ DemoPlayback:
 loc_30A2:
 		move.b	d0,2(a1)
 		move.b	#0,3(a1)
-		addq.w	#2,(unk_FFF790).w
-		andi.w	#$3FF,(unk_FFF790).w
+		addq.w	#2,(v_btnpushtime1).w
+		andi.w	#$3FF,(v_btnpushtime1).w
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -2216,7 +2216,7 @@ loc_30C4:
 		move.b	(v_zone).w,d0
 		lsl.w	#2,d0
 		movea.l	(a1,d0.w),a1
-		move.w	(unk_FFF790).w,d0
+		move.w	(v_btnpushtime1).w,d0
 		adda.w	d0,a1
 		move.b	(a1),d0
 		lea	(v_jpadhold1).w,a0
@@ -2226,10 +2226,10 @@ loc_30C4:
 		move.b	d1,(a0)+
 		and.b	d1,d0
 		move.b	d0,(a0)+
-		subq.b	#1,(unk_FFF792).w
+		subq.b	#1,(v_btnpushtime2).w
 		bcc.s	locret_30FE
-		move.b	3(a1),(unk_FFF792).w
-		addq.w	#2,(unk_FFF790).w
+		move.b	3(a1),(v_btnpushtime2).w
+		addq.w	#2,(v_btnpushtime1).w
 
 locret_30FE:
 		rts
@@ -2402,7 +2402,7 @@ locret_34BA:
 ; ---------------------------------------------------------------------------
 
 LoadSignpostPLC:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.w	locret_34FA
 		cmpi.w	#id_MZ*$100+2,(v_zone).w
 		beq.s	loc_34D4
@@ -2411,15 +2411,15 @@ LoadSignpostPLC:
 
 loc_34D4:
 		move.w	(v_screenposx).w,d0
-		move.w	(unk_FFF72A).w,d1
+		move.w	(v_limitright2).w,d1
 		subi.w	#$100,d1
 		cmp.w	d1,d0
 		blt.s	locret_34FA
 		tst.b	(f_timecount).w
 		beq.s	locret_34FA
-		cmp.w	(unk_FFF728).w,d1
+		cmp.w	(v_limitleft2).w,d1
 		beq.s	locret_34FA
-		move.w	d1,(unk_FFF728).w
+		move.w	d1,(v_limitleft2).w
 		moveq	#plcid_Signpost,d0
 		bra.w	plcReplace
 ; ---------------------------------------------------------------------------
@@ -2463,7 +2463,7 @@ loc_3554:
 loc_3564:
 		move.l	d0,(a1)+
 		dbf	d1,loc_3564
-		lea	(oscValues+2).w,a1
+		lea	(v_oscillate+2).w,a1
 		moveq	#0,d0
 		move.w	#$27,d1
 
@@ -2495,14 +2495,14 @@ loc_3584:
 		move.w	#$40,(v_ssrotate).w
 		move.w	#bgm_SS,d0
 		bsr.w	PlaySound_Special
-		move.w	#0,(unk_FFF790).w
+		move.w	#0,(v_btnpushtime1).w
 		lea	(off_3100).l,a1
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lsl.w	#2,d0
 		movea.l	(a1,d0.w),a1
-		move.b	1(a1),(unk_FFF792).w
-		subq.b	#1,(unk_FFF792).w
+		move.b	1(a1),(v_btnpushtime2).w
+		subq.b	#1,(v_btnpushtime2).w
 		move.w	#$708,(v_demolength).w
 		move.w	(v_vdp_buffer1).w,d0
 		ori.b	#$40,d0
@@ -2597,11 +2597,11 @@ loc_36EA:
 SS_PalCycle:
 		tst.w	(f_pause).w
 		bmi.s	locret_37B4
-		subq.w	#1,(unk_FFF79C).w
+		subq.w	#1,(v_palss_time).w
 		bpl.s	locret_37B4
 		lea	(vdp_control_port).l,a6
-		move.w	(unk_FFF79A).w,d0
-		addq.w	#1,(unk_FFF79A).w
+		move.w	(v_palss_num).w,d0
+		addq.w	#1,(v_palss_num).w
 		andi.w	#$1F,d0
 		lsl.w	#2,d0
 		lea	(byte_380A).l,a0
@@ -2611,7 +2611,7 @@ SS_PalCycle:
 		move.w	#$1FF,d0
 
 loc_3760:
-		move.w	d0,(unk_FFF79C).w
+		move.w	d0,(v_palss_time).w
 		moveq	#0,d0
 		move.b	(a0)+,d0
 		move.w	d0,(unk_FFF7A0).w
@@ -2803,12 +2803,12 @@ byte_3A9A:	dc.b 8, 2, 4, $FF, 2, 3, 8, $FF, 4, 2, 2, 3, 8, $FD, 4
 sub_43B6:
 		lea	(vdp_control_port).l,a5
 		lea	(vdp_data_port).l,a6
-		lea	(unk_FFF756).w,a2
+		lea	(v_bg1_scroll_flags).w,a2
 		lea	(v_bgscreenposx).w,a3
 		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
 		bsr.w	sub_4484
-		lea	(unk_FFF758).w,a2
+		lea	(v_bg2_scroll_flags).w,a2
 		lea	(v_bg2screenposx).w,a3
 		bra.w	sub_4524
 ; ---------------------------------------------------------------------------
@@ -2816,15 +2816,15 @@ sub_43B6:
 mapLevelLoad:
 		lea	(vdp_control_port).l,a5
 		lea	(vdp_data_port).l,a6
-		lea	(unk_FFF756).w,a2
+		lea	(v_bg1_scroll_flags).w,a2
 		lea	(v_bgscreenposx).w,a3
 		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
 		bsr.w	sub_4484
-		lea	(unk_FFF758).w,a2
+		lea	(v_bg2_scroll_flags).w,a2
 		lea	(v_bg2screenposx).w,a3
 		bsr.w	sub_4524
-		lea	(unk_FFF754).w,a2
+		lea	(v_fg_scroll_flags).w,a2
 		lea	(v_screenposx).w,a3
 		lea	(v_lvllayout).w,a4
 		move.w	#$4000,d2
@@ -2905,7 +2905,7 @@ loc_44BE:
 		bsr.w	sub_4752
 		moveq	#-16,d4
 		moveq	#-16,d5
-		move.w	(unk_FFF7F0).w,d6
+		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
 		andi.w	#$FFF0,d1
 		sub.w	d1,d6
@@ -2926,7 +2926,7 @@ loc_44EE:
 		bsr.w	sub_4752
 		moveq	#-16,d4
 		move.w	#$140,d5
-		move.w	(unk_FFF7F0).w,d6
+		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
 		andi.w	#$FFF0,d1
 		sub.w	d1,d6
@@ -2950,7 +2950,7 @@ sub_4524:
 		beq.s	loc_456E
 		cmpi.w	#$10,(a3)
 		bcs.s	loc_456E
-		move.w	(unk_FFF7F0).w,d4
+		move.w	(v_scroll_block_1_size).w,d4
 		move.w	4(a3),d1
 		andi.w	#$FFF0,d1
 		sub.w	d1,d4
@@ -2959,7 +2959,7 @@ sub_4524:
 		bsr.w	sub_4752
 		move.w	(sp)+,d4
 		moveq	#-16,d5
-		move.w	(unk_FFF7F0).w,d6
+		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
 		andi.w	#$FFF0,d1
 		sub.w	d1,d6
@@ -2973,7 +2973,7 @@ sub_4524:
 loc_456E:
 		bclr	#3,(a2)
 		beq.s	locret_45B0
-		move.w	(unk_FFF7F0).w,d4
+		move.w	(v_scroll_block_1_size).w,d4
 		move.w	4(a3),d1
 		andi.w	#$FFF0,d1
 		sub.w	d1,d4
@@ -2982,7 +2982,7 @@ loc_456E:
 		bsr.w	sub_4752
 		move.w	(sp)+,d4
 		move.w	#$140,d5
-		move.w	(unk_FFF7F0).w,d6
+		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
 		andi.w	#$FFF0,d1
 		sub.w	d1,d6
@@ -3692,7 +3692,7 @@ Map_UnkSwitch:	include "_maps\Unknown Switch.asm"
 ; ---------------------------------------------------------------------------
 
 sub_6936:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.w	locret_69A6
 		cmpi.b	#6,(v_player+obRoutine).w
 		bcc.s	locret_69A6
@@ -4092,7 +4092,7 @@ loc_886E:
 loc_8876:
 		lea	$80(a4),a4
 		dbf	d7,loc_87B2
-		move.b	d5,(byte_FFF62C).w
+		move.b	d5,(v_spritecount).w
 		cmpi.b	#$50,d5
 		beq.s	loc_8890
 		move.l	#0,(a2)
@@ -4284,7 +4284,7 @@ ObjectChkOffscreen:
 
 ObjPosLoad:
 		moveq	#0,d0
-		move.b	(unk_FFF76C).w,d0
+		move.b	(v_opl_routine).w,d0
 		move.w	off_89FC(pc,d0.w),d0
 		jmp	off_89FC(pc,d0.w)
 ; ---------------------------------------------------------------------------
@@ -4293,18 +4293,18 @@ off_89FC:	dc.w loc_8A00-off_89FC, loc_8A44-off_89FC
 ; ---------------------------------------------------------------------------
 
 loc_8A00:
-		addq.b	#2,(unk_FFF76C).w
+		addq.b	#2,(v_opl_routine).w
 		move.w	(v_zone).w,d0
 		lsl.b	#6,d0
 		lsr.w	#4,d0
 		lea	(ObjPos_Index).l,a0
 		movea.l	a0,a1
 		adda.w	(a0,d0.w),a0
-		move.l	a0,(unk_FFF770).w
-		move.l	a0,(unk_FFF774).w
+		move.l	a0,(v_opl_data).w
+		move.l	a0,(v_opl_data+4).w
 		adda.w	2(a1,d0.w),a1
-		move.l	a1,(unk_FFF778).w
-		move.l	a1,(unk_FFF77C).w
+		move.l	a1,(v_opl_data+8).w
+		move.l	a1,(v_opl_data+$C).w
 		lea	(v_regbuffer).w,a2
 		move.w	#$101,(a2)+
 		move.w	#$5E,d0
@@ -4312,18 +4312,18 @@ loc_8A00:
 loc_8A38:
 		clr.l	(a2)+
 		dbf	d0,loc_8A38
-		move.w	#$FFFF,(unk_FFF76E).w
+		move.w	#$FFFF,(v_opl_screen).w
 
 loc_8A44:
 		lea	(v_regbuffer).w,a2
 		moveq	#0,d2
 		move.w	(v_screenposx).w,d6
 		andi.w	#$FF80,d6
-		cmp.w	(unk_FFF76E).w,d6
+		cmp.w	(v_opl_screen).w,d6
 		beq.w	locret_8B20
 		bge.s	loc_8ABA
-		move.w	d6,(unk_FFF76E).w
-		movea.l	(unk_FFF774).w,a0
+		move.w	d6,(v_opl_screen).w
+		movea.l	(v_opl_data+4).w,a0
 		subi.w	#$80,d6
 		bcs.s	loc_8A96
 
@@ -4352,8 +4352,8 @@ loc_8A94:
 		addq.w	#6,a0
 
 loc_8A96:
-		move.l	a0,(unk_FFF774).w
-		movea.l	(unk_FFF770).w,a0
+		move.l	a0,(v_opl_data+4).w
+		movea.l	(v_opl_data).w,a0
 		addi.w	#$300,d6
 
 loc_8AA2:
@@ -4369,13 +4369,13 @@ loc_8AB0:
 ; ---------------------------------------------------------------------------
 
 loc_8AB4:
-		move.l	a0,(unk_FFF770).w
+		move.l	a0,(v_opl_data).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_8ABA:
-		move.w	d6,(unk_FFF76E).w
-		movea.l	(unk_FFF770).w,a0
+		move.w	d6,(v_opl_screen).w
+		movea.l	(v_opl_data).w,a0
 		addi.w	#$280,d6
 
 loc_8AC6:
@@ -4391,8 +4391,8 @@ loc_8AD4:
 		beq.s	loc_8AC6
 
 loc_8ADA:
-		move.l	a0,(unk_FFF770).w
-		movea.l	(unk_FFF774).w,a0
+		move.l	a0,(v_opl_data).w
+		movea.l	(v_opl_data+4).w,a0
 		subi.w	#$300,d6
 		bcs.s	loc_8AFA
 
@@ -4409,19 +4409,19 @@ loc_8AF6:
 ; ---------------------------------------------------------------------------
 
 loc_8AFA:
-		move.l	a0,(unk_FFF774).w
+		move.l	a0,(v_opl_data+4).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_8B00:
-		movea.l	(unk_FFF778).w,a0
+		movea.l	(v_opl_data+8).w,a0
 		move.w	(v_bg3screenposx).w,d0
 		addi.w	#$200,d0
 		andi.w	#$FF80,d0
 		cmp.w	(a0),d0
 		bcs.s	locret_8B20
 		bsr.w	sub_8B22
-		move.l	a0,(unk_FFF778).w
+		move.l	a0,(v_opl_data+8).w
 		bra.w	loc_8B00
 ; ---------------------------------------------------------------------------
 
@@ -4693,7 +4693,7 @@ ObjSmashWall_FragLeft:dc.w $FA00, $FA00
                 include "_incObj\3D Boss - Green Hill (part 1).asm"
 
 sub_B146:
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		andi.b	#7,d0
 		bne.s	locret_B186
 		bsr.w	FindFreeObj
@@ -4883,7 +4883,7 @@ ObjSeeSaw_SlopeLine:dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 ; ---------------------------------------------------------------------------
 
 SonicPlayer:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.w	DebugMode
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
@@ -4907,9 +4907,9 @@ loc_E830:
 		move.b	#2,obPriority(a0)
 		move.b	#$18,obActWid(a0)
 		move.b	#4,obRender(a0)
-		move.w	#$600,(unk_FFF760).w
-		move.w	#$C,(unk_FFF762).w
-		move.w	#$40,(unk_FFF764).w
+		move.w	#$600,(v_sonspeedmax).w
+		move.w	#$C,(v_sonspeedacc).w
+		move.w	#$40,(v_sonspeeddec).w
 
 loc_E872:
 		andi.w	#$7FF,obY(a0)
@@ -4918,7 +4918,7 @@ loc_E872:
 		beq.s	loc_E892
 		btst	#4,(v_jpadpress2).w
 		beq.s	loc_E892
-		move.w	#1,(DebugRoutine).w
+		move.w	#1,(v_debuguse).w
 
 loc_E892:
 		moveq	#0,d0
@@ -4928,7 +4928,7 @@ loc_E892:
 		jsr	off_E8C8(pc,d1.w)
 		bsr.s	sub_E8D6
 		bsr.w	sub_E952
-		move.b	(unk_FFF768).w,$36(a0)
+		move.b	(v_anglebuffer).w,$36(a0)
 		move.b	(unk_FFF76A).w,$37(a0)
 		bsr.w	Sonic_Animate
 		bsr.w	TouchObjects
@@ -5206,7 +5206,7 @@ Sonic_WalkSpeed:
 		add.l	d1,d2
 		swap	d2
 		swap	d3
-		move.b	d0,(unk_FFF768).w
+		move.b	d0,(v_anglebuffer).w
 		move.b	d0,(unk_FFF76A).w
 		move.b	d0,d1
 		addi.b	#$20,d0
@@ -5225,7 +5225,7 @@ loc_10514:
 ; ---------------------------------------------------------------------------
 
 sub_10520:
-		move.b	d0,(unk_FFF768).w
+		move.b	d0,(v_anglebuffer).w
 		move.b	d0,(unk_FFF76A).w
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
@@ -5246,7 +5246,7 @@ Sonic_HitFloor:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -5273,7 +5273,7 @@ loc_105A8:
 		move.b	(unk_FFF76A).w,d3
 		cmp.w	d0,d1
 		ble.s	loc_105B6
-		move.b	(unk_FFF768).w,d3
+		move.b	(v_anglebuffer).w,d3
 		move.w	d0,d1
 
 loc_105B6:
@@ -5289,7 +5289,7 @@ locret_105BE:
 
 loc_105C8:
 		addi.w	#$A,d2
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5297,7 +5297,7 @@ loc_105C8:
 		move.b	#0,d2
 
 loc_105E2:
-		move.b	(unk_FFF768).w,d3
+		move.b	(v_anglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_105EE
 		move.b	d2,d3
@@ -5315,13 +5315,13 @@ ObjectHitFloor2:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		move.b	#0,(a4)
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
 		bsr.w	sub_101BE
-		move.b	(unk_FFF768).w,d3
+		move.b	(v_anglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_10626
 		move.b	#0,d3
@@ -5340,7 +5340,7 @@ loc_10628:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5371,7 +5371,7 @@ sub_1068C:
 
 loc_10694:
 		addi.w	#$A,d3
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5383,13 +5383,13 @@ loc_10694:
 ObjectHitWallRight:
 		add.w	obX(a0),d3
 		move.w	obY(a0),d2
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		move.b	#0,(a4)
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor
-		move.b	(unk_FFF768).w,d3
+		move.b	(v_anglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_106DE
 		move.b	#$C0,d3
@@ -5409,7 +5409,7 @@ Sonic_NoRunningOnWalls:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -5440,7 +5440,7 @@ Sonic_NoRunningOnWalls:
 loc_10754:
 		subi.w	#$A,d2
 		eori.w	#$F,d2
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -5457,12 +5457,12 @@ ObjectHitCeiling:
 		ext.w	d0
 		sub.w	d0,d2
 		eori.w	#$F,d2
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
-		move.b	(unk_FFF768).w,d3
+		move.b	(v_anglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_107AC
 		move.b	#$80,d3
@@ -5482,7 +5482,7 @@ loc_107AE:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
@@ -5515,7 +5515,7 @@ Sonic_HitWall:
 loc_10822:
 		subi.w	#$A,d3
 		eori.w	#$F,d3
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
@@ -5527,13 +5527,13 @@ loc_10822:
 ObjectHitWallLeft:
 		add.w	obX(a0),d3
 		move.w	obY(a0),d2
-		lea	(unk_FFF768).w,a4
+		lea	(v_anglebuffer).w,a4
 		move.b	#0,(a4)
 		movea.w	#$FFF0,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor
-		move.b	(unk_FFF768).w,d3
+		move.b	(v_anglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_10870
 		move.b	#$40,d3
@@ -5652,7 +5652,7 @@ loc_10986:
 		lea	$70(a0),a0
 		dbf	d7,loc_10930
 
-		move.b	d5,(byte_FFF62C).w
+		move.b	d5,(v_spritecount).w
 		cmpi.b	#$50,d5
 		beq.s	loc_109A6
 		move.l	#0,(a2)
@@ -6015,7 +6015,7 @@ loc_11756:
 loc_1176A:
 		hudVRAM $DEC0
 		moveq	#0,d1
-		move.b	(byte_FFF62C).w,d1
+		move.b	(v_spritecount).w,d1
 		bsr.w	sub_118FE
 		tst.b	(f_lifecount).w
 		beq.s	loc_11788
@@ -6378,7 +6378,8 @@ byte_11D26:	incbin "artunc\Lives Counter Numbers.bin"
 ; ===========================================================================
 ; Unused 8x8 Font Art
 ; ===========================================================================
-byte_18000:	incbin "leftovers\0x18000.bin"		; Some similar art to this is used in other prototypes, such as Sonic 2 Nick Arcade
+;byte_18000:
+		incbin "leftovers\0x18000.bin"		; Some similar art to this is used in other prototypes, such as Sonic 2 Nick Arcade
 		even
 ; ===========================================================================
 ; Sega Screen\Title Screen Art and Mappings
@@ -6399,21 +6400,22 @@ SonicDynPLC:	include "_maps\Sonic - Dynamic Gfx Script.asm"
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- Sonic
 ; ---------------------------------------------------------------------------
-ArtSonic:	incbin "artunc\Sonic.bin"
+Art_Sonic:	incbin "artunc\Sonic.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-ArtSmoke:	incbin "artnem\Smoke.bin"
+Nem_Smoke:	incbin "artnem\Smoke.bin"
 		even
-ArtShield:	incbin "artnem\Shield.bin"
+Nem_Shield:	incbin "artnem\Shield.bin"
 		even
-ArtInvinStars:	incbin "artnem\Stars.bin"
+Nem_Stars:	incbin "artnem\Stars.bin"
 		even
-ArtFlash:	incbin "artnem\Flash.bin"
+Nem_Flash:	incbin "artnem\Flash.bin"
 		even
-byte_26E90:	incbin "artnem\Unused - Goggles.bin"
-	        even
+;byte_26E90:
+		incbin "artnem\Unused - Goggles.bin"
+		even
 
                 align $400,$FF				; Padding
 
@@ -6517,13 +6519,13 @@ ArtSplats:	incbin "artnem\Enemy Splats.bin"
 ; ---------------------------------------------------------------------------
 Nem_TitleCard:	incbin "artnem\Title Cards.bin"
 		even
-ArtHUD:		incbin "levels\shared\HUD\Main.nem"
+Nem_HUD:	incbin "levels\shared\HUD\Main.nem"
 		even
-ArtLives:	incbin "levels\shared\HUD\Lives.nem"
+Nem_Lives:	incbin "levels\shared\HUD\Lives.nem"
 		even
-ArtRings:	incbin "artnem\Rings.bin"
+Nem_Rings:	incbin "artnem\Rings.bin"
 		even
-ArtMonitors:	incbin "artnem\Monitors.bin"
+Nem_Monitors:	incbin "artnem\Monitors.bin"
 		even
 ArtExplosions:	incbin "levels\shared\Explosions\Art.nem"
 		even

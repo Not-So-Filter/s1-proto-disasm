@@ -37,15 +37,15 @@ loc_F0A0:
 		cmp.b	d0,d1
 		blt.s	locret_F102
 		add.w	d1,obY(a0)
-		move.b	d3,$26(a0)
+		move.b	d3,obAngle(a0)
 		bsr.w	Sonic_ResetOnFloor
-		move.b	#0,$1C(a0)
+		move.b	#0,obAnim(a0)
 		move.b	d3,d0
 		addi.b	#$20,d0
 		andi.b	#$40,d0
 		bne.s	loc_F0E0
 		move.w	#0,obVelY(a0)
-		move.w	obVelX(a0),$14(a0)
+		move.w	obVelX(a0),obInertia(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -56,10 +56,10 @@ loc_F0E0:
 		move.w	#$FC0,obVelY(a0)
 
 loc_F0F4:
-		move.w	obVelY(a0),$14(a0)
+		move.w	obVelY(a0),obInertia(a0)
 		tst.b	d3
 		bpl.s	locret_F102
-		neg.w	$14(a0)
+		neg.w	obInertia(a0)
 
 locret_F102:
 		rts
@@ -71,7 +71,7 @@ loc_F104:
 		bpl.s	loc_F11E
 		sub.w	d1,obX(a0)
 		move.w	#0,obVelX(a0)
-		move.w	obVelY(a0),$14(a0)
+		move.w	obVelY(a0),obInertia(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -91,11 +91,11 @@ loc_F132:
 		tst.w	d1
 		bpl.s	locret_F15E
 		add.w	d1,obY(a0)
-		move.b	d3,$26(a0)
+		move.b	d3,obAngle(a0)
 		bsr.w	Sonic_ResetOnFloor
-		move.b	#0,$1C(a0)
+		move.b	#0,obAnim(a0)
 		move.w	#0,obVelY(a0)
-		move.w	obVelX(a0),$14(a0)
+		move.w	obVelX(a0),obInertia(a0)
 
 locret_F15E:
 		rts
@@ -129,12 +129,12 @@ loc_F184:
 ; ---------------------------------------------------------------------------
 
 loc_F1A4:
-		move.b	d3,$26(a0)
+		move.b	d3,obAngle(a0)
 		bsr.w	Sonic_ResetOnFloor
-		move.w	obVelY(a0),$14(a0)
+		move.w	obVelY(a0),obInertia(a0)
 		tst.b	d3
 		bpl.s	locret_F1BA
-		neg.w	$14(a0)
+		neg.w	obInertia(a0)
 
 locret_F1BA:
 		rts
@@ -146,7 +146,7 @@ loc_F1BC:
 		bpl.s	loc_F1D6
 		add.w	d1,obX(a0)
 		move.w	#0,obVelX(a0)
-		move.w	obVelY(a0),$14(a0)
+		move.w	obVelY(a0),obInertia(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -166,11 +166,11 @@ loc_F1EA:
 		tst.w	d1
 		bpl.s	locret_F216
 		add.w	d1,obY(a0)
-		move.b	d3,$26(a0)
+		move.b	d3,obAngle(a0)
 		bsr.w	Sonic_ResetOnFloor
-		move.b	#0,$1C(a0)
+		move.b	#0,obAnim(a0)
 		move.w	#0,obVelY(a0)
-		move.w	obVelX(a0),$14(a0)
+		move.w	obVelX(a0),obInertia(a0)
 
 locret_F216:
 		rts

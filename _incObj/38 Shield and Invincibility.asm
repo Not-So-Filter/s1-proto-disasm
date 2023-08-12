@@ -51,12 +51,12 @@ ObjShield_Shield:
 ObjShield_Stars:
 		tst.b	(v_invinc).w
 		beq.s	ObjShield_Delete2
-		move.w	(unk_FFF7A8).w,d0
+		move.w	(v_trackpos).w,d0
 		move.b	obAnim(a0),d1
 		subq.b	#1,d1
 		bra.s	ObjShield_StarTrail
 ; ---------------------------------------------------------------------------
-		lsl.b	#4,d1				; Unused code in the final game as well
+		lsl.b	#4,d1			; Unused code in the final game as well
 		addq.b	#4,d1
 		sub.b	d1,d0
 		move.b	$30(a0),d1

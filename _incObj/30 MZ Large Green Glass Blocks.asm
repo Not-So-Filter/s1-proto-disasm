@@ -136,13 +136,13 @@ locret_9532:
 ; ---------------------------------------------------------------------------
 
 loc_9534:
-		move.b	(oscValues+$12).w,d0
+		move.b	(v_oscillate+$12).w,d0
 		move.w	#$40,d1
 		bra.w	loc_9616
 ; ---------------------------------------------------------------------------
 
 loc_9540:
-		move.b	(oscValues+$12).w,d0
+		move.b	(v_oscillate+$12).w,d0
 		move.w	#$40,d1
 		neg.w	d0
 		add.w	d1,d0
@@ -152,7 +152,7 @@ loc_9540:
 loc_9550:
 		btst	#3,obSubtype(a0)
 		beq.s	loc_9564
-		move.b	(oscValues+$12).w,d0
+		move.b	(v_oscillate+$12).w,d0
 		subi.w	#$10,d0
 		bra.w	loc_9624
 ; ---------------------------------------------------------------------------
@@ -203,7 +203,7 @@ loc_95D0:
 loc_95D6:
 		btst	#3,obSubtype(a0)
 		beq.s	loc_95E8
-		move.b	(oscValues+$12).w,d0
+		move.b	(v_oscillate+$12).w,d0
 		subi.w	#$10,d0
 		bra.s	loc_9624
 ; ---------------------------------------------------------------------------
@@ -211,7 +211,7 @@ loc_95D6:
 loc_95E8:
 		tst.b	$34(a0)
 		bne.s	loc_9606
-		lea	(unk_FFF7E0).w,a2
+		lea	(f_switch).w,a2
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
 		lsr.w	#4,d0

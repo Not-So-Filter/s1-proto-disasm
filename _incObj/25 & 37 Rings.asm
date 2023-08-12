@@ -224,7 +224,7 @@ loc_7E48:
 		bsr.w	SpeedToPos
 		addi.w	#$18,obVelY(a0)
 		bmi.s	loc_7E82
-		move.b	(byte_FFFE0F).w,d0
+		move.b	(v_vbla_byte).w,d0
 		add.b	d7,d0
 		andi.b	#3,d0
 		bne.s	loc_7E82
@@ -240,7 +240,7 @@ loc_7E48:
 loc_7E82:
 		tst.b	(v_ani3_time).w
 		beq.s	loc_7EBC
-		move.w	(unk_FFF72E).w,d0
+		move.w	(v_limitbtm2).w,d0
 		addi.w	#224,d0
 		cmp.w	obY(a0),d0
 		bcs.s	loc_7EBC

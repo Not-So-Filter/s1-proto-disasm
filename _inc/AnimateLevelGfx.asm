@@ -31,13 +31,13 @@ AniArt_Index:	dc.w AniArt_GHZ-AniArt_Index, AniArt_none-AniArt_Index
 AniArt_GHZ:
 
 AniArt_GHZ_Waterfall:
-		subq.b	#1,(unk_FFF7B1).w
+		subq.b	#1,(v_lani0_time).w
 		bpl.s	AniArt_GHZ_Bigflower
 
-		move.b	#5,(unk_FFF7B1).w
+		move.b	#5,(v_lani0_time).w
 		lea	(Art_GhzWater).l,a1
-		move.b	(unk_FFF7B0).w,d0
-		addq.b	#1,(unk_FFF7B0).w
+		move.b	(v_lani0_frame).w,d0
+		addq.b	#1,(v_lani0_frame).w
 		andi.w	#1,d0
 		beq.s	.isframe0
 		lea	$100(a1),a1
@@ -49,13 +49,13 @@ AniArt_GHZ_Waterfall:
 ; ---------------------------------------------------------------------------
 
 AniArt_GHZ_Bigflower:
-		subq.b	#1,(unk_FFF7B3).w
+		subq.b	#1,(v_lani1_time).w
 		bpl.s	AniArt_GHZ_Smallflower
 
-		move.b	#$F,(unk_FFF7B3).w
+		move.b	#$F,(v_lani1_time).w
 		lea	(Art_GhzFlower1).l,a1
-		move.b	(unk_FFF7B2).w,d0
-		addq.b	#1,(unk_FFF7B2).w
+		move.b	(v_lani1_frame).w,d0
+		addq.b	#1,(v_lani1_frame).w
 		andi.w	#1,d0
 		beq.s	.isframe0
 		lea	$200(a1),a1
@@ -67,17 +67,17 @@ AniArt_GHZ_Bigflower:
 ; ---------------------------------------------------------------------------
 
 AniArt_GHZ_Smallflower:
-		subq.b	#1,(unk_FFF7B5).w
+		subq.b	#1,(v_lani2_time).w
 		bpl.s	.end
 
-		move.b	#7,(unk_FFF7B5).w
-		move.b	(unk_FFF7B4).w,d0
-		addq.b	#1,(unk_FFF7B4).w
+		move.b	#7,(v_lani2_time).w
+		move.b	(v_lani2_frame).w,d0
+		addq.b	#1,(v_lani2_frame).w
 		andi.w	#3,d0
 		move.b	.sequence(pc,d0.w),d0
 		btst	#0,d0
 		bne.s	.isframe1
-		move.b	#$7F,(unk_FFF7B5).w
+		move.b	#$7F,(v_lani2_time).w
 
 	.isframe1:
 		lsl.w	#7,d0
@@ -100,20 +100,20 @@ AniArt_GHZ_Smallflower:
 AniArt_MZ:
 
 AniArt_MZ_Lava:
-		subq.b	#1,(unk_FFF7B1).w
+		subq.b	#1,(v_lani0_time).w
 		bpl.s	AniArt_MZ_Magma
 
-		move.b	#$13,(unk_FFF7B1).w
+		move.b	#$13,(v_lani0_time).w
 		lea	(Art_MzLava1).l,a1
 		moveq	#0,d0
-		move.b	(unk_FFF7B0).w,d0
+		move.b	(v_lani0_frame).w,d0
 		addq.b	#1,d0
 		cmpi.b	#3,d0
 		bne.s	.frame01or2
 		moveq	#0,d0
 
 	.frame01or2:
-		move.b	d0,(unk_FFF7B0).w
+		move.b	d0,(v_lani0_frame).w
 		mulu.w	#$100,d0
 		adda.w	d0,a1
 		locVRAM $5C40
@@ -121,20 +121,20 @@ AniArt_MZ_Lava:
 		bsr.w	LoadTiles
 
 AniArt_MZ_Magma:
-		subq.b	#1,(unk_FFF7B3).w
+		subq.b	#1,(v_lani1_time).w
 		bpl.s	AniArt_MZ_Saturns
 
-		move.b	#1,(unk_FFF7B3).w
+		move.b	#1,(v_lani1_time).w
 		moveq	#0,d0
-		move.b	(unk_FFF7B0).w,d0
+		move.b	(v_lani0_frame).w,d0
 		lea	(Art_MzLava2).l,a4
 		ror.w	#7,d0
 		adda.w	d0,a4
 		locVRAM $5A40
 		moveq	#0,d3
-		move.b	(unk_FFF7B2).w,d3
-		addq.b	#1,(unk_FFF7B2).w
-		move.b	(oscValues+$A).w,d3
+		move.b	(v_lani1_frame).w,d3
+		addq.b	#1,(v_lani1_frame).w
+		move.b	(v_oscillate+$A).w,d3
 		move.w	#3,d2
 
 	.loop:
@@ -153,19 +153,19 @@ AniArt_MZ_Magma:
 ; ---------------------------------------------------------------------------
 
 AniArt_MZ_Saturns:
-		subq.b	#1,(unk_FFF7B5).w
+		subq.b	#1,(v_lani2_time).w
 		bpl.w	locret_11480
-		move.b	#7,(unk_FFF7B5).w
+		move.b	#7,(v_lani2_time).w
 		lea	(Art_MzSaturns).l,a1
 		moveq	#0,d0
-		move.b	(unk_FFF7B4).w,d0
+		move.b	(v_lani2_frame).w,d0
 		addq.b	#1,d0
 		cmpi.b	#5,d0	; are we on frame 5? (this check should be 6, causing one of the frames for the saturns to be skipped)
 		bne.s	AniArt_MZ_Torch	; if not, then we move onto the MZ Torch
 		moveq	#0,d0
 
 AniArt_MZ_Torch:
-		move.b	d0,(unk_FFF7B4).w
+		move.b	d0,(v_lani2_frame).w
 		mulu.w	#$100,d0
 		adda.w	d0,a1
 		locVRAM $5D40
@@ -173,9 +173,9 @@ AniArt_MZ_Torch:
 		bsr.w	LoadTiles
 		lea	(Art_MzTorch).l,a1
 		moveq	#0,d0
-		move.b	(unk_FFF7B6).w,d0
-		addq.b	#1,(unk_FFF7B6).w
-		andi.b	#3,(unk_FFF7B6).w
+		move.b	(v_lani3_frame).w,d0
+		addq.b	#1,(v_lani3_frame).w
+		andi.b	#3,(v_lani3_frame).w
 		mulu.w	#$C0,d0
 		adda.w	d0,a1
 		locVRAM $5E40

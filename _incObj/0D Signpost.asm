@@ -34,7 +34,7 @@ loc_C752:
 		move.w	#sfx_Signpost,d0
 		jsr	(PlaySound).l
 		clr.b	(f_timecount).w
-		move.w	(unk_FFF72A).w,(unk_FFF728).w
+		move.w	(v_limitright2).w,(v_limitleft2).w
 		addq.b	#2,obRoutine(a0)
 
 locret_C77A:
@@ -92,13 +92,13 @@ byte_C804:	dc.b $E8, $F0
 ; ---------------------------------------------------------------------------
 
 loc_C814:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.w	locret_C880
 
 sub_C81C:
 		tst.b	(f_victory).w
 		bne.s	locret_C880
-		move.w	(unk_FFF72A).w,(unk_FFF728).w
+		move.w	(v_limitright2).w,(v_limitleft2).w
 		clr.b	(v_invinc).w
 		clr.b	(f_timecount).w
 		move.b	#id_GotThroughCard,(v_objspace+obSize*24).w

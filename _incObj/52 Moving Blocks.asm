@@ -65,7 +65,7 @@ locret_D690:
 ; ---------------------------------------------------------------------------
 
 loc_D692:
-		move.b	(oscValues+$E).w,d0
+		move.b	(v_oscillate+$E).w,d0
 		subi.b	#$60,d1
 		btst	#0,obStatus(a0)
 		beq.s	loc_D6A6

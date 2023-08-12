@@ -7,7 +7,7 @@
 ; Initialise the values
 
 oscInit:
-		lea	(oscValues).w,a1
+		lea	(v_oscillate).w,a1
 		lea	(.baselines).l,a2
 		moveq	#$20,d1
 
@@ -42,7 +42,7 @@ oscInit:
 oscUpdate:
 		cmpi.b	#6,(v_objspace+obRoutine).w
 		bcc.s	.end
-		lea	(oscValues).w,a1
+		lea	(v_oscillate).w,a1
 		lea	(.settings).l,a2
 		move.w	(a1)+,d3			; get oscillation direction bitfield
 		moveq	#$F,d1
@@ -75,7 +75,7 @@ oscUpdate:
 	.next:
 		addq.w	#4,a1
 		dbf	d1,.loop
-		move.w	d3,(oscValues).w
+		move.w	d3,(v_oscillate).w
 
 .end:
 		rts

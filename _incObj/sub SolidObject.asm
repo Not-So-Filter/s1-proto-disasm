@@ -35,7 +35,7 @@ loc_A302:
 ; ---------------------------------------------------------------------------
 
 loc_A30C:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.w	loc_A448
 		tst.b	obRender(a0)
 		bpl.w	loc_A42E
@@ -78,7 +78,7 @@ loc_A346:
 ; ---------------------------------------------------------------------------
 
 loc_A37C:
-		tst.w	(DebugRoutine).w
+		tst.w	(v_debuguse).w
 		bne.w	loc_A448
 		tst.b	obRender(a0)
 		bpl.w	loc_A42E
