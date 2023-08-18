@@ -157,10 +157,16 @@ TrackModulationDelta:	equ $1A				; FM/PSG only
 TrackModulationSteps:	equ $1B				; FM/PSG only
 TrackModulationVal:	equ $1C				; FM/PSG only (2 bytes)
 TrackDetune:		equ $1E				; FM/PSG only
-TrackPSGNoise:		equ $1F				; PSG only
-TrackFeedbackAlgo:	equ $1F				; FM only
 TrackVoicePtr:		equ $1C				; FM SFX only (4 bytes)
-TrackLoopCounters:	equ $24				; All tracks (multiple bytes)
+TrackPanNumber:		equ $1F				; FM only
+TrackPanTable:		equ $20				; FM only
+TrackPanStart:		equ $21				; FM only
+TrackPanLimit:		equ $22				; FM only
+TrackPanLength:		equ $23				; FM only
+TrackPanContinue:	equ $24				; FM only
+TrackFeedbackAlgo:	equ $25				; FM only
+TrackPSGNoise:		equ $26				; PSG only
+TrackLoopCounters:	equ $28				; All tracks (multiple bytes)
 TrackGoSubStack:	equ TrackSz			; All tracks (multiple bytes. This constant won't get to be used because of an optimisation that just uses TrackSz)
 
 TrackSz:	equ $30

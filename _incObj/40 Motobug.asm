@@ -16,7 +16,7 @@ loc_B898:
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
 		move.b	#$14,obActWid(a0)
-		tst.b	$1C(a0)
+		tst.b	obAnim(a0)
 		bne.s	loc_B8F2
 		move.b	#$E,obHeight(a0)
 		move.b	#8,obWidth(a0)

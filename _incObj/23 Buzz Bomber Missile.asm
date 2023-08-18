@@ -14,7 +14,7 @@ loc_7A04:
 		subq.w	#1,$32(a0)
 		bpl.s	sub_7A5E
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapBuzzMissile,obMap(a0)
+		move.l	#Map_Missile,obMap(a0)
 		move.w	#$2444,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)
@@ -30,7 +30,7 @@ loc_7A04:
 
 loc_7A4E:
 		bsr.s	sub_7A5E
-		lea	(AniBuzzMissile).l,a1
+		lea	(Ani_Missile).l,a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ loc_7A6C:
 		move.b	#$87,obColType(a0)
 		move.b	#1,obAnim(a0)
 		bsr.w	SpeedToPos
-		lea	(AniBuzzMissile).l,a1
+		lea	(Ani_Missile).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
 		move.w	(v_limitbtm2).w,d0
@@ -75,7 +75,7 @@ loc_7AB8:
 		bsr.w	SpeedToPos
 
 loc_7AC2:
-		lea	(AniBuzzMissile).l,a1
+		lea	(Ani_Missile).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
 		rts

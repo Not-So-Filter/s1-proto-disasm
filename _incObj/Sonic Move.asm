@@ -23,7 +23,7 @@ Sonic_NoRight:
 		tst.w	obInertia(a0)
 		bne.w	Sonic_ResetScroll
 		bclr	#5,obStatus(a0)
-		move.b	#5,obAnim(a0)
+		move.b	#id_Wait,obAnim(a0)
 		btst	#3,obStatus(a0)
 		beq.s	Sonic_Balance
 		moveq	#0,d0
@@ -67,14 +67,14 @@ loc_EA92:
 		bset	#0,obStatus(a0)
 
 loc_EA98:
-		move.b	#6,obAnim(a0)
+		move.b	#id_Balance,obAnim(a0)
 		bra.s	Sonic_ResetScroll
 ; ---------------------------------------------------------------------------
 
 Sonic_LookUp:
 		btst	#bitUp,(v_jpadhold2).w
 		beq.s	Sonic_Duck
-		move.b	#7,obAnim(a0)
+		move.b	#id_LookUp,obAnim(a0)
 		cmpi.w	#$C8,(unk_FFF73E).w
 		beq.s	loc_EAEA
 		addq.w	#2,(unk_FFF73E).w
@@ -84,7 +84,7 @@ Sonic_LookUp:
 Sonic_Duck:
 		btst	#bitDn,(v_jpadhold2).w
 		beq.s	Sonic_ResetScroll
-		move.b	#8,obAnim(a0)
+		move.b	#id_Duck,obAnim(a0)
 		cmpi.w	#8,(unk_FFF73E).w
 		beq.s	loc_EAEA
 		subq.w	#2,(unk_FFF73E).w
@@ -201,7 +201,7 @@ loc_EBAC:
 
 loc_EBB8:
 		move.w	d0,obInertia(a0)
-		move.b	#0,obAnim(a0)
+		move.b	#id_Walk,obAnim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -218,7 +218,7 @@ loc_EBCC:
 		bne.s	locret_EBFA
 		cmpi.w	#$400,d0
 		blt.s	locret_EBFA
-		move.b	#$D,obAnim(a0)
+		move.b	#id_Stop,obAnim(a0)
 		bclr	#0,obStatus(a0)
 		move.w	#sfx_Skid,d0
 		jsr	(PlaySound_Special).l
@@ -243,7 +243,7 @@ loc_EC16:
 
 loc_EC1E:
 		move.w	d0,obInertia(a0)
-		move.b	#0,obAnim(a0)
+		move.b	#id_Walk,obAnim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -260,7 +260,7 @@ loc_EC32:
 		bne.s	locret_EC60
 		cmpi.w	#-$400,d0
 		bgt.s	locret_EC60
-		move.b	#$D,obAnim(a0)
+		move.b	#id_Stop,obAnim(a0)
 		bset	#0,obStatus(a0)
 		move.w	#sfx_Skid,d0
 		jsr	(PlaySound_Special).l

@@ -13,7 +13,7 @@ off_8BB6:	dc.w loc_8BBA-off_8BB6, loc_8BF0-off_8BB6
 
 loc_8BBA:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapChopper,obMap(a0)
+		move.l	#Map_Chop,obMap(a0)
 		move.w	#$47B,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
@@ -23,7 +23,7 @@ loc_8BBA:
 		move.w	obY(a0),$30(a0)
 
 loc_8BF0:
-		lea	(AniChopper).l,a1
+		lea	(Ani_Chop).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	SpeedToPos
 		addi.w	#$18,obVelY(a0)

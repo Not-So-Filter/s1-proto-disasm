@@ -27,16 +27,16 @@ ObjEntryRingBeta_Init2:
 		move.w	#$78,$30(a0)
 
 ObjEntryRingBeta_RmvSonic:
-		move.w	(v_objspace+obX).w,obX(a0)
-		move.w	(v_objspace+obY).w,obY(a0)
-		move.b	(v_objspace+obStatus).w,obStatus(a0)
+		move.w	(v_player+obX).w,obX(a0)
+		move.w	(v_player+obY).w,obY(a0)
+		move.b	(v_player+obStatus).w,obStatus(a0)
 		lea	(AniEntryRingBeta).l,a1
 		jsr	(AnimateSprite).l
 		cmpi.b	#2,obFrame(a0)
 		bne.s	ObjEntryRingBeta_Display
 		tst.b	(v_objspace).w
 		beq.s	ObjEntryRingBeta_Display
-		move.b	#0,(v_objspace).w
+		move.b	#0,(v_player).w
 		move.w	#sfx_SSGoal,d0
 		jsr	(PlaySound_Special).l
 
@@ -47,7 +47,7 @@ ObjEntryRingBeta_Display:
 ObjEntryRingBeta_LoadSonic:
 		subq.w	#1,$30(a0)
 		bne.s	ObjEntryRingBeta_Wait
-		move.b	#id_SonicPlayer,(v_objspace).w
+		move.b	#id_SonicPlayer,(v_player).w
 		bra.w	DeleteObject
 ; ---------------------------------------------------------------------------
 

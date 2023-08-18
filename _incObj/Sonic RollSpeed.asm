@@ -45,7 +45,7 @@ loc_ECB4:
 		bclr	#2,obStatus(a0)
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
-		move.b	#5,obAnim(a0)
+		move.b	#id_Wait,obAnim(a0)
 		subq.w	#5,obY(a0)
 
 loc_ECD6:
@@ -67,7 +67,7 @@ Sonic_RollLeft:
 
 loc_ED00:
 		bset	#0,obStatus(a0)
-		move.b	#2,obAnim(a0)
+		move.b	#id_Roll,obAnim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ Sonic_RollRight:
 		move.w	obInertia(a0),d0
 		bmi.s	loc_ED30
 		bclr	#0,obStatus(a0)
-		move.b	#2,obAnim(a0)
+		move.b	#id_Roll,obAnim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

@@ -265,9 +265,9 @@ v_ani3_time:		equ $FFFFFEC6	; synchronised sprite animation 3 - time until next 
 v_ani3_frame:		equ $FFFFFEC7	; synchronised sprite animation 3 - current frame
 v_ani3_buf:		equ $FFFFFEC8	; synchronised sprite animation 3 - info buffer (2 bytes)
 word_FFFFE0:		equ $FFFFFFE0	; value that's set to 1 during initation, unused elsewhere (2 bytes)
-word_FFFFE8:		equ $FFFFFFE8
-DemoMode:		equ $FFFFFFF0
-DemoNum:		equ $FFFFFFF2
+word_FFFFE8:		equ $FFFFFFE8	; value that's set to 0 during initation of a level, unused elsewhere (2 bytes)
+f_demo:			equ $FFFFFFF0
+v_demonum:		equ $FFFFFFF2
 v_megadrive:		equ $FFFFFFF8
 f_debugmode:		equ $FFFFFFFA
 v_init:			equ $FFFFFFFC	; 'init' text string (4 bytes)

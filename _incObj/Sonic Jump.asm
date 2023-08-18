@@ -29,12 +29,12 @@ Sonic_Jump:
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
 		tst.b	(f_victory).w			; has the victory animation flag been set?
-		bne.s	loc_EF48			; if yes, branch and use the "victory leaping" animation
+		bne.s	loc_EF48			; if yes, branch
 		btst	#2,obStatus(a0)
 		bne.s	loc_EF50
 		move.b	#$E,obHeight(a0)
 		move.b	#7,obWidth(a0)
-		move.b	#2,obAnim(a0)			; use "jumping" animation
+		move.b	#id_Roll,obAnim(a0)		; use "jumping" animation
 		bset	#2,obStatus(a0)
 		addq.w	#5,obY(a0)
 
@@ -43,7 +43,7 @@ locret_EF46:
 ; ---------------------------------------------------------------------------
 
 loc_EF48:
-		move.b	#$13,obAnim(a0)
+		move.b	#id_Leap2,obAnim(a0)		; use the "victory leaping" animation
 		rts
 ; ---------------------------------------------------------------------------
 

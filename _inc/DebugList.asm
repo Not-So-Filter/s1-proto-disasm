@@ -5,7 +5,7 @@ DebugLists:
                 dc.w .SLZ-DebugLists
 		dc.w .SZ-DebugLists
                 dc.w .CWZ-DebugLists
-                
+
 dbug:	macro map,object,subtype,frame,vram
 	dc.l map+(object<<24)
 	dc.b subtype,frame
@@ -19,8 +19,8 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug 	MapRing,	$25,	0,	0,	$27B2
 	dbug	MapMonitor,	$26,	0,	0,	$680
 	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
-	dbug	MapBuzzbomber,	$22,	0,	0,	$444
-	dbug	MapChopper,	$2B,	0,	0,	$47B
+	dbug	Map_Buzz,	$22,	0,	0,	$444
+	dbug	Map_Chop,	$2B,	0,	0,	$47B
 	dbug	MapSpikes,	$36,	0,	0,	$51B
 	dbug	MapPlatform1,	$18,    0,	0,	$4000
 	dbug	MapPRock,	$3B,	0,	0,	$63D0
@@ -46,7 +46,7 @@ dbug:	macro map,object,subtype,frame,vram
 ;		mappings	object		subtype	frame	VRAM setting
 	dbug 	MapRing,	$25,	0,	0,	$27B2
 	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug	MapBuzzbomber,	$22,	0,	0,	$444
+	dbug	Map_Buzz,	$22,	0,	0,	$444
 	dbug	MapSpikes,	$36,	0,	0,	$51B
 	dbug	MapSpring,	$41,	0,	0,	$523
 	dbug    MapLavaball,    $13,    0,      0,      $345
@@ -79,7 +79,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapSpring,      $41,    0,      0,      $523
 	dbug    MapLavaball,    $13,    0,      0,      $345
 	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
-	dbug	MapBuzzbomber,	$22,	0,	0,	$444
+	dbug	Map_Buzz,	$22,	0,	0,	$444
 	.SLZend:
 
 .SZ:	
@@ -94,7 +94,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapSceneryLamp, $12,    0,      0,      0
 	dbug    MapBumper,      $47,    0,      0,      $380
 	dbug	Map_Crabmeat,	$1F,	0,	0,	$400
-	dbug	MapBuzzbomber,	$22,	0,	0,	$444
+	dbug	Map_Buzz,	$22,	0,	0,	$444
 	dbug    MapYadrin,      $50,    0,      0,      $47B
 	dbug    MapPlatform2,   $18,    0,      0,      $4000
 	dbug    MapMovingBlocks,$56,    0,      0,      $4000

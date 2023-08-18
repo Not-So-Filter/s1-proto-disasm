@@ -35,7 +35,7 @@ locret_AE3C:
 ; ---------------------------------------------------------------------------
 
 loc_AE3E:
-		cmpi.b	#2,obAnim(a1)
+		cmpi.b	#id_Roll,obAnim(a1)
 		bne.s	locret_AE3C
 		move.w	$30(a0),d0
 		bpl.s	loc_AE4E

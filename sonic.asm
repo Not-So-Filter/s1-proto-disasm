@@ -1544,7 +1544,7 @@ loc_25D8:
                 copyTilemapUnc	$C206,$21,$15
 
 		move.w	#0,(v_debuguse).w
-		move.w	#0,(DemoMode).w
+		move.w	#0,(f_demo).w
 		move.w	#0,(v_zone).w
 		bsr.w	LoadLevelBounds
 		bsr.w	DeformLayers
@@ -1730,18 +1730,18 @@ loc_282C:
 		bne.w	loc_27FE
 		move.b	#bgm_Fade,d0
 		bsr.w	PlaySound_Special
-		move.w	(DemoNum).w,d0
+		move.w	(v_demonum).w,d0
 		andi.w	#7,d0
 		add.w	d0,d0
 		move.w	DemoLevels(pc,d0.w),d0
 		move.w	d0,(v_zone).w
-		addq.w	#1,(DemoNum).w
-		cmpi.w	#6,(DemoNum).w
+		addq.w	#1,(v_demonum).w
+		cmpi.w	#6,(v_demonum).w
 		bcs.s	loc_2860
-		move.w	#0,(DemoNum).w
+		move.w	#0,(v_demonum).w
 
 loc_2860:
-		move.w	#1,(DemoMode).w
+		move.w	#1,(f_demo).w
 		move.b	#id_Demo,(v_gamemode).w
 		cmpi.w	#$600,d0
 		bne.s	loc_2878
@@ -2179,7 +2179,7 @@ loc_3034:
 ; ---------------------------------------------------------------------------
 
 DemoPlayback:
-		tst.w	(DemoMode).w
+		tst.w	(f_demo).w
 		bne.s	loc_30B8
 		rts
 ; ---------------------------------------------------------------------------
@@ -2519,7 +2519,7 @@ loc_3620:
 		bsr.w	BuildSprites
 		jsr	(Special_ShowLayout).l
 		bsr.w	SpecialAnimateBG
-		tst.w	(DemoMode).w
+		tst.w	(f_demo).w
 		beq.s	loc_3656
 		tst.w	(v_demolength).w
 		beq.s	loc_3662
@@ -3925,11 +3925,10 @@ Map_Crabmeat:	include "_maps\Crabmeat.asm"
 
 		include "_incObj\22 Buzz Bomber.asm"
 		include "_incObj\23 Buzz Bomber Missile.asm"
-Ani_Buzz:	include "levels\GHZ\Buzzbomber\Sprite.ani"
-		include "levels\GHZ\Buzzbomber\Missile.ani"
-Map_Buzz:	include "levels\GHZ\Buzzbomber\Sprite.map"
-		include "levels\GHZ\Buzzbomber\Missile.map"
-		even
+		include "_anim\Buzz Bomber.asm"
+		include "_anim\Buzz Bomber Missile.asm"
+Map_Buzz:	include "_maps\Buzz Bomber.asm"
+Map_Missile:	include "_maps\Buzz Bomber Missile.asm"
 
 		include "_incObj\25 & 37 Rings.asm"
 		include "_incObj\4B Giant Ring Flash.asm"
@@ -4497,10 +4496,8 @@ locret_8BA2:
 		rts
 
 		include "_incObj\2B Chopper.asm"
-		include "levels\GHZ\Chopper\Sprite.ani"
-		even
-		include "levels\GHZ\Chopper\Sprite.map"
-		even
+		include "_anim\Chopper.asm"
+Map_Chop:	include "_maps\Chopper.asm"
 
                 include "_incObj\2C Jaws.asm"
 		include "_anim\Jaws.asm"

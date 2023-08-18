@@ -219,7 +219,7 @@ DACUpdateTrack:
 ; ---------------------------------------------------------------------------
 
 .duration:
-		jsr	dCalcDuration(pc)
+		jsr	SetDuration(pc)
 
 .checknote:
 		move.l	a4,TrackDataPointer(a5)
@@ -258,19 +258,19 @@ FMUpdateTrack:
 		subq.b	#1,TrackDurationTimeout(a5)
 		bne.s	.notegoing
 		bclr	#4,(a5)
-		jsr	dTrackerFM(pc)
-		jsr	dUpdateFreqFM(pc)
-		jsr	dPanAniInit(pc)
-		bra.w	dNoteOnFM
+		jsr	FMDoNext(pc)
+		jsr	FMPrepareNote(pc)
+		jsr	FMPan_Set(pc)
+		bra.w	FMNoteOn
 ; ---------------------------------------------------------------------------
 
 .notegoing:
-		jsr	dGate(pc)
+		jsr	NoteTimeoutUpdate(pc)
 		jsr	DoModulation(pc)
-		bra.w	dUpdateFreqFM2
+		bra.w	FMUpdateFreq
 ; ---------------------------------------------------------------------------
 
-dTrackerFM:
+FMDoNext:
 		movea.l	TrackDataPointer(a5),a4
 		bclr	#1,(a5)
 
@@ -284,22 +284,22 @@ dTrackerFM:
 ; ---------------------------------------------------------------------------
 
 .notcommand:
-		jsr	sKeyOffFM(pc)
+		jsr	FMNoteOff(pc)
 		tst.b	d5
 		bpl.s	.duration
-		jsr	dLoadFreqFM(pc)
+		jsr	FMSetFreq(pc)
 		move.b	(a4)+,d5
 		bpl.s	.duration
 		subq.w	#1,a4
-		bra.w	dFinishTrack
+		bra.w	FinishTrackUpdate
 ; ---------------------------------------------------------------------------
 
 .duration:
-		jsr	dCalcDuration(pc)
-		bra.w	dFinishTrack
+		jsr	SetDuration(pc)
+		bra.w	FinishTrackUpdate
 ; ---------------------------------------------------------------------------
 
-dLoadFreqFM:
+FMSetFreq:
 		subi.b	#$80,d5
 		beq.s	TrackSetRest
 		add.b	TrackTranspose(a5),d5
@@ -311,7 +311,7 @@ dLoadFreqFM:
 		rts
 ; ---------------------------------------------------------------------------
 
-dCalcDuration:
+SetDuration:
 		move.b	d5,d0
 		move.b	TrackTempoDivider(a5),d1
 
@@ -333,15 +333,15 @@ TrackSetRest:
 		clr.w	TrackFreq(a5)
 ; ---------------------------------------------------------------------------
 
-dFinishTrack:
+FinishTrackUpdate:
 		move.l	a4,TrackDataPointer(a5)		; Store new track position
 		move.b	TrackSavedDuration(a5),TrackDurationTimeout(a5) ; Reset note timeout
 		btst	#4,(a5)				; Is track set to not attack note? (TrackPlaybackControl)
-		bne.s	locret_74426			; If so, branch
+		bne.s	.locret				; If so, branch
 		move.b	TrackNoteTimeoutMaster(a5),TrackNoteTimeout(a5) ; Reset note fill timeout
 		clr.b	TrackVolEnvIndex(a5)		; Reset PSG volume envelope index (even on FM tracks...)
 		btst	#3,(a5)				; Is modulation on? (TrackPlaybackControl)
-		beq.s	locret_74426			; If not, return (TrackPlaybackControl)
+		beq.s	.locret				; If not, return (TrackPlaybackControl)
 		movea.l	TrackModulationPtr(a5),a0	; Modulation data pointer
 		move.b	(a0)+,TrackModulationWait(a5)	; Reset wait
 		move.b	(a0)+,TrackModulationSpeed(a5)	; Reset speed
@@ -350,11 +350,11 @@ dFinishTrack:
 		lsr.b	#1,d0				; Halve them
 		move.b	d0,TrackModulationSteps(a5)	; Then store
 		clr.w	TrackModulationVal(a5)		; Reset frequency change
-locret_74426:
+.locret:
 		rts
 ; ---------------------------------------------------------------------------
 
-dGate:
+NoteTimeoutUpdate:
 		tst.b	TrackNoteTimeout(a5)
 		beq.s	.locret
 		subq.b	#1,TrackNoteTimeout(a5)
@@ -362,13 +362,13 @@ dGate:
 		bset	#1,(a5)
 		tst.b	TrackVoiceControl(a5)
 		bmi.w	.psg
-		jsr	sKeyOffFM(pc)
+		jsr	FMNoteOff(pc)
 		addq.w	#4,sp
 		rts
 ; ---------------------------------------------------------------------------
 
 .psg:
-		jsr	sMutePSG(pc)
+		jsr	PSGNoteOff(pc)
 		addq.w	#4,sp
 
 .locret:
@@ -414,13 +414,13 @@ DoModulation:
 		rts
 ; ---------------------------------------------------------------------------
 
-dUpdateFreqFM:
+FMPrepareNote:
 		btst	#1,(a5)
 		bne.s	locret_744E0
 		move.w	TrackFreq(a5),d6
-		beq.s	dUpdateFreqFM_Rest
+		beq.s	FMSetRest
 
-dUpdateFreqFM2:
+FMUpdateFreq:
 		move.b	TrackDetune(a5),d0
 		ext.w	d0
 		add.w	d0,d6
@@ -429,32 +429,32 @@ dUpdateFreqFM2:
 		tst.b	TrackSavedDuration(a6)
 		beq.s	.nofm3sm
 		cmpi.b	#2,TrackVoiceControl(a5)
-		beq.s	dUpdateFreqFM_FM3SM
+		beq.s	FM3SpcUpdateFreq
 
 .nofm3sm:
 		move.w	d6,d1
 		lsr.w	#8,d1
 		move.b	#$A4,d0
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 		move.b	d6,d1
 		move.b	#$A0,d0
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 
 locret_744E0:
 		rts
 ; ---------------------------------------------------------------------------
 
-dUpdateFreqFM_Rest:
+FMSetRest:
 		bset	#1,(a5)
 		rts
 ; ---------------------------------------------------------------------------
 
-dUpdateFreqFM_FM3SM:
+FM3SpcUpdateFreq:
 		lea	.fm3freqs(pc),a1
 		lea	TrackFreq(a6),a2
 		moveq	#3,d7
 
-.fm3loop:
+.loopfm3:
 		move.w	d6,d1
 		move.w	(a2)+,d0
 		add.w	d0,d1
@@ -465,7 +465,7 @@ dUpdateFreqFM_FM3SM:
 		move.b	d3,d1
 		move.b	(a1)+,d0
 		jsr	WriteFMI(pc)
-		dbf	d7,.fm3loop
+		dbf	d7,.loopfm3
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -475,11 +475,11 @@ dUpdateFreqFM_FM3SM:
 		dc.b $A6, $A2
 ; ---------------------------------------------------------------------------
 
-dPanAniInit:
+FMPan_Set:
 		btst	#1,(a5)
 		bne.s	.tables
 		moveq	#0,d0
-		move.b	TrackFeedbackAlgo(a5),d0
+		move.b	TrackPanNumber(a5),d0
 		lsl.w	#1,d0
 		jmp	.tables(pc,d0.w)
 ; ---------------------------------------------------------------------------
@@ -487,18 +487,18 @@ dPanAniInit:
 .tables:
 		rts
 ; ---------------------------------------------------------------------------
-		bra.s	dPanAni_Cont
+		bra.s	FMPan_Cont
 ; ---------------------------------------------------------------------------
-		bra.s	dPanAni_Reset
+		bra.s	FMPan_Reset
 ; ---------------------------------------------------------------------------
-		bra.s	dPanAni_Reset
+		bra.s	FMPan_Reset
 ; ---------------------------------------------------------------------------
 
-dPanAni:
+FMPan_Chk:
 		btst	#1,(a5)
 		bne.s	.table
 		moveq	#0,d0
-		move.b	TrackFeedbackAlgo(a5),d0
+		move.b	TrackPanNumber(a5),d0
 		lsl.w	#1,d0
 		jmp	.table(pc,d0.w)
 ; ---------------------------------------------------------------------------
@@ -508,52 +508,52 @@ dPanAni:
 ; ---------------------------------------------------------------------------
 		rts
 ; ---------------------------------------------------------------------------
-		bra.s	dPanAni_Cont
+		bra.s	FMPan_Cont
 ; ---------------------------------------------------------------------------
-		bra.s	dPanAni_Cont
+		bra.s	FMPan_Cont
 ; ---------------------------------------------------------------------------
 
-dPanAni_Reset:
-		move.b	$23(a5),$24(a5)
-		clr.b	$21(a5)
+FMPan_Reset:
+		move.b	TrackPanLength(a5),TrackPanContinue(a5)
+		clr.b	TrackPanStart(a5)
 
-dPanAni_Cont:
-		move.b	$24(a5),d0
-		cmp.b	$23(a5),d0
+FMPan_Cont:
+		move.b	TrackPanContinue(a5),d0
+		cmp.b	TrackPanLength(a5),d0
 		bne.s	loc_7457E
-		move.b	$22(a5),d3
-		cmp.b	$21(a5),d3
+		move.b	TrackPanLimit(a5),d3
+		cmp.b	TrackPanStart(a5),d3
 		bpl.s	loc_74576
-		cmpi.b	#2,$1F(a5)
+		cmpi.b	#2,TrackPanNumber(a5)
 		beq.s	locret_745AE
-		clr.b	$21(a5)
+		clr.b	TrackPanStart(a5)
 
 loc_74576:
-		clr.b	$24(a5)
-		addq.b	#1,$21(a5)
+		clr.b	TrackPanContinue(a5)
+		addq.b	#1,TrackPanStart(a5)
 
 loc_7457E:
 		moveq	#0,d0
-		move.b	$20(a5),d0
+		move.b	TrackPanTable(a5),d0
 		subq.w	#1,d0
 		lsl.w	#2,d0
-		movea.l	dPanAniTable(pc,d0.w),a0
+		movea.l	FMPanTable(pc,d0.w),a0
 		moveq	#0,d0
-		move.b	$21(a5),d0
+		move.b	TrackPanStart(a5),d0
 		subq.w	#1,d0
 		move.b	(a0,d0.w),d1
-		move.b	$A(a5),d0
+		move.b	TrackAMSFMSPan(a5),d0
 		andi.b	#$37,d0
 		or.b	d0,d1
 		move.b	#$B4,d0
 		jsr	WriteFMIorIIMain(pc)
-		addq.b	#1,$24(a5)
+		addq.b	#1,TrackPanContinue(a5)
 
 locret_745AE:
 		rts
 ; ---------------------------------------------------------------------------
 
-dPanAniTable:	dc.l pd01, pd02, pd03
+FMPanTable:	dc.l pd01, pd02, pd03
 
 pd01:		dc.b $40, $80
 
@@ -564,75 +564,79 @@ pd03:		dc.b $C0, $80, $C0, $40
 ; ---------------------------------------------------------------------------
 
 PauseMusic:
-		bmi.s	.resume
+		bmi.s	.unpausemusic
 		cmpi.b	#2,f_pausemusic(a6)
-		beq.w	dPauseExit
+		beq.w	.unpausedallfm
 		move.b	#2,f_pausemusic(a6)
 		moveq	#2,d2
 		move.b	#$B4,d0
 		moveq	#0,d1
 
-.clearpan:
+.killpanloop:
 		jsr	WriteFMI(pc)
 		jsr	WriteFMII(pc)
 		addq.b	#1,d0
-		dbf	d2,.clearpan
+		dbf	d2,.killpanloop
+
 		moveq	#2,d2
 		moveq	#$28,d0
 
-.keyoff:
+.noteoffloop:
 		move.b	d2,d1
 		jsr	WriteFMI(pc)
 		addq.b	#4,d1
 		jsr	WriteFMI(pc)
-		dbf	d2,.keyoff
+		dbf	d2,.noteoffloop
+
 		jsr	dMutePSG(pc)
 		bra.w	DoStartZ80
 ; ---------------------------------------------------------------------------
 
-.resume:
+.unpausemusic:
 		clr.b	f_pausemusic(a6)
 		moveq	#TrackSz,d3
-		lea	v_music_track_ram(a6),a5
-		moveq	#6,d4
+		lea	v_music_fmdac_tracks(a6),a5
+		moveq	#((v_music_fmdac_tracks_end-v_music_fmdac_tracks)/TrackSz)-1,d4	; 6 FM + 1 DAC tracks
 
-.enablemusic:
-		btst	#7,(a5)
-		beq.s	.nextmusic
-		btst	#2,(a5)
-		bne.s	.nextmusic
-		move.b	#$B4,d0
-		move.b	TrackAMSFMSPan(a5),d1
-		jsr	dWriteYMch(pc)
+.bgmfmloop:
+		btst	#7,(a5)			; Is track playing? (TrackPlaybackControl)
+		beq.s	.bgmfmnext		; Branch if not
+		btst	#2,(a5)			; Is track being overridden? (TrackPlaybackControl)
+		bne.s	.bgmfmnext		; Branch if yes
+		move.b	#$B4,d0			; Command to set AMS/FMS/panning
+		move.b	TrackAMSFMSPan(a5),d1	; Get value from track RAM
+		jsr	WriteFMIorII(pc)
 
-.nextmusic:
+.bgmfmnext:
 		adda.w	d3,a5
-		dbf	d4,.enablemusic
-		lea	v_sfx_track_ram(a6),a5
-		moveq	#2,d4
+		dbf	d4,.bgmfmloop
 
-.enablesfx:
-		btst	#7,(a5)
-		beq.s	.nextsfx
-		btst	#2,(a5)
-		bne.s	.nextsfx
-		move.b	#$B4,d0
-		move.b	TrackAMSFMSPan(a5),d1
-		jsr	dWriteYMch(pc)
+		lea	v_sfx_fm_tracks(a6),a5
+		moveq	#((v_sfx_fm_tracks_end-v_sfx_fm_tracks)/TrackSz)-1,d4	; 3 FM tracks (SFX)
 
-.nextsfx:
+.sfxfmloop:
+		btst	#7,(a5)			; Is track playing? (TrackPlaybackControl)
+		beq.s	.sfxfmnext		; Branch if not
+		btst	#2,(a5)			; Is track being overridden? (TrackPlaybackControl)
+		bne.s	.sfxfmnext		; Branch if yes
+		move.b	#$B4,d0			; Command to set AMS/FMS/panning
+		move.b	TrackAMSFMSPan(a5),d1	; Get value from track RAM
+		jsr	WriteFMIorII(pc)
+
+.sfxfmnext:
 		adda.w	d3,a5
-		dbf	d4,.enablesfx
-		lea	$340(a6),a5
-		btst	#7,(a5)
-		beq.s	dPauseExit
-		btst	#2,(a5)
-		bne.s	dPauseExit
-		move.b	#$B4,d0
-		move.b	TrackAMSFMSPan(a5),d1
-		jsr	dWriteYMch(pc)
+		dbf	d4,.sfxfmloop
 
-dPauseExit:
+		lea	v_spcsfx_track_ram(a6),a5
+		btst	#7,(a5)			; Is track playing? (TrackPlaybackControl)
+		beq.s	.unpausedallfm		; Branch if not
+		btst	#2,(a5)			; Is track being overridden? (TrackPlaybackControl)
+		bne.s	.unpausedallfm		; Branch if yes
+		move.b	#$B4,d0			; Command to set AMS/FMS/panning
+		move.b	TrackAMSFMSPan(a5),d1	; Get value from track RAM
+		jsr	WriteFMIorII(pc)
+
+.unpausedallfm:
 		bra.w	DoStartZ80
 ; ---------------------------------------------------------------------------
 
@@ -667,7 +671,7 @@ dPlaySnd:
 		move.b	#$80,v_sound_id(a6)
 		cmpi.b	#$80,d7
 		beq.s	.nosound
-		bcs.w	dStopAll
+		bcs.w	StopAllSound
 		cmpi.b	#bgm__Last+$E,d7
 		bls.w	dPlaySnd_Music
 		cmpi.b	#sfx__First,d7
@@ -694,11 +698,11 @@ dPlaySnd_Cmd:
 ; ---------------------------------------------------------------------------
 
 Sound_ExIndex:
-ptr_flgE0:	bra.w	dPlaySnd_FadeOut
-ptr_flgE1:	bra.w	dStopSFX
-ptr_flgE2:	bra.w	dPlaySnd_ShoesOn
-ptr_flgE3:	bra.w	dPlaySnd_ShoesOff
-ptr_flgE4:	bra.w	dStopSpecSFX
+ptr_flgE0:	bra.w	PlaySnd_FadeOut
+ptr_flgE1:	bra.w	StopSFX
+ptr_flgE2:	bra.w	PlaySnd_ShoesOn
+ptr_flgE3:	bra.w	PlaySnd_ShoesOff
+ptr_flgE4:	bra.w	StopSpecialSFX
 ptr_flgend:
 ; ---------------------------------------------------------------------------
 
@@ -870,7 +874,7 @@ dPlaySnd_Music:
 		lsr.b	#3,d0
 
 .getch:
-		lea	dMusicChanTbl(pc),a0
+		lea	SFX_BGMChannelRAM(pc),a0
 		movea.l	(a0,d0.w),a0
 		bset	#2,(a0)
 
@@ -892,13 +896,13 @@ dPlaySnd_Music:
 		moveq	#((v_music_fm_tracks_end-v_music_fm_tracks)/TrackSz)-1,d4
 
 .fmnoteoffloop:
-		jsr	sKeyOffFM(pc)
+		jsr	FMNoteOff(pc)
 		adda.w	d6,a5
 		dbf	d4,.fmnoteoffloop
 		moveq	#((v_music_psg_tracks_end-v_music_psg_tracks)/TrackSz)-1,d4
 
 .psgnoteoffloop:
-		jsr	sMutePSG(pc)
+		jsr	PSGNoteOff(pc)
 		adda.w	d6,a5
 		dbf	d4,.psgnoteoffloop
 
@@ -957,7 +961,7 @@ dPlaySnd_SFX:
 		bmi.s	.psg
 		subq.w	#2,d3
 		lsl.w	#2,d3
-		lea	dMusicChanTbl(pc),a5
+		lea	SFX_BGMChannelRAM(pc),a5
 		movea.l	(a5,d3.w),a5
 		bset	#2,(a5)
 		bra.s	.continue
@@ -965,7 +969,7 @@ dPlaySnd_SFX:
 
 .psg:
 		lsr.w	#3,d3
-		movea.l	dMusicChanTbl(pc,d3.w),a5
+		movea.l	SFX_BGMChannelRAM(pc,d3.w),a5
 		bset	#2,(a5)
 		cmpi.b	#$C0,d4
 		bne.s	.continue
@@ -976,7 +980,7 @@ dPlaySnd_SFX:
 		move.b	d0,(psg_input).l
 
 .continue:
-		movea.l	dSFXChanTbl(pc,d3.w),a5
+		movea.l	SFX_SFXChannelRAM(pc,d3.w),a5
 		movea.l	a5,a2
 		moveq	#(TrackSz/4)-1,d0
 
@@ -1011,7 +1015,7 @@ dPlaySnd_SFX:
 		rts
 ; ---------------------------------------------------------------------------
 
-dMusicChanTbl:
+SFX_BGMChannelRAM:
                 dc.l (v_snddriver_ram+v_music_fm3_track)&$FFFFFF
 		dc.l 0
 		dc.l (v_snddriver_ram+v_music_fm4_track)&$FFFFFF
@@ -1021,7 +1025,7 @@ dMusicChanTbl:
 		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF ; Plain PSG3
 		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF ; Noise
 
-dSFXChanTbl:
+SFX_SFXChannelRAM:
 		dc.l (v_snddriver_ram+v_sfx_fm3_track)&$FFFFFF
 		dc.l 0
 		dc.l (v_snddriver_ram+v_sfx_fm4_track)&$FFFFFF
@@ -1033,70 +1037,74 @@ dSFXChanTbl:
 ; ---------------------------------------------------------------------------
 
 dPlaySnd_SpecSFX:
-		tst.b	f_1up_playing(a6)
-		bne.w	.exitp
+		tst.b	f_1up_playing(a6)	; Is 1-up playing?
+		bne.w	.locret			; Return if so
 		movea.l	(Go_SpecSoundIndex).l,a0
-		subi.b	#spec__First,d7
+		subi.b	#spec__First,d7		; Make it 0-based
 		lsl.w	#2,d7
 		movea.l	(a0,d7.w),a3
 		movea.l	a3,a1
 		moveq	#0,d0
-		move.w	(a1)+,d0
-		add.l	a3,d0
-		move.l	d0,$20(a6)
-		move.b	(a1)+,d5
-		move.b	(a1)+,d7
+		move.w	(a1)+,d0			; Voice pointer
+		add.l	a3,d0				; Relative pointer
+		move.l	d0,v_special_voice_ptr(a6)	; Store voice pointer
+		move.b	(a1)+,d5			; Dividing timing
+		; DANGER! there is a missing 'moveq	#0,d7' here, without which special SFXes whose
+		; index entry is above $3F will cause a crash. This instance was not fixed in Ristar's driver.
+		move.b	(a1)+,d7			; Number of tracks (FM + PSG)
 		subq.b	#1,d7
 		moveq	#TrackSz,d6
 
-.chloop:
-		move.b	1(a1),d4
-		bmi.s	.sppsg
-		bset	#2,$100(a6)
-		lea	$340(a6),a5
-		bra.s	.cont
-; ---------------------------------------------------------------------------
+.sfxloadloop:
+		move.b	1(a1),d4					; Voice control bits
+		bmi.s	.sfxoverridepsg					; Branch if PSG
+		bset	#2,v_music_fm4_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
+		lea	v_spcsfx_fm4_track(a6),a5
+		bra.s	.sfxinitpsg
+; ===========================================================================
 
-.sppsg:
-		bset	#2,$1F0(a6)
-		lea	$370(a6),a5
+.sfxoverridepsg:
+		bset	#2,v_music_psg3_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
+		lea	v_spcsfx_psg3_track(a6),a5
 
-.cont:
+.sfxinitpsg:
 		movea.l	a5,a2
-		moveq	#$B,d0
+		moveq	#(TrackSz/4)-1,d0	; $30 bytes
 
-.clearch:
+.clearsfxtrackram:
 		clr.l	(a2)+
-		dbf	d0,.clearch
-		move.w	(a1)+,(a5)
-		move.b	d5,2(a5)
+		dbf	d0,.clearsfxtrackram
+
+		move.w	(a1)+,(a5)			; Initial playback control bits & voice control bits (TrackPlaybackControl)
+		move.b	d5,TrackTempoDivider(a5)
 		moveq	#0,d0
-		move.w	(a1)+,d0
-		add.l	a3,d0
-		move.l	d0,4(a5)
-		move.w	(a1)+,8(a5)
-		move.b	#1,$E(a5)
-		move.b	d6,$D(a5)
-		tst.b	d4
-		bmi.s	.notsppsg
-		move.b	#$C0,$A(a5)
+		move.w	(a1)+,d0			; Track data pointer
+		add.l	a3,d0				; Relative pointer
+		move.l	d0,TrackDataPointer(a5)	; Store track pointer
+		move.w	(a1)+,TrackTranspose(a5)	; load FM/PSG channel modifier
+		move.b	#1,TrackDurationTimeout(a5)	; Set duration of first "note"
+		move.b	d6,TrackStackPointer(a5)	; set "gosub" (coord flag $F8) stack init value
+		tst.b	d4				; Is this a PSG channel?
+		bmi.s	.sfxpsginitdone			; Branch if yes
+		move.b	#$C0,TrackAMSFMSPan(a5)	; AMS/FMS/Panning
 
-.notsppsg:
-		dbf	d7,.chloop
-		tst.b	$250(a6)
-		bpl.s	.nospecx
-		bset	#2,$340(a6)
+.sfxpsginitdone:
+		dbf	d7,.sfxloadloop
 
-.nospecx:
-		tst.b	$310(a6)
-		bpl.s	.exitp
-		bset	#2,$370(a6)
-		ori.b	#$1F,d4
+		tst.b	v_sfx_fm4_track+TrackPlaybackControl(a6)	; Is track playing?
+		bpl.s	.doneoverride					; Branch if not
+		bset	#2,v_spcsfx_fm4_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
+
+.doneoverride:
+		tst.b	v_sfx_psg3_track+TrackPlaybackControl(a6)	; Is track playing?
+		bpl.s	.locret						; Branch if not
+		bset	#2,v_spcsfx_psg3_track+TrackPlaybackControl(a6)	; Set 'SFX is overriding' bit
+		ori.b	#$1F,d4						; Command to silence channel
 		move.b	d4,(psg_input).l
-		bchg	#5,d4
+		bchg	#5,d4			; Command to silence noise channel
 		move.b	d4,(psg_input).l
 
-.exitp:
+.locret:
 		rts
 ; ---------------------------------------------------------------------------
 ; Unused RAM addresses for FM and PSG channel variables used by the Special SFX
@@ -1113,180 +1121,184 @@ dPlaySnd_SpecSFX:
 
 ; BGMFM4PSG3RAM:
 ;SpecSFX_BGMChannelRAM:
-		dc.l (v_snddriver_ram+$100)&$FFFFFF
-                dc.l (v_snddriver_ram+$1F0)&$FFFFFF
+		dc.l (v_snddriver_ram+v_music_fm4_track)&$FFFFFF
+                dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF
 ; SFXFM4PSG3RAM:
 ;SpecSFX_SFXChannelRAM:
-                dc.l (v_snddriver_ram+$250)&$FFFFFF
-		dc.l (v_snddriver_ram+$310)&$FFFFFF
+                dc.l (v_snddriver_ram+v_sfx_fm4_track)&$FFFFFF
+		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF
 ; SpecialSFXFM4PSG3RAM:
 ;SpecSFX_SpecSFXChannelRAM:
-                dc.l (v_snddriver_ram+$340)&$FFFFFF
-                dc.l (v_snddriver_ram+$370)&$FFFFFF
+                dc.l (v_snddriver_ram+v_spcsfx_fm4_track)&$FFFFFF
+                dc.l (v_snddriver_ram+v_spcsfx_psg3_track)&$FFFFFF
 ; ---------------------------------------------------------------------------
 
-dStopSFX:
+StopSFX:
 		clr.b	v_sndprio(a6)
 		moveq	#$27,d0
 		moveq	#0,d1
 		jsr	WriteFMI(pc)
-		lea	$220(a6),a5
-		moveq	#5,d7
+		lea	v_sfx_track_ram(a6),a5
+		moveq	#((v_sfx_track_ram_end-v_sfx_track_ram)/TrackSz)-1,d7	; 3 FM + 3 PSG tracks (SFX)
 
-.runch:
-		tst.b	(a5)
-		bpl.w	.nextch
-		bclr	#7,(a5)
+.trackloop:
+		tst.b	(a5)		; Is track playing? (TrackPlaybackControl)
+		bpl.w	.nexttrack	; Branch if not
+		bclr	#7,(a5)		; Stop track (TrackPlaybackControl)
 		moveq	#0,d3
-		move.b	1(a5),d3
-		bmi.s	.psg
-		jsr	sKeyOffFM(pc)
-		cmpi.b	#4,d3
-		bne.s	.notspecial
-		tst.b	$340(a6)
-		bpl.s	.notspecial
-		lea	$340(a6),a5
-		movea.l	$20(a6),a1
-		bra.s	.procfm
-; ---------------------------------------------------------------------------
-
-.notspecial:
-		subq.b	#2,d3
+		move.b	TrackVoiceControl(a5),d3	; Get voice control bits
+		bmi.s	.trackpsg			; Branch if PSG
+		jsr	FMNoteOff(pc)
+		cmpi.b	#4,d3						; Is this FM4?
+		bne.s	.getfmpointer					; Branch if not
+		tst.b	v_spcsfx_fm4_track+TrackPlaybackControl(a6)	; Is special SFX playing?
+		bpl.s	.getfmpointer					; Branch if not
+		; DANGER! there is a missing 'movea.l	a5,a3' here, without which the
+		; code is broken. It is dangerous to do a fade out when a GHZ waterfall
+		; is playing its sound!
+		lea	v_spcsfx_fm4_track(a6),a5
+		movea.l	v_special_voice_ptr(a6),a1	; Get special voice pointer
+		bra.s	.gotfmpointer
+; ===========================================================================
+; loc_72416:
+.getfmpointer:
+		subq.b	#2,d3		; SFX only has FM3 and up
 		lsl.b	#2,d3
-		lea	dMusicChanTbl(pc),a0
+		lea	SFX_BGMChannelRAM(pc),a0
 		movea.l	a5,a3
 		movea.l	(a0,d3.w),a5
-		movea.l	$18(a6),a1
-
-.procfm:
-		bclr	#2,(a5)
-		bset	#1,(a5)
-		move.b	$B(a5),d0
-		jsr	dUpdateVoice(pc)
+		movea.l	v_voice_ptr(a6),a1	; Get music voice pointer
+; loc_72428:
+.gotfmpointer:
+		bclr	#2,(a5)			; Clear 'SFX is overriding' bit (TrackPlaybackControl)
+		bset	#1,(a5)			; Set 'track at rest' bit (TrackPlaybackControl)
+		move.b	TrackVoiceIndex(a5),d0	; Current voice
+		jsr	SetVoice(pc)
 		movea.l	a3,a5
-		bra.s	.nextch
-; ---------------------------------------------------------------------------
-
-.psg:
-		jsr	sMutePSG(pc)
-		lea	$370(a6),a0
-		cmpi.b	#$E0,d3
-		beq.s	.procpsg
-		cmpi.b	#$C0,d3
-		beq.s	.procpsg
+		bra.s	.nexttrack
+; ===========================================================================
+; loc_7243C:
+.trackpsg:
+		jsr	PSGNoteOff(pc)
+		lea	v_spcsfx_psg3_track(a6),a0
+		cmpi.b	#$E0,d3			; Is this a noise channel:
+		beq.s	.gotpsgpointer		; Branch if yes
+		cmpi.b	#$C0,d3			; Is this PSG 3?
+		beq.s	.gotpsgpointer		; Branch if yes
 		lsr.b	#3,d3
-		lea	dMusicChanTbl(pc),a0
+		lea	SFX_BGMChannelRAM(pc),a0
 		movea.l	(a0,d3.w),a0
-
-.procpsg:
-		bclr	#2,(a0)
-		bset	#1,(a0)
-		cmpi.b	#$E0,1(a0)
-		bne.s	.nextch
-		move.b	$26(a0),(psg_input).l
-
-.nextch:
+; loc_7245A:
+.gotpsgpointer:
+		bclr	#2,(a0)				; Clear 'SFX is overriding' bit (TrackPlaybackControl)
+		bset	#1,(a0)				; Set 'track at rest' bit (TrackPlaybackControl)
+		cmpi.b	#$E0,TrackVoiceControl(a0)	; Is this a noise channel?
+		bne.s	.nexttrack			; Branch if not
+		move.b	TrackPSGNoise(a0),(psg_input).l ; Set noise type
+; loc_72472:
+.nexttrack:
 		adda.w	#TrackSz,a5
-		dbf	d7,.runch
+		dbf	d7,.trackloop
+
 		rts
 ; ---------------------------------------------------------------------------
 
-dStopSpecSFX:
-		lea	$340(a6),a5
-		tst.b	(a5)
-		bpl.s	.spec2
-		bclr	#7,(a5)
-		btst	#2,(a5)
-		bne.s	.spec2
-		jsr	sKeyOffFM2(pc)
-		lea	$100(a6),a5
-		bclr	#2,(a5)
-		bset	#1,(a5)
-		tst.b	(a5)
-		bpl.s	.spec2
-		movea.l	$18(a6),a1
-		move.b	$B(a5),d0
-		jsr	dUpdateVoice(pc)
+StopSpecialSFX:
+		lea	v_spcsfx_fm4_track(a6),a5
+		tst.b	(a5)			; Is track playing? (TrackPlaybackControl)
+		bpl.s	.fadedfm		; Branch if not
+		bclr	#7,(a5)			; Stop track (TrackPlaybackControl)
+		btst	#2,(a5)			; Is SFX overriding? (TrackPlaybackControl)
+		bne.s	.fadedfm		; Branch if not
+		jsr	SendFMNoteOff(pc)
+		lea	v_music_fm4_track(a6),a5
+		bclr	#2,(a5)			; Clear 'SFX is overriding' bit (TrackPlaybackControl)
+		bset	#1,(a5)			; Set 'track at rest' bit (TrackPlaybackControl)
+		tst.b	(a5)			; Is track playing? (TrackPlaybackControl)
+		bpl.s	.fadedfm		; Branch if not
+		movea.l	v_voice_ptr(a6),a1	; Voice pointer
+		move.b	TrackVoiceIndex(a5),d0	; Current voice
+		jsr	SetVoice(pc)
 
-.spec2:
-		lea	$370(a6),a5
-		tst.b	(a5)
-		bpl.s	.locret
-		bclr	#7,(a5)
-		btst	#2,(a5)
-		bne.s	.locret
-		jsr	sMutePSG2(pc)
-		lea	$1F0(a6),a5
-		bclr	#2,(a5)
-		bset	#1,(a5)
-		tst.b	(a5)
-		bpl.s	.locret
-		cmpi.b	#$E0,1(a5)
-		bne.s	.locret
-		move.b	$26(a5),(psg_input).l
+.fadedfm:
+		lea	v_spcsfx_psg3_track(a6),a5
+		tst.b	(a5)			; Is track playing? (TrackPlaybackControl)
+		bpl.s	.fadedpsg		; Branch if not
+		bclr	#7,(a5)			; Stop track (TrackPlaybackControl)
+		btst	#2,(a5)			; Is SFX overriding? (TrackPlaybackControl)
+		bne.s	.fadedpsg		; Return if not
+		jsr	SendPSGNoteOff(pc)
+		lea	v_music_psg3_track(a6),a5
+		bclr	#2,(a5)			; Clear 'SFX is overriding' bit (TrackPlaybackControl)
+		bset	#1,(a5)			; Set 'track at rest' bit (TrackPlaybackControl)
+		tst.b	(a5)			; Is track playing? (TrackPlaybackControl)
+		bpl.s	.fadedpsg		; Return if not
+		cmpi.b	#$E0,TrackVoiceControl(a5)	; Is this a noise channel?
+		bne.s	.fadedpsg			; Return if not
+		move.b	TrackPSGNoise(a5),(psg_input).l ; Set noise type
 
-.locret:
+.fadedpsg:
 		rts
 ; ---------------------------------------------------------------------------
 
-dPlaySnd_FadeOut:
-		jsr	dStopSFX(pc)
-		jsr	dStopSpecSFX(pc)
-		move.b	#3,6(a6)
-		move.b	#$28,4(a6)
-		clr.b	$40(a6)
-		clr.b	$2A(a6)
+PlaySnd_FadeOut:
+		jsr	StopSFX(pc)
+		jsr	StopSpecialSFX(pc)
+		move.b	#3,v_fadeout_delay(a6)			; Set fadeout delay to 3
+		move.b	#$28,v_fadeout_counter(a6)		; Set fadeout counter
+		clr.b	v_music_dac_track+TrackPlaybackControl(a6)	; Stop DAC track
+		clr.b	f_speedup(a6)				; Disable speed shoes tempo
 		rts
 ; ---------------------------------------------------------------------------
 
 DoFadeOut:
-		move.b	6(a6),d0
-		beq.s	.dotick
-		subq.b	#1,6(a6)
+		move.b	v_fadeout_delay(a6),d0	; Has fadeout delay expired?
+		beq.s	.continuefade		; Branch if yes
+		subq.b	#1,v_fadeout_delay(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
-.dotick:
-		subq.b	#1,4(a6)
-		beq.w	dStopAll
-		move.b	#3,6(a6)
-		lea	$70(a6),a5
-		moveq	#5,d7
+.continuefade:
+		subq.b	#1,v_fadeout_counter(a6)	; Update fade counter
+		beq.w	StopAllSound			; Branch if fade is done
+		move.b	#3,v_fadeout_delay(a6)		; Reset fade delay
+		lea	v_music_fm_tracks(a6),a5
+		moveq	#((v_music_fm_tracks_end-v_music_fm_tracks)/TrackSz)-1,d7	; 6 FM tracks
 
-.loopfm:
-		tst.b	(a5)
-		bpl.s	.nofm
-		addq.b	#1,9(a5)
-		bpl.s	.updatefm
-		bclr	#7,(a5)
-		bra.s	.nofm
+.fmloop:
+		tst.b	(a5)			; Is track playing? (TrackPlaybackControl)
+		bpl.s	.nextfm			; Branch if not
+		addq.b	#1,TrackVolume(a5)	; Increase volume attenuation
+		bpl.s	.sendfmtl		; Branch if still positive
+		bclr	#7,(a5)			; Stop track (TrackPlaybackControl)
+		bra.s	.nextfm
 ; ---------------------------------------------------------------------------
 
-.updatefm:
-		jsr	dUpdateVolFM(pc)
+.sendfmtl:
+		jsr	SendVoiceTL(pc)
 
-.nofm:
+.nextfm:
 		adda.w	#TrackSz,a5
-		dbf	d7,.loopfm
-		moveq	#2,d7
+		dbf	d7,.fmloop
+		moveq	#((v_music_psg_tracks_end-v_music_psg_tracks)/TrackSz)-1,d7	; 3 PSG tracks
 
-.looppsg:
-		tst.b	(a5)
-		bpl.s	.nopsg
-		addq.b	#1,9(a5)
-		cmpi.b	#$10,9(a5)
-		bcs.s	.updatpsg
-		bclr	#7,(a5)
-		bra.s	.nopsg
+.psgloop:
+		tst.b	(a5)			; Is track playing? (TrackPlaybackControl)
+		bpl.s	.nextpsg		; branch if not
+		addq.b	#1,TrackVolume(a5)	; Increase volume attenuation
+		cmpi.b	#$10,TrackVolume(a5)	; Is it greater than $F?
+		blo.s	.sendpsgvol		; Branch if not
+		bclr	#7,(a5)			; Stop track (TrackPlaybackControl)
+		bra.s	.nextpsg
 ; ---------------------------------------------------------------------------
 
-.updatpsg:
-		move.b	9(a5),d6
-		jsr	dUpdateVolPSG(pc)
+.sendpsgvol:
+		move.b	TrackVolume(a5),d6	; Store new volume attenuation
+		jsr	SetPSGVolume(pc)
 
-.nopsg:
+.nextpsg:
 		adda.w	#TrackSz,a5
-		dbf	d7,.looppsg
+		dbf	d7,.psgloop
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1297,7 +1309,7 @@ dMuteFM_Special:
 
 .tlloop:
 		move.b	d3,d0
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 		addq.b	#4,d3
 		dbf	d4,.tlloop
 		moveq	#3,d4
@@ -1306,7 +1318,7 @@ dMuteFM_Special:
 
 .rrloop:
 		move.b	d3,d0
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 		addq.b	#4,d3
 		dbf	d4,.rrloop
 		rts
@@ -1339,7 +1351,7 @@ dMuteFM:
 		rts
 ; ---------------------------------------------------------------------------
 
-dStopAll:
+StopAllSound:
 		moveq	#$2B,d0
 		move.b	#$80,d1
 		jsr	WriteFMI(pc)
@@ -1378,78 +1390,78 @@ InitMusicPlayback:
 
 TempoWait:
 		move.b	v_main_tempo(a6),v_main_tempo_timeout(a6)
-		addq.b	#1,$4E(a6)
-		addq.b	#1,$7E(a6)
-		addq.b	#1,$AE(a6)
-		addq.b	#1,$DE(a6)
-		addq.b	#1,$10E(a6)
-		addq.b	#1,$13E(a6)
-		addq.b	#1,$16E(a6)
-		addq.b	#1,$19E(a6)
-		addq.b	#1,$1CE(a6)
-		addq.b	#1,$1FE(a6)
+		addq.b	#1,v_music_dac_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_fm1_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_fm2_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_fm3_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_fm4_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_fm5_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_fm6_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_psg1_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_psg2_track+TrackDurationTimeout(a6)
+		addq.b	#1,v_music_psg3_track+TrackDurationTimeout(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
-dPlaySnd_ShoesOn:
+PlaySnd_ShoesOn:
 		move.b	v_speeduptempo(a6),v_main_tempo(a6)
 		move.b	v_speeduptempo(a6),v_main_tempo_timeout(a6)
 		move.b	#$80,f_speedup(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
-dPlaySnd_ShoesOff:
-		move.b	$28(a6),v_main_tempo(a6)
-		move.b	$28(a6),v_main_tempo_timeout(a6)
+PlaySnd_ShoesOff:
+		move.b	v_tempo_mod(a6),v_main_tempo(a6)
+		move.b	v_tempo_mod(a6),v_main_tempo_timeout(a6)
 		clr.b	f_speedup(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
 DoFadeIn:
-		tst.b	v_fadein_delay(a6)
-		beq.s	.dotick
+		tst.b	v_fadein_delay(a6)	; Has fadein delay expired?
+		beq.s	.continuefade		; Branch if yes
 		subq.b	#1,v_fadein_delay(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
-.dotick:
-		tst.b	v_fadein_counter(a6)
-		beq.s	.disable
-		subq.b	#1,v_fadein_counter(a6)
-		move.b	#2,v_fadein_delay(a6)
-		lea	$70(a6),a5
-		moveq	#5,d7
+.continuefade:
+		tst.b	v_fadein_counter(a6)	; Is fade done?
+		beq.s	.fadedone		; Branch if yes
+		subq.b	#1,v_fadein_counter(a6)	; Update fade counter
+		move.b	#2,v_fadein_delay(a6)	; Reset fade delay
+		lea	v_music_fm_tracks(a6),a5
+		moveq	#((v_music_fm_tracks_end-v_music_fm_tracks)/TrackSz)-1,d7	; 6 FM tracks
 
-.loopfm:
-		tst.b	(a5)
-		bpl.s	.nofm
-		subq.b	#1,9(a5)
-		jsr	dUpdateVolFM(pc)
+.fmloop:
+		tst.b	(a5)			; Is track playing? (TrackPlaybackControl)
+		bpl.s	.nextfm			; Branch if not
+		subq.b	#1,TrackVolume(a5)	; Reduce volume attenuation
+		jsr	SendVoiceTL(pc)
 
-.nofm:
+.nextfm:
 		adda.w	#TrackSz,a5
-		dbf	d7,.loopfm
-		moveq	#2,d7
+		dbf	d7,.fmloop
+		moveq	#((v_music_psg_tracks_end-v_music_psg_tracks)/TrackSz)-1,d7		; 3 PSG tracks
 
-.looppsg:
-		tst.b	(a5)
-		bpl.s	.nopsg
-		subq.b	#1,9(a5)
-		jsr	dUpdateVolPSG(pc)
+.psgloop:
+		tst.b	(a5)			; Is track playing? (TrackPlaybackControl)
+		bpl.s	.nextpsg		; Branch if not
+		subq.b	#1,TrackVolume(a5)	; Reduce volume attenuation
+		jsr	SetPSGVolume(pc)
 
-.nopsg:
+.nextpsg:
 		adda.w	#TrackSz,a5
-		dbf	d7,.looppsg
+		dbf	d7,.psgloop
 		rts
 ; ---------------------------------------------------------------------------
 
-.disable:
-		bclr	#2,$40(a6)
-		clr.b	f_fadein_flag(a6)
+.fadedone:
+		bclr	#2,v_music_dac_track+TrackPlaybackControl(a6)	; Clear 'SFX overriding' bit
+		clr.b	f_fadein_flag(a6)				; Stop fadein
 		rts
 ; ---------------------------------------------------------------------------
 
-dNoteOnFM:
+FMNoteOn:
 		btst	#1,(a5)
 		bne.s	.locret
 		btst	#2,(a5)
@@ -1464,13 +1476,13 @@ dNoteOnFM:
 		rts
 ; ---------------------------------------------------------------------------
 
-sKeyOffFM:
+FMNoteOff:
 		btst	#4,(a5)
 		bne.s	locret_74E42
 		btst	#2,(a5)
 		bne.s	locret_74E42
 
-sKeyOffFM2:
+SendFMNoteOff:
 		moveq	#$28,d0
 		move.b	TrackVoiceControl(a5),d1
 		bra.w	WriteFMI
@@ -1483,16 +1495,16 @@ locret_74E42:
 WriteFMIorIIMain:
 		btst	#2,(a5)
 		bne.s	locret_74E4E
-		bra.w	dWriteYMch
+		bra.w	WriteFMIorII
 ; ---------------------------------------------------------------------------
 
 locret_74E4E:
 		rts
 ; ---------------------------------------------------------------------------
 
-dWriteYMch:
+WriteFMIorII:
 		btst	#2,TrackVoiceControl(a5)
-		bne.s	dWriteYMch2
+		bne.s	WriteFMIIPart
 		add.b	TrackVoiceControl(a5),d0
 
 ; ---------------------------------------------------------------------------
@@ -1515,7 +1527,7 @@ WriteFMI:
 		rts
 ; ---------------------------------------------------------------------------
 
-dWriteYMch2:
+WriteFMIIPart:
 		move.b	TrackVoiceControl(a5),d2
 		bclr	#2,d2
 		add.b	d2,d0
@@ -1553,20 +1565,20 @@ PSGUpdateTrack:
 		subq.b	#1,TrackDurationTimeout(a5)
 		bne.s	.noupdate
 		bclr	#4,(a5)
-		jsr	dTrackerPSG(pc)
-		jsr	dUpdateFreqPSG(pc)
-		bra.w	dVolEnvProg
+		jsr	PSGDoNext(pc)
+		jsr	PSGDoNoteOn(pc)
+		bra.w	PSGDoVolFX
 ; ---------------------------------------------------------------------------
 
 .noupdate:
-		jsr	dGate(pc)
-		jsr	dVolEnvProg2(pc)
+		jsr	NoteTimeoutUpdate(pc)
+		jsr	PSGUpdateVolFX(pc)
 		jsr	DoModulation(pc)
-		jsr	dUpdateFreqPSG2(pc)
+		jsr	PSGUpdateFreq(pc)
 		rts
 ; ---------------------------------------------------------------------------
 
-dTrackerPSG:
+PSGDoNext:
 		bclr	#1,(a5)
 		movea.l	TrackDataPointer(a5),a4
 
@@ -1587,12 +1599,12 @@ dTrackerPSG:
 		tst.b	d5
 		bpl.s	.duration
 		subq.w	#1,a4
-		bra.w	dFinishTrack
+		bra.w	FinishTrackUpdate
 ; ---------------------------------------------------------------------------
 
 .duration:
-		jsr	dCalcDuration(pc)
-		bra.w	dFinishTrack
+		jsr	SetDuration(pc)
+		bra.w	FinishTrackUpdate
 ; ---------------------------------------------------------------------------
 
 dLoadFreqPSG:
@@ -1603,22 +1615,22 @@ dLoadFreqPSG:
 		lsl.w	#1,d5
 		lea	dFreqPSG(pc),a0
 		move.w	(a0,d5.w),TrackFreq(a5)
-		bra.w	dFinishTrack
+		bra.w	FinishTrackUpdate
 ; ---------------------------------------------------------------------------
 
 .duration:
 		bset	#1,(a5)
 		move.w	#-1,TrackFreq(a5)
-		jsr	dFinishTrack(pc)
-		bra.w	sMutePSG
+		jsr	FinishTrackUpdate(pc)
+		bra.w	PSGNoteOff
 ; ---------------------------------------------------------------------------
 
-dUpdateFreqPSG:
+PSGDoNoteOn:
 		move.w	TrackFreq(a5),d6
 		bmi.s	dRestPSG
 ; ---------------------------------------------------------------------------
 
-dUpdateFreqPSG2:
+PSGUpdateFreq:
 		move.b	TrackDetune(a5),d0
 		ext.w	d0
 		add.w	d0,d6
@@ -1649,15 +1661,15 @@ dRestPSG:
 		rts
 ; ---------------------------------------------------------------------------
 
-dVolEnvProg2:
+PSGUpdateVolFX:
 		tst.b	TrackVoiceIndex(a5)
-		beq.w	dUpdateVolPSG_Rts
+		beq.w	SetPSGVolume_Rts
 
-dVolEnvProg:
+PSGDoVolFX:
 		move.b	TrackVolume(a5),d6
 		moveq	#0,d0
 		move.b	TrackVoiceIndex(a5),d0
-		beq.s	dUpdateVolPSG
+		beq.s	SetPSGVolume
 		movea.l	(Go_PSGIndex).l,a0
 		subq.w	#1,d0
 		lsl.w	#2,d0
@@ -1677,32 +1689,32 @@ dVolEnvProg:
 .volume:
 		add.w	d0,d6
 		cmpi.b	#$10,d6
-		bcs.s	dUpdateVolPSG
+		bcs.s	SetPSGVolume
 		moveq	#$F,d6
 ; ---------------------------------------------------------------------------
 
-dUpdateVolPSG:
+SetPSGVolume:
 		btst	#1,(a5)
-		bne.s	dUpdateVolPSG_Rts
+		bne.s	SetPSGVolume_Rts
 		btst	#2,(a5)
-		bne.s	dUpdateVolPSG_Rts
+		bne.s	SetPSGVolume_Rts
 		btst	#4,(a5)
-		bne.s	dUpdateVolPSG_ChkGate
+		bne.s	SetPSGVolume_ChkGate
 
-dUpdateVolPSG_DoIt:
+SetPSGVolume_DoIt:
 		or.b	TrackVoiceControl(a5),d6
 		addi.b	#$10,d6
 		move.b	d6,(psg_input).l
 
-dUpdateVolPSG_Rts:
+SetPSGVolume_Rts:
 		rts
 ; ---------------------------------------------------------------------------
 
-dUpdateVolPSG_ChkGate:
+SetPSGVolume_ChkGate:
 		tst.b	TrackNoteTimeoutMaster(a5)
-		beq.s	dUpdateVolPSG_DoIt
+		beq.s	SetPSGVolume_DoIt
 		tst.b	TrackNoteTimeout(a5)
-		bne.s	dUpdateVolPSG_DoIt
+		bne.s	SetPSGVolume_DoIt
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1713,19 +1725,19 @@ dVolEnvCmd_Hold:
 
 dVolEnvCmd_Loop:
 		move.b	TrackVoiceControl(a0,d0.w),TrackVolEnvIndex(a5)
-		bra.w	dVolEnvProg
+		bra.w	PSGDoVolFX
 ; ---------------------------------------------------------------------------
 
 dVolEnvCmd_Reset:
 		clr.b	TrackVolEnvIndex(a5)
-		bra.w	dVolEnvProg
+		bra.w	PSGDoVolFX
 ; ---------------------------------------------------------------------------
 
-sMutePSG:
+PSGNoteOff:
 		btst	#2,(a5)
 		bne.s	locret_750DE
 
-sMutePSG2:
+SendPSGNoteOff:
 		move.b	TrackVoiceControl(a5),d0
 		ori.b	#$1F,d0
 		move.b	d0,(psg_input).l
@@ -1769,57 +1781,57 @@ CoordFlag:
 ; ---------------------------------------------------------------------------
 		bra.w	cfFadeInToPrevious	; E4
 ; ---------------------------------------------------------------------------
-		bra.w	dcaVolFMP	; E5
+		bra.w	cfChangePFMVolume	; E5
 ; ---------------------------------------------------------------------------
-		bra.w	dcaVolFM	; E6
+		bra.w	cfChangeFMVolume	; E6
 ; ---------------------------------------------------------------------------
-		bra.w	dcHold		; E7
+		bra.w	cfHoldNote	; E7
 ; ---------------------------------------------------------------------------
-		bra.w	dcGate		; E8
+		bra.w	cfNoteTimeout	; E8
 ; ---------------------------------------------------------------------------
-		bra.w	dcsLFO		; E9
+		bra.w	cfSetLFO	; E9
 ; ---------------------------------------------------------------------------
-		bra.w	dcsTempo	; EA
+		bra.w	cfSetTempo	; EA
 ; ---------------------------------------------------------------------------
 		bra.w	dcPlaySnd	; EB
 ; ---------------------------------------------------------------------------
-		bra.w	dcaVolPSG	; EC
+		bra.w	cfChangePSGVolume	; EC
 ; ---------------------------------------------------------------------------
-		bra.w	loc_753C0	; ED
+		bra.w	cfClearPush	; ED
 ; ---------------------------------------------------------------------------
 		bra.w	dcYM1		; EE
 ; ---------------------------------------------------------------------------
-		bra.w	dcVoice		; EF
+		bra.w	cfSetVoice	; EF
 ; ---------------------------------------------------------------------------
-		bra.w	dcMod68k	; F0
+		bra.w	cfModulation	; F0
 ; ---------------------------------------------------------------------------
-		bra.w	dcModOn		; F1
+		bra.w	cfEnableModulation	; F1
 ; ---------------------------------------------------------------------------
-		bra.w	dcStop		; F2
+		bra.w	cfStopTrack	; F2
 ; ---------------------------------------------------------------------------
-		bra.w	dcNoisePSG	; F3
+		bra.w	cfSetPSGNoise	; F3
 ; ---------------------------------------------------------------------------
-		bra.w	dcModOff	; F4
+		bra.w	cfDisableModulation	; F4
 ; ---------------------------------------------------------------------------
-		bra.w	dcVolEnv	; F5
+		bra.w	cfSetPSGTone	; F5
 ; ---------------------------------------------------------------------------
-		bra.w	dcJump		; F6
+		bra.w	cfJumpTo	; F6
 ; ---------------------------------------------------------------------------
-		bra.w	dcLoop		; F7
+		bra.w	cfRepeatAtPos	; F7
 ; ---------------------------------------------------------------------------
-		bra.w	dcCall		; F8
+		bra.w	cfJumpToGosub	; F8
 ; ---------------------------------------------------------------------------
-		bra.w	dcReturn	; F9
+		bra.w	cfJumpReturn	; F9
 ; ---------------------------------------------------------------------------
-		bra.w	dcTickCh	; FA
+		bra.w	cfSetTempoDivider	; FA
 ; ---------------------------------------------------------------------------
-		bra.w	dcaTranspose	; FB
+		bra.w	cfChangeTransposition	; FB
 ; ---------------------------------------------------------------------------
-		bra.w	dcTick		; FC
+		bra.w	cfSetTempoDividerAll	; FC
 ; ---------------------------------------------------------------------------
-		bra.w	loc_7565A	; FD
+		bra.w	cfStopSpecialFM4	; FD
 ; ---------------------------------------------------------------------------
-		bra.w	dcFM3SM		; FE
+		bra.w	cfFE_SpcFM3Mode	; FE
 ; ---------------------------------------------------------------------------
 		moveq	#0,d0		; FF
 		move.b	(a4)+,d0
@@ -1828,9 +1840,9 @@ CoordFlag:
 ; ---------------------------------------------------------------------------
 
 cfMetaJumpTable:
-		bra.w	dcSSGEG
+		bra.w	cfSSG_Reg
 ; ---------------------------------------------------------------------------
-		bra.w	dcSSGEG
+		bra.w	cfSSG_Reg
 ; ---------------------------------------------------------------------------
 
 cfE0_Pan:
@@ -1905,7 +1917,7 @@ loc_752A0:
 		moveq	#0,d0
 		move.b	TrackVoiceIndex(a5),d0	; Get voice
 		movea.l	v_voice_ptr(a6),a1	; Voice pointer
-		jsr	dUpdateVoice(pc)
+		jsr	SetVoice(pc)
 
 loc_752C2:
 		adda.w	#TrackSz,a5
@@ -1917,7 +1929,7 @@ loc_752CC:
 		btst	#7,(a5)
 		beq.s	loc_752DE
 		bset	#1,(a5)
-		jsr	sMutePSG(pc)
+		jsr	PSGNoteOff(pc)
 		add.b	d6,TrackVolume(a5)	; Apply current volume fade-in
 
 loc_752DE:
@@ -1934,7 +1946,7 @@ loc_752DE:
 
 dcSilence:
 		jsr	dMuteFM_Special(pc)
-		bra.w	dcStop
+		bra.w	cfStopTrack
 ; ---------------------------------------------------------------------------
 
 dcPanAni:
@@ -1950,76 +1962,76 @@ dcPanAni:
 
 .disable:
 		move.b	#$B4,d0
-		move.b	$A(a5),d1
+		move.b	TrackAMSFMSPan(a5),d1
 		bra.w	WriteFMIorIIMain
 ; ---------------------------------------------------------------------------
 
-dcaVolFMP:
+cfChangePFMVolume:
 		move.b	(a4)+,d0
-		tst.b	1(a5)
-		bpl.s	dcaVolFM
-		add.b	d0,9(a5)
+		tst.b	TrackVoiceControl(a5)
+		bpl.s	cfChangeFMVolume
+		add.b	d0,TrackVolume(a5)
 		addq.w	#1,a4
 		rts
 ; ---------------------------------------------------------------------------
 
-dcaVolFM:
+cfChangeFMVolume:
 		move.b	(a4)+,d0
-		add.b	d0,9(a5)
-		bra.w	dUpdateVolFM
+		add.b	d0,TrackVolume(a5)
+		bra.w	SendVoiceTL
 ; ---------------------------------------------------------------------------
 
-dcHold:
+cfHoldNote:
 		bset	#4,(a5)
 		rts
 ; ---------------------------------------------------------------------------
 
-dcGate:
-		move.b	(a4),$12(a5)
-		move.b	(a4)+,$13(a5)
+cfNoteTimeout:
+		move.b	(a4),TrackNoteTimeout(a5)
+		move.b	(a4)+,TrackNoteTimeoutMaster(a5)
 		rts
 ; ---------------------------------------------------------------------------
 
-dcsLFO:
-		movea.l	$18(a6),a1
-		beq.s	.something
-		movea.l	$1C(a6),a1
+cfSetLFO:
+		movea.l	v_voice_ptr(a6),a1
+		beq.s	.lfo_ss
+		movea.l	v_voice_ptr+4(a6),a1
 
-.something:
-		move.b	(a4),d3
-		adda.w	#9,a0
-		lea	dOpLFO(pc),a2
-		moveq	#3,d6
+.lfo_ss:
+		move.b	(a4),d3			; d3 = slot data
+		adda.w	#9,a0			; a0 = DR1 addr
+		lea	LFO_Reg_Table(pc),a2
+		moveq	#3,d6			; loop time
 
-.lfoops:
-		move.b	(a1)+,d1
-		move.b	(a2)+,d0
-		btst	#7,d3
-		beq.s	.skipop
-		bset	#7,d1
-		jsr	WriteFMIorIIMain(pc)
+.lfo_loop:
+		move.b	(a1)+,d1		; d1 = DR data
+		move.b	(a2)+,d0		; d0 = DR reg.
+		btst	#7,d3			; if slot bit data = 0
+		beq.s	.lfo_not		; then not write
+		bset	#7,d1			; AMON on
+		jsr	WriteFMIorIIMain(pc)	; DR write
 
-.skipop:
+.lfo_not:
 		lsl.w	#1,d3
-		dbf	d6,.lfoops
-		move.b	(a4)+,d1
-		moveq	#$22,d0
+		dbf	d6,.lfo_loop
+		move.b	(a4)+,d1		; lfo data get
+		moveq	#$22,d0			; FM reg
 		jsr	WriteFMI(pc)
-		move.b	(a4)+,d1
-		move.b	$A(a5),d0
-		andi.b	#$C0,d0
-		or.b	d0,d1
-		move.b	d1,$A(a5)
-		move.b	#$B4,d0
+		move.b	(a4)+,d1		; d1 = ams,pms data
+		move.b	TrackAMSFMSPan(a5),d0	; d0 = pan data
+		andi.b	#$C0,d0			; lr data get
+		or.b	d0,d1			; d1 = lr,ams,pms data
+		move.b	d1,TrackAMSFMSPan(a5)	; pan data store
+		move.b	#$B4,d0			; d0 = pan registor
 		bra.w	WriteFMIorIIMain
 ; ---------------------------------------------------------------------------
 
-dOpLFO:		dc.b $60, $68, $64, $6C
+LFO_Reg_Table:	dc.b $60, $68, $64, $6C
 ; ---------------------------------------------------------------------------
 
-dcsTempo:
-		move.b	(a4),2(a6)
-		move.b	(a4)+,1(a6)
+cfSetTempo:
+		move.b	(a4),v_main_tempo(a6)
+		move.b	(a4)+,v_main_tempo_timeout(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -2028,14 +2040,14 @@ dcPlaySnd:
 		rts
 ; ---------------------------------------------------------------------------
 
-dcaVolPSG:
+cfChangePSGVolume:
 		move.b	(a4)+,d0
-		add.b	d0,9(a5)
+		add.b	d0,TrackVolume(a5)
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_753C0:
-		move.b	#0,$2C(a6)
+cfClearPush:
+		move.b	#0,f_push_playing(a6)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -2045,22 +2057,22 @@ dcYM1:
 		bra.w	WriteFMI
 ; ---------------------------------------------------------------------------
 
-dcVoice:
+cfSetVoice:
 		moveq	#0,d0
 		move.b	(a4)+,d0
-		move.b	d0,$B(a5)
+		move.b	d0,TrackVoiceIndex(a5)
 		btst	#2,(a5)
 		bne.w	locret_75454
-		movea.l	$18(a6),a1
-		tst.b	$E(a6)
-		beq.s	dUpdateVoice
-		movea.l	$1C(a6),a1
-		tst.b	$E(a6)
-		bmi.s	dUpdateVoice
-		movea.l	$20(a6),a1
+		movea.l	v_voice_ptr(a6),a1
+		tst.b	f_voice_selector(a6)
+		beq.s	SetVoice
+		movea.l	TrackVoicePtr(a6),a1
+		tst.b	f_voice_selector(a6)
+		bmi.s	SetVoice
+		movea.l	v_special_voice_ptr(a6),a1
 ; ---------------------------------------------------------------------------
 
-dUpdateVoice:
+SetVoice:
 		subq.w	#1,d0
 		bmi.s	.havevoiceptr
 		move.w	#25,d1
@@ -2071,17 +2083,17 @@ dUpdateVoice:
 
 .havevoiceptr:
 		move.b	(a1)+,d1		; feedback/algorithm
-		move.b	d1,$25(a5) ; Save it to track RAM
+		move.b	d1,TrackFeedbackAlgo(a5) ; Save it to track RAM
 		move.b	d1,d4
 		move.b	#$B0,d0			; Command to write feedback/algorithm
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 		lea	FMInstrumentOperatorTable(pc),a2
 		moveq	#(FMInstrumentOperatorTable_End-FMInstrumentOperatorTable)-1,d3		; Don't want to send TL yet
 
 .sendvoiceloop:
 		move.b	(a2)+,d0
 		move.b	(a1)+,d1
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 		dbf	d3,.sendvoiceloop
 
 		moveq	#(FMInstrumentTLTable_End-FMInstrumentTLTable)-1,d5
@@ -2097,12 +2109,12 @@ dUpdateVoice:
 		add.b	d3,d1		; Include additional attenuation
 
 .sendtl:
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 		dbf	d5,.sendtlloop
 
 		move.b	#$B4,d0			; Register for AMS/FMS/Panning
 		move.b	TrackAMSFMSPan(a5),d1	; Value to send
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 
 locret_75454:
 		rts
@@ -2111,7 +2123,7 @@ locret_75454:
 FMSlotMask:	dc.b 8,	8, 8, 8, $A, $E, $E, $F
 ; ---------------------------------------------------------------------------
 
-dUpdateVolFM:
+SendVoiceTL:
 		btst	#2,(a5)
 		bne.s	.locret
 		moveq	#0,d0
@@ -2138,7 +2150,7 @@ dUpdateVolFM:
 .gotvoice:
 		adda.w	#21,a1				; Want TL
 		lea	FMInstrumentTLTable(pc),a2
-		move.b	$25(a5),d0	; Get feedback/algorithm
+		move.b	TrackFeedbackAlgo(a5),d0	; Get feedback/algorithm
 		andi.w	#7,d0				; Want only algorithm
 		move.b	FMSlotMask(pc,d0.w),d4		; Get slot mask
 		move.b	TrackVolume(a5),d3		; Get track volume attenuation
@@ -2152,7 +2164,7 @@ dUpdateVolFM:
 		bcc.s	.senttl		; Branch if not
 		add.b	d3,d1		; Include additional attenuation
 		bcs.s	.senttl		; Branch on overflow
-		jsr	dWriteYMch(pc)
+		jsr	WriteFMIorII(pc)
 
 .senttl:
 		dbf	d5,.sendtlloop
@@ -2192,7 +2204,7 @@ FMInstrumentTLTable:
 FMInstrumentTLTable_End
 ; ---------------------------------------------------------------------------
 
-dcMod68k:
+cfModulation:
 		bset	#3,(a5)				; Turn on modulation (TrackPlaybackControl)
 		move.l	a4,TrackModulationPtr(a5)	; Save pointer to modulation data
 		move.b	(a4)+,TrackModulationWait(a5)	; Modulation delay
@@ -2205,40 +2217,40 @@ dcMod68k:
 		rts
 ; ---------------------------------------------------------------------------
 
-dcModOn:
+cfEnableModulation:
 		bset	#3,(a5)		; Turn on modulation (TrackPlaybackControl)
 		rts
 ; ---------------------------------------------------------------------------
 
-dcStop:
-		bclr	#7,(a5)
-		bclr	#4,(a5)
-		tst.b	1(a5)
+cfStopTrack:
+		bclr	#7,(a5)			; Stop track (TrackPlaybackControl)
+		bclr	#4,(a5)			; Clear 'do not attack next note' bit (TrackPlaybackControl)
+		tst.b	TrackVoiceControl(a5)
 		bmi.s	.psg
-		tst.b	8(a6)
+		tst.b	f_updating_dac(a6)
 		bmi.w	.exit
-		jsr	sKeyOffFM(pc)
+		jsr	FMNoteOff(pc)
 		bra.s	.checksfx
 ; ---------------------------------------------------------------------------
 
 .psg:
-		jsr	sMutePSG(pc)
+		jsr	PSGNoteOff(pc)
 
 .checksfx:
-		tst.b	$E(a6)
+		tst.b	f_voice_selector(a6)
 		bpl.w	.exit
-		clr.b	0(a6)
+		clr.b	v_sndprio(a6)
 		moveq	#0,d0
-		move.b	1(a5),d0
+		move.b	TrackVoiceControl(a5),d0
 		bmi.s	.getpsg
-		lea	dMusicChanTbl(pc),a0
+		lea	SFX_BGMChannelRAM(pc),a0
 		movea.l	a5,a3
 		cmpi.b	#4,d0
 		bne.s	.getfm
-		tst.b	$340(a6)
+		tst.b	v_spcsfx_fm4_track+TrackPlaybackControl(a6)
 		bpl.s	.getfm
-		lea	$340(a6),a5
-		movea.l	$20(a6),a1
+		lea	v_spcsfx_fm4_track(a6),a5
+		movea.l	v_special_voice_ptr(a6),a1
 		bra.s	.voice
 ; ---------------------------------------------------------------------------
 
@@ -2248,17 +2260,17 @@ dcStop:
 		movea.l	(a0,d0.w),a5
 		tst.b	(a5)
 		bpl.s	.checkfm3
-		movea.l	$18(a6),a1
+		movea.l	v_voice_ptr(a6),a1
 
 .voice:
 		bclr	#2,(a5)
 		bset	#1,(a5)
-		move.b	$B(a5),d0
-		jsr	dUpdateVoice(pc)
+		move.b	TrackVoiceIndex(a5),d0
+		jsr	SetVoice(pc)
 
 .checkfm3:
 		movea.l	a3,a5
-		cmpi.b	#2,1(a5)
+		cmpi.b	#2,TrackVoiceControl(a5)
 		bne.s	.exit
 		clr.b	$F(a6)
 		moveq	#0,d1
@@ -2268,7 +2280,7 @@ dcStop:
 ; ---------------------------------------------------------------------------
 
 .getpsg:
-		lea	$370(a6),a0
+		lea	v_spcsfx_psg3_track(a6),a0
 		tst.b	(a0)
 		bpl.s	.normalpsg
 		cmpi.b	#$E0,d0
@@ -2277,131 +2289,131 @@ dcStop:
 		beq.s	.unint
 
 .normalpsg:
-		lea	dMusicChanTbl(pc),a0
+		lea	SFX_BGMChannelRAM(pc),a0
 		lsr.b	#3,d0
 		movea.l	(a0,d0.w),a0
 
 .unint:
 		bclr	#2,(a0)
 		bset	#1,(a0)
-		cmpi.b	#$E0,1(a0)
+		cmpi.b	#$E0,TrackVoiceControl(a0)
 		bne.s	.exit
-		move.b	$26(a0),(psg_input).l
+		move.b	TrackPSGNoise(a0),(psg_input).l
 
 .exit:
 		addq.w	#8,sp
 		rts
 ; ---------------------------------------------------------------------------
 
-dcNoisePSG:
-		move.b	#$E0,1(a5)
-		move.b	(a4)+,$26(a5)
+cfSetPSGNoise:
+		move.b	#$E0,TrackVoiceControl(a5)
+		move.b	(a4)+,TrackPSGNoise(a5)
 		btst	#2,(a5)
-		bne.s	.interrupted
+		bne.s	.locret
 		move.b	-1(a4),(psg_input).l
 
-.interrupted:
+.locret:
 		rts
 ; ---------------------------------------------------------------------------
 
-dcModOff:
-		bclr	#3,(a5)
+cfDisableModulation:
+		bclr	#3,(a5)		; Disable modulation (TrackPlaybackControl)
 		rts
 ; ---------------------------------------------------------------------------
 
-dcVolEnv:
-		move.b	(a4)+,$B(a5)
+cfSetPSGTone:
+		move.b	(a4)+,TrackVoiceIndex(a5)	; Set current PSG tone
 		rts
 ; ---------------------------------------------------------------------------
 
-dcJump:
-		move.b	(a4)+,d0
-		lsl.w	#8,d0
-		move.b	(a4)+,d0
-		adda.w	d0,a4
-		subq.w	#1,a4
+cfJumpTo:
+		move.b	(a4)+,d0	; High byte of offset
+		lsl.w	#8,d0		; Shift it into place
+		move.b	(a4)+,d0	; Low byte of offset
+		adda.w	d0,a4		; Add to current position
+		subq.w	#1,a4		; Put back one byte
 		rts
 ; ---------------------------------------------------------------------------
 
-dcLoop:
+cfRepeatAtPos:
 		moveq	#0,d0
 		move.b	(a4)+,d0
 		move.b	(a4)+,d1
-		tst.b	$28(a5,d0.w)
+		tst.b	TrackLoopCounters(a5,d0.w)
 		bne.s	.noreset
-		move.b	d1,$28(a5,d0.w)
+		move.b	d1,TrackLoopCounters(a5,d0.w)
 
 .noreset:
-		subq.b	#1,$28(a5,d0.w)
-		bne.s	dcJump
+		subq.b	#1,TrackLoopCounters(a5,d0.w)
+		bne.s	cfJumpTo
 		addq.w	#2,a4
 		rts
 ; ---------------------------------------------------------------------------
 
-dcCall:
+cfJumpToGosub:
 		moveq	#0,d0
-		move.b	$D(a5),d0
+		move.b	TrackStackPointer(a5),d0
 		subq.b	#4,d0
 		move.l	a4,(a5,d0.w)
-		move.b	d0,$D(a5)
-		bra.s	dcJump
+		move.b	d0,TrackStackPointer(a5)
+		bra.s	cfJumpTo
 ; ---------------------------------------------------------------------------
 
-dcReturn:
+cfJumpReturn:
 		moveq	#0,d0
-		move.b	$D(a5),d0
-		movea.l	(a5,d0.w),a4
-		addq.w	#2,a4
-		addq.b	#4,d0
-		move.b	d0,$D(a5)
+		move.b	TrackStackPointer(a5),d0 ; Track stack pointer
+		movea.l	(a5,d0.w),a4		; Set track return address
+		addq.w	#2,a4			; Skip jump target address from gosub flag
+		addq.b	#4,d0			; Actually 'pop' value
+		move.b	d0,TrackStackPointer(a5) ; Set new stack pointer
 		rts
 ; ---------------------------------------------------------------------------
 
-dcTickCh:
-		move.b	(a4)+,2(a5)
+cfSetTempoDivider:
+		move.b	(a4)+,TrackTempoDivider(a5)
 		rts
 ; ---------------------------------------------------------------------------
 
-dcaTranspose:
+cfChangeTransposition:
 		move.b	(a4)+,d0
-		add.b	d0,8(a5)
+		add.b	d0,TrackTranspose(a5)
 		rts
 ; ---------------------------------------------------------------------------
 
-dcTick:
-		lea	$40(a6),a0
-		move.b	(a4)+,d0
+cfSetTempoDividerAll:
+		lea	v_music_track_ram(a6),a0
+		move.b	(a4)+,d0			; Get new tempo divider
 		moveq	#TrackSz,d1
-		moveq	#9,d2
+		moveq	#((v_music_track_ram_end-v_music_track_ram)/TrackSz)-1,d2	; 1 DAC + 6 FM + 3 PSG tracks
 
-.tickloop:
-		move.b	d0,2(a0)
+.trackloop:
+		move.b	d0,TrackTempoDivider(a0)	; Set track's tempo divider
 		adda.w	d1,a0
-		dbf	d2,.tickloop
+		dbf	d2,.trackloop
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_7565A:
-		bclr	#7,(a5)
-		bclr	#4,(a5)
-		jsr	sKeyOffFM(pc)
-		tst.b	$250(a6)
-		bmi.s	loc_75688
+cfStopSpecialFM4:
+		bclr	#7,(a5)		; Stop track (TrackPlaybackControl)
+		bclr	#4,(a5)		; Clear 'do not attack next note' bit (TrackPlaybackControl)
+		jsr	FMNoteOff(pc)
+		tst.b	v_sfx_fm4_track+TrackPlaybackControl(a6)	; Is SFX using FM4?
+		bmi.s	.locexit					; Branch if yes
 		movea.l	a5,a3
-		lea	$100(a6),a5
-		movea.l	$18(a6),a1
-		bclr	#2,(a5)
-		bset	#1,(a5)
-		move.b	$B(a5),d0
-		jsr	dUpdateVoice(pc)
+		lea	v_music_fm4_track(a6),a5
+		movea.l	v_voice_ptr(a6),a1	; Voice pointer
+		bclr	#2,(a5)			; Clear 'SFX is overriding' bit (TrackPlaybackControl)
+		bset	#1,(a5)			; Set 'track at rest' bit (TrackPlaybackControl)
+		move.b	TrackVoiceIndex(a5),d0	; Current voice
+		jsr	SetVoice(pc)
 		movea.l	a3,a5
 
-loc_75688:
-		addq.w	#8,sp
+.locexit:
+		addq.w	#8,sp		; Tamper with return value so we don't return to caller
 		rts
 ; ---------------------------------------------------------------------------
 
-dcFM3SM:
+cfFE_SpcFM3Mode:
 		lea	$10(a6),a0
 		moveq	#7,d0
 
@@ -2414,11 +2426,11 @@ dcFM3SM:
 		bra.w	WriteFMI
 ; ---------------------------------------------------------------------------
 
-dcSSGEG:
-		lea	.OpSSGEG(pc),a1
+cfSSG_Reg:
+		lea	SSG_Reg_Table(pc),a1
 		moveq	#3,d3
 
-.oploop:
+.loop:
 		move.b	(a1)+,d0
 		move.b	(a4)+,d1
 		bset	#3,d1
@@ -2426,11 +2438,11 @@ dcSSGEG:
 		move.b	(a1)+,d0
 		moveq	#$1F,d1
 		jsr	WriteFMIorIIMain(pc)
-		dbf	d3,.oploop
+		dbf	d3,.loop
 		rts
 ; ---------------------------------------------------------------------------
 
-.OpSSGEG:	dc.b $90, $50, $98, $58
+SSG_Reg_Table:	dc.b $90, $50, $98, $58
 		dc.b $94, $54, $9C, $5C
 		even
 

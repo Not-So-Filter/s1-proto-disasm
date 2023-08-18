@@ -16,7 +16,7 @@ loc_F226:
 		bclr	#2,obStatus(a0)
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
-		move.b	#0,obAnim(a0)
+		move.b	#id_Walk,obAnim(a0)
 		subq.w	#5,obY(a0)
 
 loc_F25C:
