@@ -13,19 +13,19 @@ off_732C:	dc.w loc_7382-off_732C, loc_7418-off_732C, loc_7472-off_732C, loc_74A8
 byte_733E:	dc.b 0, 1, 2, 3, 4, 5, 6, 3, 4, 1, 0, 5
 
 word_734A:	dc.w $FE00, $FC00
-		dc.l MapAnimals1
+		dc.l Map_Animal1
 		dc.w $FE00, $FD00
-		dc.l MapAnimals2
+		dc.l Map_Animal2
 		dc.w $FEC0, $FE00
-		dc.l MapAnimals1
+		dc.l Map_Animal1
 		dc.w $FF00, $FE80
-		dc.l MapAnimals2
+		dc.l Map_Animal2
 		dc.w $FE80, $FD00
-		dc.l MapAnimals3
+		dc.l Map_Animal3
 		dc.w $FD00, $FC00
-		dc.l MapAnimals2
+		dc.l Map_Animal2
 		dc.w $FD80, $FC80
-		dc.l MapAnimals3
+		dc.l Map_Animal3
 ; ---------------------------------------------------------------------------
 
 loc_7382:

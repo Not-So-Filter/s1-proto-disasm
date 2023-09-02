@@ -1,6 +1,10 @@
-AniYardin:	dc.w byte_D40C-AniYardin, byte_D410-AniYardin
+; ---------------------------------------------------------------------------
+; Animation script - Yadrin enemy
+; ---------------------------------------------------------------------------
+Ani_Yad:	dc.w .stand-Ani_Yad
+		dc.w .walk-Ani_Yad
 
-byte_D40C:	dc.b 7, 0, afEnd
+.stand:		dc.b 7,	0, afEnd
 		even
-
-byte_D410:	dc.b 7, 0, 3, 1, 4, 0, 3, 2, 5, afEnd
+.walk:		dc.b 7,	0, 3, 1, 4, 0, 3, 2, 5,	afEnd
+		even

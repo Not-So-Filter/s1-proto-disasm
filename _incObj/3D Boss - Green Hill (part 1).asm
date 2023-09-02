@@ -30,7 +30,7 @@ loc_B022:
 		move.b	#id_BossGreenHill,obId(a1)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
-		move.l	#MapGHZBoss,obMap(a1)
+		move.l	#Map_Eggman,obMap(a1)
 		move.w	#$400,obGfx(a1)
 		move.b	#4,obRender(a1)
 		move.b	#$20,obActWid(a1)
@@ -50,7 +50,7 @@ loc_B07C:
 		move.b	ob2ndRout(a0),d0
 		move.w	off_B0AA(pc,d0.w),d1
 		jsr	off_B0AA(pc,d1.w)
-		lea	(AniGHZBoss).l,a1
+		lea	(Ani_Eggman).l,a1
 		bsr.w	AnimateSprite
 		move.b	obStatus(a0),d0
 		andi.b	#3,d0

@@ -32,7 +32,7 @@ SS_MapIndex:	dc.l Map_SSWalls
 		dc.w $4142
 		dc.l MapRing
 		dc.w $27B2
-		dc.l MapBumper
+		dc.l Map_Bump
 		dc.w $23B
 		dc.l off_10C78
 		dc.w $251
@@ -50,9 +50,9 @@ SS_MapIndex:	dc.l Map_SSWalls
 		dc.w $27B2
 		dc.l ($7<<24)|MapRing
 		dc.w $27B2
-		dc.l ($1<<24)|MapBumper
+		dc.l ($1<<24)|Map_Bump
 		dc.w $23B
-		dc.l ($2<<24)|MapBumper
+		dc.l ($2<<24)|Map_Bump
 		dc.w $23B
 
 off_10C78:	dc.w byte_10C7C-off_10C78, byte_10C82-off_10C78

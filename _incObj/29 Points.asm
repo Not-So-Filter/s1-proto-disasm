@@ -13,7 +13,7 @@ off_7500:	dc.w ObjPoints_Init-off_7500, ObjPoints_Act-off_7500
 
 ObjPoints_Init:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapPoints,obMap(a0)
+		move.l	#Map_Poi,obMap(a0)
 		move.w	#$2797,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#1,obPriority(a0)

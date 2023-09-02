@@ -18,7 +18,7 @@ loc_6A6C:
 		move.w	#$2300,obGfx(a0)
 		move.b	#1,obPriority(a0)
 		move.b	#$1D,obDelayAni(a0)
-		lea	(Ani_TitleSonic).l,a1
+		lea	(Ani_TSon).l,a1
 		bsr.w	AnimateSprite
 
 loc_6AA0:
@@ -45,7 +45,7 @@ loc_6AC0:
 ; ---------------------------------------------------------------------------
 
 loc_6AC6:
-		lea	(Ani_TitleSonic).l,a1
+		lea	(Ani_TSon).l,a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------

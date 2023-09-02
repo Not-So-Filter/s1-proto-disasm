@@ -20,7 +20,7 @@ loc_5C98:
 		add.w	d1,obY(a0)
 		move.w	#0,obVelY(a0)
 		move.b	#8,obRoutine(a0)
-		move.l	#MapRollingBall,obMap(a0)
+		move.l	#Map_GBall,obMap(a0)
 		move.w	#$43AA,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)

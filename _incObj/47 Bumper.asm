@@ -12,7 +12,7 @@ off_C5FE:	dc.w loc_C602-off_C5FE, loc_C62C-off_C5FE
 
 loc_C602:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapBumper,obMap(a0)
+		move.l	#Map_Bump,obMap(a0)
 		move.w	#$380,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#$10,obActWid(a0)
@@ -43,7 +43,7 @@ loc_C62C:
 		jsr	(PlaySound_Special).l
 
 loc_C684:
-		lea	(AniBumper).l,a1
+		lea	(Ani_Bump).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject

@@ -12,7 +12,7 @@ off_5788:	dc.w loc_5792-off_5788, loc_5854-off_5788, loc_5854-off_5788, loc_58C2
 
 loc_5792:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapSpikeLogs,obMap(a0)
+		move.l	#Map_Hel,obMap(a0)
 		move.w	#$4398,obGfx(a0)
 		move.b	#7,obStatus(a0)
 		move.b	#4,obRender(a0)

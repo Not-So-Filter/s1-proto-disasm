@@ -11,7 +11,7 @@ off_B890:	dc.w loc_B898-off_B890, loc_B8FA-off_B890, loc_B9D8-off_B890, loc_B9E6
 ; ---------------------------------------------------------------------------
 
 loc_B898:
-		move.l	#MapMotobug,obMap(a0)
+		move.l	#Map_Moto,obMap(a0)
 		move.w	#$4F0,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
@@ -44,7 +44,7 @@ loc_B8FA:
 		move.b	ob2ndRout(a0),d0
 		move.w	off_B94E(pc,d0.w),d1
 		jsr	off_B94E(pc,d1.w)
-		lea	(AniMotobug).l,a1
+		lea	(Ani_Moto).l,a1
 		bsr.w	AnimateSprite
 
 		include "_incObj\sub RememberState.asm"
@@ -99,7 +99,7 @@ loc_B9C0:
 ; ---------------------------------------------------------------------------
 
 loc_B9D8:
-		lea	(AniMotobug).l,a1
+		lea	(Ani_Moto).l,a1
 		bsr.w	AnimateSprite
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------

@@ -12,7 +12,7 @@ off_C538:	dc.w loc_C53C-off_C538, loc_C560-off_C538
 
 loc_C53C:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapSceneryLamp,obMap(a0)
+		move.l	#Map_Light,obMap(a0)
 		move.w	#0,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#$10,obActWid(a0)

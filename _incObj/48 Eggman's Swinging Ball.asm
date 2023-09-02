@@ -14,7 +14,7 @@ loc_B34A:
 		addq.b	#2,obRoutine(a0)
 		move.w	#$4080,obAngle(a0)
 		move.w	#$FE00,$3E(a0)
-		move.l	#MapGHZBossBall,obMap(a0)
+		move.l	#Map_BossItems,obMap(a0)
 		move.w	#$46C,obGfx(a0)
 		lea	obSubtype(a0),a2
 		move.b	#0,(a2)+
@@ -30,7 +30,7 @@ loc_B376:
 		move.w	obY(a0),obY(a1)
 		move.b	#id_BossBall,obId(a1)
 		move.b	#6,obRoutine(a1)
-		move.l	#MapSwingPtfm,obMap(a1)
+		move.l	#Map_Swing_GHZ,obMap(a1)
 		move.w	#$380,obGfx(a1)
 		move.b	#1,obFrame(a1)
 		addq.b	#1,obSubtype(a0)
@@ -49,7 +49,7 @@ loc_B3AC:
 
 loc_B3D6:
 		move.b	#8,obRoutine(a1)
-		move.l	#MapRollingBall,obMap(a1)
+		move.l	#Map_GBall,obMap(a1)
 		move.w	#$43AA,obGfx(a1)
 		move.b	#1,obFrame(a1)
 		move.b	#5,obPriority(a1)

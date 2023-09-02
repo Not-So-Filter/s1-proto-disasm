@@ -18,7 +18,7 @@ word_BAB4:	dc.w -$1000, -$A00
 
 loc_BAB8:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapSpring,obMap(a0)
+		move.l	#Map_Spring,obMap(a0)
 		move.w	#$523,obGfx(a0)
 		ori.b	#4,obRender(a0)
 		move.b	#$10,obActWid(a0)
@@ -74,7 +74,7 @@ loc_BB4A:
 		jsr	(PlaySound_Special).l
 
 loc_BB84:
-		lea	(AniSpring).l,a1
+		lea	(Ani_Spring).l,a1
 		bra.w	AnimateSprite
 ; ---------------------------------------------------------------------------
 
@@ -124,7 +124,7 @@ loc_BC06:
 		jsr	(PlaySound_Special).l
 
 loc_BC1C:
-		lea	(AniSpring).l,a1
+		lea	(Ani_Spring).l,a1
 		bra.w	AnimateSprite
 ; ---------------------------------------------------------------------------
 
@@ -168,7 +168,7 @@ loc_BC60:
 		jsr	(PlaySound_Special).l
 
 loc_BC98:
-		lea	(AniSpring).l,a1
+		lea	(Ani_Spring).l,a1
 		bra.w	AnimateSprite
 ; ---------------------------------------------------------------------------
 

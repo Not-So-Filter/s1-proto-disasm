@@ -17,7 +17,7 @@ loc_7ED6:
 		lea	2(a2,d0.w),a2
 		bclr	#7,(a2)
 		addq.b	#2,obRoutine(a0)
-		move.l	#Map4B,obMap(a0)
+		move.l	#Map_GRing,obMap(a0)
 		move.w	#$24EC,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#2,obPriority(a0)

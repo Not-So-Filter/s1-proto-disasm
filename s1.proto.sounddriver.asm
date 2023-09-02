@@ -662,10 +662,10 @@ loc_74688:
 loc_746A6:
 		dbf	d4,loc_74688
 		tst.b	d3
-		bmi.s	dPlaySnd
+		bmi.s	PlaySoundID
 		move.b	d3,v_sndprio(a6)
 
-dPlaySnd:
+PlaySoundID:
 		moveq	#0,d7
 		move.b	v_sound_id(a6),d7
 		move.b	#$80,v_sound_id(a6)
@@ -2445,42 +2445,42 @@ cfSSG_Reg:
 SSG_Reg_Table:	dc.b $90, $50, $98, $58
 		dc.b $94, $54, $9C, $5C
 		even
-
-Unc_Z80:        incbin "sound/z80built.bin"
+		
+Unc_Z80:        incbin	"sound/z80.bin"
 Unc_Z80_End:	even
-Music81:	incbin "sound/music/Mus81 - GHZ.bin"
+Music81:	incbin	"sound/music/Mus81 - GHZ.bin"
 		even
-Music82:	incbin "sound/music/Mus82 - LZ.bin"
+Music82:	incbin	"sound/music/Mus82 - LZ.bin"
 		even
-Music83:	incbin "sound/music/Mus83 - MZ.bin"
+Music83:	incbin	"sound/music/Mus83 - MZ.bin"
 		even
-Music84:	incbin "sound/music/Mus84 - SLZ.bin"
+Music84:	incbin	"sound/music/Mus84 - SLZ.bin"
 		even
-Music85:	incbin "sound/music/Mus85 - SZ.bin"
+Music85:	incbin	"sound/music/Mus85 - SZ.bin"
 		even
-Music86:	incbin "sound/music/Mus86 - CWZ.bin"
+Music86:	incbin	"sound/music/Mus86 - CWZ.bin"
 		even
-Music87:	incbin "sound/music/Mus87 - Invincibility.bin"
+Music87:	incbin	"sound/music/Mus87 - Invincibility.bin"
 		even
-Music88:	incbin "sound/music/Mus88 - Extra Life.bin"
+Music88:	incbin	"sound/music/Mus88 - Extra Life.bin"
 		even
-Music89:	incbin "sound/music/Mus89 - Special Stage.bin"
+Music89:	incbin	"sound/music/Mus89 - Special Stage.bin"
 		even
-Music8A:	incbin "sound/music/Mus8A - Title Screen.bin"
+Music8A:	incbin	"sound/music/Mus8A - Title Screen.bin"
 		even
-Music8B:	incbin "sound/music/Mus8B - Ending.bin"
+Music8B:	incbin	"sound/music/Mus8B - Ending.bin"
 		even
-Music8C:	incbin "sound/music/Mus8C - Boss.bin"
+Music8C:	incbin	"sound/music/Mus8C - Boss.bin"
 		even
-Music8D:	incbin "sound/music/Mus8D - FZ.bin"
+Music8D:	incbin	"sound/music/Mus8D - FZ.bin"
 		even
-Music8E:	incbin "sound/music/Mus8E - Sonic Got Through.bin"
+Music8E:	incbin	"sound/music/Mus8E - Sonic Got Through.bin"
 		even
-Music8F:	incbin "sound/music/Mus8F - Game Over.bin"
+Music8F:	incbin	"sound/music/Mus8F - Game Over.bin"
 		even
-Music90:	incbin "sound/music/Mus90 - Continue Screen.bin"
+Music90:	incbin	"sound/music/Mus90 - Continue Screen.bin"
 		even
-Music91:	incbin "sound/music/Mus91 - Credits.bin"
+Music91:	incbin	"sound/music/Mus91 - Credits.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Sound	effect pointers
@@ -2540,8 +2540,8 @@ ptr_sndend:
 ; ---------------------------------------------------------------------------
 SpecSoundIndex:
 ptr_sndD0:	dc.l SoundD0
-ptr_sndD1:	dc.l SoundD1				; leftover from Michael Jackson's Moonwalker
-ptr_sndD2:	dc.l SoundD2				; leftover from Michael Jackson's Moonwalker
+ptr_sndD1:	dc.l SoundD1	; leftover from Michael Jackson's Moonwalker
+ptr_sndD2:	dc.l SoundD2	; leftover from Michael Jackson's Moonwalker
 ptr_specend:
 
 SoundA0:	incbin "sound/sfx/A0.ssf"

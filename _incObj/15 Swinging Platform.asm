@@ -13,7 +13,7 @@ off_548A:	dc.w ObjSwingPtfm_Init-off_548A, loc_55C8-off_548A, loc_55E4-off_548A,
 
 ObjSwingPtfm_Init:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapSwingPtfm,obMap(a0)
+		move.l	#Map_Swing_GHZ,obMap(a0)
 		move.w	#$4380,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)
@@ -21,15 +21,15 @@ ObjSwingPtfm_Init:
 		move.b	#8,obHeight(a0)
 		move.w	obY(a0),$38(a0)
 		move.w	obX(a0),$3A(a0)
-		cmpi.b	#id_SLZ,(v_zone).w
-		bne.s	ObjSwingPtfm_NotSZ
-		move.l	#MapSwingPtfmSZ,obMap(a0)
+		cmpi.b	#id_SLZ,(v_zone).w	; are we on Star Light Zone?
+		bne.s	ObjSwingPtfm_NotSLZ	; if not, branch
+		move.l	#Map_Swing_SLZ,obMap(a0)
 		move.w	#$43DC,obGfx(a0)
 		move.b	#$20,obActWid(a0)
 		move.b	#$10,obHeight(a0)
 		move.b	#$99,obColType(a0)
 
-ObjSwingPtfm_NotSZ:
+ObjSwingPtfm_NotSLZ:
 		move.b	obId(a0),d4
 		moveq	#0,d1
 		lea	obSubtype(a0),a2
@@ -85,7 +85,7 @@ loc_5586:
 		move.w	(sp)+,d1
 		btst	#4,d1
 		beq.s	loc_55C8
-		move.l	#MapRollingBall,obMap(a0)
+		move.l	#Map_GBall,obMap(a0)
 		move.w	#$43AA,obGfx(a0)
 		move.b	#1,obFrame(a0)
 		move.b	#2,obPriority(a0)

@@ -103,7 +103,7 @@ sub_C81C:
 		clr.b	(f_timecount).w
 		move.b	#id_GotThroughCard,(v_objspace+obSize*24).w
 		moveq	#plcid_TitleCard,d0
-		jsr	(plcReplace).l
+		jsr	(NewPLC).l
 		move.b	#1,(f_endactbonus).w
 		moveq	#0,d0
 		move.b	(v_time+1).w,d0
@@ -119,7 +119,7 @@ sub_C81C:
 
 loc_C862:
 		add.w	d0,d0
-		move.w	word_C882(pc,d0.w),(v_timebonus).w
+		move.w	TimeBonuses(pc,d0.w),(v_timebonus).w
 		move.w	(v_rings).w,d0
 		mulu.w	#10,d0
 		move.w	d0,(v_ringbonus).w
@@ -130,6 +130,24 @@ locret_C880:
 		rts
 ; ---------------------------------------------------------------------------
 
-word_C882:	dc.w $1388, $3E8, $1F4, $190, $12C, $12C, $C8, $C8, $64
-		dc.w $64, $64, $64, $32, $32, $32, $32, $A, $A, $A, $A
+TimeBonuses:	dc.w 5000
+		dc.w 1000
+		dc.w 500
+		dc.w 400
+		dc.w 300
+		dc.w 300
+		dc.w 200
+		dc.w 200
+		dc.w 100
+		dc.w 100
+                dc.w 100
+                dc.w 100
+                dc.w 50
+                dc.w 50
+                dc.w 50
+                dc.w 50
+                dc.w 10
+                dc.w 10
+                dc.w 10
+                dc.w 10
 		dc.w 0

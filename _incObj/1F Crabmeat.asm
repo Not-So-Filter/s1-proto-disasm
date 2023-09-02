@@ -13,7 +13,7 @@ off_75B8:	dc.w loc_75C2-off_75B8, loc_7616-off_75B8, loc_7772-off_75B8, loc_7778
 loc_75C2:
 		move.b	#$10,obHeight(a0)
 		move.b	#8,obWidth(a0)
-		move.l	#Map_Crabmeat,obMap(a0)
+		move.l	#Map_Crab,obMap(a0)
 		move.w	#$400,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)
@@ -37,7 +37,7 @@ loc_7616:
 		move.b	ob2ndRout(a0),d0
 		move.w	off_7632(pc,d0.w),d1
 		jsr	off_7632(pc,d1.w)
-		lea	(Ani_Crabmeat).l,a1
+		lea	(Ani_Crab).l,a1
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ---------------------------------------------------------------------------
@@ -170,7 +170,7 @@ loc_7772:
 
 loc_7778:
 		addq.b	#2,obRoutine(a0)
-		move.l	#Map_Crabmeat,obMap(a0)
+		move.l	#Map_Crab,obMap(a0)
 		move.w	#$400,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)
@@ -180,7 +180,7 @@ loc_7778:
 		move.b	#7,obAnim(a0)
 
 loc_77AE:
-		lea	(Ani_Crabmeat).l,a1
+		lea	(Ani_Crab).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	ObjectFall
 		bsr.w	DisplaySprite

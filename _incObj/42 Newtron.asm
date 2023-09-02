@@ -12,7 +12,7 @@ off_BD26:	dc.w loc_BD2C-off_BD26, loc_BD5C-off_BD26, loc_BEC6-off_BD26
 
 loc_BD2C:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapNewtron,obMap(a0)
+		move.l	#Map_Newt,obMap(a0)
 		move.w	#$249B,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
@@ -25,7 +25,7 @@ loc_BD5C:
 		move.b	ob2ndRout(a0),d0
 		move.w	off_BD78(pc,d0.w),d1
 		jsr	off_BD78(pc,d1.w)
-		lea	(AniNewtron).l,a1
+		lea	(Ani_Newt).l,a1
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ---------------------------------------------------------------------------

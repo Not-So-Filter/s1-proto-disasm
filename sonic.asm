@@ -936,37 +936,59 @@ loc_139A:
 loc_13A2:
 		movem.l	(sp)+,a1-a2
 		rts
-; ---------------------------------------------------------------------------
 
-plcReplace:
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+; Queue pattern load requests, but clear the PLQ first
+
+; ARGUMENTS
+; d0 = index of PLC list (see ArtLoadCues)
+
+; NOTICE: This subroutine does not check for buffer overruns. The programmer
+;	  (or hacker) is responsible for making sure that no more than
+;	  16 load requests are copied into the buffer.
+;	  _________DO NOT PUT MORE THAN 16 LOAD REQUESTS IN A LIST!__________
+;         (or if you change the size of Plc_Buffer, the limit becomes (Plc_Buffer_Only_End-Plc_Buffer)/6)
+
+; LoadPLC2:
+NewPLC:
 		movem.l	a1-a2,-(sp)
 		lea	(ArtLoadCues).l,a1
 		add.w	d0,d0
 		move.w	(a1,d0.w),d0
-		lea	(a1,d0.w),a1
-		bsr.s	ClearPLC
+		lea	(a1,d0.w),a1	; jump to relevant PLC
+		bsr.s	ClearPLC	; erase any data in PLC buffer space
 		lea	(v_plc_buffer).w,a2
-		move.w	(a1)+,d0
-		bmi.s	loc_13CE
+		move.w	(a1)+,d0	; get length of PLC
+		bmi.s	.skip		; if it's negative, skip the next loop
 
-loc_13C6:
+	.loop:
 		move.l	(a1)+,(a2)+
-		move.w	(a1)+,(a2)+
-		dbf	d0,loc_13C6
+		move.w	(a1)+,(a2)+	; copy PLC to RAM
+		dbf	d0,.loop		; repeat for length of PLC
 
-loc_13CE:
+	.skip:
 		movem.l	(sp)+,a1-a2
-		rts
+		rts	
+; End of function NewPLC
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; ---------------------------------------------------------------------------
+; Subroutine to	clear the pattern load cues
 ; ---------------------------------------------------------------------------
 
-ClearPLC:
-		lea	(v_plc_buffer).w,a2
-		moveq	#$1F,d0
+; Clear the pattern load queue ($FFF680 - $FFF700)
 
-loc_13DA:
+
+ClearPLC:
+		lea	(v_plc_buffer).w,a2 ; PLC buffer space in RAM
+		moveq	#$1F,d0	; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
+
+	.loop:
 		clr.l	(a2)+
-		dbf	d0,loc_13DA
-		rts
+		dbf	d0,.loop
+		rts	
+; End of function ClearPLC
 ; ---------------------------------------------------------------------------
 
 RunPLC:
@@ -1097,9 +1119,9 @@ Cyc_Title:	incbin "palette\Cycle - Title.bin"
 		even
 Cyc_GHZ:	incbin "palette\Cycle - GHZ.bin"
 		even
-Cyc_LZ:	        incbin "palette\Cycle - LZ Unused.bin"
+Cyc_LZ:	        incbin "palette\Cycle - LZ (Unused).bin"
 		even
-Cyc_MZ:	        incbin "palette\Cycle - MZ Unused.bin"
+Cyc_MZ:	        incbin "palette\Cycle - MZ (Unused).bin"
 		even
 Cyc_SLZ:	incbin "palette\Cycle - SLZ.bin"
 		even
@@ -1579,7 +1601,7 @@ loc_25D8:
 		move.b	#id_PSBTM,(v_objspace+obSize*3).w	; load object which hides sonic
 		move.b	#2,(v_objspace+obSize*3+obFrame).w
 		moveq	#plcid_Main,d0
-		bsr.w	plcReplace
+		bsr.w	NewPLC
 		move.w	(v_vdp_buffer1).w,d0
 		ori.b	#$40,d0
 		move.w	d0,(vdp_control_port).l
@@ -2047,7 +2069,7 @@ loc_2D54:
 		move.b	d0,(v_shield).w
 		move.b	d0,(v_invinc).w
 		move.b	d0,(v_shoes).w
-		move.b	d0,($FFFFFE2F).w
+		move.b	d0,(byte_FFFE2F).w
 		move.w	d0,(v_debuguse).w
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_framecount).w
@@ -2421,7 +2443,7 @@ loc_34D4:
 		beq.s	locret_34FA
 		move.w	d1,(v_limitleft2).w
 		moveq	#plcid_Signpost,d0
-		bra.w	plcReplace
+		bra.w	NewPLC
 ; ---------------------------------------------------------------------------
 
 locret_34FA:
@@ -3557,22 +3579,20 @@ locret_511C:
 MapBridge:      include "_maps\Bridge.asm"
 
 		include "_incObj\15 Swinging Platform.asm"
-MapSwingPtfm:	include "_maps\Swinging Platforms (GHZ).asm"
-MapSwingPtfmSZ: include "_maps\Swinging Platforms (SZ).asm"
+Map_Swing_GHZ:	include "_maps\Swinging Platforms (GHZ).asm"
+Map_Swing_SLZ:	include "_maps\Swinging Platforms (SLZ).asm"
 
                 include "_incObj\17 Spiked Pole Helix.asm"
-MapSpikeLogs:	include "_maps\Spiked Pole Helix.asm"
+Map_Hel:	include "_maps\Spiked Pole Helix.asm"
 
                 include "_incObj\18 Platforms.asm"
-		include "_maps\05BD2.asm"
-		include "levels\shared\Platform\1.map"
-		include "levels\shared\Platform\2.map"
-		include "levels\shared\Platform\3.map"
-		even
+		include "_maps\Platforms (unused).asm"
+Map_Plat_GHZ:	include "_maps\Platforms (GHZ).asm"
+Map_Plat_SZ:	include "_maps\Platforms (SZ).asm"
+Map_Plat_SLZ:	include "_maps\Platforms (SLZ).asm"
 
                 include "_incObj\19 GHZ Ball.asm"
-		include "levels\GHZ\RollingBall\Sprite.map"
-		even
+Map_GBall:	include "_maps\GHZ Ball.asm"
 
                 include "_incObj\1A Collapsing Ledge (part 1).asm"
                 include "_incObj\53 Collapsing Floors.asm"
@@ -3582,7 +3602,7 @@ loc_612A:
 		move.b	#0,$3A(a0)
 
 loc_6130:
-		lea	(ObjCollapseFloor_Delay1).l,a4
+		lea	(CFlo_Data1).l,a4
 		moveq	#$18,d1
 		addq.b	#2,obFrame(a0)
 
@@ -3629,13 +3649,14 @@ loc_61A8:
 		jmp	(PlaySound_Special).l
 ; ---------------------------------------------------------------------------
 
-ObjCollapseFloor_Delay1:dc.b $1C, $18, $14, $10, $1A, $16, $12, $E, $A, 6, $18
+CFlo_Data1:	dc.b $1C, $18, $14, $10, $1A, $16, $12, $E, $A, 6, $18
 		dc.b $14, $10, $C, 8, 4, $16, $12, $E, $A, 6, 2, $14, $10
 		dc.b $C, 0
-
-ObjCollapseFloor_Delay2:dc.b $1E, $16, $E, 6, $1A, $12, $A, 2
-
-ObjCollapseFloor_Delay3:dc.b $16, $1E, $1A, $12, 6, $E, $A, 2
+		even
+CFlo_Data2:	dc.b $1E, $16, $E, 6, $1A, $12, $A, 2
+		even
+CFlo_Data3:	dc.b $16, $1E, $1A, $12, 6, $E, $A, 2
+		even
 ; ---------------------------------------------------------------------------
 
 sub_61E0:
@@ -3672,11 +3693,11 @@ ObjCollapsePtfm_Slope:dc.b $20, $20, $20, $20, $20, $20, $20, $20, $21, $21
 		dc.b $27, $27, $28, $28, $29, $29, $2A, $2A, $2B, $2B
 		dc.b $2C, $2C, $2D, $2D, $2E, $2E, $2F, $2F, $30, $30
 		dc.b $30, $30, $30, $30, $30, $30, $30, $30
+		even
 
                 include "_maps\06526.asm"
-		include "levels\GHZ\CollapsePtfm\Sprite.map"
-		include "levels\GHZ\CollapseFloor\Sprite.map"
-		even
+MapCollapsePtfm:	include "_maps\Collapsing Ledge.asm"
+MapCollapseFloor:	include "_maps\Collapsing Floors.asm"
 
 		include "_incObj\1B.asm"
 Map_1B:		include "_maps\1B.asm"
@@ -3811,15 +3832,11 @@ loc_6A28:
 		moveq	#0,d4
 		rts
 ; ---------------------------------------------------------------------------
-Map_2A:
-		include "_maps\2A.asm"
+Map_2A:		include "_maps\2A.asm"
 
 		include "_incObj\0E Title Screen Sonic.asm"
 		include "_incObj\0F Press Start.asm"
-; ---------------------------------------------------------------------------
-Ani_TitleSonic:
 		include "_anim\Title Screen Sonic.asm"
-Ani_TitleText:
 		include "_anim\Press Start.asm"
 ; ---------------------------------------------------------------------------
 
@@ -3896,32 +3913,29 @@ loc_6BCC:
 locret_6BDA:
 		rts
 ; ---------------------------------------------------------------------------
-Map_TitleText:
-		include "_maps\Press Start.asm"
-Map_TitleSonic:
-		include "_maps\Title Screen Sonic.asm"
+Map_TitleText:	include "_maps\Press Start.asm"
+Map_TitleSonic:	include "_maps\Title Screen Sonic.asm"
 
                 include "_incObj\1E Ballhog.asm"
                 include "_incObj\20 Ballhog's Bomb.asm"
                 include "_incObj\24, 27 & 3F Explosions.asm"
-Ani_Hog:	include "_anim\BallHog.asm"
-Map_Hog:	include "_maps\BallHog.asm"
-		include "_maps\BallHog's Bomb.asm"
-		include "_maps\BallHog's Bomb Explosion.asm"
+		include "_anim\Ball Hog.asm"
+Map_Hog:	include "_maps\Ball Hog.asm"
+		include "_maps\Ball Hog's Bomb.asm"
+		include "_maps\Ball Hog's Bomb Explosion.asm"
 		include "levels\shared\Explosion\Sprite.map"
 		include "levels\shared\Explosion\Bomb.map"
 
 		include "_incObj\28 Animals.asm"
 		include "_incObj\29 Points.asm"
-		include "levels\shared\Animals\1.map"
-		include "levels\shared\Animals\2.map"
-		include "levels\shared\Animals\3.map"
-		include "levels\shared\Points\Sprite.map"
-		even
+Map_Animal1:	include "_maps\Animals 1.asm"
+Map_Animal2:	include "_maps\Animals 2.asm"
+Map_Animal3:	include "_maps\Animals 3.asm"
+Map_Poi:	include "_maps\Points.asm"
 
 		include "_incObj\1F Crabmeat.asm"
-Ani_Crabmeat:	include "_anim\Crabmeat.asm"
-Map_Crabmeat:	include "_maps\Crabmeat.asm"
+		include "_anim\Crabmeat.asm"
+Map_Crab:	include "_maps\Crabmeat.asm"
 
 		include "_incObj\22 Buzz Bomber.asm"
 		include "_incObj\23 Buzz Bomber Missile.asm"
@@ -3932,10 +3946,9 @@ Map_Missile:	include "_maps\Buzz Bomber Missile.asm"
 
 		include "_incObj\25 & 37 Rings.asm"
 		include "_incObj\4B Giant Ring Flash.asm"
-Ani_Ring:	include "_anim\Rings.asm"
+		include "_anim\Rings.asm"
 Map_Ring:	include "_maps\Rings.asm"
-		include "_maps\4B.asm"
-		even
+Map_GRing:	include "_maps\Giant Ring.asm"
 
 		include "_incObj\26 Monitor.asm"
 		include "_incObj\2E Monitor Content Power-Up.asm"
@@ -3948,8 +3961,8 @@ ExecuteObjects:
 		lea	(v_objspace).w,a0
 		moveq	#$7F,d7
 		moveq	#0,d0
-		cmpi.b	#6,(v_player+obRoutine).w
-		bcc.s	loc_8560
+		cmpi.b	#6,(v_player+obRoutine).w	; has sonic died?
+		bcc.s	loc_8560	; if so, branch
 
 sub_8546:
 		move.b	(a0),d0
@@ -4621,7 +4634,7 @@ byte_A9A6:	dc.b 4
 		dc.b $F8, 5, 0, $32, $F0
 		dc.b $F8, 5, 0, $2E, 0
 		dc.b $F8, 5, 0, $10, $10
-		even
+		dc.b 0
 
 byte_A9BC:	dc.b 2
 		dc.b 4, $C, 0, $53, $EC
@@ -4684,8 +4697,7 @@ ObjSmashWall_FragLeft:dc.w $FA00, $FA00
 		dc.w $FA00, $100
 		dc.w $FC00, $500
 
-		include "levels\GHZ\SmashWall\Sprite.map"
-		even
+MapSmashWall:	include "_maps\Smashable Walls.asm"
 
                 include "_incObj\3D Boss - Green Hill (part 1).asm"
 
@@ -4731,12 +4743,10 @@ BossMove:
                 include "_incObj\3D Boss - Green Hill (part 2).asm"
                 include "_incObj\48 Eggman's Swinging Ball.asm"
 
-		include "levels\GHZ\Boss\Sprite.ani"
-		include "_maps\Boss Items.asm"
-		even
+		include "_anim\Eggman.asm"
+Map_Eggman:	include "_maps\Eggman.asm"
 
-		include "_maps\GHZ Ball.asm"
-		even
+Map_BossItems:	include "_maps\Boss Items.asm"
 
                 include "_incObj\3E Prison Capsule.asm"
 
@@ -4746,21 +4756,18 @@ BossMove:
 
 		include "_incObj\40 Motobug.asm"
 
-		include "levels\GHZ\Motobug\Sprite.ani"
-		include "levels\GHZ\Motobug\Sprite.map"
-		even
+		include "_anim\Moto Bug.asm"
+Map_Moto:	include "_maps\Moto Bug.asm"
 
 		include "_incObj\41 Springs.asm"
 
-		include "levels\shared\Spring\Sprite.ani"
-		include "levels\shared\Spring\Sprite.map"
-		even
+		include "_anim\Springs.asm"
+Map_Spring:	include "_maps\Springs.asm"
 
 		include "_incObj\42 Newtron.asm"
 
-		include "levels\GHZ\Newtron\Sprite.ani"
-		include "levels\GHZ\Newtron\Sprite.map"
-		even
+		include "_anim\Newtron.asm"
+Map_Newt:	include "_maps\Newtron.asm"
 
 		include "_incObj\43 Roller.asm"
 		include "levels\shared\Roller\Sprite.ani"
@@ -4769,8 +4776,7 @@ BossMove:
 		even
 
 		include "_incObj\44 GHZ Edge Walls.asm"
-		include "levels\GHZ\Wall\Sprite.map"
-		even
+Map_Edge:	include "_maps\GHZ Edge Walls.asm"
 
 		include "_incObj\13 Lava Ball Maker.asm"
 		include "_incObj\14 Lava Ball.asm"
@@ -4782,14 +4788,11 @@ BossMove:
 		even
 
 		include "_incObj\12 Light.asm"
-		include "levels\SZ\SceneryLamp\Sprite.map"
-		even
+Map_Light:	include "_maps\Light.asm"
 
 		include "_incObj\47 Bumper.asm"
-		include "levels\SZ\Bumper\Sprite.ani"
-		even
-		include "levels\SZ\Bumper\Sprite.map"
-		even
+		include "_anim\Bumper.asm"
+Map_Bump:	include "_maps\Bumper.asm"
 
                 include "_incObj\0D Signpost.asm"
 
@@ -4818,12 +4821,11 @@ Map_Yadrin:	include "_maps\Yadrin.asm"
 		include "_incObj\51 Smashable Green Block.asm"
 
 ObjSmashBlock_Frag:dc.w $FE00, $FE00, $FF00, $FF00, $200, $FE00, $100, $FF00
-		include "levels\GHZ\SmashBlock\Sprite.map"
-		even
+
+MapSmashBlock:	include "_maps\Smashable Green Block.asm"
 
 		include "_incObj\52 Moving Blocks.asm"
-		include "levels\GHZ\MovingPtfm\Sprite.map"
-		even
+MapMovingPtfm:	include "_maps\Moving Blocks (MZ).asm"
 
 		include "_incObj\55 Basaran.asm"
 		include "levels\MZ\Basaran\Sprite.ani"
@@ -6429,13 +6431,13 @@ byte_27698:	incbin "artnem\ghz checkered ball.nem"
 		even
 ArtSpikes:	incbin "artnem\Spikes.bin"
 		even
-ArtSpikeLogs:	incbin "levels\GHZ\SpikeLogs\Art.nem"
+ArtSpikeLogs:	incbin "artnem\GHZ Spiked Log.bin"
 		even
-ArtPurpleRock:	incbin "levels\GHZ\PurpleRock\Art.nem"
+ArtPurpleRock:	incbin "artnem\GHZ Purple Rock.bin"
 		even
-ArtSmashWall:	incbin "levels\GHZ\SmashWall\Art.nem"
+ArtSmashWall:	incbin "artnem\GHZ Breakable Wall.bin"
 		even
-ArtWall:	incbin "levels\GHZ\Wall\Art.nem"
+ArtWall:	incbin "artnem\GHZ Edge Wall.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - MZ stuff
@@ -6472,7 +6474,7 @@ byte_29D4A:	incbin "artnem\slz metal block.nem"
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SZ stuff
 ; ---------------------------------------------------------------------------
-ArtBumper:	incbin "levels\SZ\Bumper\Art.nem"
+ArtBumper:	incbin "artnem\SZ Bumper.bin"
 		even
 byte_29FC0:	incbin "artnem\SZ small spiked ball.nem"
 		even
@@ -6524,34 +6526,34 @@ Nem_Rings:	incbin "artnem\Rings.bin"
 		even
 Nem_Monitors:	incbin "artnem\Monitors.bin"
 		even
-ArtExplosions:	incbin "levels\shared\Explosions\Art.nem"
+ArtExplosions:	incbin "artnem\Explosion.bin"
 		even
 byte_2E6C8:	incbin "artnem\score points.nem"
 		even
 ArtGameOver:	incbin "levels\shared\GameOver\Art.nem"
 		even
-ArtSpringHoriz:	incbin "levels\shared\Spring\Art Horizontal.nem"
+ArtSpringHoriz:	incbin "artnem\Spring Horizontal.bin"
 		even
-ArtSpringVerti:	incbin "levels\shared\Spring\Art Vertical.nem"
+ArtSpringVerti:	incbin "artnem\Spring Vertical.bin"
 		even
 ArtSignPost:	incbin "artnem\Signpost.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals
 ; ---------------------------------------------------------------------------
-ArtAnimalPocky:	incbin "levels\shared\Animals\Pocky.nem"
+ArtAnimalPocky:	incbin "artnem\Animal Rabbit.bin"
 		even
-ArtAnimalCucky:	incbin "levels\shared\Animals\Cucky.nem"
+ArtAnimalCucky:	incbin "artnem\Animal Chicken.bin"
 		even
-ArtAnimalPecky:	incbin "levels\shared\Animals\Pecky.nem"
+ArtAnimalPecky:	incbin "artnem\Animal Blackbird.bin"
 		even
-ArtAnimalRocky:	incbin "levels\shared\Animals\Rocky.nem"
+ArtAnimalRocky:	incbin "artnem\Animal Seal.bin"
 		even
-ArtAnimalPicky:	incbin "levels\shared\Animals\Picky.nem"
+ArtAnimalPicky:	incbin "artnem\Animal Pig.bin"
 		even
-ArtAnimalFlicky:incbin "levels\shared\Animals\Flicky.nem"
+ArtAnimalFlicky:incbin "artnem\Animal Flicky.bin"
 		even
-ArtAnimalRicky:	incbin "levels\shared\Animals\Ricky.nem"
+ArtAnimalRicky:	incbin "artnem\Animal Squirrel.bin"
 		even
 
 		align $1000,$FF				; Padding

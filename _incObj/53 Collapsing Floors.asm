@@ -111,10 +111,10 @@ loc_6108:
 		move.b	#0,$3A(a0)
 
 loc_610E:
-		lea	(ObjCollapseFloor_Delay2).l,a4
+		lea	(CFlo_Data2).l,a4
 		btst	#0,obSubtype(a0)
 		beq.s	loc_6122
-		lea	(ObjCollapseFloor_Delay3).l,a4
+		lea	(CFlo_Data3).l,a4
 
 loc_6122:
 		moveq	#7,d1

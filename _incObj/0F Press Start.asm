@@ -26,5 +26,5 @@ locret_6B18:
 ; ---------------------------------------------------------------------------
 
 loc_6B1A:
-		lea	(Ani_TitleText).l,a1
+		lea	(Ani_PSBTM).l,a1
 		bra.w	AnimateSprite

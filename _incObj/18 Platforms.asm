@@ -13,17 +13,17 @@ off_5918:	dc.w loc_5922-off_5918, loc_59AE-off_5918, loc_59D2-off_5918, loc_5BCE
 loc_5922:
 		addq.b	#2,obRoutine(a0)
 		move.w	#$4000,obGfx(a0)
-		move.l	#MapPlatform1,obMap(a0)
+		move.l	#Map_Plat_GHZ,obMap(a0)
 		move.b	#$20,obActWid(a0)
 		cmpi.b	#id_SZ,(v_zone).w
 		bne.s	loc_5950
-		move.l	#MapPlatform2,obMap(a0)
+		move.l	#Map_Plat_SZ,obMap(a0)
 		move.b	#$20,obActWid(a0)
 
 loc_5950:
 		cmpi.b	#id_SLZ,(v_zone).w
 		bne.s	loc_5972
-		move.l	#MapPlatform3,obMap(a0)
+		move.l	#Map_Plat_SLZ,obMap(a0)
 		move.b	#$20,obActWid(a0)
 		move.w	#$4480,obGfx(a0)
 		move.b	#3,obSubtype(a0)
