@@ -58,7 +58,7 @@ loc_DFE6:
 		lsl.w	#2,d0
 		move.w	d0,$3C(a0)
 		move.b	(a2)+,obSubtype(a0)
-		move.l	#MapSLZMovingPtfm,obMap(a0)
+		move.l	#Map_Elev,obMap(a0)
 		move.w	#$4480,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)

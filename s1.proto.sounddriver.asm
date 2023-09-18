@@ -642,28 +642,29 @@ PauseMusic:
 
 CycleSoundQueue:
 		movea.l	(Go_SoundPriorities).l,a0
-		lea	v_soundqueue0(a6),a1
-		move.b	v_sndprio(a6),d3
-		moveq	#v_soundqueue2-v_soundqueue0,d4
+		lea	v_soundqueue0(a6),a1	; load music track number
+		move.b	v_sndprio(a6),d3	; Get priority of currently playing SFX
+		moveq	#(v_soundqueue_end-v_soundqueue_start)-1,d4	; number of soundqueues
 
-loc_74688:
-		move.b	(a1),d0
+.inputloop:
+		move.b	(a1),d0			; move track number to d0
 		move.b	d0,d1
-		clr.b	(a1)+
-		subi.b	#bgm__First,d0
-		bcs.s	loc_746A6
-		andi.w	#$7F,d0
-		move.b	(a0,d0.w),d2
-		cmp.b	d3,d2
-		bcs.s	loc_746A6
-		move.b	d2,d3
-		move.b	d1,v_sound_id(a6)
+		clr.b	(a1)+			; Clear entry
+		subi.b	#bgm__First,d0		; Make it into 0-based index
+		bcs.s	.nextinput		; If negative (i.e., it was $80 or lower), branch
+		andi.w	#$7F,d0			; Clear high byte and sign bit
+		move.b	(a0,d0.w),d2		; Get sound type
+		cmp.b	d3,d2			; Is it a lower priority sound?
+		bcs.s	.nextinput
+		move.b	d2,d3			; Store new priority
+		move.b	d1,v_sound_id(a6)	; Queue sound for playing
 
-loc_746A6:
-		dbf	d4,loc_74688
-		tst.b	d3
+.nextinput:
+		dbf	d4,.inputloop
+
+		tst.b	d3			; We don't want to change sound priority if it is negative
 		bmi.s	PlaySoundID
-		move.b	d3,v_sndprio(a6)
+		move.b	d3,v_sndprio(a6)	; Set new sound priority
 
 PlaySoundID:
 		moveq	#0,d7

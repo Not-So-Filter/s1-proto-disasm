@@ -14,7 +14,7 @@ off_E222:	dc.w loc_E228-off_E222, loc_E258-off_E222, loc_E268-off_E222
 
 loc_E228:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapCirclePtfm,obMap(a0)
+		move.l	#Map_Circ,obMap(a0)
 		move.w	#$4480,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)

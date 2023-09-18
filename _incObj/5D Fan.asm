@@ -12,7 +12,7 @@ off_E56C:	dc.w loc_E570-off_E56C, loc_E594-off_E56C
 
 loc_E570:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapFan,obMap(a0)
+		move.l	#Map_Fan,obMap(a0)
 		move.w	#$43A0,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#$10,obActWid(a0)

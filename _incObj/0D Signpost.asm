@@ -106,10 +106,10 @@ sub_C81C:
 		jsr	(NewPLC).l
 		move.b	#1,(f_endactbonus).w
 		moveq	#0,d0
-		move.b	(v_time+1).w,d0
+		move.b	(v_timemin).w,d0
 		mulu.w	#$3C,d0
 		moveq	#0,d1
-		move.b	(v_time+2).w,d1
+		move.b	(v_timesec).w,d1
 		add.w	d1,d0
 		divu.w	#$F,d0
 		moveq	#$14,d1

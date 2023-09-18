@@ -14,7 +14,7 @@ off_4E42:	dc.w loc_4E4A-off_4E42
 ; ---------------------------------------------------------------------------
 
 loc_4E4A:
-		addq.b	#2,obRoutine(a0)			; The code was nulled out at some point.
+		addq.b	#2,obRoutine(a0)	; this just jumps to the locret underneath
 
 locret_4E4E:
 		rts

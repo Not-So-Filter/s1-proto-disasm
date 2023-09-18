@@ -19,7 +19,7 @@ id_MZ:		equ 2
 id_SLZ:		equ 3
 id_SZ:		equ 4
 id_CWZ:		equ 5
-id_Lvl06:	equ 6
+id_06:		equ 6
 id_SS:		equ 7
 
 ; Colours

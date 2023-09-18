@@ -4,15 +4,15 @@ Sonic_AnglePos:
 		btst	#3,obStatus(a0)
 		beq.s	loc_FE26
 		moveq	#0,d0
-		move.b	d0,(v_anglebuffer).w
-		move.b	d0,(unk_FFF76A).w
+		move.b	d0,(v_prianglebuffer).w
+		move.b	d0,(v_secanglebuffer).w
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_FE26:
 		moveq	#3,d0
-		move.b	d0,(v_anglebuffer).w
-		move.b	d0,(unk_FFF76A).w
+		move.b	d0,(v_prianglebuffer).w
+		move.b	d0,(v_secanglebuffer).w
 		move.b	obAngle(a0),d0
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
@@ -31,7 +31,7 @@ loc_FE26:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -47,7 +47,7 @@ loc_FE26:
 		ext.w	d0
 		neg.w	d0
 		add.w	d0,d3
-		lea	(unk_FFF76A).w,a4
+		lea	(v_secanglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -131,10 +131,10 @@ loc_FF3E:
 ; ---------------------------------------------------------------------------
 
 Sonic_Angle:
-		move.b	(unk_FFF76A).w,d2
+		move.b	(v_secanglebuffer).w,d2
 		cmp.w	d0,d1
 		ble.s	loc_FF60
-		move.b	(v_anglebuffer).w,d2
+		move.b	(v_prianglebuffer).w,d2
 		move.w	d0,d1
 
 loc_FF60:
@@ -167,7 +167,7 @@ loc_FF88:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -184,7 +184,7 @@ loc_FFAE:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(unk_FFF76A).w,a4
+		lea	(v_secanglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -231,7 +231,7 @@ Sonic_WalkCeiling:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$D,d5
@@ -247,7 +247,7 @@ Sonic_WalkCeiling:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	(unk_FFF76A).w,a4
+		lea	(v_secanglebuffer).w,a4
 		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$D,d5
@@ -290,7 +290,7 @@ Sonic_WalkVertL:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$D,d5
@@ -306,7 +306,7 @@ Sonic_WalkVertL:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	(unk_FFF76A).w,a4
+		lea	(v_secanglebuffer).w,a4
 		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$D,d5

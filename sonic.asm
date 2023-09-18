@@ -90,8 +90,8 @@ Checksum:	dc.w 0					; Checksum
 		dc.b "J               "			; I\O support
 RomStartLoc:	dc.l StartOfROM				; Start address of ROM
 RomEndLoc:      dc.l EndOfROM-1				; End address of ROM
-RamStartLoc:	dc.l $FF0000				; Start address of RAM
-RamEndLoc:      dc.l $FFFFFF				; End address of RAM
+RamStartLoc:	dc.l v_startofram&$FFFFFF		; Start address of RAM
+RamEndLoc:      dc.l v_endofram&$FFFFFF			; End address of RAM
 SRAMSupport:	dc.l $20202020				; SRAM (none)
                 dc.l $20202020				; SRAM start ($200001)
                 dc.l $20202020				; SRAM end ($20xxxx)
@@ -278,7 +278,7 @@ loc_348:
 		move.l	#"init",(v_init).w
 
 loc_36A:
-		lea	($FF0000).l,a6
+		lea	(v_startofram&$FFFFFF).l,a6
 		moveq	#0,d7
 		move.w	#$3F7F,d6
 
@@ -687,7 +687,7 @@ HBlank:
 		rte
 ; ---------------------------------------------------------------------------
 
-sub_F3C:
+;sub_F3C:
 		tst.w	(f_hblank).w
 		beq.s	locret_F7E
 		movem.l	d0/a0/a5,-(sp)
@@ -968,7 +968,7 @@ NewPLC:
 
 	.skip:
 		movem.l	(sp)+,a1-a2
-		rts	
+		rts
 ; End of function NewPLC
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -987,7 +987,7 @@ ClearPLC:
 	.loop:
 		clr.l	(a2)+
 		dbf	d0,.loop
-		rts	
+		rts
 ; End of function ClearPLC
 ; ---------------------------------------------------------------------------
 
@@ -1493,7 +1493,7 @@ loc_24BC:
 		locVRAM 0
 		lea	(Nem_SegaLogo).l,a0
 		bsr.w	NemDec
-		lea	($FF0000).l,a1
+		lea	(v_startofram&$FFFFFF).l,a1
 		lea	(Eni_SegaLogo).l,a0
 		move.w	#0,d0
 		bsr.w	EniDec
@@ -1563,7 +1563,7 @@ loc_25D8:
 
 		lea	(Unc_Title).l,a1
 
-                copyTilemapUnc	$C206,$21,$15
+                copyUncTilemap	$C206,$21,$15
 
 		move.w	#0,(v_debuguse).w
 		move.w	#0,(f_demo).w
@@ -1581,7 +1581,7 @@ loc_25D8:
 		move.l	(a0)+,(a4)+
 		dbf	d0,.loadblocks
 		lea	(Blk256_GHZ).l,a0
-		lea	(v_256x256).l,a1
+		lea	(v_256x256&$FFFFFF).l,a1
 		bsr.w	KosDec
 		bsr.w	LevelLayoutLoad
 		lea	(vdp_control_port).l,a5
@@ -2270,12 +2270,12 @@ off_3100:	dc.l byte_614C6
 		dc.b 0, $1A, 8, $FF, 8, $CA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ; ---------------------------------------------------------------------------
 ;sub_314C:
-		cmpi.b	#id_Lvl06,(v_zone).w
+		cmpi.b	#id_06,(v_zone).w
 		bne.s	locret_3176
 		bsr.w	sub_3178
-		lea	($FF0900).l,a1
+		lea	(v_startofram&$FFFFFF+$900).l,a1
 		bsr.s	sub_3166
-		lea	($FF3380).l,a1
+		lea	(v_startofram&$FFFFFF+$3380).l,a1
 
 sub_3166:
 		lea	(Anim16Unk1).l,a0
@@ -2290,7 +2290,7 @@ locret_3176:
 ; ---------------------------------------------------------------------------
 
 sub_3178:
-		lea	($FF0000).l,a1
+		lea	(v_startofram&$FFFFFF).l,a1
 		lea	(Anim16Unk2).l,a0
 		move.w	#(Anim16Unk2_end-Anim16Unk2)/2-1,d1
 
@@ -2558,12 +2558,12 @@ loc_3662:
 ; ---------------------------------------------------------------------------
 
 ssLoadBG:
-		lea	($FF0000).l,a1
+		lea	(v_startofram&$FFFFFF).l,a1
 		lea	(byte_639B8).l,a0
 		move.w	#$4051,d0
 		bsr.w	EniDec
 		move.l	#$50000001,d3
-		lea	($FF0080).l,a2
+		lea	(v_startofram&$FFFFFF+$80).l,a2
 		moveq	#6,d7
 
 loc_368C:
@@ -2583,7 +2583,7 @@ loc_369C:
 		bne.s	loc_36B0
 		cmpi.w	#6,d7
 		bne.s	loc_36C0
-		lea	($FF0000).l,a1
+		lea	(v_startofram&$FFFFFF).l,a1
 
 loc_36B0:
 		movem.l	d0-d4,-(sp)
@@ -2607,7 +2607,7 @@ loc_36C0:
 loc_36EA:
 		adda.w	#$80,a2
 		dbf	d7,loc_368C
-		lea	($FF0000).l,a1
+		lea	(v_startofram&$FFFFFF).l,a1
 		lea	(byte_6477C).l,a0
 		move.w	#$4000,d0
 		bsr.w	EniDec
@@ -3301,7 +3301,7 @@ LoadLevelData:
 		move.l	(a0)+,(a4)+
 		dbf	d0,.loadblocks
 		movea.l	(a2)+,a0
-		lea	(v_256x256).l,a1
+		lea	(v_256x256&$FFFFFF).l,a1
 		bsr.w	KosDec
 		bsr.w	LevelLayoutLoad
 		move.w	(a2)+,d0
@@ -4845,12 +4845,10 @@ MapMovingPtfm:	include "_maps\Moving Blocks (MZ).asm"
 		even
 
 		include "_incObj\59 SLZ Elevators.asm"
-		include "levels\SLZ\MovingPtfm\Srite.map"
-		even
+Map_Elev:	include "_maps\SLZ Elevators.asm"
 
 		include "_incObj\5A SLZ Circling Platform.asm"
-		include "levels\SLZ\CirclePtfm\Sprite.map"
-		even
+Map_Circ:	include "_maps\SLZ Circling Platform.asm"
 
 		include "_incObj\5B Staircase.asm"
 		include "levels\SLZ\StaircasePtfm\Sprite.map"
@@ -4861,8 +4859,7 @@ MapMovingPtfm:	include "_maps\Moving Blocks (MZ).asm"
 		even
 
 		include "_incObj\5D Fan.asm"
-		include "levels\SLZ\Fan\Sprite.map"
-		even
+Map_Fan:	include "_maps\Fan.asm"
 
                 include "_incObj\5E Seesaw.asm"
 
@@ -4877,8 +4874,8 @@ ObjSeeSaw_SlopeLine:dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15
-		include "levels\SLZ\Seesaw\Sprite.map"
-		even
+
+Map_Seesaw:	include "_maps\Seesaw.asm"
 ; ---------------------------------------------------------------------------
 
 SonicPlayer:
@@ -4927,8 +4924,8 @@ loc_E892:
 		jsr	off_E8C8(pc,d1.w)
 		bsr.s	sub_E8D6
 		bsr.w	sub_E952
-		move.b	(v_anglebuffer).w,$36(a0)
-		move.b	(unk_FFF76A).w,$37(a0)
+		move.b	(v_prianglebuffer).w,$36(a0)
+		move.b	(v_secanglebuffer).w,$37(a0)
 		bsr.w	Sonic_Animate
 		bsr.w	TouchObjects
 		bsr.w	Sonic_SpecialChunk
@@ -5087,14 +5084,11 @@ sub_F290:
                 include "_incObj\Sonic Loops.asm"
                 include "_incObj\Sonic Animate.asm"
 ; ---------------------------------------------------------------------------
-AniSonic:
+Ani_Sonic:
 		include "_anim\Sonic.asm"
-		even
-
 		include "_incObj\Sonic LoadGfx.asm"
 
                 include "_incObj\38 Shield and Invincibility.asm"
-
                 include "_incObj\4A Giant Ring.asm"
 
 		include "_anim\Shield.asm"
@@ -5205,8 +5199,8 @@ Sonic_WalkSpeed:
 		add.l	d1,d2
 		swap	d2
 		swap	d3
-		move.b	d0,(v_anglebuffer).w
-		move.b	d0,(unk_FFF76A).w
+		move.b	d0,(v_prianglebuffer).w
+		move.b	d0,(v_secanglebuffer).w
 		move.b	d0,d1
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
@@ -5224,8 +5218,8 @@ loc_10514:
 ; ---------------------------------------------------------------------------
 
 sub_10520:
-		move.b	d0,(v_anglebuffer).w
-		move.b	d0,(unk_FFF76A).w
+		move.b	d0,(v_prianglebuffer).w
+		move.b	d0,(v_secanglebuffer).w
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		cmpi.b	#$40,d0
@@ -5245,7 +5239,7 @@ Sonic_HitFloor:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -5260,7 +5254,7 @@ Sonic_HitFloor:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	(unk_FFF76A).w,a4
+		lea	(v_secanglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -5269,10 +5263,10 @@ Sonic_HitFloor:
 		move.b	#0,d2
 
 loc_105A8:
-		move.b	(unk_FFF76A).w,d3
+		move.b	(v_secanglebuffer).w,d3
 		cmp.w	d0,d1
 		ble.s	loc_105B6
-		move.b	(v_anglebuffer).w,d3
+		move.b	(v_prianglebuffer).w,d3
 		move.w	d0,d1
 
 loc_105B6:
@@ -5288,7 +5282,7 @@ locret_105BE:
 
 loc_105C8:
 		addi.w	#$A,d2
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5296,7 +5290,7 @@ loc_105C8:
 		move.b	#0,d2
 
 loc_105E2:
-		move.b	(v_anglebuffer).w,d3
+		move.b	(v_prianglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_105EE
 		move.b	d2,d3
@@ -5314,13 +5308,13 @@ ObjectHitFloor2:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		move.b	#0,(a4)
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
 		bsr.w	sub_101BE
-		move.b	(v_anglebuffer).w,d3
+		move.b	(v_prianglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_10626
 		move.b	#0,d3
@@ -5339,7 +5333,7 @@ loc_10628:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5354,7 +5348,7 @@ loc_10628:
 		move.b	obHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(unk_FFF76A).w,a4
+		lea	(v_secanglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5370,7 +5364,7 @@ sub_1068C:
 
 loc_10694:
 		addi.w	#$A,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5382,13 +5376,13 @@ loc_10694:
 ObjectHitWallRight:
 		add.w	obX(a0),d3
 		move.w	obY(a0),d2
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		move.b	#0,(a4)
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor
-		move.b	(v_anglebuffer).w,d3
+		move.b	(v_prianglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_106DE
 		move.b	#$C0,d3
@@ -5408,7 +5402,7 @@ Sonic_NoRunningOnWalls:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -5424,7 +5418,7 @@ Sonic_NoRunningOnWalls:
 		move.b	obWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	(unk_FFF76A).w,a4
+		lea	(v_secanglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -5439,7 +5433,7 @@ Sonic_NoRunningOnWalls:
 loc_10754:
 		subi.w	#$A,d2
 		eori.w	#$F,d2
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -5456,12 +5450,12 @@ ObjectHitCeiling:
 		ext.w	d0
 		sub.w	d0,d2
 		eori.w	#$F,d2
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
-		move.b	(v_anglebuffer).w,d3
+		move.b	(v_prianglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_107AC
 		move.b	#$80,d3
@@ -5481,7 +5475,7 @@ loc_107AE:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
@@ -5497,7 +5491,7 @@ loc_107AE:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	(unk_FFF76A).w,a4
+		lea	(v_secanglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
@@ -5514,7 +5508,7 @@ Sonic_HitWall:
 loc_10822:
 		subi.w	#$A,d3
 		eori.w	#$F,d3
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		movea.w	#$FFF0,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
@@ -5526,13 +5520,13 @@ loc_10822:
 ObjectHitWallLeft:
 		add.w	obX(a0),d3
 		move.w	obY(a0),d2
-		lea	(v_anglebuffer).w,a4
+		lea	(v_prianglebuffer).w,a4
 		move.b	#0,(a4)
 		movea.w	#$FFF0,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor
-		move.b	(v_anglebuffer).w,d3
+		move.b	(v_prianglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_10870
 		move.b	#$40,d3
@@ -5545,7 +5539,7 @@ Special_ShowLayout:
 		bsr.w	Special_AniWallsandRings
 		bsr.w	Special_AniItems
 		move.w	d5,-(sp)
-		lea	($FFFF8000).w,a1
+		lea	(v_startofram+$8000).w,a1
 		move.b	(v_ssangle).w,d0
 		andi.b	#$FC,d0
 		jsr	(CalcSine).l
@@ -5598,7 +5592,7 @@ loc_108E4:
 		dbf	d7,loc_108C2
 
 		move.w	(sp)+,d5
-		lea	($FF0000).l,a0
+		lea	(v_startofram&$FFFFFF).l,a0
 		moveq	#0,d0
 		move.w	(v_screenposy).w,d0
 		divu.w	#$18,d0
@@ -5608,7 +5602,7 @@ loc_108E4:
 		move.w	(v_screenposx).w,d0
 		divu.w	#$18,d0
 		adda.w	d0,a0
-		lea	($FFFF8000).w,a4
+		lea	(v_startofram+$8000).w,a4
 		move.w	#$F,d7
 
 loc_10930:
@@ -5630,7 +5624,7 @@ loc_10934:
 		bcs.s	loc_10986
 		cmpi.w	#$170,d2
 		bcc.s	loc_10986
-		lea	($FF4000).l,a5
+		lea	(v_startofram&$FFFFFF+$4000).l,a5
 		lsl.w	#3,d0
 		lea	(a5,d0.w),a5
 		movea.l	(a5)+,a1
@@ -5664,7 +5658,7 @@ loc_109A6:
 ; ---------------------------------------------------------------------------
 
 Special_AniWallsandRings:
-		lea	($FF400C).l,a1
+		lea	(v_startofram&$FFFFFF+$400C).l,a1
 		moveq	#0,d0
 		move.b	(v_ssangle).w,d0
 		lsr.b	#2,d0
@@ -5691,7 +5685,7 @@ loc_109E0:
 		move.b	#7,(v_ani2_time).w
 		bra.s	loc_10A02
 ; ---------------------------------------------------------------------------
-		addq.b	#1,(v_ani2_frame).w	; apparently the GOAL blocks were meant to flash yellow
+		addq.b	#1,(v_ani2_frame).w	; the GOAL blocks were meant to flash yellow
 		andi.b	#1,(v_ani2_frame).w
 
 loc_10A02:
@@ -5705,8 +5699,8 @@ loc_10A02:
 		andi.b	#3,(v_ani0_frame).w
 
 loc_10A26:
-		lea	($FF402E).l,a1
-		lea	(Special_VRAMSet).l,a0
+		lea	(v_startofram&$FFFFFF+$402E).l,a1
+		lea	(SS_WaRiVramSet).l,a0
 		moveq	#0,d0
 		move.b	(v_ani0_frame).w,d0
 		add.w	d0,d0
@@ -5730,7 +5724,7 @@ loc_10A26:
 		rts
 ; ---------------------------------------------------------------------------
 
-Special_VRAMSet:dc.w $142, $142, $142, $2142
+SS_WaRiVramSet:	dc.w $142, $142, $142, $2142
 		dc.w $142, $142, $142, $142
 		dc.w $2142, $2142, $2142, $142
 		dc.w $2142, $2142, $2142, $2142
@@ -5741,7 +5735,7 @@ Special_VRAMSet:dc.w $142, $142, $142, $2142
 ; ---------------------------------------------------------------------------
 
 sub_10ACC:
-		lea	($FF4400).l,a2
+		lea	(v_startofram&$FFFFFF+$4400).l,a2
 		move.w	#$1F,d0
 
 loc_10AD6:
@@ -5755,7 +5749,7 @@ locret_10AE0:
 ; ---------------------------------------------------------------------------
 
 Special_AniItems:
-		lea	($FF4400).l,a0
+		lea	(v_startofram&$FFFFFF+$4400).l,a0
 		move.w	#$1F,d7
 
 loc_10AEC:
@@ -5824,14 +5818,14 @@ byte_10B6A:	dc.b $1B, $1C, $1B, $1C, 0, 0
 ; ---------------------------------------------------------------------------
 
 SS_Load:
-		lea	($FF0000).l,a1
+		lea	(v_startofram&$FFFFFF).l,a1
 		move.w	#$FFF,d0
 
 loc_10B7A:
 		clr.l	(a1)+
 		dbf	d0,loc_10B7A
 
-		lea	($FF172E).l,a1
+		lea	(v_startofram&$FFFFFF+$172E).l,a1
 		lea	(SS_1).l,a0
 		moveq	#$23,d1
 
@@ -5845,7 +5839,7 @@ loc_10B90:
 		lea	$5C(a1),a1
 		dbf	d1,loc_10B8E
 
-		lea	($FF4008).l,a1
+		lea	(v_startofram&$FFFFFF+$4008).l,a1
 		lea	(SS_MapIndex).l,a0
 		moveq	#$1B,d1
 
@@ -5856,7 +5850,7 @@ loc_10BAC:
 		move.w	(a0)+,(a1)+
 		dbf	d1,loc_10BAC
 
-		lea	($FF4400).l,a1
+		lea	(v_startofram&$FFFFFF+$4400).l,a1
 		move.w	#$3F,d1
 
 loc_10BC8:
@@ -5870,7 +5864,7 @@ loc_10BC8:
                 include "_inc\Special Stage Mappings & VRAM Pointers.asm"
 
 ;sub_10C98:
-		lea	($FF1020).l,a1
+		lea	(v_startofram&$FFFFFF+$1020).l,a1
 		lea	(SS_1).l,a0
 		moveq	#$3F,d1
 
@@ -6457,9 +6451,9 @@ byte_28E6E:	incbin "levels\MZ\PushBlock\Art.nem"
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SLZ stuff
 ; ---------------------------------------------------------------------------
-ArtSeesaw:	incbin "levels\SLZ\Seesaw\Art.nem"
+ArtSeesaw:	incbin "artnem\SLZ Seesaw.bin"
 		even
-ArtFan:		incbin "levels\SLZ\Fan\Art.nem"
+ArtFan:		incbin "artnem\SLZ Fan.bin"
 		even
 byte_294DA:	incbin "artnem\slz platform.nem"
 		even

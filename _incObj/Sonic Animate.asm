@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_Animate:
-		lea	(AniSonic).l,a1
+		lea	(Ani_Sonic).l,a1
 		moveq	#0,d0
 		move.b	obAnim(a0),d0
 		cmp.b	obNextAni(a0),d0
