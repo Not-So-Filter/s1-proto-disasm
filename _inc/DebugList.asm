@@ -60,7 +60,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapMovingPtfm,	$52,    0,      0,      $2B8
 	dbug    MapCollapseFloor,$53,   0,      0,      $62B8
 	dbug    MapLavaHurt,	$54,    0,      0,      $8680
-	dbug    MapBasaran,	$55,    0,      0,      $24B8
+	dbug    Map_Bas,	$55,    0,      0,      $24B8
 	.MZend:
 
 .SLZ:
@@ -73,7 +73,7 @@ dbug:	macro map,object,subtype,frame,vram
 	dbug    MapCollapseFloor,$53,   0,      2,      $44E0
 	dbug    Map_Plat_SLZ,	$18,    0,      0,      $4480
 	dbug    Map_Circ,	$5A,    0,      0,      $4480
-	dbug    MapStaircasePtfm,$5B,   0,      0,      $4480
+	dbug    Map_Stair,	$5B,   0,      0,      $4480
 	dbug    Map_Fan,	$5D,    0,      0,      $43A0
 	dbug    Map_Seesaw,	$5E,    0,      0,      $374
 	dbug    Map_Spring,	$41,    0,      0,      $523

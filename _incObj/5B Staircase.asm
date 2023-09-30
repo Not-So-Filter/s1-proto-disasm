@@ -42,7 +42,7 @@ loc_E37C:
 
 loc_E38A:
 		move.b	#id_Staircase,obId(a1)
-		move.l	#MapStaircasePtfm,obMap(a1)
+		move.l	#Map_Stair,obMap(a1)
 		move.w	#$4480,obGfx(a1)
 		move.b	#4,obRender(a1)
 		move.b	#3,obPriority(a1)

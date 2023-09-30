@@ -982,7 +982,7 @@ NewPLC:
 
 ClearPLC:
 		lea	(v_plc_buffer).w,a2 ; PLC buffer space in RAM
-		moveq	#$1F,d0	; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
+		moveq	#(v_plc_buffer_end-v_plc_buffer)/3-1,d0	; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
 
 	.loop:
 		clr.l	(a2)+
@@ -1013,12 +1013,12 @@ loc_1404:
 		moveq	#$10,d6
 		moveq	#0,d0
 		move.l	a0,(v_plc_buffer).w
-		move.l	a3,(v_ptrnemcode).w
-		move.l	d0,(unk_FFF6E4).w
-		move.l	d0,(unk_FFF6E8).w
-		move.l	d0,(unk_FFF6EC).w
-		move.l	d5,(unk_FFF6F0).w
-		move.l	d6,(unk_FFF6F4).w
+		move.l	a3,(v_plc_buffer_reg0).w
+		move.l	d0,(v_plc_buffer_reg4).w
+		move.l	d0,(v_plc_buffer_reg8).w
+		move.l	d0,(v_plc_buffer_regC).w
+		move.l	d5,(v_plc_buffer_reg10).w
+		move.l	d6,(v_plc_buffer_reg14).w
 
 locret_1436:
 		rts
@@ -1027,7 +1027,7 @@ locret_1436:
 sub_1438:
 		tst.w	(f_plc_execute).w
 		beq.w	locret_14D0
-		move.w	#9,(unk_FFF6FA).w
+		move.w	#9,(v_plc_buffer_reg1A).w
 		moveq	#0,d0
 		move.w	(v_plc_buffer+4).w,d0
 		addi.w	#$120,(v_plc_buffer+4).w
@@ -1037,7 +1037,7 @@ sub_1438:
 loc_1454:
 		tst.w	(f_plc_execute).w
 		beq.s	locret_14D0
-		move.w	#3,(unk_FFF6FA).w
+		move.w	#3,(v_plc_buffer_reg1A).w
 		moveq	#0,d0
 		move.w	(v_plc_buffer+4).w,d0
 		addi.w	#$60,(v_plc_buffer+4).w
@@ -1051,12 +1051,12 @@ loc_146C:
 		move.l	d0,(a4)
 		subq.w	#4,a4
 		movea.l	(v_plc_buffer).w,a0
-		movea.l	(v_ptrnemcode).w,a3
-		move.l	(unk_FFF6E4).w,d0
-		move.l	(unk_FFF6E8).w,d1
-		move.l	(unk_FFF6EC).w,d2
-		move.l	(unk_FFF6F0).w,d5
-		move.l	(unk_FFF6F4).w,d6
+		movea.l	(v_plc_buffer_reg0).w,a3
+		move.l	(v_plc_buffer_reg4).w,d0
+		move.l	(v_plc_buffer_reg8).w,d1
+		move.l	(v_plc_buffer_regC).w,d2
+		move.l	(v_plc_buffer_reg10).w,d5
+		move.l	(v_plc_buffer_reg14).w,d6
 		lea	(v_ngfx_buffer).w,a1
 
 loc_14A0:
@@ -1064,17 +1064,17 @@ loc_14A0:
 		bsr.w	NemPCD_NewRow
 		subq.w	#1,(f_plc_execute).w
 		beq.s	ShiftPLC
-		subq.w	#1,(unk_FFF6FA).w
+		subq.w	#1,(v_plc_buffer_reg1A).w
 		bne.s	loc_14A0
 		move.l	a0,(v_plc_buffer).w
 
 loc_14B8:
-		move.l	a3,(v_ptrnemcode).w
-		move.l	d0,(unk_FFF6E4).w
-		move.l	d1,(unk_FFF6E8).w
-		move.l	d2,(unk_FFF6EC).w
-		move.l	d5,(unk_FFF6F0).w
-		move.l	d6,(unk_FFF6F4).w
+		move.l	a3,(v_plc_buffer_reg0).w
+		move.l	d0,(v_plc_buffer_reg4).w
+		move.l	d1,(v_plc_buffer_reg8).w
+		move.l	d2,(v_plc_buffer_regC).w
+		move.l	d5,(v_plc_buffer_reg10).w
+		move.l	d6,(v_plc_buffer_reg14).w
 
 locret_14D0:
 		rts
@@ -4324,7 +4324,7 @@ loc_8A00:
 loc_8A38:
 		clr.l	(a2)+
 		dbf	d0,loc_8A38
-		move.w	#$FFFF,(v_opl_screen).w
+		move.w	#-1,(v_opl_screen).w
 
 loc_8A44:
 		lea	(v_regbuffer).w,a2
@@ -4828,9 +4828,8 @@ MapSmashBlock:	include "_maps\Smashable Green Block.asm"
 MapMovingPtfm:	include "_maps\Moving Blocks (MZ).asm"
 
 		include "_incObj\55 Basaran.asm"
-		include "levels\MZ\Basaran\Sprite.ani"
-		include "levels\MZ\Basaran\Sprite.map"
-		even
+		include "_anim\Basaran.asm"
+Map_Bas:	include "_maps\Basaran.asm"
 
 		include "_incObj\56 Floating Blocks and Doors.asm"
 		include "levels\shared\MovingBlocks\Sprite.map"
@@ -4851,12 +4850,10 @@ Map_Elev:	include "_maps\SLZ Elevators.asm"
 Map_Circ:	include "_maps\SLZ Circling Platform.asm"
 
 		include "_incObj\5B Staircase.asm"
-		include "levels\SLZ\StaircasePtfm\Sprite.map"
-		even
+Map_Stair:	include "_maps\Staircase.asm"
 
 		include "_incObj\5C Pylon.asm"
-		include "levels\SLZ\Girder\Sprite.map"
-		even
+Map_Pylon:	include "_maps\Pylon.asm"
 
 		include "_incObj\5D Fan.asm"
 Map_Fan:	include "_maps\Fan.asm"
@@ -6367,7 +6364,7 @@ byte_11D26:	incbin "artunc\Lives Counter Numbers.bin"
 		include "_inc\LevelHeaders.asm"
 		include "_inc\Pattern Load Cues.asm"
 
-		align $8000,$FF				; Padding
+		align $8000,$FF		; Padding
 ; ===========================================================================
 ; Unused 8x8 Font Art
 ; ===========================================================================
@@ -6410,7 +6407,7 @@ Nem_Flash:	incbin "artnem\Flash.bin"
 		incbin "artnem\Unused - Goggles.bin"
 		even
 
-                align $400,$FF				; Padding
+                align $400,$FF		; Padding
 
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff
@@ -6550,7 +6547,7 @@ ArtAnimalFlicky:incbin "artnem\Animal Flicky.bin"
 ArtAnimalRicky:	incbin "artnem\Animal Squirrel.bin"
 		even
 
-		align $1000,$FF				; Padding
+		align $1000,$FF		; Padding
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns
 ; Blocks are Uncompressed
@@ -6618,7 +6615,7 @@ byte_61578:	incbin "demodata\Intro - SZ.bin"	; Sparkling's demo (?)
 byte_6161E:	incbin "demodata\Intro - Special Stage.bin" ; Special stage demo
 		even
 
-		align $3000,$FF				; Padding
+		align $3000,$FF		; Padding
 
                 include "_maps\SS Walls.asm"
 
@@ -6629,7 +6626,7 @@ ArtSpecialBlocks:incbin "artnem\Art Blocks.nem"
 		even
 byte_639B8:	incbin "tilemaps\SS Background 1.bin"
 		even
-ArtSpecialAnimals:incbin "artnem\Art Animals.nem"
+ArtSpecialAnimals:incbin "artnem\Special Birds & Fish.bin"
 		even
 byte_6477C:	incbin "tilemaps\SS Background 2.bin"
 		even
@@ -6666,7 +6663,7 @@ ArtSpecialUpDown:incbin "artnem\Special UP-DOWN.bin"
 ArtSpecialEmerald:incbin "artnem\Special Emeralds.bin"
 		even
 
-		align $4000,$FF				; Padding
+		align $4000,$FF		; Padding
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------

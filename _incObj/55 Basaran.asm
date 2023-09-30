@@ -12,7 +12,7 @@ ObjBasaran_Index:dc.w ObjBasaran_Init-ObjBasaran_Index, ObjBasaran_Action-ObjBas
 
 ObjBasaran_Init:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapBasaran,obMap(a0)
+		move.l	#Map_Bas,obMap(a0)
 		move.w	#$84B8,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#$C,obHeight(a0)
@@ -25,7 +25,7 @@ ObjBasaran_Action:
 		move.b	ob2ndRout(a0),d0
 		move.w	ObjBasaran_Index2(pc,d0.w),d1
 		jsr	ObjBasaran_Index2(pc,d1.w)
-		lea	(AniBasaran).l,a1
+		lea	(Ani_Bas).l,a1
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ---------------------------------------------------------------------------

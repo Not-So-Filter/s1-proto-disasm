@@ -177,7 +177,7 @@ v_soundqueue_end:	rs.b 0
 f_voice_selector:	rs.b 10			; $00 = use music voice pointer; $40 = use special voice pointer; $80 = use track voice pointer
 
 v_voice_ptr:		rs.l 1			; voice data pointer (4 bytes)
-		rs.l 1				; unused voice data pointer (4 bytes)
+v_lfo_voice_ptr:	rs.l 1			; lfo voice data pointer (4 bytes)
 v_special_voice_ptr:	rs.l 1			; voice data pointer for special SFX ($D0-$DF) (4 bytes)
 
 f_fadein_flag:		rs.b 1			; Flag for fade in
@@ -191,47 +191,51 @@ v_ring_speaker:		rs.b 1			; which speaker the "ring" sound is played in (00 = ri
 f_push_playing:		rs.b 1			; if set, prevents further push sounds from playing
 	rsreset
 
-v_music_track_ram:	= $040			; Start of music RAM
+	rsset TrackSz+$10
 
-v_music_fmdac_tracks:	= v_music_track_ram+TrackSz*0
-v_music_dac_track:	= v_music_fmdac_tracks+TrackSz*0
-v_music_fm_tracks:	= v_music_fmdac_tracks+TrackSz*1
-v_music_fm1_track:	= v_music_fm_tracks+TrackSz*0
-v_music_fm2_track:	= v_music_fm_tracks+TrackSz*1
-v_music_fm3_track:	= v_music_fm_tracks+TrackSz*2
-v_music_fm4_track:	= v_music_fm_tracks+TrackSz*3
-v_music_fm5_track:	= v_music_fm_tracks+TrackSz*4
-v_music_fm6_track:	= v_music_fm_tracks+TrackSz*5
-v_music_fm_tracks_end:	= v_music_fm_tracks+TrackSz*6
-v_music_fmdac_tracks_end:	= v_music_fm_tracks_end
-v_music_psg_tracks:	= v_music_fmdac_tracks_end
-v_music_psg1_track:	= v_music_psg_tracks+TrackSz*0
-v_music_psg2_track:	= v_music_psg_tracks+TrackSz*1
-v_music_psg3_track:	= v_music_psg_tracks+TrackSz*2
-v_music_psg_tracks_end:	= v_music_psg_tracks+TrackSz*3
-v_music_track_ram_end:	= v_music_psg_tracks_end
+v_music_track_ram:	rs.b 0	; Start of music RAM
 
-v_sfx_track_ram:	= v_music_track_ram_end	; Start of SFX RAM, straight after the end of music RAM
+v_music_fmdac_tracks:	rs.b 0
+v_music_dac_track:	rs.b TrackSz
+v_music_fm_tracks:	rs.b 0
+v_music_fm1_track:	rs.b TrackSz
+v_music_fm2_track:	rs.b TrackSz
+v_music_fm3_track:	rs.b TrackSz
+v_music_fm4_track:	rs.b TrackSz
+v_music_fm5_track:	rs.b TrackSz
+v_music_fm6_track:	rs.b TrackSz
+v_music_fm_tracks_end:	rs.b 0
+v_music_fmdac_tracks_end:	rs.b 0
+v_music_psg_tracks:	rs.b 0
+v_music_psg1_track:	rs.b TrackSz
+v_music_psg2_track:	rs.b TrackSz
+v_music_psg3_track:	rs.b TrackSz
+v_music_psg_tracks_end:	rs.b 0
+v_music_track_ram_end:	rs.b 0
 
-v_sfx_fm_tracks:	= v_sfx_track_ram+TrackSz*0
-v_sfx_fm3_track:	= v_sfx_fm_tracks+TrackSz*0
-v_sfx_fm4_track:	= v_sfx_fm_tracks+TrackSz*1
-v_sfx_fm5_track:	= v_sfx_fm_tracks+TrackSz*2
-v_sfx_fm_tracks_end:	= v_sfx_fm_tracks+TrackSz*3
-v_sfx_psg_tracks:	= v_sfx_fm_tracks_end
-v_sfx_psg1_track:	= v_sfx_psg_tracks+TrackSz*0
-v_sfx_psg2_track:	= v_sfx_psg_tracks+TrackSz*1
-v_sfx_psg3_track:	= v_sfx_psg_tracks+TrackSz*2
-v_sfx_psg_tracks_end:	= v_sfx_psg_tracks+TrackSz*3
-v_sfx_track_ram_end:	= v_sfx_psg_tracks_end
+v_sfx_track_ram:	rs.b 0	; Start of SFX RAM, straight after the end of music RAM
 
-v_spcsfx_track_ram:	= v_sfx_track_ram_end		; Start of special SFX RAM, straight after the end of SFX RAM
+v_sfx_fm_tracks:	rs.b 0
+v_sfx_fm3_track:	rs.b TrackSz
+v_sfx_fm4_track:	rs.b TrackSz
+v_sfx_fm5_track:	rs.b TrackSz
+v_sfx_fm_tracks_end:	rs.b 0
+v_sfx_psg_tracks:	rs.b 0
+v_sfx_psg1_track:	rs.b TrackSz
+v_sfx_psg2_track:	rs.b TrackSz
+v_sfx_psg3_track:	rs.b TrackSz
+v_sfx_psg_tracks_end:	rs.b 0
+v_sfx_track_ram_end:	rs.b 0
 
-v_spcsfx_fm4_track:	= v_spcsfx_track_ram+TrackSz*0
-v_spcsfx_psg3_track:	= v_spcsfx_track_ram+TrackSz*1
-v_spcsfx_track_ram_end:	= v_spcsfx_track_ram+TrackSz*2
+v_spcsfx_track_ram:	rs.b 0	; Start of special SFX RAM, straight after the end of SFX RAM
 
-v_1up_ram_copy:		= v_spcsfx_track_ram_end
+v_spcsfx_fm4_track:	rs.b TrackSz
+v_spcsfx_psg3_track:	rs.b TrackSz
+v_spcsfx_track_ram_end:	rs.b 0
+
+v_1up_ram_copy:		rs.b TrackSz
+
+	rsreset
 
 ; =================================================================================
 ; From here on, no longer relative to sound driver RAM
@@ -281,14 +285,15 @@ v_levselitem:		rs.w 1			; level select - item selected (2 bytes)
 v_levselsound:		rs.w 1			; level select - sound selected (2 bytes)
 	rs.b $14				; unused
 v_plc_buffer:		rs.b $60		; pattern load cues buffer (maximum $10 PLCs) ($60 bytes)
-v_ptrnemcode:		rs.l 1			; pointer for nemesis decompression code ($1502 or $150C) (4 bytes)
-unk_FFF6E4:		rs.l 1
-unk_FFF6E8:		rs.l 1
-unk_FFF6EC:		rs.l 1
-unk_FFF6F0:		rs.l 1
-unk_FFF6F4:		rs.l 1
+v_plc_buffer_end:	rs.b 0
+v_plc_buffer_reg0:	rs.l 1			; pattern load cues buffer (4 bytes)
+v_plc_buffer_reg4:	rs.l 1			; pattern load cues buffer (4 bytes)
+v_plc_buffer_reg8:	rs.l 1			; pattern load cues buffer (4 bytes)
+v_plc_buffer_regC:	rs.l 1			; pattern load cues buffer (4 bytes)
+v_plc_buffer_reg10:	rs.l 1			; pattern load cues buffer (4 bytes)
+v_plc_buffer_reg14:	rs.l 1			; pattern load cues buffer (4 bytes)
 f_plc_execute:		rs.w 1			; flag set for pattern load cue execution (2 bytes)
-unk_FFF6FA:		rs.w 1
+v_plc_buffer_reg1A:	rs.w 1
 	rs.l 1					; unused
 v_screenposx:		rs.l 1
 v_screenposy:		rs.l 1

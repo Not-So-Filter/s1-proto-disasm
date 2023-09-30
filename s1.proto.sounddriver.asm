@@ -1951,13 +1951,13 @@ dcSilence:
 ; ---------------------------------------------------------------------------
 
 dcPanAni:
-		move.b	(a4)+,$1F(a5)
+		move.b	(a4)+,TrackPanNumber(a5)
 		beq.s	.disable
-		move.b	(a4)+,$20(a5)
-		move.b	(a4)+,$21(a5)
-		move.b	(a4)+,$22(a5)
-		move.b	(a4),$23(a5)
-		move.b	(a4)+,$24(a5)
+		move.b	(a4)+,TrackPanTable(a5)
+		move.b	(a4)+,TrackPanStart(a5)
+		move.b	(a4)+,TrackPanLimit(a5)
+		move.b	(a4),TrackPanLength(a5)
+		move.b	(a4)+,TrackPanContinue(a5)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1996,7 +1996,7 @@ cfNoteTimeout:
 cfSetLFO:
 		movea.l	v_voice_ptr(a6),a1
 		beq.s	.lfo_ss
-		movea.l	v_voice_ptr+4(a6),a1
+		movea.l	v_lfo_voice_ptr(a6),a1
 
 .lfo_ss:
 		move.b	(a4),d3			; d3 = slot data
@@ -2037,7 +2037,7 @@ cfSetTempo:
 ; ---------------------------------------------------------------------------
 
 dcPlaySnd:
-		move.b	(a4)+,$A(a6)
+		move.b	(a4)+,v_soundqueue0(a6)
 		rts
 ; ---------------------------------------------------------------------------
 

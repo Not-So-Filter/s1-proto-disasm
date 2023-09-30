@@ -12,7 +12,7 @@ off_E4EA:	dc.w loc_E4EE-off_E4EA, loc_E506-off_E4EA
 
 loc_E4EE:
 		addq.b	#2,obRoutine(a0)
-		move.l	#MapSLZGirder,obMap(a0)
+		move.l	#Map_Pylon,obMap(a0)
 		move.w	#$83CC,obGfx(a0)
 		move.b	#$10,obActWid(a0)
 
