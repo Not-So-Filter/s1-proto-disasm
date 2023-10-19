@@ -33,14 +33,14 @@ oscInit:
 		dc.w $7080, $276
 		dc.w $80, 0
 		dc.w $80, 0
-        	even
+		even
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 ; Oscillate values
 
 oscUpdate:
-		cmpi.b	#6,(v_objspace+obRoutine).w
+		cmpi.b	#6,(v_objspace+objRoutine).w
 		bcc.s	.end
 		lea	(v_oscillate).w,a1
 		lea	(.settings).l,a2
@@ -96,4 +96,4 @@ oscUpdate:
 		dc.w 7,	$70
 		dc.w 2,	$10
 		dc.w 2,	$10
-        	even
+		even

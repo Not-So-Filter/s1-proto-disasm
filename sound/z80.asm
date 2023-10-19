@@ -227,28 +227,25 @@ off_160:	dw zDAC_Sample1
 		dw 0
 		dw 0
 		dw 0
-		db 0
-		db 14h
+		dw 1400h
 		dw zDAC_Sample2
 		dw (zDAC_Sample2_End-zDAC_Sample2)
 		dw 0
 		dw 0
 		dw 0
-		db 0
-		db 1
+		dw 0100h
 		dw zDAC_Sample3
 		dw (zDAC_Sample3_End-zDAC_Sample3)
 		dw 0
 		dw 0
 		dw 0
-		db 0
-		db 1Bh
+		dw 1B00h
 
-zDAC_Sample1:	binclude       "dac\kick.dpcm"
+zDAC_Sample1:	binclude	"dac\kick.dpcm"
 zDAC_Sample1_End:
 
-zDAC_Sample2:	binclude       "dac\snare.dpcm"
+zDAC_Sample2:	binclude	"dac\snare.dpcm"
 zDAC_Sample2_End:
 
-zDAC_Sample3:	binclude       "dac\timpani.dpcm"
+zDAC_Sample3:	binclude	"dac\timpani.dpcm"
 zDAC_Sample3_End:

@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_AnglePos:
-		btst	#3,obStatus(a0)
+		btst	#3,objStatus(a0)
 		beq.s	loc_FE26
 		moveq	#0,d0
 		move.b	d0,(v_prianglebuffer).w
@@ -13,7 +13,7 @@ loc_FE26:
 		moveq	#3,d0
 		move.b	d0,(v_prianglebuffer).w
 		move.b	d0,(v_secanglebuffer).w
-		move.b	obAngle(a0),d0
+		move.b	objAngle(a0),d0
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		cmpi.b	#$40,d0
@@ -22,13 +22,13 @@ loc_FE26:
 		beq.w	Sonic_WalkCeiling
 		cmpi.b	#$C0,d0
 		beq.w	Sonic_WalkVertR
-		move.w	obY(a0),d2
-		move.w	obX(a0),d3
+		move.w	objY(a0),d2
+		move.w	objX(a0),d3
 		moveq	#0,d0
-		move.b	obHeight(a0),d0
+		move.b	objHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		move.b	obWidth(a0),d0
+		move.b	objWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_prianglebuffer).w,a4
@@ -37,13 +37,13 @@ loc_FE26:
 		moveq	#$D,d5
 		bsr.w	sub_101BE
 		move.w	d1,-(sp)
-		move.w	obY(a0),d2
-		move.w	obX(a0),d3
+		move.w	objY(a0),d2
+		move.w	objX(a0),d3
 		moveq	#0,d0
-		move.b	obHeight(a0),d0
+		move.b	objHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		move.b	obWidth(a0),d0
+		move.b	objWidth(a0),d0
 		ext.w	d0
 		neg.w	d0
 		add.w	d0,d3
@@ -59,7 +59,7 @@ loc_FE26:
 		bpl.s	loc_FEC8
 		cmpi.w	#$FFF2,d1
 		blt.s	locret_FEE8
-		add.w	d1,obY(a0)
+		add.w	d1,objY(a0)
 
 locret_FEC6:
 		rts
@@ -68,65 +68,65 @@ locret_FEC6:
 loc_FEC8:
 		cmpi.w	#$E,d1
 		bgt.s	loc_FED4
-		add.w	d1,obY(a0)
+		add.w	d1,objY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_FED4:
-		bset	#1,obStatus(a0)
-		bclr	#5,obStatus(a0)
-		move.b	#1,obNextAni(a0)
+		bset	#1,objStatus(a0)
+		bclr	#5,objStatus(a0)
+		move.b	#1,objNextAni(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 locret_FEE8:
 		rts
 ; ---------------------------------------------------------------------------
-		move.l	obX(a0),d2
-		move.w	obVelX(a0),d0
+		move.l	objX(a0),d2
+		move.w	objVelX(a0),d0
 		ext.l	d0
 		asl.l	#8,d0
 		sub.l	d0,d2
-		move.l	d2,obX(a0)
+		move.l	d2,objX(a0)
 		move.w	#$38,d0
 		ext.l	d0
 		asl.l	#8,d0
 		sub.l	d0,d3
-		move.l	d3,obY(a0)
+		move.l	d3,objY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 locret_FF0C:
 		rts
 ; ---------------------------------------------------------------------------
-		move.l	obY(a0),d3
-		move.w	obVelY(a0),d0
+		move.l	objY(a0),d3
+		move.w	objVelY(a0),d0
 		subi.w	#$38,d0
-		move.w	d0,obVelY(a0)
+		move.w	d0,objVelY(a0)
 		ext.l	d0
 		asl.l	#8,d0
 		sub.l	d0,d3
-		move.l	d3,obY(a0)
+		move.l	d3,objY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 		rts
 ; ---------------------------------------------------------------------------
 
 sub_FF2C:
-		move.l	obX(a0),d2
-		move.l	obY(a0),d3
-		move.w	obVelX(a0),d0
+		move.l	objX(a0),d2
+		move.l	objY(a0),d3
+		move.w	objVelX(a0),d0
 		ext.l	d0
 		asl.l	#8,d0
 		sub.l	d0,d2
 
 loc_FF3E:
-		move.w	obVelY(a0),d0
+		move.w	objVelY(a0),d0
 		ext.l	d0
 		asl.l	#8,d0
 		sub.l	d0,d3
-		move.l	d2,obX(a0)
-		move.l	d3,obY(a0)
+		move.l	d2,objX(a0)
+		move.l	d3,objY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -142,29 +142,29 @@ loc_FF60:
 
 loc_FF64:
 		bne.s	loc_FF6C
-		move.b	d2,obAngle(a0)
+		move.b	d2,objAngle(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_FF6C:
-		move.b	obAngle(a0),d2
+		move.b	objAngle(a0),d2
 		addi.b	#$20,d2
 		andi.b	#$C0,d2
-		move.b	d2,obAngle(a0)
+		move.b	d2,objAngle(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 Sonic_WalkVertR:
-		move.w	obY(a0),d2
-		move.w	obX(a0),d3
+		move.w	objY(a0),d2
+		move.w	objX(a0),d3
 		moveq	#0,d0
 
 loc_FF88:
-		move.b	obWidth(a0),d0
+		move.b	objWidth(a0),d0
 		ext.w	d0
 		neg.w	d0
 		add.w	d0,d2
-		move.b	obHeight(a0),d0
+		move.b	objHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_prianglebuffer).w,a4
@@ -175,13 +175,13 @@ loc_FF88:
 		move.w	d1,-(sp)
 
 loc_FFAE:
-		move.w	obY(a0),d2
-		move.w	obX(a0),d3
+		move.w	objY(a0),d2
+		move.w	objX(a0),d3
 		moveq	#0,d0
-		move.b	obWidth(a0),d0
+		move.b	objWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		move.b	obHeight(a0),d0
+		move.b	objHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_secanglebuffer).w,a4
@@ -198,7 +198,7 @@ loc_FFD6:
 		bpl.s	loc_FFF4
 		cmpi.w	#$FFF2,d1
 		blt.w	locret_FF0C
-		add.w	d1,obX(a0)
+		add.w	d1,objX(a0)
 
 locret_FFF2:
 		rts
@@ -207,28 +207,28 @@ locret_FFF2:
 loc_FFF4:
 		cmpi.w	#$E,d1
 		bgt.s	loc_10000
-		add.w	d1,obX(a0)
+		add.w	d1,objX(a0)
 
 locret_FFFE:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_10000:
-		bset	#1,obStatus(a0)
-		bclr	#5,obStatus(a0)
-		move.b	#1,obNextAni(a0)
+		bset	#1,objStatus(a0)
+		bclr	#5,objStatus(a0)
+		move.b	#1,objNextAni(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 Sonic_WalkCeiling:
-		move.w	obY(a0),d2
-		move.w	obX(a0),d3
+		move.w	objY(a0),d2
+		move.w	objX(a0),d3
 		moveq	#0,d0
-		move.b	obHeight(a0),d0
+		move.b	objHeight(a0),d0
 		ext.w	d0
 		sub.w	d0,d2
 		eori.w	#$F,d2
-		move.b	obWidth(a0),d0
+		move.b	objWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_prianglebuffer).w,a4
@@ -237,14 +237,14 @@ Sonic_WalkCeiling:
 		moveq	#$D,d5
 		bsr.w	sub_101BE
 		move.w	d1,-(sp)
-		move.w	obY(a0),d2
-		move.w	obX(a0),d3
+		move.w	objY(a0),d2
+		move.w	objX(a0),d3
 		moveq	#0,d0
-		move.b	obHeight(a0),d0
+		move.b	objHeight(a0),d0
 		ext.w	d0
 		sub.w	d0,d2
 		eori.w	#$F,d2
-		move.b	obWidth(a0),d0
+		move.b	objWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
 		lea	(v_secanglebuffer).w,a4
@@ -259,7 +259,7 @@ Sonic_WalkCeiling:
 		bpl.s	loc_10090
 		cmpi.w	#$FFF2,d1
 		blt.w	locret_FEE8
-		sub.w	d1,obY(a0)
+		sub.w	d1,objY(a0)
 
 locret_1008E:
 		rts
@@ -268,25 +268,25 @@ locret_1008E:
 loc_10090:
 		cmpi.w	#$E,d1
 		bgt.s	loc_1009C
-		sub.w	d1,obY(a0)
+		sub.w	d1,objY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_1009C:
-		bset	#1,obStatus(a0)
-		bclr	#5,obStatus(a0)
-		move.b	#1,obNextAni(a0)
+		bset	#1,objStatus(a0)
+		bclr	#5,objStatus(a0)
+		move.b	#1,objNextAni(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 Sonic_WalkVertL:
-		move.w	obY(a0),d2
-		move.w	obX(a0),d3
+		move.w	objY(a0),d2
+		move.w	objX(a0),d3
 		moveq	#0,d0
-		move.b	obWidth(a0),d0
+		move.b	objWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d2
-		move.b	obHeight(a0),d0
+		move.b	objHeight(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
@@ -296,13 +296,13 @@ Sonic_WalkVertL:
 		moveq	#$D,d5
 		bsr.w	FindFloor
 		move.w	d1,-(sp)
-		move.w	obY(a0),d2
-		move.w	obX(a0),d3
+		move.w	objY(a0),d2
+		move.w	objX(a0),d3
 		moveq	#0,d0
-		move.b	obWidth(a0),d0
+		move.b	objWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		move.b	obHeight(a0),d0
+		move.b	objHeight(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
@@ -318,7 +318,7 @@ Sonic_WalkVertL:
 		bpl.s	loc_1012C
 		cmpi.w	#$FFF2,d1
 		blt.w	locret_FF0C
-		sub.w	d1,obX(a0)
+		sub.w	d1,objX(a0)
 
 locret_1012A:
 		rts
@@ -327,12 +327,12 @@ locret_1012A:
 loc_1012C:
 		cmpi.w	#$E,d1
 		bgt.s	loc_10138
-		sub.w	d1,obX(a0)
+		sub.w	d1,objX(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_10138:
-		bset	#1,obStatus(a0)
-		bclr	#5,obStatus(a0)
-		move.b	#1,obNextAni(a0)
+		bset	#1,objStatus(a0)
+		bclr	#5,objStatus(a0)
+		move.b	#1,objNextAni(a0)
 		rts

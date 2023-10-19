@@ -2,7 +2,7 @@
 
 ObjSLZMovingPtfm:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_DF9A(pc,d0.w),d1
 		jsr	off_DF9A(pc,d1.w)
 		out_of_range.w	DeleteObject,$32(a0)
@@ -30,11 +30,11 @@ byte_DFA2:	dc.b $28, 0
 ; ---------------------------------------------------------------------------
 
 loc_DFC2:
-		addq.b	#2,obRoutine(a0)
+		addq.b	#2,objRoutine(a0)
 		moveq	#0,d0
-		move.b	obSubtype(a0),d0
+		move.b	objSubtype(a0),d0
 		bpl.s	loc_DFE6
-		addq.b	#4,obRoutine(a0)
+		addq.b	#4,objRoutine(a0)
 		andi.w	#$7F,d0
 		mulu.w	#6,d0
 		move.w	d0,$3C(a0)
@@ -47,39 +47,39 @@ loc_DFE6:
 		lsr.w	#3,d0
 		andi.w	#$1E,d0
 		lea	byte_DFA2(pc,d0.w),a2
-		move.b	(a2)+,obActWid(a0)
-		move.b	(a2)+,obFrame(a0)
+		move.b	(a2)+,objActWid(a0)
+		move.b	(a2)+,objFrame(a0)
 		moveq	#0,d0
-		move.b	obSubtype(a0),d0
+		move.b	objSubtype(a0),d0
 		add.w	d0,d0
 		andi.w	#$1E,d0
 		lea	byte_DFA2+2(pc,d0.w),a2
 		move.b	(a2)+,d0
 		lsl.w	#2,d0
 		move.w	d0,$3C(a0)
-		move.b	(a2)+,obSubtype(a0)
-		move.l	#Map_Elev,obMap(a0)
-		move.w	#$4480,obGfx(a0)
-		move.b	#4,obRender(a0)
-		move.b	#4,obPriority(a0)
-		move.w	obX(a0),$32(a0)
-		move.w	obY(a0),$30(a0)
+		move.b	(a2)+,objSubtype(a0)
+		move.l	#Map_Elev,objMap(a0)
+		move.w	#$4480,objGfx(a0)
+		move.b	#4,objRender(a0)
+		move.b	#4,objPriority(a0)
+		move.w	objX(a0),$32(a0)
+		move.w	objY(a0),$30(a0)
 
 loc_E03A:
 		moveq	#0,d1
-		move.b	obActWid(a0),d1
+		move.b	objActWid(a0),d1
 		jsr	(PtfmNormal).l
 		bra.w	sub_E06E
 ; ---------------------------------------------------------------------------
 
 loc_E04A:
 		moveq	#0,d1
-		move.b	obActWid(a0),d1
+		move.b	objActWid(a0),d1
 		jsr	(PtfmCheckExit).l
-		move.w	obX(a0),-(sp)
+		move.w	objX(a0),-(sp)
 		bsr.w	sub_E06E
 		move.w	(sp)+,d2
-		tst.b	obId(a0)
+		tst.b	objId(a0)
 		beq.s	locret_E06C
 		jmp	(ptfmSurfaceNormal).l
 ; ---------------------------------------------------------------------------
@@ -90,7 +90,7 @@ locret_E06C:
 
 sub_E06E:
 		moveq	#0,d0
-		move.b	obSubtype(a0),d0
+		move.b	objSubtype(a0),d0
 		andi.w	#$F,d0
 		add.w	d0,d0
 		move.w	off_E082(pc,d0.w),d1
@@ -107,9 +107,9 @@ locret_E096:
 ; ---------------------------------------------------------------------------
 
 loc_E098:
-		cmpi.b	#4,obRoutine(a0)
+		cmpi.b	#4,objRoutine(a0)
 		bne.s	locret_E0A4
-		addq.b	#1,obSubtype(a0)
+		addq.b	#1,objSubtype(a0)
 
 locret_E0A4:
 		rts
@@ -120,7 +120,7 @@ loc_E0A6:
 		move.w	$34(a0),d0
 		neg.w	d0
 		add.w	$30(a0),d0
-		move.w	d0,obY(a0)
+		move.w	d0,objY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -128,7 +128,7 @@ loc_E0BA:
 		bsr.w	sub_E14A
 		move.w	$34(a0),d0
 		add.w	$30(a0),d0
-		move.w	d0,obY(a0)
+		move.w	d0,objY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -138,10 +138,10 @@ loc_E0CC:
 		asr.w	#1,d0
 		neg.w	d0
 		add.w	$30(a0),d0
-		move.w	d0,obY(a0)
+		move.w	d0,objY(a0)
 		move.w	$34(a0),d0
 		add.w	$32(a0),d0
-		move.w	d0,obX(a0)
+		move.w	d0,objX(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -150,11 +150,11 @@ loc_E0EE:
 		move.w	$34(a0),d0
 		asr.w	#1,d0
 		add.w	$30(a0),d0
-		move.w	d0,obY(a0)
+		move.w	d0,objY(a0)
 		move.w	$34(a0),d0
 		neg.w	d0
 		add.w	$32(a0),d0
-		move.w	d0,obX(a0)
+		move.w	d0,objX(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -163,18 +163,18 @@ loc_E110:
 		move.w	$34(a0),d0
 		neg.w	d0
 		add.w	$30(a0),d0
-		move.w	d0,obY(a0)
-		tst.b	obSubtype(a0)
+		move.w	d0,objY(a0)
+		tst.b	objSubtype(a0)
 		beq.w	loc_E12C
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_E12C:
-		btst	#3,obStatus(a0)
+		btst	#3,objStatus(a0)
 		beq.s	loc_E146
-		bset	#1,obStatus(a1)
-		bclr	#3,obStatus(a1)
-		move.b	#2,obRoutine(a1)
+		bset	#1,objStatus(a1)
+		bclr	#3,objStatus(a1)
+		move.b	#2,objRoutine(a1)
 
 loc_E146:
 		bra.w	DeleteObject
@@ -211,7 +211,7 @@ loc_E188:
 		add.w	d2,d2
 		cmp.w	d2,d0
 		bne.s	locret_E192
-		clr.b	obSubtype(a0)
+		clr.b	objSubtype(a0)
 
 locret_E192:
 		rts
@@ -223,10 +223,10 @@ loc_E194:
 		move.w	$3E(a0),$3C(a0)
 		bsr.w	FindFreeObj
 		bne.s	loc_E1BE
-		move.b	#id_Elevator,obId(a1)
-		move.w	obX(a0),obX(a1)
-		move.w	obY(a0),obY(a1)
-		move.b	#$E,obSubtype(a1)
+		move.b	#id_Elevator,objId(a1)
+		move.w	objX(a0),objX(a1)
+		move.w	objY(a0),objY(a1)
+		move.b	#$E,objSubtype(a1)
 
 loc_E1BE:
 		addq.l	#4,sp

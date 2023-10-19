@@ -2,7 +2,7 @@
 
 ObjStaircasePtfm:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_E358(pc,d0.w),d1
 		jsr	off_E358(pc,d1.w)
 		move.w	$30(a0),d0
@@ -20,16 +20,16 @@ off_E358:	dc.w loc_E35E-off_E358, loc_E3DE-off_E358, loc_E3F2-off_E358
 ; ---------------------------------------------------------------------------
 
 loc_E35E:
-		addq.b	#2,obRoutine(a0)
+		addq.b	#2,objRoutine(a0)
 		moveq	#$38,d3
 		moveq	#1,d4
-		btst	#0,obStatus(a0)
+		btst	#0,objStatus(a0)
 		beq.s	loc_E372
 		moveq	#$3B,d3
 		moveq	#-1,d4
 
 loc_E372:
-		move.w	obX(a0),d2
+		move.w	objX(a0),d2
 		movea.l	a0,a1
 		moveq	#3,d1
 		bra.s	loc_E38A
@@ -38,20 +38,20 @@ loc_E372:
 loc_E37C:
 		bsr.w	FindNextFreeObj
 		bne.w	loc_E3DE
-		move.b	#4,obRoutine(a1)
+		move.b	#4,objRoutine(a1)
 
 loc_E38A:
-		move.b	#id_Staircase,obId(a1)
-		move.l	#Map_Stair,obMap(a1)
-		move.w	#$4480,obGfx(a1)
-		move.b	#4,obRender(a1)
-		move.b	#3,obPriority(a1)
-		move.b	#$10,obActWid(a1)
-		move.b	obSubtype(a0),obSubtype(a1)
-		move.w	d2,obX(a1)
-		move.w	obY(a0),obY(a1)
-		move.w	obX(a0),$30(a1)
-		move.w	obY(a1),$32(a1)
+		move.b	#id_Staircase,objId(a1)
+		move.l	#Map_Stair,objMap(a1)
+		move.w	#$4480,objGfx(a1)
+		move.b	#4,objRender(a1)
+		move.b	#3,objPriority(a1)
+		move.b	#$10,objActWid(a1)
+		move.b	objSubtype(a0),objSubtype(a1)
+		move.w	d2,objX(a1)
+		move.w	objY(a0),objY(a1)
+		move.w	objX(a0),$30(a1)
+		move.w	objY(a1),$32(a1)
 		addi.w	#$20,d2
 		move.b	d3,$37(a1)
 		move.l	a0,$3C(a1)
@@ -60,7 +60,7 @@ loc_E38A:
 
 loc_E3DE:
 		moveq	#0,d0
-		move.b	obSubtype(a0),d0
+		move.b	objSubtype(a0),d0
 		andi.w	#7,d0
 		add.w	d0,d0
 		move.w	off_E43A(pc,d0.w),d1
@@ -72,20 +72,20 @@ loc_E3F2:
 		move.b	$37(a0),d0
 		move.b	(a2,d0.w),d0
 		add.w	$32(a0),d0
-		move.w	d0,obY(a0)
+		move.w	d0,objY(a0)
 		moveq	#0,d1
-		move.b	obActWid(a0),d1
+		move.b	objActWid(a0),d1
 		addi.w	#$B,d1
 		move.w	#$10,d2
 		move.w	#$11,d3
-		move.w	obX(a0),d4
+		move.w	objX(a0),d4
 		bsr.w	SolidObject
 		tst.b	d4
 		bpl.s	loc_E42A
 		move.b	d4,$36(a2)
 
 loc_E42A:
-		btst	#3,obStatus(a0)
+		btst	#3,objStatus(a0)
 		beq.s	locret_E438
 		move.b	#1,$36(a2)
 
@@ -110,7 +110,7 @@ locret_E456:
 loc_E458:
 		subq.w	#1,$34(a0)
 		bne.s	locret_E456
-		addq.b	#1,obSubtype(a0)
+		addq.b	#1,objSubtype(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -128,7 +128,7 @@ locret_E476:
 loc_E478:
 		subq.w	#1,$34(a0)
 		bne.s	loc_E484
-		addq.b	#1,obSubtype(a0)
+		addq.b	#1,objSubtype(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

@@ -28,7 +28,7 @@ locret_495C:
 ; ---------------------------------------------------------------------------
 
 off_495E:	dc.w EventsGHZ-off_495E, EventsNull-off_495E
-                dc.w EventsMZ-off_495E, EventsSLZ-off_495E
+		dc.w EventsMZ-off_495E, EventsSLZ-off_495E
 		dc.w EventsNull-off_495E, EventsNull-off_495E
 ; ---------------------------------------------------------------------------
 
@@ -122,9 +122,9 @@ loc_4A3E:
 		bcs.s	locret_4A76
 		bsr.w	FindFreeObj
 		bne.s	loc_4A5E
-		move.b	#id_BossGreenHill,obId(a1)
-		move.w	#$2A60,obX(a1)
-		move.w	#$280,obY(a1)
+		move.b	#id_BossGreenHill,objId(a1)
+		move.w	#$2A60,objX(a1)
+		move.w	#$280,objY(a1)
 
 loc_4A5E:
 		move.w	#bgm_Boss,d0

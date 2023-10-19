@@ -12,8 +12,8 @@ off_11E74:	dc.w loc_11E78-off_11E74, loc_11EB8-off_11E74
 
 loc_11E78:
 		addq.b	#2,(v_debuguse).w
-		move.b	#0,obFrame(a0)
-		move.b	#0,obAnim(a0)
+		move.b	#0,objFrame(a0)
+		move.b	#0,objAnim(a0)
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lea	(DebugLists).l,a2
@@ -69,8 +69,8 @@ loc_11F12:
 		addq.w	#1,d1
 		swap	d1
 		asr.l	#4,d1
-		move.l	obY(a0),d2
-		move.l	obX(a0),d3
+		move.l	objY(a0),d2
+		move.l	objX(a0),d3
 		btst	#bitUp,d4
 		beq.s	loc_11F32
 		sub.l	d1,d2
@@ -98,8 +98,8 @@ loc_11F54:
 		add.l	d1,d3
 
 loc_11F5C:
-		move.l	d2,obY(a0)
-		move.l	d3,obX(a0)
+		move.l	d2,objY(a0)
+		move.l	d3,objX(a0)
 		btst	#bitA,(v_jpadpress2).w
 		beq.s	loc_11F80
 		addq.b	#1,(v_debugitem).w
@@ -116,9 +116,9 @@ loc_11F80:
 		beq.s	loc_11FA4
 		jsr	(FindFreeObj).l
 		bne.s	loc_11FA4
-		move.w	obX(a0),obX(a1)
-		move.w	obY(a0),obY(a1)
-		move.b	obMap(a0),obId(a1)
+		move.w	objX(a0),objX(a1)
+		move.w	objY(a0),objY(a1)
+		move.b	objMap(a0),objId(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -127,11 +127,11 @@ loc_11FA4:
 		beq.s	locret_11FCC
 		moveq	#0,d0
 		move.w	d0,(v_debuguse).w
-		move.l	#Map_Sonic,(v_player+obMap).w
-		move.w	#$780,(v_player+obGfx).w
-		move.b	d0,(v_player+obAnim).w
-		move.w	d0,obScreenY(a0)
-		move.w	d0,obScreenX(a0)
+		move.l	#Map_Sonic,(v_player+objMap).w
+		move.w	#$780,(v_player+objGfx).w
+		move.b	d0,(v_player+objAnim).w
+		move.w	d0,objScreenY(a0)
+		move.w	d0,objScreenX(a0)
 
 locret_11FCC:
 		rts
@@ -141,7 +141,7 @@ sub_11FCE:
 		moveq	#0,d0
 		move.b	(v_debugitem).w,d0
 		lsl.w	#3,d0
-		move.l	(a2,d0.w),obMap(a0)
-		move.w	6(a2,d0.w),obGfx(a0)
-		move.b	5(a2,d0.w),obFrame(a0)
+		move.l	(a2,d0.w),objMap(a0)
+		move.w	6(a2,d0.w),objGfx(a0)
+		move.b	5(a2,d0.w),objFrame(a0)
 		rts

@@ -1,5 +1,4 @@
 off_6256:	dc.w byte_625E-off_6256, byte_62AF-off_6256, byte_6300-off_6256, byte_637E-off_6256
-
 byte_625E:	dc.b $10
 		dc.b $C8, $E, 0, $60, $10
 		dc.b $D0, $D, 0, $6C, $F0
@@ -17,7 +16,6 @@ byte_625E:	dc.b $10
 		dc.b 0, 5, 0, $B8, $D0
 		dc.b $10, $D, 0, $B0, $10
 		dc.b $10, 5, 0, $BC, 0
-
 byte_62AF:	dc.b $10
 		dc.b $C8, $E, 0, $60, $10
 		dc.b $D0, $D, 0, $6C, $F0
@@ -35,7 +33,6 @@ byte_62AF:	dc.b $10
 		dc.b 0, 5, 0, $BC, $D0
 		dc.b $10, $D, 0, $B0, $10
 		dc.b $10, 5, 0, $BC, 0
-
 byte_6300:	dc.b $19
 		dc.b $C8, 6, 0, $66, $20
 		dc.b $C8, 6, 0, $60, $10
@@ -62,7 +59,6 @@ byte_6300:	dc.b $19
 		dc.b $10, 5, 0, $B0, $20
 		dc.b $10, 5, 0, $B0, $10
 		dc.b $10, 5, 0, $BC, 0
-
 byte_637E:	dc.b $19
 		dc.b $C8, 6, 0, $66, $20
 		dc.b $C8, 6, 0, $60, $10

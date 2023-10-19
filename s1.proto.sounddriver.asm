@@ -2,14 +2,14 @@
 ; Modified SMPS 68k Type 1b sound driver
 ; ---------------------------------------------------------------------------
 ; Go_SoundTypes:
-Go_SoundPriorities:     dc.l SoundPriorities
+Go_SoundPriorities:	dc.l SoundPriorities
 ; Go_SoundD0:
 Go_SpecSoundIndex:	dc.l SpecSoundIndex
-Go_MusicIndex:          dc.l MusicIndex
-Go_SoundIndex:	        dc.l SoundIndex
-Go_Modulation:	        dc.l ModulationIndex
+Go_MusicIndex:		dc.l MusicIndex
+Go_SoundIndex:		dc.l SoundIndex
+Go_Modulation:		dc.l ModulationIndex
 ; off_74010:
-Go_PSGIndex:	        dc.l PSG_Index
+Go_PSGIndex:		dc.l PSG_Index
 			dc.l $A0
 			dc.l UpdateMusic
 Go_SpeedUpIndex:	dc.l SpeedUpIndex
@@ -35,7 +35,7 @@ ModulationIndex:dc.b $D, 1, 7, 4, 1, 1, 1, 4, 2, 1, 2, 4, 8, 1, 6, 4
 ; ---------------------------------------------------------------------------
 ; New tempos for songs during speed shoes
 ; ---------------------------------------------------------------------------
-SpeedUpIndex:   dc.b 7					; GHZ
+SpeedUpIndex:	dc.b 7					; GHZ
 		dc.b $72				; LZ
 		dc.b $73				; MZ
 		dc.b $26				; SLZ
@@ -77,7 +77,7 @@ ptr_musend:
 ; ---------------------------------------------------------------------------
 ; SoundTypes:
 SoundPriorities:
-                dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80 ; $81
+		dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80 ; $81
 		dc.b $80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$70 ; $90
 		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70 ; $A0
 		dc.b $70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70 ; $B0
@@ -738,7 +738,7 @@ dPlaySnd_Music:
 		adda.w	#TrackSz,a5
 		dbf	d0,.loop0
 
-                movea.l	a6,a0
+		movea.l	a6,a0
 		lea	v_1up_ram_copy(a6),a1
 		move.w	#((v_music_track_ram_end-v_startofvariables)/4)-1,d0	; Backup $220 bytes: all variables and music track data
 
@@ -1017,7 +1017,7 @@ dPlaySnd_SFX:
 ; ---------------------------------------------------------------------------
 
 SFX_BGMChannelRAM:
-                dc.l (v_snddriver_ram+v_music_fm3_track)&$FFFFFF
+		dc.l (v_snddriver_ram+v_music_fm3_track)&$FFFFFF
 		dc.l 0
 		dc.l (v_snddriver_ram+v_music_fm4_track)&$FFFFFF
 		dc.l (v_snddriver_ram+v_music_fm5_track)&$FFFFFF
@@ -1123,15 +1123,15 @@ dPlaySnd_SpecSFX:
 ; BGMFM4PSG3RAM:
 ;SpecSFX_BGMChannelRAM:
 		dc.l (v_snddriver_ram+v_music_fm4_track)&$FFFFFF
-                dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF
+		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF
 ; SFXFM4PSG3RAM:
 ;SpecSFX_SFXChannelRAM:
-                dc.l (v_snddriver_ram+v_sfx_fm4_track)&$FFFFFF
+		dc.l (v_snddriver_ram+v_sfx_fm4_track)&$FFFFFF
 		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF
 ; SpecialSFXFM4PSG3RAM:
 ;SpecSFX_SpecSFXChannelRAM:
-                dc.l (v_snddriver_ram+v_spcsfx_fm4_track)&$FFFFFF
-                dc.l (v_snddriver_ram+v_spcsfx_psg3_track)&$FFFFFF
+		dc.l (v_snddriver_ram+v_spcsfx_fm4_track)&$FFFFFF
+		dc.l (v_snddriver_ram+v_spcsfx_psg3_track)&$FFFFFF
 ; ---------------------------------------------------------------------------
 
 StopSFX:

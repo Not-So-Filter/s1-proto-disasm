@@ -1,23 +1,23 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_ResetOnFloor:
-		btst	#4,obStatus(a0)
+		btst	#4,objStatus(a0)
 		beq.s	loc_F226
 		nop
 		nop
 		nop
 
 loc_F226:
-		bclr	#5,obStatus(a0)
-		bclr	#1,obStatus(a0)
-		bclr	#4,obStatus(a0)
-		btst	#2,obStatus(a0)
+		bclr	#5,objStatus(a0)
+		bclr	#1,objStatus(a0)
+		bclr	#4,objStatus(a0)
+		btst	#2,objStatus(a0)
 		beq.s	loc_F25C
-		bclr	#2,obStatus(a0)
-		move.b	#$13,obHeight(a0)
-		move.b	#9,obWidth(a0)
-		move.b	#id_Walk,obAnim(a0)
-		subq.w	#5,obY(a0)
+		bclr	#2,objStatus(a0)
+		move.b	#$13,objHeight(a0)
+		move.b	#9,objWidth(a0)
+		move.b	#id_Walk,objAnim(a0)
+		subq.w	#5,objY(a0)
 
 loc_F25C:
 		move.w	#0,$3E(a0)

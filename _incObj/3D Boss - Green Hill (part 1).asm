@@ -2,7 +2,7 @@
 
 ObjGHZBoss:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_B002(pc,d0.w),d1
 		jmp	off_B002(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -26,36 +26,36 @@ loc_B01C:
 		bne.s	loc_B064
 
 loc_B022:
-		move.b	(a2)+,obRoutine(a1)
-		move.b	#id_BossGreenHill,obId(a1)
-		move.w	obX(a0),obX(a1)
-		move.w	obY(a0),obY(a1)
-		move.l	#Map_Eggman,obMap(a1)
-		move.w	#$400,obGfx(a1)
-		move.b	#4,obRender(a1)
-		move.b	#$20,obActWid(a1)
-		move.b	#3,obPriority(a1)
-		move.b	(a2)+,obAnim(a1)
+		move.b	(a2)+,objRoutine(a1)
+		move.b	#id_BossGreenHill,objId(a1)
+		move.w	objX(a0),objX(a1)
+		move.w	objY(a0),objY(a1)
+		move.l	#Map_Eggman,objMap(a1)
+		move.w	#$400,objGfx(a1)
+		move.b	#4,objRender(a1)
+		move.b	#$20,objActWid(a1)
+		move.b	#3,objPriority(a1)
+		move.b	(a2)+,objAnim(a1)
 		move.l	a0,$34(a1)
 		dbf	d1,loc_B01C
 
 loc_B064:
-		move.w	obX(a0),$30(a0)
-		move.w	obY(a0),$38(a0)
-		move.b	#$F,obColType(a0)
-		move.b	#8,obColProp(a0)
+		move.w	objX(a0),objBossX(a0)
+		move.w	objY(a0),objBossY(a0)
+		move.b	#$F,objColType(a0)
+		move.b	#8,objColProp(a0)
 
 loc_B07C:
 		moveq	#0,d0
-		move.b	ob2ndRout(a0),d0
+		move.b	obj2ndRout(a0),d0
 		move.w	off_B0AA(pc,d0.w),d1
 		jsr	off_B0AA(pc,d1.w)
 		lea	(Ani_Eggman).l,a1
 		bsr.w	AnimateSprite
-		move.b	obStatus(a0),d0
+		move.b	objStatus(a0),d0
 		andi.b	#3,d0
-		andi.b	#$FC,obRender(a0)
-		or.b	d0,obRender(a0)
+		andi.b	#$FC,objRender(a0)
+		or.b	d0,objRender(a0)
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 
@@ -65,26 +65,26 @@ off_B0AA:	dc.w loc_B0B6-off_B0AA, loc_B1AE-off_B0AA
 ; ---------------------------------------------------------------------------
 
 loc_B0B6:
-		move.w	#$100,obVelY(a0)
+		move.w	#$100,objVelY(a0)
 		bsr.w	BossMove
-		cmpi.w	#$338,$38(a0)
+		cmpi.w	#$338,objBossY(a0)
 		bne.s	loc_B0D2
-		move.w	#0,obVelY(a0)
-		addq.b	#2,ob2ndRout(a0)
+		move.w	#0,objVelY(a0)
+		addq.b	#2,obj2ndRout(a0)
 
 loc_B0D2:
 		move.b	$3F(a0),d0
 		jsr	(CalcSine).l
 		asr.w	#6,d0
-		add.w	$38(a0),d0
-		move.w	d0,obY(a0)
-		move.w	$30(a0),obX(a0)
+		add.w	objBossY(a0),d0
+		move.w	d0,objY(a0)
+		move.w	objBossX(a0),objX(a0)
 		addq.b	#2,$3F(a0)
-		cmpi.b	#8,ob2ndRout(a0)
+		cmpi.b	#8,obj2ndRout(a0)
 		bcc.s	locret_B136
-		tst.b	obStatus(a0)
+		tst.b	objStatus(a0)
 		bmi.s	loc_B138
-		tst.b	obColType(a0)
+		tst.b	objColType(a0)
 		bne.s	locret_B136
 		tst.b	$3E(a0)
 		bne.s	loc_B11A
@@ -103,13 +103,13 @@ loc_B128:
 		move.w	d0,(a1)
 		subq.b	#1,$3E(a0)
 		bne.s	locret_B136
-		move.b	#$F,obColType(a0)
+		move.b	#$F,objColType(a0)
 
 locret_B136:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_B138:
-		move.b	#8,ob2ndRout(a0)
+		move.b	#8,obj2ndRout(a0)
 		move.w	#$B3,$3C(a0)
 		rts

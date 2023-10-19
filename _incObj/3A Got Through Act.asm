@@ -2,7 +2,7 @@
 
 ObjLevelResults:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_A6EE(pc,d0.w),d1
 		jmp	off_A6EE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -25,37 +25,37 @@ loc_A702:
 		moveq	#6,d1
 
 loc_A70C:
-		move.b	#id_GotThroughCard,obId(a1)
-		move.w	(a2)+,obX(a1)
+		move.b	#id_GotThroughCard,objId(a1)
+		move.w	(a2)+,objX(a1)
 		move.w	(a2)+,got_mainX(a1)
-		move.w	(a2)+,obScreenY(a1)
-		move.b	(a2)+,obRoutine(a1)
+		move.w	(a2)+,objScreenY(a1)
+		move.b	(a2)+,objRoutine(a1)
 		move.b	(a2)+,d0
 		cmpi.b	#6,d0
 		bne.s	loc_A72E
 		add.b	(v_act).w,d0
 
 loc_A72E:
-		move.b	d0,obFrame(a1)
-		move.l	#MapLevelResults,obMap(a1)
-		move.w	#$8580,obGfx(a1)
-		move.b	#0,obRender(a1)
-		lea	obSize(a1),a1
+		move.b	d0,objFrame(a1)
+		move.l	#MapLevelResults,objMap(a1)
+		move.w	#$8580,objGfx(a1)
+		move.b	#0,objRender(a1)
+		lea	objSize(a1),a1
 		dbf	d1,loc_A70C
 
 loc_A74E:
 		moveq	#$10,d1
 		move.w	got_mainX(a0),d0
-		cmp.w	obX(a0),d0
+		cmp.w	objX(a0),d0
 		beq.s	loc_A774
 		bge.s	loc_A75E
 		neg.w	d1
 
 loc_A75E:
-		add.w	d1,obX(a0)
+		add.w	d1,objX(a0)
 
 loc_A762:
-		move.w	obX(a0),d0
+		move.w	objX(a0),d0
 		bmi.s	locret_A772
 		cmpi.w	#$200,d0
 		bcc.s	locret_A772
@@ -67,15 +67,15 @@ locret_A772:
 ; ---------------------------------------------------------------------------
 
 loc_A774:
-		cmpi.b	#4,obFrame(a0)
+		cmpi.b	#4,objFrame(a0)
 		bne.s	loc_A762
-		addq.b	#2,obRoutine(a0)
-		move.w	#$B4,obTimeFrame(a0)
+		addq.b	#2,objRoutine(a0)
+		move.w	#$B4,objTimeFrame(a0)
 
 loc_A786:
-		subq.w	#1,obTimeFrame(a0)
+		subq.w	#1,objTimeFrame(a0)
 		bne.s	loc_A790
-		addq.b	#2,obRoutine(a0)
+		addq.b	#2,objRoutine(a0)
 
 loc_A790:
 		bra.w	DisplaySprite
@@ -101,8 +101,8 @@ loc_A7C0:
 		bne.s	loc_A7DA
 		move.w	#sfx_Cash,d0
 		jsr	(PlaySound_Special).l
-		addq.b	#2,obRoutine(a0)
-		move.w	#$B4,obTimeFrame(a0)
+		addq.b	#2,objRoutine(a0)
+		move.w	#$B4,objTimeFrame(a0)
 
 locret_A7D8:
 		rts

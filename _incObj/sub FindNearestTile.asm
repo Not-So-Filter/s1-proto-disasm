@@ -32,7 +32,7 @@ loc_10186:
 
 loc_1018A:
 		andi.w	#$7F,d1
-		btst	#6,obRender(a0)
+		btst	#6,objRender(a0)
 		beq.s	loc_101A2
 		addq.w	#1,d1
 		cmpi.w	#$29,d1

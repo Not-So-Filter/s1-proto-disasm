@@ -2,7 +2,7 @@
 
 ObjMZBlocks:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_C3FC(pc,d0.w),d1
 		jmp	off_C3FC(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,22 +11,22 @@ off_C3FC:	dc.w loc_C400-off_C3FC, loc_C43C-off_C3FC
 ; ---------------------------------------------------------------------------
 
 loc_C400:
-		addq.b	#2,obRoutine(a0)
-		move.b	#$F,obHeight(a0)
-		move.b	#$F,obWidth(a0)
-		move.l	#MapMZBlocks,obMap(a0)
-		move.w	#$4000,obGfx(a0)
-		move.b	#4,obRender(a0)
-		move.b	#3,obPriority(a0)
-		move.b	#$10,obActWid(a0)
-		move.w	obY(a0),$30(a0)
+		addq.b	#2,objRoutine(a0)
+		move.b	#$F,objHeight(a0)
+		move.b	#$F,objWidth(a0)
+		move.l	#Map_Brick,objMap(a0)
+		move.w	#$4000,objGfx(a0)
+		move.b	#4,objRender(a0)
+		move.b	#3,objPriority(a0)
+		move.b	#$10,objActWid(a0)
+		move.w	objY(a0),$30(a0)
 		move.w	#$5C0,$32(a0)
 
 loc_C43C:
-		tst.b	obRender(a0)
+		tst.b	objRender(a0)
 		bpl.s	loc_C46A
 		moveq	#0,d0
-		move.b	obSubtype(a0),d0
+		move.b	objSubtype(a0),d0
 		andi.w	#7,d0
 		add.w	d0,d0
 		move.w	off_C48E(pc,d0.w),d1
@@ -34,7 +34,7 @@ loc_C43C:
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	#$11,d3
-		move.w	obX(a0),d4
+		move.w	objX(a0),d4
 		bsr.w	SolidObject
 
 loc_C46A:
@@ -52,20 +52,20 @@ locret_C498:
 ; ---------------------------------------------------------------------------
 
 loc_C49A:
-		move.w	(v_objspace+obX).w,d0
-		sub.w	obX(a0),d0
+		move.w	(v_objspace+objX).w,d0
+		sub.w	objX(a0),d0
 		bcc.s	loc_C4A6
 		neg.w	d0
 
 loc_C4A6:
 		cmpi.w	#$90,d0
 		bcc.s	loc_C4B2
-		move.b	#3,obSubtype(a0)
+		move.b	#3,objSubtype(a0)
 
 loc_C4B2:
 		moveq	#0,d0
 		move.b	(v_oscillate+$16).w,d0
-		btst	#3,obSubtype(a0)
+		btst	#3,objSubtype(a0)
 		beq.s	loc_C4C6
 		neg.w	d0
 		addi.w	#$10,d0
@@ -73,25 +73,25 @@ loc_C4B2:
 loc_C4C6:
 		move.w	$30(a0),d1
 		sub.w	d0,d1
-		move.w	d1,obY(a0)
+		move.w	d1,objY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_C4D2:
 		bsr.w	SpeedToPos
-		addi.w	#$18,obVelY(a0)
+		addi.w	#$18,objVelY(a0)
 		bsr.w	ObjectHitFloor
 		tst.w	d1
 		bpl.w	locret_C50C
-		add.w	d1,obY(a0)
-		clr.w	obVelY(a0)
-		move.w	obY(a0),$30(a0)
-		move.b	#4,obSubtype(a0)
+		add.w	d1,objY(a0)
+		clr.w	objVelY(a0)
+		move.w	objY(a0),$30(a0)
+		move.b	#4,objSubtype(a0)
 		move.w	(a1),d0
 		andi.w	#$3FF,d0
 		cmpi.w	#$2E8,d0
 		bcc.s	locret_C50C
-		move.b	#0,obSubtype(a0)
+		move.b	#0,objSubtype(a0)
 
 locret_C50C:
 		rts
@@ -105,5 +105,5 @@ loc_C510:
 		lsr.w	#3,d0
 		move.w	$30(a0),d1
 		sub.w	d0,d1
-		move.w	d1,obY(a0)
+		move.w	d1,objY(a0)
 		rts

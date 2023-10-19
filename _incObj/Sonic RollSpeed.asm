@@ -19,7 +19,7 @@ loc_EC86:
 		bsr.w	Sonic_RollRight
 
 loc_EC92:
-		move.w	obInertia(a0),d0
+		move.w	objInertia(a0),d0
 		beq.s	loc_ECB4
 		bmi.s	loc_ECA8
 		sub.w	d5,d0
@@ -27,7 +27,7 @@ loc_EC92:
 		move.w	#0,d0
 
 loc_ECA2:
-		move.w	d0,obInertia(a0)
+		move.w	d0,objInertia(a0)
 		bra.s	loc_ECB4
 ; ---------------------------------------------------------------------------
 
@@ -37,37 +37,37 @@ loc_ECA8:
 		move.w	#0,d0
 
 loc_ECB0:
-		move.w	d0,obInertia(a0)
+		move.w	d0,objInertia(a0)
 
 loc_ECB4:
-		tst.w	obInertia(a0)
+		tst.w	objInertia(a0)
 		bne.s	loc_ECD6
-		bclr	#2,obStatus(a0)
-		move.b	#$13,obHeight(a0)
-		move.b	#9,obWidth(a0)
-		move.b	#id_Wait,obAnim(a0)
-		subq.w	#5,obY(a0)
+		bclr	#2,objStatus(a0)
+		move.b	#$13,objHeight(a0)
+		move.b	#9,objWidth(a0)
+		move.b	#id_Wait,objAnim(a0)
+		subq.w	#5,objY(a0)
 
 loc_ECD6:
-		move.b	obAngle(a0),d0
+		move.b	objAngle(a0),d0
 		jsr	(CalcSine).l
-		muls.w	obInertia(a0),d1
+		muls.w	objInertia(a0),d1
 		asr.l	#8,d1
-		move.w	d1,obVelX(a0)
-		muls.w	obInertia(a0),d0
+		move.w	d1,objVelX(a0)
+		muls.w	objInertia(a0),d0
 		asr.l	#8,d0
-		move.w	d0,obVelY(a0)
+		move.w	d0,objVelY(a0)
 		bra.w	loc_EB34
 ; ---------------------------------------------------------------------------
 
 Sonic_RollLeft:
-		move.w	obInertia(a0),d0
+		move.w	objInertia(a0),d0
 		beq.s	loc_ED00
 		bpl.s	loc_ED0E
 
 loc_ED00:
-		bset	#0,obStatus(a0)
-		move.b	#id_Roll,obAnim(a0)
+		bset	#0,objStatus(a0)
+		move.b	#id_Roll,objAnim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -77,15 +77,15 @@ loc_ED0E:
 		move.w	#$FF80,d0
 
 loc_ED16:
-		move.w	d0,obInertia(a0)
+		move.w	d0,objInertia(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 Sonic_RollRight:
-		move.w	obInertia(a0),d0
+		move.w	objInertia(a0),d0
 		bmi.s	loc_ED30
-		bclr	#0,obStatus(a0)
-		move.b	#id_Roll,obAnim(a0)
+		bclr	#0,objStatus(a0)
+		move.b	#id_Roll,objAnim(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -95,5 +95,5 @@ loc_ED30:
 		move.w	#$80,d0
 
 loc_ED38:
-		move.w	d0,obInertia(a0)
+		move.w	d0,objInertia(a0)
 		rts

@@ -53,47 +53,77 @@ bitDn:		equ 1
 bitUp:		equ 0
 
 ; Object variables
-obId:		equ 0	; id of object (this is put here for readability, this actually makes routines slower by 4 cycles)
-obRender:	equ 1	; bitfield for x/y flip, display mode
-obGfx:		equ 2	; palette line & VRAM setting (2 bytes)
-obMap:		equ 4	; mappings address (4 bytes)
-obX:		equ 8	; x-axis position (2-4 bytes)
-obScreenY:	equ $A	; y-axis position for screen-fixed items (2 bytes)
-obY:		equ $C	; y-axis position (2-4 bytes)
-obScreenX:	equ $E	; x-axis position for screen-fixed items (2 bytes)
-obVelX:		equ $10	; x-axis velocity (2 bytes)
-obVelY:		equ $12	; y-axis velocity (2 bytes)
-obInertia:	equ $14	; potential speed (2 bytes)
-obHeight:	equ $16	; height/2
-obWidth:	equ $17	; width/2
-obActWid:	equ $18	; action width
-obPriority:	equ $19	; sprite stack priority -- 0 is front
-obFrame:	equ $1A	; current frame displayed
-obAniFrame:	equ $1B	; current frame in animation script
-obAnim:		equ $1C	; current animation
-obNextAni:	equ $1D	; next animation
-obTimeFrame:	equ $1E	; time to next frame
-obDelayAni:	equ $1F	; time to delay animation
-obColType:	equ $20	; collision response type
-obColProp:	equ $21	; collision extra property
-obStatus:	equ $22	; orientation or mode
-obRespawnNo:	equ $23	; respawn list index number
-obRoutine:	equ $24	; routine number
-ob2ndRout:	equ $25	; secondary routine number
-obAngle:	equ $26	; angle
-obSubtype:	equ $28	; object subtype
-obSolid:	equ ob2ndRout ; solid status flag
-obSize:		equ $40 ; size for each object variables
+	rsset 0
+objId:		rs.b 1	; id of object (this is put here for readability, this actually makes routines slower by 4 cycles)
+objRender:	rs.b 1	; bitfield for x/y flip, display mode
+objGfx:		rs.w 1	; palette line & VRAM setting (2 bytes)
+objMap:		rs.l 1	; mappings address (4 bytes)
+objX:		rs.w 1	; x-axis position (2-4 bytes)
+objScreenY:	rs.w 1	; y-axis position for screen-fixed items (2 bytes)
+objY:		rs.w 1	; y-axis position (2-4 bytes)
+objScreenX:	rs.w 1	; x-axis position for screen-fixed items (2 bytes)
+objVelX:	rs.w 1	; x-axis velocity (2 bytes)
+objVelY:	rs.w 1	; y-axis velocity (2 bytes)
+objInertia:	rs.w 1	; potential speed (2 bytes)
+objHeight:	rs.b 1	; height/2
+objWidth:	rs.b 1	; width/2
+objActWid:	rs.b 1	; action width
+objPriority:	rs.b 1	; sprite stack priority -- 0 is front
+objFrame:	rs.b 1	; current frame displayed
+objAniFrame:	rs.b 1	; current frame in animation script
+objAnim:	rs.b 1	; current animation
+objNextAni:	rs.b 1	; next animation
+objTimeFrame:	rs.b 1	; time to next frame
+objDelayAni:	rs.b 1	; time to delay animation
+objColType:	rs.b 1	; collision response type
+objColProp:	rs.b 1	; collision extra property
+objStatus:	rs.b 1	; orientation or mode
+objRespawnNo:	rs.b 1	; respawn list index number
+objRoutine:	rs.b 1	; routine number
+obj2ndRout:	rs.b 1	; secondary routine number
+objAngle:	rs.w 1	; angle
+objSubtype:	rs.b 1	; object subtype
+objOff_29:	rs.b 1
+objOff_2A:	rs.b 1
+objOff_2B:	rs.b 1
+objOff_2C:	rs.b 1
+objOff_2D:	rs.b 1
+objOff_2E:	rs.b 1
+objOff_2F:	rs.b 1
+objOff_30:	rs.b 1
+objOff_31:	rs.b 1
+objOff_32:	rs.b 1
+objOff_33:	rs.b 1
+objOff_34:	rs.b 1
+objOff_35:	rs.b 1
+objOff_36:	rs.b 1
+objOff_37:	rs.b 1
+objOff_38:	rs.b 1
+objOff_39:	rs.b 1
+objOff_3A:	rs.b 1
+objOff_3B:	rs.b 1
+objOff_3C:	rs.b 1
+objOff_3D:	rs.b 1
+objOff_3E:	rs.b 1
+objOff_3F:	rs.b 1
+objSize:	rs.b 1	; size for each object
+	rsreset
+
+objSolid:	equ obj2ndRout ; solid status flag
 
 ; Object variables used by Sonic
-flashtime:	equ $30	; time between flashes after getting hit
-invtime:	equ $32	; time left for invincibility
-shoetime:	equ $34	; time left for speed shoes
-standonobject:	equ $3D	; object Sonic stands on
+flashtime:	equ objOff_30	; time between flashes after getting hit
+invtime:	equ objOff_32	; time left for invincibility
+shoetime:	equ objOff_34	; time left for speed shoes
+standonobject:	equ objOff_3D	; object Sonic stands on
 
 ; Object variables used by the title card
-card_mainX:	equ $30		; position for card to display on
-card_finalX:	equ $32		; position for card to finish on
+card_mainX:	equ objOff_30		; position for card to display on
+card_finalX:	equ objOff_32		; position for card to finish on
+
+; Object variables used by the boss
+objBossX:	equ objOff_30		; x position
+objBossY:	equ objOff_38		; y position
 
 ; Animation flags
 afEnd:		equ $FF	; return to beginning of animation

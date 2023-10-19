@@ -2,7 +2,7 @@
 
 ObjMonitorItem:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_8242(pc,d0.w),d1
 		jsr	off_8242(pc,d1.w)
 		bra.w	DisplaySprite
@@ -13,34 +13,34 @@ off_8242:	dc.w loc_8248-off_8242, loc_8288-off_8242
 ; ---------------------------------------------------------------------------
 
 loc_8248:
-		addq.b	#2,obRoutine(a0)
-		move.w	#$680,obGfx(a0)
-		move.b	#$24,obRender(a0)
-		move.b	#3,obPriority(a0)
-		move.b	#8,obActWid(a0)
-		move.w	#-$300,obVelY(a0)
+		addq.b	#2,objRoutine(a0)
+		move.w	#$680,objGfx(a0)
+		move.b	#$24,objRender(a0)
+		move.b	#3,objPriority(a0)
+		move.b	#8,objActWid(a0)
+		move.w	#-$300,objVelY(a0)
 		moveq	#0,d0
-		move.b	obAnim(a0),d0
+		move.b	objAnim(a0),d0
 		addq.b	#2,d0
-		move.b	d0,obFrame(a0)
+		move.b	d0,objFrame(a0)
 		movea.l	#Map_Monitor,a1
 		add.b	d0,d0
 		adda.w	(a1,d0.w),a1
 		addq.w	#1,a1
-		move.l	a1,obMap(a0)
+		move.l	a1,objMap(a0)
 
 loc_8288:
-		tst.w	obVelY(a0)
+		tst.w	objVelY(a0)
 		bpl.w	loc_829C
 		bsr.w	SpeedToPos
-		addi.w	#$18,obVelY(a0)
+		addi.w	#$18,objVelY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_829C:
-		addq.b	#2,obRoutine(a0)
-		move.w	#$1D,obTimeFrame(a0)
-		move.b	obAnim(a0),d0
+		addq.b	#2,objRoutine(a0)
+		move.w	#$1D,objTimeFrame(a0)
+		move.b	objAnim(a0),d0
 		cmpi.b	#1,d0
 		bne.s	loc_82B2
 		rts
@@ -73,7 +73,7 @@ loc_82F8:
 		cmpi.b	#4,d0
 		bne.s	loc_8314
 		move.b	#1,(v_shield).w
-		move.b	#id_ShieldItem,(v_objspace+obSize*6).w
+		move.b	#id_ShieldItem,(v_objslot6).w
 		move.w	#sfx_Shield,d0
 		jmp	(PlaySound).l
 ; ---------------------------------------------------------------------------
@@ -83,14 +83,14 @@ loc_8314:
 		bne.s	loc_8360
 		move.b	#1,(v_invinc).w
 		move.w	#$4B0,(v_objspace+invtime).w
-		move.b	#id_ShieldItem,(v_objspace+obSize*8).w
-		move.b	#1,(v_objspace+obSize*8+obAnim).w
-		move.b	#id_ShieldItem,(v_objspace+obSize*9).w
-		move.b	#2,(v_objspace+obSize*9+obAnim).w
-		move.b	#id_ShieldItem,(v_objspace+obSize*10).w
-		move.b	#3,(v_objspace+obSize*10+obAnim).w
-		move.b	#id_ShieldItem,(v_objspace+obSize*11).w
-		move.b	#4,(v_objspace+obSize*11+obAnim).w
+		move.b	#id_ShieldItem,(v_objslot8).w
+		move.b	#1,(v_objslot8+objAnim).w
+		move.b	#id_ShieldItem,(v_objslot9).w
+		move.b	#2,(v_objslot9+objAnim).w
+		move.b	#id_ShieldItem,(v_objslotA).w
+		move.b	#3,(v_objslotA+objAnim).w
+		move.b	#id_ShieldItem,(v_objslotB).w
+		move.b	#4,(v_objslotB+objAnim).w
 		move.w	#bgm_Invincible,d0
 		jmp	(PlaySound).l
 ; ---------------------------------------------------------------------------
@@ -124,6 +124,6 @@ locret_83A8:
 ; ---------------------------------------------------------------------------
 
 loc_83AA:
-		subq.w	#1,obTimeFrame(a0)
+		subq.w	#1,objTimeFrame(a0)
 		bmi.w	DeleteObject
 		rts

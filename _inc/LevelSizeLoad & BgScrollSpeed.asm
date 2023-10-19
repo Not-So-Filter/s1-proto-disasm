@@ -87,7 +87,7 @@ loc_3C7C:
 		lea	StartPosArray(pc,d0.w),a1
 		moveq	#0,d1
 		move.w	(a1)+,d1
-		move.w	d1,(v_player+obX).w
+		move.w	d1,(v_player+objX).w
 		subi.w	#$A0,d1
 		bcc.s	loc_3C94
 		moveq	#0,d1
@@ -96,7 +96,7 @@ loc_3C94:
 		move.w	d1,(v_screenposx).w
 		moveq	#0,d0
 		move.w	(a1),d0
-		move.w	d0,(v_player+obY).w
+		move.w	d0,(v_player+objY).w
 		subi.w	#$60,d0
 		bcc.s	loc_3CA8
 		moveq	#0,d0

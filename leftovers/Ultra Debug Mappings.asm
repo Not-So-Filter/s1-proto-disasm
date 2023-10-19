@@ -1,13 +1,16 @@
-UltraDebugMappings:
+;
+;
+;
+;
 		lea	(word_2F48).l,a0
-		lea	(v_objspace+obSize*10).w,a1
+		lea	(v_objslotA).w,a1
 		move.w	#$33,d1
 
 .loop:
 		move.b	#id_Obj05,(a1)
-		move.w	(a0)+,obX(a1)
-		move.w	(a0)+,obScreenY(a1)
-		lea	obSize(a1),a1
+		move.w	(a0)+,objX(a1)
+		move.w	(a0)+,objScreenY(a1)
+		lea	objSize(a1),a1
 		dbf	d1,.loop
 		rts
 ; ---------------------------------------------------------------------------

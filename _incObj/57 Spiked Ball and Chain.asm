@@ -2,7 +2,7 @@
 
 ObjSpikedBalls:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	ObjSpikedBalls_Index(pc,d0.w),d1
 		jmp	ObjSpikedBalls_Index(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,26 +11,26 @@ ObjSpikedBalls_Index:dc.w ObjSpikedBalls_Init-ObjSpikedBalls_Index, ObjSpikedBal
 ; ---------------------------------------------------------------------------
 
 ObjSpikedBalls_Init:
-		addq.b	#2,obRoutine(a0)
-		move.l	#MapSpikedBalls,obMap(a0)
-		move.w	#$3BA,obGfx(a0)
-		move.b	#4,obRender(a0)
-		move.b	#4,obPriority(a0)
-		move.b	#8,obActWid(a0)
-		move.w	obX(a0),$3A(a0)
-		move.w	obY(a0),$38(a0)
-		move.b	#$98,obColType(a0)
-		move.b	obSubtype(a0),d1
+		addq.b	#2,objRoutine(a0)
+		move.l	#MapSpikedBalls,objMap(a0)
+		move.w	#$3BA,objGfx(a0)
+		move.b	#4,objRender(a0)
+		move.b	#4,objPriority(a0)
+		move.b	#8,objActWid(a0)
+		move.w	objX(a0),$3A(a0)
+		move.w	objY(a0),$38(a0)
+		move.b	#$98,objColType(a0)
+		move.b	objSubtype(a0),d1
 		andi.b	#$F0,d1
 		ext.w	d1
 		asl.w	#3,d1
 		move.w	d1,$3E(a0)
-		move.b	obStatus(a0),d0
+		move.b	objStatus(a0),d0
 		ror.b	#2,d0
 		andi.b	#$C0,d0
-		move.b	d0,obAngle(a0)
+		move.b	d0,objAngle(a0)
 		lea	$29(a0),a2
-		move.b	obSubtype(a0),d1
+		move.b	objSubtype(a0),d1
 		andi.w	#7,d1
 		move.b	#0,(a2)+
 		move.w	d1,d3
@@ -38,7 +38,7 @@ ObjSpikedBalls_Init:
 		move.b	d3,$3C(a0)
 		subq.w	#1,d1
 		bcs.s	loc_DD5E
-		btst	#3,obSubtype(a0)
+		btst	#3,objSubtype(a0)
 		beq.s	ObjSpikedBalls_MakeChain
 		subq.w	#1,d1
 		bcs.s	loc_DD5E
@@ -52,14 +52,14 @@ ObjSpikedBalls_MakeChain:
 		lsr.w	#6,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
-		move.b	#4,obRoutine(a1)
-		move.b	obId(a0),obId(a1)
-		move.l	obMap(a0),obMap(a1)
-		move.w	obGfx(a0),obGfx(a1)
-		move.b	obRender(a0),obRender(a1)
-		move.b	obPriority(a0),obPriority(a1)
-		move.b	obActWid(a0),obActWid(a1)
-		move.b	obColType(a0),obColType(a1)
+		move.b	#4,objRoutine(a1)
+		move.b	objId(a0),objId(a1)
+		move.l	objMap(a0),objMap(a1)
+		move.w	objGfx(a0),objGfx(a1)
+		move.b	objRender(a0),objRender(a1)
+		move.b	objPriority(a0),objPriority(a1)
+		move.b	objActWid(a0),objActWid(a1)
+		move.b	objColType(a0),objColType(a1)
 		subi.b	#$10,d3
 		move.b	d3,$3C(a1)
 		dbf	d1,ObjSpikedBalls_MakeChain
@@ -78,8 +78,8 @@ ObjSpikedBalls_Move:
 
 ObjSpikedBalls_MoveStub:
 		move.w	$3E(a0),d0
-		add.w	d0,obAngle(a0)
-		move.b	obAngle(a0),d0
+		add.w	d0,objAngle(a0)
+		move.b	objAngle(a0),d0
 		jsr	(CalcSine).l
 		move.w	$38(a0),d2
 		move.w	$3A(a0),d3
@@ -102,8 +102,8 @@ ObjSpikedBalls_MoveLoop:
 		asr.l	#8,d5
 		add.w	d2,d4
 		add.w	d3,d5
-		move.w	d4,obY(a1)
-		move.w	d5,obX(a1)
+		move.w	d4,objY(a1)
+		move.w	d5,objX(a1)
 		dbf	d6,ObjSpikedBalls_MoveLoop
 		rts
 ; ---------------------------------------------------------------------------

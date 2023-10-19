@@ -2,7 +2,7 @@
 
 ObjPurpleRock:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_AD1A(pc,d0.w),d1
 		jmp	off_AD1A(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,18 +11,18 @@ off_AD1A:	dc.w loc_AD1E-off_AD1A, loc_AD42-off_AD1A
 ; ---------------------------------------------------------------------------
 
 loc_AD1E:
-		addq.b	#2,obRoutine(a0)
-		move.l	#Map_PRock,obMap(a0)
-		move.w	#$63D0,obGfx(a0)
-		move.b	#4,obRender(a0)
-		move.b	#$13,obActWid(a0)
-		move.b	#4,obPriority(a0)
+		addq.b	#2,objRoutine(a0)
+		move.l	#Map_PRock,objMap(a0)
+		move.w	#$63D0,objGfx(a0)
+		move.b	#4,objRender(a0)
+		move.b	#$13,objActWid(a0)
+		move.b	#4,objPriority(a0)
 
 loc_AD42:
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	#$10,d3
-		move.w	obX(a0),d4
+		move.w	objX(a0),d4
 		bsr.w	SolidObject
 		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject

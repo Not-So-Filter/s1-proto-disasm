@@ -2,10 +2,10 @@
 
 Signpost:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_C726(pc,d0.w),d1
 		jsr	off_C726(pc,d1.w)
-		lea	(AniSignpost).l,a1
+		lea	(Ani_Sign).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject
@@ -18,16 +18,16 @@ off_C726:	dc.w loc_C72E-off_C726
 ; ---------------------------------------------------------------------------
 
 loc_C72E:
-		addq.b	#2,obRoutine(a0)
-		move.l	#MapSignpost,obMap(a0)
-		move.w	#$680,obGfx(a0)
-		move.b	#4,obRender(a0)
-		move.b	#$18,obActWid(a0)
-		move.b	#4,obPriority(a0)
+		addq.b	#2,objRoutine(a0)
+		move.l	#Map_Sign,objMap(a0)
+		move.w	#$680,objGfx(a0)
+		move.b	#4,objRender(a0)
+		move.b	#$18,objActWid(a0)
+		move.b	#4,objPriority(a0)
 
 loc_C752:
-		move.w	(v_objspace+obX).w,d0
-		sub.w	obX(a0),d0
+		move.w	(v_objspace+objX).w,d0
+		sub.w	objX(a0),d0
 		bcs.s	locret_C77A
 		cmpi.w	#$20,d0
 		bcc.s	locret_C77A
@@ -35,7 +35,7 @@ loc_C752:
 		jsr	(PlaySound).l
 		clr.b	(f_timecount).w
 		move.w	(v_limitright2).w,(v_limitleft2).w
-		addq.b	#2,obRoutine(a0)
+		addq.b	#2,objRoutine(a0)
 
 locret_C77A:
 		rts
@@ -45,10 +45,10 @@ loc_C77C:
 		subq.w	#1,$30(a0)
 		bpl.s	loc_C798
 		move.w	#$3C,$30(a0)
-		addq.b	#1,obAnim(a0)
-		cmpi.b	#3,obAnim(a0)
+		addq.b	#1,objAnim(a0)
+		cmpi.b	#3,objAnim(a0)
 		bne.s	loc_C798
-		addq.b	#2,obRoutine(a0)
+		addq.b	#2,objRoutine(a0)
 
 loc_C798:
 		subq.w	#1,$32(a0)
@@ -61,21 +61,21 @@ loc_C798:
 		lea	byte_C804(pc,d0.w),a2
 		bsr.w	FindFreeObj
 		bne.s	locret_C802
-		move.b	#id_Rings,obId(a1)
-		move.b	#6,obRoutine(a1)
+		move.b	#id_Rings,objId(a1)
+		move.b	#6,objRoutine(a1)
 		move.b	(a2)+,d0
 		ext.w	d0
-		add.w	obX(a0),d0
-		move.w	d0,obX(a1)
+		add.w	objX(a0),d0
+		move.w	d0,objX(a1)
 		move.b	(a2)+,d0
 		ext.w	d0
-		add.w	obY(a0),d0
-		move.w	d0,obY(a1)
-		move.l	#MapRing,obMap(a1)
-		move.w	#$27B2,obGfx(a1)
-		move.b	#4,obRender(a1)
-		move.b	#2,obPriority(a1)
-		move.b	#8,obActWid(a1)
+		add.w	objY(a0),d0
+		move.w	d0,objY(a1)
+		move.l	#MapRing,objMap(a1)
+		move.w	#$27B2,objGfx(a1)
+		move.b	#4,objRender(a1)
+		move.b	#2,objPriority(a1)
+		move.b	#8,objActWid(a1)
 
 locret_C802:
 		rts
@@ -101,7 +101,7 @@ sub_C81C:
 		move.w	(v_limitright2).w,(v_limitleft2).w
 		clr.b	(v_invinc).w
 		clr.b	(f_timecount).w
-		move.b	#id_GotThroughCard,(v_objspace+obSize*24).w
+		move.b	#id_GotThroughCard,(v_objslot18).w
 		moveq	#plcid_TitleCard,d0
 		jsr	(NewPLC).l
 		move.b	#1,(f_endactbonus).w

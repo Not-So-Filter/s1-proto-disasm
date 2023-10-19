@@ -34,7 +34,7 @@ loc_3E18:
 ; ---------------------------------------------------------------------------
 
 Deform_Index:	dc.w Deform_GHZ-Deform_Index, Deform_LZ-Deform_Index, Deform_MZ-Deform_Index
-                dc.w Deform_SLZ-Deform_Index, Deform_SZ-Deform_Index, Deform_CWZ-Deform_Index
+		dc.w Deform_SLZ-Deform_Index, Deform_SZ-Deform_Index, Deform_CWZ-Deform_Index
 ; ---------------------------------------------------------------------------
 
 Deform_GHZ:
@@ -60,7 +60,7 @@ Deform_GHZ:
 		move.w	#$6F,d1
 		sub.w	d4,d1
 		move.w	(v_screenposx).w,d0
-		cmpi.b	#4,(v_gamemode).w
+		cmpi.b	#id_Title,(v_gamemode).w
 		bne.s	loc_3EA8
 		moveq	#0,d0
 
@@ -324,7 +324,7 @@ locret_40E6:
 ; ---------------------------------------------------------------------------
 
 sub_40E8:
-		move.w	(v_player+obX).w,d0
+		move.w	(v_player+objX).w,d0
 		sub.w	(v_screenposx).w,d0
 		subi.w	#$90,d0
 		bcs.s	loc_412C
@@ -374,14 +374,14 @@ loc_4146:
 
 ScrollVertical:
 		moveq	#0,d1
-		move.w	(v_player+obY).w,d0
+		move.w	(v_player+objY).w,d0
 		sub.w	(v_screenposy).w,d0
-		btst	#2,(v_objspace+obStatus).w
+		btst	#2,(v_objspace+objStatus).w
 		beq.s	loc_4160
 		subq.w	#5,d0
 
 loc_4160:
-		btst	#1,(v_player+obStatus).w
+		btst	#1,(v_player+objStatus).w
 		beq.s	loc_4180
 		addi.w	#$20,d0
 		sub.w	(unk_FFF73E).w,d0

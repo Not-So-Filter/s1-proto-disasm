@@ -2,7 +2,7 @@
 
 ObjRings:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_7BEE(pc,d0.w),d1
 		jmp	off_7BEE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -30,10 +30,10 @@ byte_7BF8:	dc.b $10, 0
 loc_7C18:
 		lea	(v_regbuffer).w,a2
 		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
+		move.b	objRespawnNo(a0),d0
 		lea	2(a2,d0.w),a2
 		move.b	(a2),d4
-		move.b	obSubtype(a0),d1
+		move.b	objSubtype(a0),d1
 		move.b	d1,d0
 		andi.w	#7,d1
 		cmpi.w	#7,d1
@@ -50,8 +50,8 @@ loc_7C3A:
 		move.b	byte_7BF8+1(pc,d0.w),d6
 		ext.w	d6
 		movea.l	a0,a1
-		move.w	obX(a0),d2
-		move.w	obY(a0),d3
+		move.w	objX(a0),d2
+		move.w	objY(a0),d3
 		lsr.b	#1,d4
 		bcs.s	loc_7CBC
 		bclr	#7,(a2)
@@ -67,18 +67,18 @@ loc_7C64:
 		bne.s	loc_7CC8
 
 loc_7C74:
-		move.b	#id_Rings,obId(a1)
-		addq.b	#2,obRoutine(a1)
-		move.w	d2,obX(a1)
-		move.w	obX(a0),$32(a1)
-		move.w	d3,obY(a1)
-		move.l	#Map_Ring,obMap(a1)
-		move.w	#$27B2,obGfx(a1)
-		move.b	#4,obRender(a1)
-		move.b	#2,obPriority(a1)
-		move.b	#$47,obColType(a1)
-		move.b	#8,obActWid(a1)
-		move.b	obRespawnNo(a0),obRespawnNo(a1)
+		move.b	#id_Rings,objId(a1)
+		addq.b	#2,objRoutine(a1)
+		move.w	d2,objX(a1)
+		move.w	objX(a0),$32(a1)
+		move.w	d3,objY(a1)
+		move.l	#Map_Ring,objMap(a1)
+		move.w	#$27B2,objGfx(a1)
+		move.b	#4,objRender(a1)
+		move.b	#2,objPriority(a1)
+		move.b	#$47,objColType(a1)
+		move.b	#8,objActWid(a1)
+		move.b	objRespawnNo(a0),objRespawnNo(a1)
 		move.b	d1,$34(a1)
 
 loc_7CBC:
@@ -93,20 +93,20 @@ loc_7CC8:
 		bne.w	DeleteObject
 
 loc_7CD0:
-		move.b	(v_ani1_frame).w,obFrame(a0)
+		move.b	(v_ani1_frame).w,objFrame(a0)
 		bsr.w	DisplaySprite
 		out_of_range.s	loc_7D2C,$32(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_7CF8:
-		addq.b	#2,obRoutine(a0)
-		move.b	#0,obColType(a0)
-		move.b	#1,obPriority(a0)
+		addq.b	#2,objRoutine(a0)
+		move.b	#0,objColType(a0)
+		move.b	#1,objPriority(a0)
 		bsr.w	CollectRing
 		lea	(v_regbuffer).w,a2
 		moveq	#0,d0
-		move.b	obRespawnNo(a0),d0
+		move.b	objRespawnNo(a0),d0
 		move.b	$34(a0),d1
 		bset	d1,2(a2,d0.w)
 
@@ -144,7 +144,7 @@ loc_7D6A:
 
 ObjRingLoss:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_7D7E(pc,d0.w),d1
 		jmp	off_7D7E(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -174,21 +174,21 @@ loc_7DA0:
 		bne.w	loc_7E2C
 
 loc_7DA8:
-		move.b	#id_RingLoss,obId(a1)
-		addq.b	#2,obRoutine(a1)
-		move.b	#8,obHeight(a1)
-		move.b	#8,obWidth(a1)
-		move.w	obX(a0),obX(a1)
-		move.w	obY(a0),obY(a1)
-		move.l	#Map_Ring,obMap(a1)
+		move.b	#id_RingLoss,objId(a1)
+		addq.b	#2,objRoutine(a1)
+		move.b	#8,objHeight(a1)
+		move.b	#8,objWidth(a1)
+		move.w	objX(a0),objX(a1)
+		move.w	objY(a0),objY(a1)
+		move.l	#Map_Ring,objMap(a1)
 
 loc_7DD2:
-		move.w	#$27B2,obGfx(a1)
-		move.b	#4,obRender(a1)
-		move.b	#2,obPriority(a1)
-		move.b	#$47,obColType(a1)
-		move.b	#8,obActWid(a1)
-		move.b	#$FF,(v_ani3_time).w
+		move.w	#$27B2,objGfx(a1)
+		move.b	#4,objRender(a1)
+		move.b	#2,objPriority(a1)
+		move.b	#$47,objColType(a1)
+		move.b	#8,objActWid(a1)
+		move.b	#-1,(v_ani3_time).w
 		tst.w	d4
 		bmi.s	loc_7E1C
 		move.w	d4,d0
@@ -206,8 +206,8 @@ loc_7DD2:
 		move.w	#$288,d4
 
 loc_7E1C:
-		move.w	d2,obVelX(a1)
-		move.w	d3,obVelY(a1)
+		move.w	d2,objVelX(a1)
+		move.w	d3,objVelY(a1)
 		neg.w	d2
 		neg.w	d4
 		dbf	d5,loc_7DA0
@@ -220,9 +220,9 @@ loc_7E2C:
 		jsr	(PlaySound_Special).l
 
 loc_7E48:
-		move.b	(v_ani3_frame).w,obFrame(a0)
+		move.b	(v_ani3_frame).w,objFrame(a0)
 		bsr.w	SpeedToPos
-		addi.w	#$18,obVelY(a0)
+		addi.w	#$18,objVelY(a0)
 		bmi.s	loc_7E82
 		move.b	(v_vbla_byte).w,d0
 		add.b	d7,d0
@@ -231,26 +231,26 @@ loc_7E48:
 		jsr	(ObjectHitFloor).l
 		tst.w	d1
 		bpl.s	loc_7E82
-		add.w	d1,obY(a0)
-		move.w	obVelY(a0),d0
+		add.w	d1,objY(a0)
+		move.w	objVelY(a0),d0
 		asr.w	#2,d0
-		sub.w	d0,obVelY(a0)
-		neg.w	obVelY(a0)
+		sub.w	d0,objVelY(a0)
+		neg.w	objVelY(a0)
 
 loc_7E82:
 		tst.b	(v_ani3_time).w
 		beq.s	loc_7EBC
 		move.w	(v_limitbtm2).w,d0
 		addi.w	#224,d0
-		cmp.w	obY(a0),d0
+		cmp.w	objY(a0),d0
 		bcs.s	loc_7EBC
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 
 loc_7E9A:
-		addq.b	#2,obRoutine(a0)
-		move.b	#0,obColType(a0)
-		move.b	#1,obPriority(a0)
+		addq.b	#2,objRoutine(a0)
+		move.b	#0,objColType(a0)
+		move.b	#1,objPriority(a0)
 		bsr.w	CollectRing
 
 loc_7EAE:

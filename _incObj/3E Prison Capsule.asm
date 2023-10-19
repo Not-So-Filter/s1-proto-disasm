@@ -2,7 +2,7 @@
 
 ObjCapsule:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_B66C(pc,d0.w),d1
 		jsr	off_B66C(pc,d1.w)
 		bsr.w	DisplaySprite
@@ -22,22 +22,22 @@ byte_B67C:	dc.b 2, $20, 4, 0
 ; ---------------------------------------------------------------------------
 
 loc_B68C:
-		move.l	#MapCapsule,obMap(a0)
-		move.w	#$49D,obGfx(a0)
-		move.b	#4,obRender(a0)
-		move.w	obY(a0),$30(a0)
+		move.l	#Map_Pri,objMap(a0)
+		move.w	#$49D,objGfx(a0)
+		move.b	#4,objRender(a0)
+		move.w	objY(a0),$30(a0)
 		moveq	#0,d0
-		move.b	obSubtype(a0),d0
+		move.b	objSubtype(a0),d0
 		lsl.w	#2,d0
 		lea	byte_B67C(pc,d0.w),a1
-		move.b	(a1)+,obRoutine(a0)
-		move.b	(a1)+,obActWid(a0)
-		move.b	(a1)+,obPriority(a0)
-		move.b	(a1)+,obFrame(a0)
+		move.b	(a1)+,objRoutine(a0)
+		move.b	(a1)+,objActWid(a0)
+		move.b	(a1)+,objPriority(a0)
+		move.b	(a1)+,objFrame(a0)
 		cmpi.w	#8,d0
 		bne.s	locret_B6D4
-		move.b	#6,obColType(a0)
-		move.b	#8,obColProp(a0)
+		move.b	#6,objColType(a0)
+		move.b	#8,objColProp(a0)
 
 locret_B6D4:
 		rts
@@ -49,19 +49,19 @@ loc_B6D6:
 		move.w	#$2B,d1
 		move.w	#$18,d2
 		move.w	#$18,d3
-		move.w	obX(a0),d4
+		move.w	objX(a0),d4
 		bra.w	SolidObject
 ; ---------------------------------------------------------------------------
 
 loc_B6F2:
-		tst.b	ob2ndRout(a0)
+		tst.b	obj2ndRout(a0)
 		beq.s	loc_B708
-		clr.b	ob2ndRout(a0)
-		bclr	#3,(v_objspace+obStatus).w
-		bset	#1,(v_objspace+obStatus).w
+		clr.b	obj2ndRout(a0)
+		bclr	#3,(v_objspace+objStatus).w
+		bset	#1,(v_objspace+objStatus).w
 
 loc_B708:
-		move.b	#2,obFrame(a0)
+		move.b	#2,objFrame(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -69,20 +69,20 @@ loc_B710:
 		move.w	#$17,d1
 		move.w	#8,d2
 		move.w	#8,d3
-		move.w	obX(a0),d4
+		move.w	objX(a0),d4
 		bsr.w	SolidObject
-		lea	(AniCapsule).l,a1
+		lea	(Ani_Pri).l,a1
 		bsr.w	AnimateSprite
-		move.w	$30(a0),obY(a0)
-		tst.b	ob2ndRout(a0)
+		move.w	$30(a0),objY(a0)
+		tst.b	obj2ndRout(a0)
 		beq.s	locret_B75E
-		addq.w	#8,obY(a0)
-		move.b	#$A,obRoutine(a0)
-		move.w	#$3C,obTimeFrame(a0)
+		addq.w	#8,objY(a0)
+		move.b	#$A,objRoutine(a0)
+		move.w	#$3C,objTimeFrame(a0)
 		clr.b	(f_timecount).w
-		clr.b	ob2ndRout(a0)
-		bclr	#3,(v_objspace+obStatus).w
-		bset	#1,(v_objspace+obStatus).w
+		clr.b	obj2ndRout(a0)
+		bclr	#3,(v_objspace+objStatus).w
+		bset	#1,(v_objspace+objStatus).w
 
 locret_B75E:
 		rts
@@ -94,28 +94,28 @@ loc_B760:
 		bne.s	loc_B7A0
 		bsr.w	FindFreeObj
 		bne.s	loc_B7A0
-		move.b	#id_ExplosionBomb,obId(a1)
-		move.w	obX(a0),obX(a1)
-		move.w	obY(a0),obY(a1)
+		move.b	#id_ExplosionBomb,objId(a1)
+		move.w	objX(a0),objX(a1)
+		move.w	objY(a0),objY(a1)
 		jsr	(RandomNumber).l
 		move.w	d0,d1
 		moveq	#0,d1
 		move.b	d0,d1
 		lsr.b	#2,d1
 		subi.w	#$20,d1
-		add.w	d1,obX(a1)
+		add.w	d1,objX(a1)
 		lsr.w	#8,d0
 		lsr.b	#3,d0
-		add.w	d0,obY(a1)
+		add.w	d0,objY(a1)
 
 loc_B7A0:
-		subq.w	#1,obTimeFrame(a0)
+		subq.w	#1,objTimeFrame(a0)
 		bne.s	locret_B7C4
 		move.b	#2,(v_bossstatus).w
-		move.b	#$C,obRoutine(a0)
-		move.b	#9,obFrame(a0)
-		move.w	#$B4,obTimeFrame(a0)
-		addi.w	#$20,obY(a0)
+		move.b	#$C,objRoutine(a0)
+		move.b	#9,objFrame(a0)
+		move.w	#$B4,objTimeFrame(a0)
+		addi.w	#$20,objY(a0)
 
 locret_B7C4:
 		rts
@@ -127,22 +127,22 @@ loc_B7C6:
 		bne.s	VBla_028
 		bsr.w	FindFreeObj
 		bne.s	VBla_028
-		move.b	#id_Animals,obId(a1)
-		move.w	obX(a0),obX(a1)
-		move.w	obY(a0),obY(a1)
+		move.b	#id_Animals,objId(a1)
+		move.w	objX(a0),objX(a1)
+		move.w	objY(a0),objY(a1)
 
 VBla_028:
-		subq.w	#1,obTimeFrame(a0)
+		subq.w	#1,objTimeFrame(a0)
 		bne.s	locret_B7F8
-		addq.b	#2,obRoutine(a0)
-		move.w	#$3C,obTimeFrame(a0)
+		addq.b	#2,objRoutine(a0)
+		move.w	#$3C,objTimeFrame(a0)
 
 locret_B7F8:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_B7FA:
-		subq.w	#1,obTimeFrame(a0)
+		subq.w	#1,objTimeFrame(a0)
 		bne.s	locret_B808
 		bsr.w	sub_C81C
 		bra.w	DeleteObject

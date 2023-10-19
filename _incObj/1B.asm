@@ -2,7 +2,7 @@
 
 Obj1B:
 		moveq	#0,d0
-		move.b	obRoutine(a0),d0
+		move.b	objRoutine(a0),d0
 		move.w	off_6634(pc,d0.w),d1
 		jmp	off_6634(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,16 +11,16 @@ off_6634:	dc.w loc_663E-off_6634, loc_6676-off_6634, loc_668A-off_6634, loc_66CE
 ; ---------------------------------------------------------------------------
 
 loc_663E:
-		addq.b	#2,obRoutine(a0)
-		move.l	#Map_1B,obMap(a0)
-		move.w	#$4000,obGfx(a0)
-		move.b	#4,obRender(a0)
-		move.b	#$20,obActWid(a0)
-		move.b	#5,obPriority(a0)
-		tst.b	obSubtype(a0)
+		addq.b	#2,objRoutine(a0)
+		move.l	#Map_1B,objMap(a0)
+		move.w	#$4000,objGfx(a0)
+		move.b	#4,objRender(a0)
+		move.b	#$20,objActWid(a0)
+		move.b	#5,objPriority(a0)
+		tst.b	objSubtype(a0)
 		bne.s	loc_6676
-		move.b	#1,obPriority(a0)
-		move.b	#6,obRoutine(a0)
+		move.b	#1,objPriority(a0)
+		move.b	#6,objRoutine(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ loc_6676:
 loc_668A:
 		move.w	#$20,d1
 		bsr.w	PtfmCheckExit
-		move.w	obX(a0),d2
+		move.w	objX(a0),d2
 		move.w	#-$14,d3
 		bsr.w	PtfmSurfaceHeight
 		bsr.w	DisplaySprite

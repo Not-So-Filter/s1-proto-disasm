@@ -1,275 +1,270 @@
- AS V1.42 Beta [Bld 247] - Source File z80.asm - Page 1 - 9/30/2023 10:36:59
+ AS V1.42 Beta [Bld 251] - Source File z80.asm - Page 1 - 10/19/2023 19:15:24
 
 
-       1/       0 :                     
-       2/       0 :                     		CPU Z80
-       3/       0 :                     		listing purecode
-       4/       0 :                     
-       5/       0 : =1FF4H              z80_stack:	equ 1FF4h
-       6/       0 : =1FF6H              zDAC_Update:	equ 1FF6h
-       7/       0 : =1FFDH              zDAC_Status:	equ 1FFDh				; Bit 7 set if the driver is not accepting new samples, it is clear otherwise
-       8/       0 : =1FFFH              zDAC_Sample:	equ 1FFFh				; Sample to play, the 68k will move into this locatiton whatever sample that's supposed to be played.
-       9/       0 :                     
-      10/       0 : =4000H              zYM2612_A0:	equ 4000h
-      11/       0 : =6000H              zBankRegister:	equ 6000h
-      12/       0 :                     
-      13/       0 :                     ; =============== S U B R O U T I N E =======================================
-      14/       0 :                     
-      15/       0 :                     
-      16/       0 :                     StartOfZ80:
-      17/       0 : F3                  		di	; disable interrupts
-      18/       1 : F3                  		di
-      19/       2 : F3                  		di
-      20/       3 : 31 F4 1F            		ld	sp, z80_stack
-      21/       6 : AF                  		xor	a
-      22/       7 : 32 FD 1F            		ld	(zDAC_Status), a
-      23/       A : 3A FB 1F            		ld	a, (1FFBh)
-      24/       D : 07                  		rlca
-      25/       E : 32 00 60            		ld	(zBankRegister), a
-      26/      11 : 06 08               		ld	b, 8
-      27/      13 : 3A FA 1F            		ld	a, (1FFAh)
-      28/      16 :                     
-      29/      16 :                     loc_16:
-      30/      16 : 32 00 60            		ld	(zBankRegister), a
-      31/      19 : 0F                  		rrca
-      32/      1A : 10 FA               		djnz	loc_16
-      33/      1C : 18 10               		jr	loc_2E
-      34/      1E :                     ; ---------------------------------------------------------------------------
-      35/      1E : 00 01 02 04 08 10   byte_1E:	db	0,1,2,4,8,10h,20h,40h
-               24 : 20 40             
-      36/      26 : 80 FF FE FC F8 F0   		db	80h,0FFh,0FEh,0FCh,0F8h,0F0h,0E0h,0C0h
-               2C : E0 C0             
-      37/      2E :                     ; ---------------------------------------------------------------------------
-      38/      2E :                     
-      39/      2E :                     loc_2E:
-      40/      2E : 21 FF 1F            		ld	hl, zDAC_Sample
-      41/      31 :                     
-      42/      31 :                     loc_31:
-      43/      31 : 7E                  		ld	a, (hl)
-      44/      32 : B7                  		or	a
-      45/      33 : F2 31 00            		jp	p, loc_31
-      46/      36 : F5                  		push	af
-      47/      37 : E5                  		push	hl
-      48/      38 : 3E 80               		ld	a, 80h
-      49/      3A : 32 FD 1F            		ld	(zDAC_Status), a
-      50/      3D : 21 00 40            		ld	hl, zYM2612_A0
-      51/      40 : 36 2B               		ld	(hl), 2Bh
-      52/      42 : 23                  		inc	hl
-      53/      43 : 36 80               		ld	(hl), 80h
-      54/      45 : AF                  		xor	a
-      55/      46 : 32 FD 1F            		ld	(zDAC_Status), a
-      56/      49 : 2B                  		dec	hl
-      57/      4A : DD 21 FC 1F         		ld	ix, 1FFCh
-      58/      4E : 16 00               		ld	d, 0
- AS V1.42 Beta [Bld 247] - Source File z80.asm - Page 2 - 9/30/2023 10:36:59
+    1/       0 :                        
+    2/   0 :                            		CPU Z80
+    3/   0 :                            		listing purecode
+    4/   0 :                            
+    5/   0 : =1FF4H                     z80_stack:	equ 1FF4h
+    6/   0 : =1FF6H                     zDAC_Update:	equ 1FF6h
+    7/   0 : =1FFDH                     zDAC_Status:	equ 1FFDh				; Bit 7 set if the driver is not accepting new samples, it is clear otherwise
+    8/   0 : =1FFFH                     zDAC_Sample:	equ 1FFFh				; Sample to play, the 68k will move into this locatiton whatever sample that's supposed to be played.
+    9/   0 :                            
+   10/   0 : =4000H                     zYM2612_A0:	equ 4000h
+   11/   0 : =6000H                     zBankRegister:	equ 6000h
+   12/   0 :                            
+   13/   0 :                            ; =============== S U B R O U T I N E =======================================
+   14/   0 :                            
+   15/   0 :                            
+   16/   0 :                            StartOfZ80:
+   17/   0 : F3                         		di	; disable interrupts
+   18/   1 : F3                         		di
+   19/   2 : F3                         		di
+   20/   3 : 31 F4 1F                   		ld	sp, z80_stack
+   21/   6 : AF                         		xor	a
+   22/   7 : 32 FD 1F                   		ld	(zDAC_Status), a
+   23/   A : 3A FB 1F                   		ld	a, (1FFBh)
+   24/   D : 07                         		rlca
+   25/   E : 32 00 60                   		ld	(zBankRegister), a
+   26/  11 : 06 08                      		ld	b, 8
+   27/  13 : 3A FA 1F                   		ld	a, (1FFAh)
+   28/  16 :                            
+   29/  16 :                            loc_16:
+   30/  16 : 32 00 60                   		ld	(zBankRegister), a
+   31/  19 : 0F                         		rrca
+   32/  1A : 10 FA                      		djnz	loc_16
+   33/  1C : 18 10                      		jr	loc_2E
+   34/  1E :                            ; ---------------------------------------------------------------------------
+   35/  1E : 00 01 02 04 08 10 20 40    byte_1E:	db	0,1,2,4,8,10h,20h,40h
+   36/  26 : 80 FF FE FC F8 F0 E0 C0    		db	80h,0FFh,0FEh,0FCh,0F8h,0F0h,0E0h,0C0h
+   37/  2E :                            ; ---------------------------------------------------------------------------
+   38/  2E :                            
+   39/  2E :                            loc_2E:
+   40/  2E : 21 FF 1F                   		ld	hl, zDAC_Sample
+   41/  31 :                            
+   42/  31 :                            loc_31:
+   43/  31 : 7E                         		ld	a, (hl)
+   44/  32 : B7                         		or	a
+   45/  33 : F2 31 00                   		jp	p, loc_31
+   46/  36 : F5                         		push	af
+   47/  37 : E5                         		push	hl
+   48/  38 : 3E 80                      		ld	a, 80h
+   49/  3A : 32 FD 1F                   		ld	(zDAC_Status), a
+   50/  3D : 21 00 40                   		ld	hl, zYM2612_A0
+   51/  40 : 36 2B                      		ld	(hl), 2Bh
+   52/  42 : 23                         		inc	hl
+   53/  43 : 36 80                      		ld	(hl), 80h
+   54/  45 : AF                         		xor	a
+   55/  46 : 32 FD 1F                   		ld	(zDAC_Status), a
+   56/  49 : 2B                         		dec	hl
+   57/  4A : DD 21 FC 1F                		ld	ix, 1FFCh
+   58/  4E : 16 00                      		ld	d, 0
+   59/  50 : D9                         		exx
+   60/  51 : E1                         		pop	hl
+ AS V1.42 Beta [Bld 251] - Source File z80.asm - Page 2 - 10/19/2023 19:15:24
 
 
-      59/      50 : D9                  		exx
-      60/      51 : E1                  		pop	hl
-      61/      52 : 32 F6 1F            		ld	(zDAC_Update), a
-      62/      55 : F1                  		pop	af
-      63/      56 : 32 F7 1F            		ld	(1FF7h), a
-      64/      59 : D6 81               		sub	81h
-      65/      5B : 77                  		ld	(hl), a
-      66/      5C : 11 00 00            		ld	de, 0
-      67/      5F : FD 21 60 01         		ld	iy, off_160
-      68/      63 : FE 06               		cp	6
-      69/      65 : 38 0C               		jr	c, loc_73
-      70/      67 : 32 F7 1F            		ld	(1FF7h), a
-      71/      6A : 32 F6 1F            		ld	(zDAC_Update), a
-      72/      6D : FD 2A F8 1F         		ld	iy, (1FF8h)
-      73/      71 : D6 07               		sub	7
-      74/      73 :                     
-      75/      73 :                     loc_73:
-      76/      73 : 87                  		add	a, a
-      77/      74 : 87                  		add	a, a
-      78/      75 : 4F                  		ld	c, a
-      79/      76 : 87                  		add	a, a
-      80/      77 : 81                  		add	a, c
-      81/      78 : 4F                  		ld	c, a
-      82/      79 : 06 00               		ld	b, 0
-      83/      7B : FD 09               		add	iy, bc
-      84/      7D : FD 5E 00            		ld	e, (iy+0)
-      85/      80 : FD 56 01            		ld	d, (iy+1)
-      86/      83 : 3A F7 1F            		ld	a, (1FF7h)
-      87/      86 : B7                  		or	a
-      88/      87 : FA 8F 00            		jp	m, loc_8F
-      89/      8A : 2A F8 1F            		ld	hl, (1FF8h)
-      90/      8D : 19                  		add	hl, de
-      91/      8E : EB                  		ex	de, hl
-      92/      8F :                     
-      93/      8F :                     loc_8F:
-      94/      8F : FD 4E 02            		ld	c, (iy+2)
-      95/      92 : FD 46 03            		ld	b, (iy+3)
-      96/      95 : FD 7E 04            		ld	a, (iy+4)
-      97/      98 : 32 FE 1F            		ld	(1FFEh), a
-      98/      9B : D9                  		exx
-      99/      9C : 0E 80               		ld	c, 80h
-     100/      9E : D9                  		exx
-     101/      9F :                     
-     102/      9F :                     loc_9F:
-     103/      9F : 21 FF 1F            		ld	hl, zDAC_Sample
-     104/      A2 : 1A                  		ld	a, (de)
-     105/      A3 : E6 F0               		and	0F0h
-     106/      A5 : 0F                  		rrca
-     107/      A6 : 0F                  		rrca
-     108/      A7 : 0F                  		rrca
-     109/      A8 : 0F                  		rrca
-     110/      A9 : C6 1E               		add	a, byte_1E
-     111/      AB : D9                  		exx
-     112/      AC : 5F                  		ld	e, a
-     113/      AD : 1A                  		ld	a, (de)
-     114/      AE : 81                  		add	a, c
-     115/      AF : 4F                  		ld	c, a
-     116/      B0 : 3E 80               		ld	a, 80h
-     117/      B2 : 32 FD 1F            		ld	(zDAC_Status), a
-     118/      B5 : FD 46 0B            		ld	b, (iy+0Bh)
- AS V1.42 Beta [Bld 247] - Source File z80.asm - Page 3 - 9/30/2023 10:36:59
+   61/  52 : 32 F6 1F                   		ld	(zDAC_Update), a
+   62/  55 : F1                         		pop	af
+   63/  56 : 32 F7 1F                   		ld	(1FF7h), a
+   64/  59 : D6 81                      		sub	81h
+   65/  5B : 77                         		ld	(hl), a
+   66/  5C : 11 00 00                   		ld	de, 0
+   67/  5F : FD 21 60 01                		ld	iy, off_160
+   68/  63 : FE 06                      		cp	6
+   69/  65 : 38 0C                      		jr	c, loc_73
+   70/  67 : 32 F7 1F                   		ld	(1FF7h), a
+   71/  6A : 32 F6 1F                   		ld	(zDAC_Update), a
+   72/  6D : FD 2A F8 1F                		ld	iy, (1FF8h)
+   73/  71 : D6 07                      		sub	7
+   74/  73 :                            
+   75/  73 :                            loc_73:
+   76/  73 : 87                         		add	a, a
+   77/  74 : 87                         		add	a, a
+   78/  75 : 4F                         		ld	c, a
+   79/  76 : 87                         		add	a, a
+   80/  77 : 81                         		add	a, c
+   81/  78 : 4F                         		ld	c, a
+   82/  79 : 06 00                      		ld	b, 0
+   83/  7B : FD 09                      		add	iy, bc
+   84/  7D : FD 5E 00                   		ld	e, (iy+0)
+   85/  80 : FD 56 01                   		ld	d, (iy+1)
+   86/  83 : 3A F7 1F                   		ld	a, (1FF7h)
+   87/  86 : B7                         		or	a
+   88/  87 : FA 8F 00                   		jp	m, loc_8F
+   89/  8A : 2A F8 1F                   		ld	hl, (1FF8h)
+   90/  8D : 19                         		add	hl, de
+   91/  8E : EB                         		ex	de, hl
+   92/  8F :                            
+   93/  8F :                            loc_8F:
+   94/  8F : FD 4E 02                   		ld	c, (iy+2)
+   95/  92 : FD 46 03                   		ld	b, (iy+3)
+   96/  95 : FD 7E 04                   		ld	a, (iy+4)
+   97/  98 : 32 FE 1F                   		ld	(1FFEh), a
+   98/  9B : D9                         		exx
+   99/  9C : 0E 80                      		ld	c, 80h
+  100/  9E : D9                         		exx
+  101/  9F :                            
+  102/  9F :                            loc_9F:
+  103/  9F : 21 FF 1F                   		ld	hl, zDAC_Sample
+  104/  A2 : 1A                         		ld	a, (de)
+  105/  A3 : E6 F0                      		and	0F0h
+  106/  A5 : 0F                         		rrca
+  107/  A6 : 0F                         		rrca
+  108/  A7 : 0F                         		rrca
+  109/  A8 : 0F                         		rrca
+  110/  A9 : C6 1E                      		add	a, byte_1E
+  111/  AB : D9                         		exx
+  112/  AC : 5F                         		ld	e, a
+  113/  AD : 1A                         		ld	a, (de)
+  114/  AE : 81                         		add	a, c
+  115/  AF : 4F                         		ld	c, a
+  116/  B0 : 3E 80                      		ld	a, 80h
+  117/  B2 : 32 FD 1F                   		ld	(zDAC_Status), a
+  118/  B5 : FD 46 0B                   		ld	b, (iy+0Bh)
+  119/  B8 :                            
+  120/  B8 :                            loc_B8:
+ AS V1.42 Beta [Bld 251] - Source File z80.asm - Page 3 - 10/19/2023 19:15:24
 
 
-     119/      B8 :                     
-     120/      B8 :                     loc_B8:
-     121/      B8 : CB 7E               		bit	7, (hl)
-     122/      BA : 20 FC               		jr	nz, loc_B8
-     123/      BC : 36 2A               		ld	(hl), 2Ah
-     124/      BE : 23                  		inc	hl
-     125/      BF : AF                  		xor	a
-     126/      C0 : 71                  		ld	(hl), c
-     127/      C1 : 32 FD 1F            		ld	(zDAC_Status), a
-     128/      C4 : 2B                  		dec	hl
-     129/      C5 :                     
-     130/      C5 :                     loc_C5:
-     131/      C5 : 10 FE               		djnz	$
-     132/      C7 : D9                  		exx
-     133/      C8 : 1A                  		ld	a, (de)
-     134/      C9 : E6 0F               		and	0Fh
-     135/      CB : C6 1E               		add	a, byte_1E
-     136/      CD : D9                  		exx
-     137/      CE : 5F                  		ld	e, a
-     138/      CF : 1A                  		ld	a, (de)
-     139/      D0 : 81                  		add	a, c
-     140/      D1 : 4F                  		ld	c, a
-     141/      D2 : 3E 80               		ld	a, 80h
-     142/      D4 : 32 FD 1F            		ld	(zDAC_Status), a
-     143/      D7 : FD 46 0B            		ld	b, (iy+0Bh)
-     144/      DA :                     
-     145/      DA :                     loc_DA:
-     146/      DA : CB 7E               		bit	7, (hl)
-     147/      DC : 20 FC               		jr	nz, loc_DA
-     148/      DE : 36 2A               		ld	(hl), 2Ah
-     149/      E0 : 23                  		inc	hl
-     150/      E1 : AF                  		xor	a
-     151/      E2 : 71                  		ld	(hl), c
-     152/      E3 : 32 FD 1F            		ld	(zDAC_Status), a
-     153/      E6 : 2B                  		dec	hl
-     154/      E7 :                     
-     155/      E7 :                     loc_E7:
-     156/      E7 : 10 FE               		djnz	$
-     157/      E9 : D9                  		exx
-     158/      EA : FD CB 05 7E         		bit	7, (iy+5)
-     159/      EE : 20 05               		jr	nz, loc_F5
-     160/      F0 : CB 7E               		bit	7, (hl)
-     161/      F2 : C2 31 00            		jp	nz, loc_31
-     162/      F5 :                     
-     163/      F5 :                     loc_F5:
-     164/      F5 : 13                  		inc	de
-     165/      F6 : 0B                  		dec	bc
-     166/      F7 : 79                  		ld	a, c
-     167/      F8 : B0                  		or	b
-     168/      F9 : C2 9F 00            		jp	nz, loc_9F
-     169/      FC : 3A FE 1F            		ld	a, (1FFEh)
-     170/      FF : B7                  		or	a
-     171/     100 : CA 53 01            		jp	z, loc_153
-     172/     103 : D9                  		exx
-     173/     104 : F2 0C 01            		jp	p, loc_10C
-     174/     107 : E6 7F               		and	7Fh
-     175/     109 : DD 71 00            		ld	(ix+0), c
-     176/     10C :                     
-     177/     10C :                     loc_10C:
-     178/     10C : 3D                  		dec	a
- AS V1.42 Beta [Bld 247] - Source File z80.asm - Page 4 - 9/30/2023 10:36:59
+  121/  B8 : CB 7E                      		bit	7, (hl)
+  122/  BA : 20 FC                      		jr	nz, loc_B8
+  123/  BC : 36 2A                      		ld	(hl), 2Ah
+  124/  BE : 23                         		inc	hl
+  125/  BF : AF                         		xor	a
+  126/  C0 : 71                         		ld	(hl), c
+  127/  C1 : 32 FD 1F                   		ld	(zDAC_Status), a
+  128/  C4 : 2B                         		dec	hl
+  129/  C5 :                            
+  130/  C5 :                            loc_C5:
+  131/  C5 : 10 FE                      		djnz	$
+  132/  C7 : D9                         		exx
+  133/  C8 : 1A                         		ld	a, (de)
+  134/  C9 : E6 0F                      		and	0Fh
+  135/  CB : C6 1E                      		add	a, byte_1E
+  136/  CD : D9                         		exx
+  137/  CE : 5F                         		ld	e, a
+  138/  CF : 1A                         		ld	a, (de)
+  139/  D0 : 81                         		add	a, c
+  140/  D1 : 4F                         		ld	c, a
+  141/  D2 : 3E 80                      		ld	a, 80h
+  142/  D4 : 32 FD 1F                   		ld	(zDAC_Status), a
+  143/  D7 : FD 46 0B                   		ld	b, (iy+0Bh)
+  144/  DA :                            
+  145/  DA :                            loc_DA:
+  146/  DA : CB 7E                      		bit	7, (hl)
+  147/  DC : 20 FC                      		jr	nz, loc_DA
+  148/  DE : 36 2A                      		ld	(hl), 2Ah
+  149/  E0 : 23                         		inc	hl
+  150/  E1 : AF                         		xor	a
+  151/  E2 : 71                         		ld	(hl), c
+  152/  E3 : 32 FD 1F                   		ld	(zDAC_Status), a
+  153/  E6 : 2B                         		dec	hl
+  154/  E7 :                            
+  155/  E7 :                            loc_E7:
+  156/  E7 : 10 FE                      		djnz	$
+  157/  E9 : D9                         		exx
+  158/  EA : FD CB 05 7E                		bit	7, (iy+5)
+  159/  EE : 20 05                      		jr	nz, loc_F5
+  160/  F0 : CB 7E                      		bit	7, (hl)
+  161/  F2 : C2 31 00                   		jp	nz, loc_31
+  162/  F5 :                            
+  163/  F5 :                            loc_F5:
+  164/  F5 : 13                         		inc	de
+  165/  F6 : 0B                         		dec	bc
+  166/  F7 : 79                         		ld	a, c
+  167/  F8 : B0                         		or	b
+  168/  F9 : C2 9F 00                   		jp	nz, loc_9F
+  169/  FC : 3A FE 1F                   		ld	a, (1FFEh)
+  170/  FF : B7                         		or	a
+  171/ 100 : CA 53 01                   		jp	z, loc_153
+  172/ 103 : D9                         		exx
+  173/ 104 : F2 0C 01                   		jp	p, loc_10C
+  174/ 107 : E6 7F                      		and	7Fh
+  175/ 109 : DD 71 00                   		ld	(ix+0), c
+  176/ 10C :                            
+  177/ 10C :                            loc_10C:
+  178/ 10C : 3D                         		dec	a
+  179/ 10D : 32 FE 1F                   		ld	(1FFEh), a
+  180/ 110 : 28 21                      		jr	z, loc_133
+ AS V1.42 Beta [Bld 251] - Source File z80.asm - Page 4 - 10/19/2023 19:15:24
 
 
-     179/     10D : 32 FE 1F            		ld	(1FFEh), a
-     180/     110 : 28 21               		jr	z, loc_133
-     181/     112 : DD 4E 00            		ld	c, (ix+0)
-     182/     115 : D9                  		exx
-     183/     116 : FD 6E 06            		ld	l, (iy+6)
-     184/     119 : FD 66 07            		ld	h, (iy+7)
-     185/     11C : 44                  		ld	b, h
-     186/     11D : 4D                  		ld	c, l
-     187/     11E : FD 5E 00            		ld	e, (iy+0)
-     188/     121 : FD 56 01            		ld	d, (iy+1)
-     189/     124 : 2A F8 1F            		ld	hl, (1FF8h)
-     190/     127 : 19                  		add	hl, de
-     191/     128 : FD 5E 02            		ld	e, (iy+2)
-     192/     12B : FD 56 03            		ld	d, (iy+3)
-     193/     12E : 19                  		add	hl, de
-     194/     12F : EB                  		ex	de, hl
-     195/     130 : C3 9F 00            		jp	loc_9F
-     196/     133 :                     ; ---------------------------------------------------------------------------
-     197/     133 :                     
-     198/     133 :                     loc_133:
-     199/     133 : DD 4E 00            		ld	c, (ix+0)
-     200/     136 : D9                  		exx
-     201/     137 : FD 4E 08            		ld	c, (iy+8)
-     202/     13A : FD 46 09            		ld	b, (iy+9)
-     203/     13D : FD 6E 02            		ld	l, (iy+2)
-     204/     140 : FD 66 03            		ld	h, (iy+3)
-     205/     143 : FD 5E 00            		ld	e, (iy+0)
-     206/     146 : FD 56 01            		ld	d, (iy+1)
-     207/     149 : 19                  		add	hl, de
-     208/     14A : ED 5B F8 1F         		ld	de, (1FF8h)
-     209/     14E : 19                  		add	hl, de
-     210/     14F : EB                  		ex	de, hl
-     211/     150 : C3 9F 00            		jp	loc_9F
-     212/     153 :                     ; ---------------------------------------------------------------------------
-     213/     153 :                     
-     214/     153 :                     loc_153:
-     215/     153 : 21 F6 1F            		ld	hl, zDAC_Update
-     216/     156 : 7E                  		ld	a, (hl)
-     217/     157 : B7                  		or	a
-     218/     158 : FA 2E 00            		jp	m, loc_2E
-     219/     15B : AF                  		xor	a
-     220/     15C : 77                  		ld	(hl), a
-     221/     15D : C3 2E 00            		jp	loc_2E
-     222/     160 :                     ; End of function StartOfZ80
-     223/     160 :                     
-     224/     160 :                     ; ---------------------------------------------------------------------------
-     225/     160 : 84 01               off_160:	dw zDAC_Sample1
-     226/     162 : 52 03               		dw (zDAC_Sample1_End-zDAC_Sample1)
-     227/     164 : 00 00               		dw 0
-     228/     166 : 00 00               		dw 0
-     229/     168 : 00 00               		dw 0
-     230/     16A : 00                  		db 0
-     231/     16B : 14                  		db 14h
-     232/     16C : D6 04               		dw zDAC_Sample2
-     233/     16E : 70 07               		dw (zDAC_Sample2_End-zDAC_Sample2)
-     234/     170 : 00 00               		dw 0
-     235/     172 : 00 00               		dw 0
-     236/     174 : 00 00               		dw 0
-     237/     176 : 00                  		db 0
-     238/     177 : 01                  		db 1
- AS V1.42 Beta [Bld 247] - Source File z80.asm - Page 5 - 9/30/2023 10:36:59
+  181/ 112 : DD 4E 00                   		ld	c, (ix+0)
+  182/ 115 : D9                         		exx
+  183/ 116 : FD 6E 06                   		ld	l, (iy+6)
+  184/ 119 : FD 66 07                   		ld	h, (iy+7)
+  185/ 11C : 44                         		ld	b, h
+  186/ 11D : 4D                         		ld	c, l
+  187/ 11E : FD 5E 00                   		ld	e, (iy+0)
+  188/ 121 : FD 56 01                   		ld	d, (iy+1)
+  189/ 124 : 2A F8 1F                   		ld	hl, (1FF8h)
+  190/ 127 : 19                         		add	hl, de
+  191/ 128 : FD 5E 02                   		ld	e, (iy+2)
+  192/ 12B : FD 56 03                   		ld	d, (iy+3)
+  193/ 12E : 19                         		add	hl, de
+  194/ 12F : EB                         		ex	de, hl
+  195/ 130 : C3 9F 00                   		jp	loc_9F
+  196/ 133 :                            ; ---------------------------------------------------------------------------
+  197/ 133 :                            
+  198/ 133 :                            loc_133:
+  199/ 133 : DD 4E 00                   		ld	c, (ix+0)
+  200/ 136 : D9                         		exx
+  201/ 137 : FD 4E 08                   		ld	c, (iy+8)
+  202/ 13A : FD 46 09                   		ld	b, (iy+9)
+  203/ 13D : FD 6E 02                   		ld	l, (iy+2)
+  204/ 140 : FD 66 03                   		ld	h, (iy+3)
+  205/ 143 : FD 5E 00                   		ld	e, (iy+0)
+  206/ 146 : FD 56 01                   		ld	d, (iy+1)
+  207/ 149 : 19                         		add	hl, de
+  208/ 14A : ED 5B F8 1F                		ld	de, (1FF8h)
+  209/ 14E : 19                         		add	hl, de
+  210/ 14F : EB                         		ex	de, hl
+  211/ 150 : C3 9F 00                   		jp	loc_9F
+  212/ 153 :                            ; ---------------------------------------------------------------------------
+  213/ 153 :                            
+  214/ 153 :                            loc_153:
+  215/ 153 : 21 F6 1F                   		ld	hl, zDAC_Update
+  216/ 156 : 7E                         		ld	a, (hl)
+  217/ 157 : B7                         		or	a
+  218/ 158 : FA 2E 00                   		jp	m, loc_2E
+  219/ 15B : AF                         		xor	a
+  220/ 15C : 77                         		ld	(hl), a
+  221/ 15D : C3 2E 00                   		jp	loc_2E
+  222/ 160 :                            ; End of function StartOfZ80
+  223/ 160 :                            
+  224/ 160 :                            ; ---------------------------------------------------------------------------
+  225/ 160 : 84 01                      off_160:	dw zDAC_Sample1
+  226/ 162 : 52 03                      		dw (zDAC_Sample1_End-zDAC_Sample1)
+  227/ 164 : 00 00                      		dw 0
+  228/ 166 : 00 00                      		dw 0
+  229/ 168 : 00 00                      		dw 0
+  230/ 16A : 00 14                      		dw 1400h
+  231/ 16C : D6 04                      		dw zDAC_Sample2
+  232/ 16E : 70 07                      		dw (zDAC_Sample2_End-zDAC_Sample2)
+  233/ 170 : 00 00                      		dw 0
+  234/ 172 : 00 00                      		dw 0
+  235/ 174 : 00 00                      		dw 0
+  236/ 176 : 00 01                      		dw 0100h
+  237/ 178 : 46 0C                      		dw zDAC_Sample3
+  238/ 17A : 16 10                      		dw (zDAC_Sample3_End-zDAC_Sample3)
+  239/ 17C : 00 00                      		dw 0
+  240/ 17E : 00 00                      		dw 0
+ AS V1.42 Beta [Bld 251] - Source File z80.asm - Page 5 - 10/19/2023 19:15:24
 
 
-     239/     178 : 46 0C               		dw zDAC_Sample3
-     240/     17A : 16 10               		dw (zDAC_Sample3_End-zDAC_Sample3)
-     241/     17C : 00 00               		dw 0
-     242/     17E : 00 00               		dw 0
-     243/     180 : 00 00               		dw 0
-     244/     182 : 00                  		db 0
-     245/     183 : 1B                  		db 1Bh
-     246/     184 :                     
-     247/     184 :                     zDAC_Sample1:	binclude       "dac\kick.dpcm"
-     248/     4D6 :                     zDAC_Sample1_End:
-     249/     4D6 :                     
-     250/     4D6 :                     zDAC_Sample2:	binclude       "dac\snare.dpcm"
-     251/     C46 :                     zDAC_Sample2_End:
-     252/     C46 :                     
-     253/     C46 :                     zDAC_Sample3:	binclude       "dac\timpani.dpcm"
-     254/    1C5C :                     zDAC_Sample3_End:
- AS V1.42 Beta [Bld 247] - Source File z80.asm - Page 6 - 9/30/2023 10:36:59
+  241/ 180 : 00 00                      		dw 0
+  242/ 182 : 00 1B                      		dw 1B00h
+  243/ 184 :                            
+  244/ 184 :                            zDAC_Sample1:	binclude	"dac\kick.dpcm"
+  245/ 4D6 :                            zDAC_Sample1_End:
+  246/ 4D6 :                            
+  247/ 4D6 :                            zDAC_Sample2:	binclude	"dac\snare.dpcm"
+  248/ C46 :                            zDAC_Sample2_End:
+  249/ C46 :                            
+  250/ C46 :                            zDAC_Sample3:	binclude	"dac\timpani.dpcm"
+  251/1C5C :                            zDAC_Sample3_End:
+ AS V1.42 Beta [Bld 251] - Source File z80.asm - Page 6 - 10/19/2023 19:15:24
 
 
   Symbol Table (* = unused):
@@ -277,7 +272,7 @@
 
 *ARCHITECTURE :                                        "i386-unknown-win32" - |
  BYTE_1E :                       1E C | *CASESENSITIVE :                  0 - |
-*CONSTPI :        3.141592653589793 - | *DATE :                 "9/30/2023" - |
+*CONSTPI :        3.141592653589793 - | *DATE :                "10/19/2023" - |
 *FALSE :                          0 - | *FULLPMMU :                       1 - |
 *HAS64 :                          0 - | *HASFPU :                         0 - |
 *HASPMMU :                        0 - | *INSUPMODE :                      0 - |
@@ -292,7 +287,7 @@
 *MOMCPU :                        80 - | *MOMCPUNAME :                 "Z80" - |
 *NESTMAX :                      100 - |  OFF_160 :                      160 C |
 *PADDING :                        1 - | *RELAXED :                        0 - |
-*STARTOFZ80 :                     0 C | *TIME :                  "10:36:59" - |
+*STARTOFZ80 :                     0 C | *TIME :                  "19:15:24" - |
 *TRUE :                           1 - | *VERSION :                     142F - |
  Z80_STACK :                   1FF4 - |  ZBANKREGISTER :               6000 - |
  ZDAC_SAMPLE :                 1FFF - |  ZDAC_SAMPLE1 :                 184 C |
@@ -304,7 +299,7 @@
      49 symbols
      23 unused symbols
 
- AS V1.42 Beta [Bld 247] - Source File z80.asm - Page 7 - 9/30/2023 10:36:59
+ AS V1.42 Beta [Bld 251] - Source File z80.asm - Page 7 - 10/19/2023 19:15:24
 
 
   Code Pages:
@@ -314,9 +309,9 @@ STANDARD (0 changed characters)
 
 1 code page
 
-0.04 seconds assembly time
+0.03 seconds assembly time
 
-    254 lines source file
+    251 lines source file
       2 passes
       0 errors
       0 warnings
