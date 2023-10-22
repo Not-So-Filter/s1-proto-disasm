@@ -39,5 +39,5 @@ loc_7F3C:
 loc_7F4C:
 		move.b	#id_VanishSonic,(v_objslot7).w
 		moveq	#plcid_Warp,d0
-		bsr.w	plcAdd
+		bsr.w	AddPLC
 		bra.w	DeleteObject

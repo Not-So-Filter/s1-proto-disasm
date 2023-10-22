@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_JumpHeight:
-		tst.b	$3C(a0)
+		tst.b	jumpflag(a0)
 		beq.s	loc_EF78
 		cmpi.w	#-$400,objVelY(a0)
 		bge.s	locret_EF76

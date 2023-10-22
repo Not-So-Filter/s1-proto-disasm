@@ -187,7 +187,7 @@ loc_908E:
 		moveq	#0,d0
 		move.b	(a2)+,d0
 		lsl.w	#6,d0
-		addi.w	#-$3000,d0
+		addi.w	#v_objspace&$FFFF,d0
 		movea.w	d0,a1
 		move.w	d1,$3C(a1)
 		dbf	d2,loc_908E
@@ -203,7 +203,7 @@ sub_90A4:
 		addq.b	#1,(a2)
 		lea	1(a2,d0.w),a2
 		move.w	a1,d0
-		subi.w	#$D000,d0
+		subi.w	#v_objspace,d0
 		lsr.w	#6,d0
 		andi.w	#$7F,d0
 		move.b	d0,(a2)
@@ -236,13 +236,11 @@ loc_90FC:
 		move.b	(a2),d0
 		clr.b	(a2)+
 		lsl.w	#6,d0
-		addi.w	#-$3000,d0
+		addi.w	#v_objspace&$FFFF,d0
 		movea.w	d0,a1
 		bsr.w	ObjectDeleteA1
 		dbf	d2,loc_90FC
 		move.b	#0,$35(a0)
-
-loc_9118:
 		move.b	#0,$34(a0)
 
 locret_911E:

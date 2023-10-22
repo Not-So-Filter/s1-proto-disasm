@@ -132,7 +132,7 @@ loc_4A5E:
 		move.b	#1,(f_lockscreen).w
 		addq.b	#2,(v_dle_routine).w
 		moveq	#plcid_Boss,d0
-		bra.w	plcAdd
+		bra.w	AddPLC
 ; ---------------------------------------------------------------------------
 
 locret_4A76:

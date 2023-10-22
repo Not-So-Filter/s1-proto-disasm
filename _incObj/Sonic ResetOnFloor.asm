@@ -20,6 +20,6 @@ loc_F226:
 		subq.w	#5,objY(a0)
 
 loc_F25C:
-		move.w	#0,$3E(a0)
-		move.b	#0,$3C(a0)
+		move.w	#0,ctrllock(a0)
+		move.b	#0,jumpflag(a0)
 		rts

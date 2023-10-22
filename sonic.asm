@@ -869,8 +869,17 @@ SoundDriverLoad:
 		startZ80
 		rts
 ; ---------------------------------------------------------------------------
+; This could potentially be Z80 variables for a SMPS Z80 driver, unused
+; ---------------------------------------------------------------------------
 ;unk_119C:
-		dc.b 3,0,0,$14,0,0,0,0
+		dc.b 3
+		dc.b 0
+		dc.b 0
+		dc.b $14
+		dc.b 0
+		dc.b 0
+		dc.b 0
+		dc.b 0
 ; ---------------------------------------------------------------------------
 
 PlaySound:
@@ -904,12 +913,10 @@ loc_1228:
 		dbf	d2,loc_1222
 		rts
 ; ---------------------------------------------------------------------------
-
 		include "_inc\Nemesis Decompression.asm"
-
 ; ---------------------------------------------------------------------------
 
-plcAdd:
+AddPLC:
 		movem.l	a1-a2,-(sp)
 		lea	(ArtLoadCues).l,a1
 		add.w	d0,d0
@@ -947,7 +954,7 @@ loc_13A2:
 ;	  (or hacker) is responsible for making sure that no more than
 ;	  16 load requests are copied into the buffer.
 ;	  _________DO NOT PUT MORE THAN 16 LOAD REQUESTS IN A LIST!__________
-;         (or if you change the size of Plc_Buffer, the limit becomes (Plc_Buffer_Only_End-Plc_Buffer)/6)
+;	  (or if you change the size of Plc_Buffer, the limit becomes (Plc_Buffer_Only_End-Plc_Buffer)/6)
 
 ; LoadPLC2:
 NewPLC:
@@ -1498,7 +1505,7 @@ loc_24BC:
 		move.w	#0,d0
 		bsr.w	EniDec
 
-		copyTilemap	$FF0000,$C61C,$B,3
+		copyTilemap	v_startofram&$FFFFFF,$C61C,$B,3
 
 		moveq	#palid_SegaBG,d0
 		bsr.w	PalLoad2
@@ -1957,11 +1964,11 @@ GM_Level:
 		moveq	#0,d0
 		move.b	(a2),d0
 		beq.s	loc_2C0A
-		bsr.w	plcAdd
+		bsr.w	AddPLC
 
 loc_2C0A:
 		moveq	#plcid_Main2,d0
-		bsr.w	plcAdd
+		bsr.w	AddPLC
 		bsr.w	PaletteFadeOut
 		bsr.w	ClearScreen
 		lea	(vdp_control_port).l,a6
@@ -2611,8 +2618,8 @@ loc_36EA:
 		lea	(byte_6477C).l,a0
 		move.w	#$4000,d0
 		bsr.w	EniDec
-		copyTilemap	$FF0000,$C000,$3F,$1F
-		copyTilemap	$FF0000,$D000,$3F,$3F
+		copyTilemap	v_startofram&$FFFFFF,$C000,$3F,$1F
+		copyTilemap	v_startofram&$FFFFFF,$D000,$3F,$3F
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -3313,7 +3320,7 @@ LoadLevelData:
 		moveq	#0,d0
 		move.b	(a2),d0
 		beq.s	.locret
-		bsr.w	plcAdd
+		bsr.w	AddPLC
 
 .locret:
 		rts
@@ -3599,7 +3606,7 @@ Map_GBall:	include "_maps\GHZ Ball.asm"
 ; ---------------------------------------------------------------------------
 
 loc_612A:
-		move.b	#0,$3A(a0)
+		move.b	#0,ledge_collapse_flag(a0)
 
 loc_6130:
 		lea	(CFlo_Data1).l,a4
@@ -3635,7 +3642,7 @@ loc_6168:
 		move.w	objGfx(a0),objGfx(a1)
 		move.b	objPriority(a0),objPriority(a1)
 		move.b	objActWid(a0),objActWid(a1)
-		move.b	(a4)+,$38(a1)
+		move.b	(a4)+,ledge_timedelay(a1)
 		cmpa.l	a0,a1
 		bcc.s	loc_61A4
 		bsr.w	DisplaySprite1
@@ -3716,7 +3723,7 @@ sub_6936:
 		bne.w	locret_69A6
 		cmpi.b	#6,(v_player+objRoutine).w
 		bcc.s	locret_69A6
-		bsr.w	sub_69CE
+		bsr.w	Obj44_SolidWall2
 		beq.s	loc_698C
 		bmi.w	loc_69A8
 		tst.w	d0
@@ -3747,7 +3754,7 @@ loc_6976:
 loc_698C:
 		btst	#5,objStatus(a0)
 		beq.s	locret_69A6
-		move.w	#1,objAnim(a1)
+		move.w	#id_Run,objAnim(a1)
 
 loc_699A:
 		bclr	#5,objStatus(a0)
@@ -3778,8 +3785,8 @@ loc_69C0:
 		rts
 ; ---------------------------------------------------------------------------
 
-sub_69CE:
-		lea	(v_objspace).w,a1
+Obj44_SolidWall2:
+		lea	(v_player).w,a1
 		move.w	objX(a1),d0
 		sub.w	objX(a0),d0
 		add.w	d1,d0
@@ -5406,7 +5413,7 @@ Sonic_NoRunningOnWalls:
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_prianglebuffer).w,a4
-		movea.w	#$FFF0,a3
+		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
@@ -5422,7 +5429,7 @@ Sonic_NoRunningOnWalls:
 		ext.w	d0
 		sub.w	d0,d3
 		lea	(v_secanglebuffer).w,a4
-		movea.w	#$FFF0,a3
+		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
@@ -5437,7 +5444,7 @@ loc_10754:
 		subi.w	#$A,d2
 		eori.w	#$F,d2
 		lea	(v_prianglebuffer).w,a4
-		movea.w	#$FFF0,a3
+		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
@@ -5454,7 +5461,7 @@ ObjectHitCeiling:
 		sub.w	d0,d2
 		eori.w	#$F,d2
 		lea	(v_prianglebuffer).w,a4
-		movea.w	#$FFF0,a3
+		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
@@ -5479,7 +5486,7 @@ loc_107AE:
 		sub.w	d0,d3
 		eori.w	#$F,d3
 		lea	(v_prianglebuffer).w,a4
-		movea.w	#$FFF0,a3
+		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor

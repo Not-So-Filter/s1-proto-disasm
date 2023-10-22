@@ -48,7 +48,7 @@ ObjSpikedBalls_MakeChain:
 		bne.s	loc_DD5E
 		addq.b	#1,$29(a0)
 		move.w	a1,d5
-		subi.w	#$D000,d5
+		subi.w	#v_objspace,d5
 		lsr.w	#6,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
@@ -66,7 +66,7 @@ ObjSpikedBalls_MakeChain:
 
 loc_DD5E:
 		move.w	a0,d5
-		subi.w	#$D000,d5
+		subi.w	#v_objspace,d5
 		lsr.w	#6,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
@@ -109,14 +109,7 @@ ObjSpikedBalls_MoveLoop:
 ; ---------------------------------------------------------------------------
 
 ObjSpikedBalls_ChkDelete:
-		move.w	$3A(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	ObjSpikedBalls_Delete
+		out_of_range.w	ObjSpikedBalls_Delete,$3A(a0)
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 

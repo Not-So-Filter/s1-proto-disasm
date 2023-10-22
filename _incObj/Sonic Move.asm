@@ -4,7 +4,7 @@ Sonic_Move:
 		move.w	(v_sonspeedmax).w,d6
 		move.w	(v_sonspeedacc).w,d5
 		move.w	(v_sonspeeddec).w,d4
-		tst.w	$3E(a0)
+		tst.w	ctrllock(a0)
 		bne.w	Sonic_LookUp
 		btst	#bitL,(v_jpadhold2).w
 		beq.s	Sonic_NoLeft
@@ -27,7 +27,7 @@ Sonic_NoRight:
 		btst	#3,objStatus(a0)
 		beq.s	Sonic_Balance
 		moveq	#0,d0
-		move.b	$3D(a0),d0
+		move.b	standonobject(a0),d0
 		lsl.w	#6,d0
 		lea	(v_objspace).w,a1
 		lea	(a1,d0.w),a1
@@ -75,9 +75,9 @@ Sonic_LookUp:
 		btst	#bitUp,(v_jpadhold2).w
 		beq.s	Sonic_Duck
 		move.b	#id_LookUp,objAnim(a0)
-		cmpi.w	#$C8,(unk_FFF73E).w
+		cmpi.w	#$C8,(v_lookshift).w
 		beq.s	loc_EAEA
-		addq.w	#2,(unk_FFF73E).w
+		addq.w	#2,(v_lookshift).w
 		bra.s	loc_EAEA
 ; ---------------------------------------------------------------------------
 
@@ -85,20 +85,20 @@ Sonic_Duck:
 		btst	#bitDn,(v_jpadhold2).w
 		beq.s	Sonic_ResetScroll
 		move.b	#id_Duck,objAnim(a0)
-		cmpi.w	#8,(unk_FFF73E).w
+		cmpi.w	#8,(v_lookshift).w
 		beq.s	loc_EAEA
-		subq.w	#2,(unk_FFF73E).w
+		subq.w	#2,(v_lookshift).w
 		bra.s	loc_EAEA
 ; ---------------------------------------------------------------------------
 
 Sonic_ResetScroll:
-		cmpi.w	#$60,(unk_FFF73E).w
+		cmpi.w	#$60,(v_lookshift).w
 		beq.s	loc_EAEA
 		bcc.s	loc_EAE6
-		addq.w	#4,(unk_FFF73E).w
+		addq.w	#4,(v_lookshift).w
 
 loc_EAE6:
-		subq.w	#2,(unk_FFF73E).w
+		subq.w	#2,(v_lookshift).w
 
 loc_EAEA:
 		move.b	(v_jpadhold2).w,d0

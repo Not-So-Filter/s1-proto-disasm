@@ -15,7 +15,8 @@ off_B66C:	dc.w loc_B68C-off_B66C, loc_B6D6-off_B66C
 		dc.w loc_B760-off_B66C, loc_B760-off_B66C
 		dc.w loc_B7C6-off_B66C, loc_B7FA-off_B66C
 
-byte_B67C:	dc.b 2, $20, 4, 0
+byte_B67C:	;    routine, actwid, priority, frame
+		dc.b 2, $20, 4, 0
 		dc.b 4, $C, 5, 1
 		dc.b 6, $10, 4, 3
 		dc.b 8, $10, 3, 5

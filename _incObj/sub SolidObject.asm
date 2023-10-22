@@ -160,8 +160,7 @@ loc_A428:
 loc_A42E:
 		btst	#5,objStatus(a0)
 		beq.s	loc_A448
-		move.w	#1,objAnim(a1)
-; ---------------------------------------------------------------------------
+		move.w	#id_Run,objAnim(a1)
 
 sub_A43C:
 		bclr	#5,objStatus(a0)

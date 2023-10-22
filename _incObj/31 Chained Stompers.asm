@@ -146,14 +146,7 @@ loc_9846:
 		bsr.w	DisplaySprite
 
 loc_984A:
-		move.w	objX(a0),d0
-		andi.w	#$FF80,d0
-		move.w	(v_screenposx).w,d1
-		subi.w	#$80,d1
-		andi.w	#$FF80,d1
-		sub.w	d1,d0
-		cmpi.w	#$280,d0
-		bhi.w	DeleteObject
+		out_of_range.w	DeleteObject
 		rts
 ; ---------------------------------------------------------------------------
 

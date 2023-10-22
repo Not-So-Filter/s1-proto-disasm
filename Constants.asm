@@ -1,9 +1,9 @@
 ; VRAM data
-vram_fg:	equ $C000	; foreground namespace
-vram_bg:	equ $E000	; background namespace
-vram_sonic:	equ $F000	; Sonic graphics
-vram_sprites:	equ $F800	; sprite table
-vram_hscroll:	equ $FC00	; horizontal scroll table
+vram_fg:	= $C000	; foreground namespace
+vram_bg:	= $E000	; background namespace
+vram_sonic:	= $F000	; Sonic graphics
+vram_sprites:	= $F800	; sprite table
+vram_hscroll:	= $FC00	; horizontal scroll table
 
 ; Game modes
 id_Sega:	equ ptr_GM_Sega-GameModeArray	; $00
@@ -13,44 +13,44 @@ id_Level:	equ ptr_GM_Level-GameModeArray	; $0C
 id_Special:	equ ptr_GM_Special-GameModeArray; $10
 
 ; Levels
-id_GHZ:		equ 0
-id_LZ:		equ 1
-id_MZ:		equ 2
-id_SLZ:		equ 3
-id_SZ:		equ 4
-id_CWZ:		equ 5
-id_06:		equ 6
-id_SS:		equ 7
+id_GHZ:		= 0
+id_LZ:		= 1
+id_MZ:		= 2
+id_SLZ:		= 3
+id_SZ:		= 4
+id_CWZ:		= 5
+id_06:		= 6
+id_SS:		= 7
 
 ; Colours
-cBlack:		equ $000		; colour black
-cWhite:		equ $EEE		; colour white
-cBlue:		equ $E00		; colour blue
-cGreen:		equ $0E0		; colour green
-cRed:		equ $00E		; colour red
-cYellow:	equ cGreen+cRed		; colour yellow
-cAqua:		equ cGreen+cBlue	; colour aqua
-cMagenta:	equ cBlue+cRed		; colour magenta
+cBlack:		= $000		; colour black
+cWhite:		= $EEE		; colour white
+cBlue:		= $E00		; colour blue
+cGreen:		= $0E0		; colour green
+cRed:		= $00E		; colour red
+cYellow:	= cGreen+cRed		; colour yellow
+cAqua:		= cGreen+cBlue	; colour aqua
+cMagenta:	= cBlue+cRed		; colour magenta
 
 ; Joypad input
-btnStart:	equ %10000000 ; Start button	($80)
-btnA:		equ %01000000 ; A		($40)
-btnC:		equ %00100000 ; C		($20)
-btnB:		equ %00010000 ; B		($10)
-btnR:		equ %00001000 ; Right		($08)
-btnL:		equ %00000100 ; Left		($04)
-btnDn:		equ %00000010 ; Down		($02)
-btnUp:		equ %00000001 ; Up		($01)
-btnDir:		equ %00001111 ; Any direction	($0F)
-btnABC:		equ %01110000 ; A, B or C	($70)
-bitStart:	equ 7
-bitA:		equ 6
-bitC:		equ 5
-bitB:		equ 4
-bitR:		equ 3
-bitL:		equ 2
-bitDn:		equ 1
-bitUp:		equ 0
+btnStart:	= %10000000 ; Start button	($80)
+btnA:		= %01000000 ; A		($40)
+btnC:		= %00100000 ; C		($20)
+btnB:		= %00010000 ; B		($10)
+btnR:		= %00001000 ; Right		($08)
+btnL:		= %00000100 ; Left		($04)
+btnDn:		= %00000010 ; Down		($02)
+btnUp:		= %00000001 ; Up		($01)
+btnDir:		= %00001111 ; Any direction	($0F)
+btnABC:		= %01110000 ; A, B or C	($70)
+bitStart:	= 7
+bitA:		= 6
+bitC:		= 5
+bitB:		= 4
+bitR:		= 3
+bitL:		= 2
+bitDn:		= 1
+bitUp:		= 0
 
 ; Object variables
 	rsset 0
@@ -109,107 +109,101 @@ objOff_3F:	rs.b 1
 objSize:	rs.b 1	; size for each object
 	rsreset
 
-objSolid:	equ obj2ndRout ; solid status flag
+objSolid:	= obj2ndRout ; solid status flag
 
 ; Object variables used by Sonic
-flashtime:	equ objOff_30	; time between flashes after getting hit
-invtime:	equ objOff_32	; time left for invincibility
-shoetime:	equ objOff_34	; time left for speed shoes
-standonobject:	equ objOff_3D	; object Sonic stands on
+flashtime:	= objOff_30	; time between flashes after getting hit
+invtime:	= objOff_32	; time left for invincibility
+shoetime:	= objOff_34	; time left for speed shoes
+jumpflag:	= objOff_3C	; flag for when sonic is jumping
+standonobject:	= objOff_3D	; object Sonic stands on
+ctrllock:	= objOff_3E	; lock left and right controls (2 bytes)
 
 ; Object variables used by the title card
-card_mainX:	equ objOff_30		; position for card to display on
-card_finalX:	equ objOff_32		; position for card to finish on
+card_mainX:	= objOff_30		; position for card to display on
+card_finalX:	= objOff_32		; position for card to finish on
 
 ; Object variables used by the boss
-objBossX:	equ objOff_30		; x position
-objBossY:	equ objOff_38		; y position
+objBossX:	= objOff_30		; x position
+objBossY:	= objOff_38		; y position
 
 ; Animation flags
-afEnd:		equ $FF	; return to beginning of animation
-afBack:		equ $FE	; go back (specified number) bytes
-afChange:	equ $FD	; run specified animation
-afRoutine:	equ $FC	; increment routine counter
-afReset:	equ $FB	; reset animation and 2nd object routine counter
-af2ndRoutine:	equ $FA	; increment 2nd routine counter
+afEnd:		= $FF	; return to beginning of animation
+afBack:		= $FE	; go back (specified number) bytes
+afChange:	= $FD	; run specified animation
+afRoutine:	= $FC	; increment routine counter
+afReset:	= $FB	; reset animation and 2nd object routine counter
+af2ndRoutine:	= $FA	; increment 2nd routine counter
 
 ; ---------------------------------------------------------------------------
 
 ; VDP addressses
-vdp_data_port:		equ $C00000
-vdp_control_port:	equ $C00004
-vdp_counter:		equ $C00008
+vdp_data_port:		= $C00000
+vdp_control_port:	= $C00004
+vdp_counter:		= $C00008
 
-psg_input:		equ $C00011
+psg_input:		= $C00011
 
 ; Z80 addresses
-z80_ram:		equ $A00000			; start of Z80 RAM
-z80_dac3_pitch:		equ $A00183
-z80_dac_update:		equ $A01FF6
-z80_dac_status:		equ $A01FFD
-z80_dac_sample:		equ $A01FFF
-z80_ram_end:		equ $A02000			; end of non-reserved Z80 RAM
-z80_version:		equ $A10001
-z80_port_1_data:	equ $A10002
-z80_port_1_control:	equ $A10008
-z80_port_2_control:	equ $A1000A
-z80_expansion_control:	equ $A1000C
-z80_bus_request:	equ $A11100
-z80_reset:		equ $A11200
-ym2612_a0:		equ $A04000
-ym2612_d0:		equ $A04001
-ym2612_a1:		equ $A04002
-ym2612_d1:		equ $A04003
+z80_ram:		= $A00000			; start of Z80 RAM
+z80_dac3_pitch:		= $A00183
+z80_dac_update:		= $A01FF6
+z80_dac_status:		= $A01FFD
+z80_dac_sample:		= $A01FFF
+z80_ram_end:		= $A02000			; end of non-reserved Z80 RAM
+z80_version:		= $A10001
+z80_port_1_data:	= $A10002
+z80_port_1_control:	= $A10008
+z80_port_2_control:	= $A1000A
+z80_expansion_control:	= $A1000C
+z80_bus_request:	= $A11100
+z80_reset:		= $A11200
+ym2612_a0:		= $A04000
+ym2612_d0:		= $A04001
+ym2612_a1:		= $A04002
+ym2612_d1:		= $A04003
 
-security_addr:		equ $A14000
+security_addr:		= $A14000
 
 ; Sound driver constants
-TrackPlaybackControl:	equ 0				; All tracks
-TrackVoiceControl:	equ 1				; All tracks
-TrackTempoDivider:	equ 2				; All tracks
-TrackDataPointer:	equ 4				; All tracks (4 bytes)
-TrackTranspose:		equ 8				; FM/PSG only (sometimes written to as a word, to include TrackVolume)
-TrackVolume:		equ 9				; FM/PSG only
-TrackAMSFMSPan:		equ $A				; FM/DAC only
-TrackVoiceIndex:	equ $B				; FM/PSG only
-TrackVolEnvIndex:	equ $C				; PSG only
-TrackStackPointer:	equ $D				; All tracks
-TrackDurationTimeout:	equ $E				; All tracks
-TrackSavedDuration:	equ $F				; All tracks
-TrackSavedDAC:		equ $10				; DAC only
-TrackFreq:		equ $10				; FM/PSG only (2 bytes)
-TrackNoteTimeout:	equ $12				; FM/PSG only
-TrackNoteTimeoutMaster:	equ $13				; FM/PSG only
-TrackModulationPtr:	equ $14				; FM/PSG only (4 bytes)
-TrackModulationWait:	equ $18				; FM/PSG only
-TrackModulationSpeed:	equ $19				; FM/PSG only
-TrackModulationDelta:	equ $1A				; FM/PSG only
-TrackModulationSteps:	equ $1B				; FM/PSG only
-TrackModulationVal:	equ $1C				; FM/PSG only (2 bytes)
-TrackDetune:		equ $1E				; FM/PSG only
-TrackVoicePtr:		equ $1C				; FM SFX only (4 bytes)
-TrackPanNumber:		equ $1F				; FM only
-TrackPanTable:		equ $20				; FM only
-TrackPanStart:		equ $21				; FM only
-TrackPanLimit:		equ $22				; FM only
-TrackPanLength:		equ $23				; FM only
-TrackPanContinue:	equ $24				; FM only
-TrackFeedbackAlgo:	equ $25				; FM only
-TrackPSGNoise:		equ $26				; PSG only
-TrackLoopCounters:	equ $28				; All tracks (multiple bytes)
-TrackGoSubStack:	equ TrackSz			; All tracks (multiple bytes. This constant won't get to be used because of an optimisation that just uses TrackSz)
-
-TrackSz:	equ $30
-
-; VRAM data
-vram_fg:	equ $C000				; foreground namespace
-vram_bg:	equ $E000				; background namespace
-vram_sonic:	equ $F000				; Sonic graphics
-vram_sprites:	equ $F800				; sprite table
-vram_hscroll:	equ $FC00				; horizontal scroll table
+TrackPlaybackControl:	= 0				; All tracks
+TrackVoiceControl:	= 1				; All tracks
+TrackTempoDivider:	= 2				; All tracks
+TrackDataPointer:	= 4				; All tracks (4 bytes)
+TrackTranspose:		= 8				; FM/PSG only (sometimes written to as a word, to include TrackVolume)
+TrackVolume:		= 9				; FM/PSG only
+TrackAMSFMSPan:		= $A				; FM/DAC only
+TrackVoiceIndex:	= $B				; FM/PSG only
+TrackVolEnvIndex:	= $C				; PSG only
+TrackStackPointer:	= $D				; All tracks
+TrackDurationTimeout:	= $E				; All tracks
+TrackSavedDuration:	= $F				; All tracks
+TrackSavedDAC:		= $10				; DAC only
+TrackFreq:		= $10				; FM/PSG only (2 bytes)
+TrackNoteTimeout:	= $12				; FM/PSG only
+TrackNoteTimeoutMaster:	= $13				; FM/PSG only
+TrackModulationPtr:	= $14				; FM/PSG only (4 bytes)
+TrackModulationWait:	= $18				; FM/PSG only
+TrackModulationSpeed:	= $19				; FM/PSG only
+TrackModulationDelta:	= $1A				; FM/PSG only
+TrackModulationSteps:	= $1B				; FM/PSG only
+TrackModulationVal:	= $1C				; FM/PSG only (2 bytes)
+TrackDetune:		= $1E				; FM/PSG only
+TrackVoicePtr:		= $1C				; FM SFX only (4 bytes)
+TrackPanNumber:		= $1F				; FM only
+TrackPanTable:		= $20				; FM only
+TrackPanStart:		= $21				; FM only
+TrackPanLimit:		= $22				; FM only
+TrackPanLength:		= $23				; FM only
+TrackPanContinue:	= $24				; FM only
+TrackFeedbackAlgo:	= $25				; FM only
+TrackPSGNoise:		= $26				; PSG only
+TrackLoopCounters:	= $28				; All tracks (multiple bytes)
+TrackSz:		= $30
+TrackGoSubStack:	= TrackSz			; All tracks (multiple bytes. This constant won't get to be used because of an optimisation that just uses TrackSz)
 
 ; Background music
-bgm__First:	equ $81
+bgm__First:	= $81
 bgm_GHZ:	equ ((ptr_mus81-MusicIndex)/4)+bgm__First
 bgm_LZ:		equ ((ptr_mus82-MusicIndex)/4)+bgm__First
 bgm_MZ:		equ ((ptr_mus83-MusicIndex)/4)+bgm__First
@@ -230,7 +224,7 @@ bgm_Credits:	equ ((ptr_mus91-MusicIndex)/4)+bgm__First
 bgm__Last:	equ ((ptr_musend-MusicIndex-4)/4)+bgm__First
 
 ; Sound effects
-sfx__First:	equ $A0
+sfx__First:	= $A0
 sfx_Jump:	equ ((ptr_sndA0-SoundIndex)/4)+sfx__First
 sfx_Lamppost:	equ ((ptr_sndA1-SoundIndex)/4)+sfx__First
 sfx_A2:		equ ((ptr_sndA2-SoundIndex)/4)+sfx__First
@@ -282,13 +276,13 @@ sfx_Signpost:	equ ((ptr_sndCF-SoundIndex)/4)+sfx__First
 sfx__Last:	equ ((ptr_sndend-SoundIndex-4)/4)+sfx__First
 
 ; Special sound effects
-spec__First:	equ $D0
+spec__First:	= $D0
 sfx_Waterfall:	equ ((ptr_sndD0-SpecSoundIndex)/4)+spec__First
 sfx_Loud_Waterfall:	equ ((ptr_sndD1-SpecSoundIndex)/4)+spec__First
 sfx_Pounding:	equ ((ptr_sndD2-SpecSoundIndex)/4)+spec__First
 spec__Last:	equ ((ptr_specend-SpecSoundIndex-4)/4)+spec__First
 
-flg__First:	equ $E0
+flg__First:	= $E0
 bgm_Fade:	equ ((ptr_flgE0-Sound_ExIndex)/4)+flg__First
 bgm_Stop:	equ ((ptr_flgE1-Sound_ExIndex)/4)+flg__First
 bgm_Speedup:	equ ((ptr_flgE2-Sound_ExIndex)/4)+flg__First

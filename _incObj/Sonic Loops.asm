@@ -17,13 +17,13 @@ loc_F3F4:
 		add.w	d1,d0
 		lea	(v_lvllayout).w,a1
 		move.b	(a1,d0.w),d1
-		cmp.b	(unk_FFF7AE).w,d1
+		cmp.b	(v_256roll1).w,d1
 		beq.w	Sonic_CheckRoll
-		cmp.b	(unk_FFF7AF).w,d1
+		cmp.b	(v_256roll2).w,d1
 		beq.w	Sonic_CheckRoll
-		cmp.b	(unk_FFF7AC).w,d1
+		cmp.b	(v_256loop1).w,d1
 		beq.s	loc_F448
-		cmp.b	(unk_FFF7AD).w,d1
+		cmp.b	(v_256loop2).w,d1
 		beq.s	loc_F438
 		bclr	#6,objRender(a0)
 		rts

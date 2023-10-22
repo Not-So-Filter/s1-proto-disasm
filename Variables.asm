@@ -17,7 +17,7 @@ v_sgfx_buffer:		rs.b $300		; sonic graphics ram buffer ($300 bytes)
 v_tracksonic:		rs.b $100		; sonic position table ($100 bytes)
 v_hscrolltablebuffer:	rs.b $400
 v_objspace:		rs.b 0			; RAM for object space ($600 bytes)
-v_player:               rs.b 0
+v_player:		rs.b 0
 v_objslot0:		rs.b objSize
 v_objslot1:		rs.b objSize
 v_objslot2:		rs.b objSize
@@ -305,7 +305,7 @@ v_bg2screenposy:	rs.l 1
 v_bg3screenposx:	rs.l 1
 v_bg3screenposy:	rs.l 1
 v_limitleft1:		rs.w 1
-	rs.w 1					; unused
+	rs.w 1					; unused, was probably v_limitright1
 v_limittop1:		rs.w 1
 v_limitbtm1:		rs.w 1
 v_limitleft2:		rs.w 1
@@ -317,7 +317,7 @@ v_limitleft3:		rs.w 1
 	rs.b 6					; unused
 v_scrshiftx:		rs.w 1
 v_scrshifty:		rs.w 1
-unk_FFF73E:		rs.w 1
+v_lookshift:		rs.w 1
 f_res_hscroll:		rs.b 1
 f_res_vscroll:		rs.b 1
 v_dle_routine:		rs.w 1
@@ -365,17 +365,17 @@ v_trackpos:		rs.b 1
 v_trackbyte:		rs.b 1
 f_lockscreen:		rs.b 1
 	rs.b 1					; unused
-unk_FFF7AC:		rs.b 1
-unk_FFF7AD:		rs.b 1
-unk_FFF7AE:		rs.b 1
-unk_FFF7AF:		rs.b 1
-v_lani0_frame:		rs.b 1
-v_lani0_time:		rs.b 1
-v_lani1_frame:		rs.b 1
-v_lani1_time:		rs.b 1
-v_lani2_frame:		rs.b 1
-v_lani2_time:		rs.b 1
-v_lani3_frame:		rs.b 1
+v_256loop1:		rs.b 1			; 256x256 level tile which contains a loop (GHZ/SLZ)
+v_256loop2:		rs.b 1			; 256x256 level tile which contains a loop (GHZ/SLZ)
+v_256roll1:		rs.b 1			; 256x256 level tile which contains a roll tunnel (GHZ)
+v_256roll2:		rs.b 1			; 256x256 level tile which contains a roll tunnel (GHZ)
+v_lani0_frame:		rs.b 1			; level graphics animation 0 - current frame
+v_lani0_time:		rs.b 1			; level graphics animation 0 - time until next frame
+v_lani1_frame:		rs.b 1			; level graphics animation 1 - current frame
+v_lani1_time:		rs.b 1			; level graphics animation 1 - time until next frame
+v_lani2_frame:		rs.b 1			; level graphics animation 2 - current frame
+v_lani2_time:		rs.b 1			; level graphics animation 2 - time until next frame
+v_lani3_frame:		rs.b 1			; level graphics animation 3 - current frame
 	rs.b $29				; unused
 f_switch:		rs.w 1
 	rs.b $E					; unused

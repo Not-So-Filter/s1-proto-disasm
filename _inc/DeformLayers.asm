@@ -384,7 +384,7 @@ loc_4160:
 		btst	#1,(v_player+objStatus).w
 		beq.s	loc_4180
 		addi.w	#$20,d0
-		sub.w	(unk_FFF73E).w,d0
+		sub.w	(v_lookshift).w,d0
 		bcs.s	loc_41BE
 		subi.w	#$40,d0
 		bcc.s	loc_41BE
@@ -394,7 +394,7 @@ loc_4160:
 ; ---------------------------------------------------------------------------
 
 loc_4180:
-		sub.w	(unk_FFF73E).w,d0
+		sub.w	(v_lookshift).w,d0
 		bne.s	loc_4192
 		tst.b	(f_bgscrollvert).w
 		bne.s	loc_41D0
@@ -405,7 +405,7 @@ loc_418C:
 ; ---------------------------------------------------------------------------
 
 loc_4192:
-		cmpi.w	#$60,(unk_FFF73E).w
+		cmpi.w	#$60,(v_lookshift).w
 		bne.s	loc_41AC
 		move.w	#$600,d1
 		cmpi.w	#6,d0

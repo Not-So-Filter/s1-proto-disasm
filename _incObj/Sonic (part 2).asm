@@ -45,7 +45,7 @@ Sonic_GameOver:
 		addi.w	#$100,d0
 		cmp.w	objY(a0),d0
 		bcc.w	locret_F3AE
-		move.w	#$FFC8,objVelY(a0)
+		move.w	#-$38,objVelY(a0)
 		addq.b	#2,objRoutine(a0)
 		addq.b	#1,(f_lifecount).w
 		subq.b	#1,(v_lives).w
@@ -57,7 +57,7 @@ Sonic_GameOver:
 		move.w	#bgm_GameOver,d0
 		jsr	(PlaySound_Special).l
 		moveq	#plcid_GameOver,d0
-		jmp	(plcAdd).l
+		jmp	(AddPLC).l
 ; ---------------------------------------------------------------------------
 
 loc_F380:

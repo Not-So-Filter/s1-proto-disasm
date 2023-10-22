@@ -27,15 +27,15 @@ ptr_Pal_Special:	palp	Pal_Special,v_pal_dry,$40 ; $A (10) - special stage
 ptr_Pal_Ending:		palp	Pal_Ending,v_pal_dry,$40 ; $B (11) - ending sequence
 		        even
 		        
-palid_SegaBG:		equ (ptr_Pal_SegaBG-PalPointers)/8
-palid_Title:		equ (ptr_Pal_Title-PalPointers)/8
-palid_LevelSel:		equ (ptr_Pal_LevelSel-PalPointers)/8
-palid_Sonic:		equ (ptr_Pal_Sonic-PalPointers)/8
-palid_GHZ:		equ (ptr_Pal_GHZ-PalPointers)/8
-palid_LZ:		equ (ptr_Pal_LZ-PalPointers)/8
-palid_MZ:		equ (ptr_Pal_MZ-PalPointers)/8
-palid_SLZ:		equ (ptr_Pal_SLZ-PalPointers)/8
-palid_SZ:		equ (ptr_Pal_SZ-PalPointers)/8
-palid_CWZ:		equ (ptr_Pal_CWZ-PalPointers)/8
-palid_Special:		equ (ptr_Pal_Special-PalPointers)/8
-palid_Ending:		equ (ptr_Pal_Ending-PalPointers)/8
+palid_SegaBG:		= (ptr_Pal_SegaBG-PalPointers)/8
+palid_Title:		= (ptr_Pal_Title-PalPointers)/8
+palid_LevelSel:		= (ptr_Pal_LevelSel-PalPointers)/8
+palid_Sonic:		= (ptr_Pal_Sonic-PalPointers)/8
+palid_GHZ:		= (ptr_Pal_GHZ-PalPointers)/8
+palid_LZ:		= (ptr_Pal_LZ-PalPointers)/8
+palid_MZ:		= (ptr_Pal_MZ-PalPointers)/8
+palid_SLZ:		= (ptr_Pal_SLZ-PalPointers)/8
+palid_SZ:		= (ptr_Pal_SZ-PalPointers)/8
+palid_CWZ:		= (ptr_Pal_CWZ-PalPointers)/8
+palid_Special:		= (ptr_Pal_Special-PalPointers)/8
+palid_Ending:		= (ptr_Pal_Ending-PalPointers)/8

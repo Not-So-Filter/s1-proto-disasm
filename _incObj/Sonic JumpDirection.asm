@@ -30,13 +30,13 @@ Sonic_JumpMove:
 		move.w	d0,objVelX(a0)
 
 Sonic_ResetScroll2:
-		cmpi.w	#$60,(unk_FFF73E).w
+		cmpi.w	#$60,(v_lookshift).w
 		beq.s	loc_ED9A
 		bcc.s	loc_ED96
-		addq.w	#4,(unk_FFF73E).w
+		addq.w	#4,(v_lookshift).w
 
 loc_ED96:
-		subq.w	#2,(unk_FFF73E).w
+		subq.w	#2,(v_lookshift).w
 
 loc_ED9A:
 		cmpi.w	#$FC00,objVelY(a0)

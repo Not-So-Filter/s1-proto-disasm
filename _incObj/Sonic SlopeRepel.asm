@@ -2,7 +2,7 @@
 
 Sonic_SlopeRepel:
 		nop
-		tst.w	$3E(a0)
+		tst.w	ctrllock(a0)
 		bne.s	loc_F02C
 		move.b	objAngle(a0),d0
 		addi.b	#$20,d0
@@ -16,12 +16,12 @@ loc_F018:
 		cmpi.w	#$280,d0
 		bcc.s	locret_F02A
 		bset	#1,objStatus(a0)
-		move.w	#$1E,$3E(a0)
+		move.w	#$1E,ctrllock(a0)
 
 locret_F02A:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_F02C:
-		subq.w	#1,$3E(a0)
+		subq.w	#1,ctrllock(a0)
 		rts

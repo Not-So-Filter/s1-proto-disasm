@@ -244,7 +244,7 @@ DACUpdateTrack:
 		move.b	.timpanipitch(pc,d0.w),d0
 		tst.b	(z80_dac_update).l
 		bne.s	.noupdate
-		move.b  d0,(z80_dac3_pitch).l
+		move.b	d0,(z80_dac3_pitch).l
 		move.b	#$83,(z80_dac_sample).l
 
 .noupdate:
@@ -2447,7 +2447,7 @@ SSG_Reg_Table:	dc.b $90, $50, $98, $58
 		dc.b $94, $54, $9C, $5C
 		even
 		
-Unc_Z80:        incbin	"sound/z80.bin"
+Unc_Z80:	incbin	"sound/z80.bin"
 Unc_Z80_End:	even
 Music81:	incbin	"sound/music/Mus81 - GHZ.bin"
 		even

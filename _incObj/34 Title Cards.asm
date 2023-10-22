@@ -102,11 +102,11 @@ loc_A5B0:
 		cmpi.b	#4,objRoutine(a0)
 		bne.s	loc_A5D0
 		moveq	#plcid_Explode,d0
-		jsr	(plcAdd).l
+		jsr	(AddPLC).l
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		addi.w	#plcid_GHZAnimals,d0
-		jsr	(plcAdd).l
+		jsr	(AddPLC).l
 
 loc_A5D0:
 		bra.w	DeleteObject

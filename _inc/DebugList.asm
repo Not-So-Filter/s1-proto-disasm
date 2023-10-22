@@ -1,10 +1,10 @@
 DebugLists:
                 dc.w .GHZ-DebugLists
                 dc.w .LZ-DebugLists
-                dc.w .MZ-DebugLists
-                dc.w .SLZ-DebugLists
+		dc.w .MZ-DebugLists
+		dc.w .SLZ-DebugLists
 		dc.w .SZ-DebugLists
-                dc.w .CWZ-DebugLists
+		dc.w .CWZ-DebugLists
 
 dbug:	macro map,object,subtype,frame,vram
 	dc.l map+(object<<24)
@@ -16,103 +16,103 @@ dbug:	macro map,object,subtype,frame,vram
 	dc.w (.GHZend-.GHZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
-	dbug 	MapRing,	$25,	0,	0,	$27B2
-	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug	Map_Crab,	$1F,	0,	0,	$400
-	dbug	Map_Buzz,	$22,	0,	0,	$444
-	dbug	Map_Chop,	$2B,	0,	0,	$47B
-	dbug	MapSpikes,	$36,	0,	0,	$51B
-	dbug	Map_Plat_GHZ,	$18,    0,	0,	$4000
-	dbug	MapPRock,	$3B,	0,	0,	$63D0
-	dbug	Map_Moto,	$40,	0,	0,	$4F0
-	dbug	Map_Spring,	$41,	0,	0,	$523
-	dbug	Map_Newt,	$42,	0,	0,	$249B
-	dbug	Map_Edge,	$44,	0,	0,	$434C
-	dbug	Map_GBall,	$19,	0,	0,	$43AA
+	dbug 	MapRing,	id_Rings,	0,	0,	$27B2
+	dbug	MapMonitor,	id_Monitor,	0,	0,	$680
+	dbug	Map_Crab,	id_Crabmeat,	0,	0,	$400
+	dbug	Map_Buzz,	id_BuzzBomber,	0,	0,	$444
+	dbug	Map_Chop,	id_Chopper,	0,	0,	$47B
+	dbug	MapSpikes,	id_Spikes,	0,	0,	$51B
+	dbug	Map_Plat_GHZ,	id_BasicPlatform,	0,	0,	$4000
+	dbug	MapPRock,	id_PurpleRock,	0,	0,	$63D0
+	dbug	Map_Moto,	id_MotoBug,	0,	0,	$4F0
+	dbug	Map_Spring,	id_Springs,	0,	0,	$523
+	dbug	Map_Newt,	id_Newtron,	0,	0,	$249B
+	dbug	Map_Edge,	id_EdgeWalls,	0,	0,	$434C
+	dbug	Map_GBall,	id_GBall,	0,	0,	$43AA
 	.GHZend:
 
 .LZ:
 	dc.w (.LZend-.LZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
-	dbug 	MapRing,	$25,	0,	0,	$27B2
-	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug	Map_Crab,	$1F,	0,	0,	$400
+	dbug 	MapRing,	id_Rings,	0,	0,	$27B2
+	dbug	MapMonitor,	id_Monitor,	0,	0,	$680
+	dbug	Map_Crab,	id_Crabmeat,	0,	0,	$400
 	.LZend:
 
 .MZ:
 	dc.w (.MZend-.MZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
-	dbug 	MapRing,	$25,	0,	0,	$27B2
-	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug	Map_Buzz,	$22,	0,	0,	$444
-	dbug	MapSpikes,	$36,	0,	0,	$51B
-	dbug	Map_Spring,	$41,	0,	0,	$523
-	dbug    Map_Fire,	$13,    0,      0,      $345
-	dbug    Map_Brick,	$46,    0,      0,      $4000
-	dbug    Map_Geyser,	$4C,    0,      0,      $63A8
-	dbug    Map_LWall,	$4E,    0,      0,      $63A8
-	dbug    Map_Push,	$33,    0,      0,      $42B8
-	dbug    Map4F,		$4F,    0,      0,      $4E4
-	dbug    MapYadrin,	$50,    0,      0,      $47B
-	dbug    MapSmashBlock,	$51,    0,      0,      $42B8
-	dbug    MapMovingPtfm,	$52,    0,      0,      $2B8
-	dbug    Map_CFlo,	$53,   0,      0,      $62B8
-	dbug    Map_LTag,	$54,    0,      0,      $8680
-	dbug    Map_Bas,	$55,    0,      0,      $24B8
+	dbug 	MapRing,	id_Rings,	0,	0,	$27B2
+	dbug	MapMonitor,	id_Monitor,	0,	0,	$680
+	dbug	Map_Buzz,	id_BuzzBomber,	0,	0,	$444
+	dbug	MapSpikes,	id_Spikes,	0,	0,	$51B
+	dbug	Map_Spring,	id_Springs,	0,	0,	$523
+	dbug	Map_Fire,	id_LavaMaker,	0,	0,	$345
+	dbug	Map_Brick,	id_MarbleBrick,	0,	0,	$4000
+	dbug	Map_Geyser,	id_GeyserMaker,	0,	0,	$63A8
+	dbug	Map_LWall,	id_LavaWall,	0,	0,	$63A8
+	dbug	Map_Push,	id_PushBlock,	0,	0,	$42B8
+	dbug	Map4F,		id_Splats,	0,	0,	$4E4
+	dbug	MapYadrin,	id_Yadrin,	0,	0,	$47B
+	dbug	MapSmashBlock,	id_SmashBlock,	0,	0,	$42B8
+	dbug	MapMovingPtfm,	id_MovingBlock,	0,	0,	$2B8
+	dbug	Map_CFlo,	id_CollapseFloor,	0,	0,	$62B8
+	dbug	Map_LTag,	id_LavaTag,	0,	0,	$8680
+	dbug	Map_Bas,	id_Basaran,	0,	0,	$24B8
 	.MZend:
 
 .SLZ:
 	dc.w (.SLZend-.SLZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
-	dbug 	MapRing,	$25,	0,	0,	$27B2
-	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug    Map_Elev,	$59,   0,      0,      $4480
-	dbug    Map_CFlo,	$53,   0,      2,      $44E0
-	dbug    Map_Plat_SLZ,	$18,    0,      0,      $4480
-	dbug    Map_Circ,	$5A,    0,      0,      $4480
-	dbug    Map_Stair,	$5B,   0,      0,      $4480
-	dbug    Map_Fan,	$5D,    0,      0,      $43A0
-	dbug    Map_Seesaw,	$5E,    0,      0,      $374
-	dbug    Map_Spring,	$41,    0,      0,      $523
-	dbug    Map_Fire,	$13,    0,      0,      $345
-	dbug	Map_Crab,	$1F,	0,	0,	$400
-	dbug	Map_Buzz,	$22,	0,	0,	$444
+	dbug 	MapRing,	id_Rings,	0,	0,	$27B2
+	dbug	MapMonitor,	id_Monitor,	0,	0,	$680
+	dbug	Map_Elev,	id_Elevator,	0,	0,	$4480
+	dbug	Map_CFlo,	id_CollapseFloor,	0,	2,	$44E0
+	dbug	Map_Plat_SLZ,	id_BasicPlatform,	0,	0,	$4480
+	dbug	Map_Circ,	id_CirclingPlatform,	0,	0,	$4480
+	dbug	Map_Stair,	id_Staircase,	0,	0,	$4480
+	dbug	Map_Fan,	id_Fan,		0,	0,	$43A0
+	dbug	Map_Seesaw,	id_Seesaw,	0,	0,	$374
+	dbug	Map_Spring,	id_Springs,	0,	0,	$523
+	dbug	Map_Fire,	id_LavaMaker,	0,	0,	$345
+	dbug	Map_Crab,	id_Crabmeat,	0,	0,	$400
+	dbug	Map_Buzz,	id_BuzzBomber,	0,	0,	$444
 	.SLZend:
 
 .SZ:
 	dc.w (.SZend-.SZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
-	dbug 	MapRing,	$25,	0,	0,	$27B2
-	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug    MapSpikes,	$36,    0,      0,      $51B
-	dbug    Map_Spring,	$41,    0,      0,      $523
-	dbug    Map_Roll,	$43,    0,      0,      $24B8
-	dbug    Map_Light,	$12,    0,      0,      0
-	dbug    Map_Bump,	$47,    0,      0,      $380
-	dbug	Map_Crab,	$1F,	0,	0,	$400
-	dbug	Map_Buzz,	$22,	0,	0,	$444
-	dbug    MapYadrin,	$50,    0,      0,      $47B
-	dbug    Map_Plat_SZ,	$18,    0,      0,      $4000
-	dbug    Map_FBlock,	$56,    0,      0,      $4000
-	dbug    MapSwitch,	$32,    0,      0,      $513
+	dbug 	MapRing,	id_Rings,	0,	0,	$27B2
+	dbug	MapMonitor,	id_Monitor,	0,	0,	$680
+	dbug	MapSpikes,	id_Spikes,	0,	0,	$51B
+	dbug	Map_Spring,	id_Springs,	0,	0,	$523
+	dbug	Map_Roll,	id_Roller,	0,	0,	$24B8
+	dbug	Map_Light,	id_SpinningLight,	0,	0,	0
+	dbug	Map_Bump,	id_Bumper,	0,	0,	$380
+	dbug	Map_Crab,	id_Crabmeat,	0,	0,	$400
+	dbug	Map_Buzz,	id_BuzzBomber,	0,	0,	$444
+	dbug	MapYadrin,	id_Yadrin,	0,	0,	$47B
+	dbug	Map_Plat_SZ,	id_BasicPlatform,	0,	0,	$4000
+	dbug	Map_FBlock,	id_FloatingBlock,	0,	0,	$4000
+	dbug	MapSwitch,	id_Button,	0,	0,	$513
 	.SZend:
 
 .CWZ:
 	dc.w (.CWZend-.CWZ-2)/8
 
 ;		mappings	object		subtype	frame	VRAM setting
-	dbug 	MapRing,	$25,	0,	0,	$27B2
-	dbug	MapMonitor,	$26,	0,	0,	$680
-	dbug	Map_Crab,	$1F,	0,	0,	$400
+	dbug 	MapRing,	id_Rings,	0,	0,	$27B2
+	dbug	MapMonitor,	id_Monitor,	0,	0,	$680
+	dbug	Map_Crab,	id_Crabmeat,	0,	0,	$400
 	.CWZend:
 
 ;.DebugUnk:
 ;		mappings	object		subtype	frame	VRAM setting
-	dbug 	MapBallhog,	$1E,	0,	0,	$2400
-	dbug	Map_Jaws,	$2C,	0,	0,	$47B
-	dbug	Map_Burro,	$2D,	0,	0,	$247B
+	dbug 	MapBallhog,	id_BallHog,	0,	0,	$2400
+	dbug	Map_Jaws,	id_Jaws,	0,	0,	$47B
+	dbug	Map_Burro,	id_Burrobot,	0,	0,	$247B
 ;	.DebugUnkend:

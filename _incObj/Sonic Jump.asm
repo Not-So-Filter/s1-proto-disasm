@@ -23,7 +23,7 @@ Sonic_Jump:
 		bset	#1,objStatus(a0)
 		bclr	#5,objStatus(a0)
 		addq.l	#4,sp
-		move.b	#1,$3C(a0)
+		move.b	#1,jumpflag(a0)
 		move.w	#sfx_Jump,d0
 		jsr	(PlaySound_Special).l
 		move.b	#$13,objHeight(a0)

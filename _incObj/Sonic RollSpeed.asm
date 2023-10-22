@@ -7,7 +7,7 @@ Sonic_RollSpeed:
 		asr.w	#1,d5
 		move.w	(v_sonspeeddec).w,d4
 		asr.w	#2,d4
-		tst.w	$3E(a0)
+		tst.w	ctrllock(a0)
 		bne.s	loc_EC92
 		btst	#bitL,(v_jpadhold2).w
 		beq.s	loc_EC86
@@ -74,7 +74,7 @@ loc_ED00:
 loc_ED0E:
 		sub.w	d4,d0
 		bcc.s	loc_ED16
-		move.w	#$FF80,d0
+		move.w	#-$80,d0
 
 loc_ED16:
 		move.w	d0,objInertia(a0)

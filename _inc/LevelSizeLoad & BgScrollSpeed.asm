@@ -34,7 +34,7 @@ loc_3B08:
 		addi.w	#$240,d0
 		move.w	d0,(v_limitleft3).w
 		move.w	(a0)+,d0
-		move.w	d0,(unk_FFF73E).w
+		move.w	d0,(v_lookshift).w
 		bra.w	loc_3C6E
 ; ---------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ loc_3CB2:
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lsl.b	#2,d0
-		move.l	SpecialChunkArray(pc,d0.w),(unk_FFF7AC).w
+		move.l	SpecialChunkArray(pc,d0.w),(v_256loop1).w
 		bra.w	LoadLevelUnk
 ; ---------------------------------------------------------------------------
 StartPosArray:	include "_inc/Start Location Array - Levels.asm"
