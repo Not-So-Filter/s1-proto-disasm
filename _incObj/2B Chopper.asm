@@ -31,7 +31,7 @@ loc_8BF0:
 		cmp.w	objY(a0),d0
 		bcc.s	loc_8C18
 		move.w	d0,objY(a0)
-		move.w	#$F900,objVelY(a0)
+		move.w	#-$700,objVelY(a0)
 
 loc_8C18:
 		move.b	#1,objAnim(a0)

@@ -903,7 +903,7 @@ TilemapToVRAM:
 		move.l	#$800000,d4
 
 loc_1222:
-		move.l	d0,4(a6)
+		move.l	d0,vdp_control_port-vdp_data_port(a6)
 		move.w	d1,d3
 
 loc_1228:
@@ -1560,7 +1560,7 @@ loc_2592:
 		lea	(Nem_TitleSonic).l,a0
 		bsr.w	NemDec
 		lea	(vdp_data_port).l,a6
-		locVRAM $D000,4(a6)
+		locVRAM $D000,vdp_control_port-vdp_data_port(a6)
 		lea	(Art_Text).l,a5
 		move.w	#$28F,d1
 
@@ -1869,7 +1869,7 @@ LevSelTextLoad:
 		moveq	#$13,d1	; Only load 13 lines.
 
 loc_2944:
-		move.l	d4,4(a6)
+		move.l	d4,vdp_control_port-vdp_data_port(a6)
 		bsr.w	sub_29CC
 		addi.l	#$800000,d4
 		dbf	d1,loc_2944
@@ -1887,7 +1887,7 @@ loc_2944:
 		add.w	d0,d1
 		adda.w	d1,a1
 		move.w	#$C680,d3
-		move.l	d4,4(a6)
+		move.l	d4,vdp_control_port-vdp_data_port(a6)
 		bsr.w	sub_29CC
 		move.w	#$E680,d3
 		cmpi.w	#$13,(v_levselitem).w	; are we on Sound Select?
@@ -3702,7 +3702,7 @@ ObjCollapsePtfm_Slope:dc.b $20, $20, $20, $20, $20, $20, $20, $20, $21, $21
 		dc.b $30, $30, $30, $30, $30, $30, $30, $30
 		even
 
-		include "_maps\06526.asm"
+		include "_maps\06256.asm"
 Map_Ledge:	include "_maps\Collapsing Ledge.asm"
 Map_CFlo:	include "_maps\Collapsing Floors.asm"
 
@@ -4647,11 +4647,19 @@ byte_A9DD:	dc.b $D
 
 Map_Over:	include "_maps\Game Over.asm"
 
-MapLevelResults:dc.w byte_AA4C-MapLevelResults, byte_AA75-MapLevelResults, byte_AA94-MapLevelResults
-		dc.w byte_AAB3-MapLevelResults, byte_AAD7-MapLevelResults
-		dc.w byte_A9DD-MapLevelResults, byte_A9BC-MapLevelResults
-		dc.w byte_A9C7-MapLevelResults, byte_A9D2-MapLevelResults
-byte_AA4C:	dc.b 8
+; ---------------------------------------------------------------------------
+; Sprite mappings - "SONIC HAS PASSED" title card
+; ---------------------------------------------------------------------------
+Map_Got:	dc.w M_Got_SonicHas-Map_Got
+		dc.w byte_AA75-Map_Got
+		dc.w byte_AA94-Map_Got
+		dc.w byte_AAB3-Map_Got
+		dc.w byte_AAD7-Map_Got
+		dc.w byte_A9DD-Map_Got
+		dc.w byte_A9BC-Map_Got
+		dc.w byte_A9C7-Map_Got
+		dc.w byte_A9D2-Map_Got
+M_Got_SonicHas:	dc.b 8
 		dc.b $F8, 5, 0, $3E, $B8
 		dc.b $F8, 5, 0, $32, $C8
 		dc.b $F8, 5, 0, $2E, $D8
@@ -4935,8 +4943,8 @@ loc_E892:
 		jsr	off_E8C8(pc,d1.w)
 		bsr.s	sub_E8D6
 		bsr.w	sub_E952
-		move.b	(v_prianglebuffer).w,$36(a0)
-		move.b	(v_secanglebuffer).w,$37(a0)
+		move.b	(v_angle_primary).w,$36(a0)
+		move.b	(v_angle_secondary).w,$37(a0)
 		bsr.w	Sonic_Animate
 		bsr.w	TouchObjects
 		bsr.w	Sonic_SpecialChunk
@@ -5209,8 +5217,8 @@ Sonic_WalkSpeed:
 		add.l	d1,d2
 		swap	d2
 		swap	d3
-		move.b	d0,(v_prianglebuffer).w
-		move.b	d0,(v_secanglebuffer).w
+		move.b	d0,(v_angle_primary).w
+		move.b	d0,(v_angle_secondary).w
 		move.b	d0,d1
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
@@ -5228,8 +5236,8 @@ loc_10514:
 ; ---------------------------------------------------------------------------
 
 sub_10520:
-		move.b	d0,(v_prianglebuffer).w
-		move.b	d0,(v_secanglebuffer).w
+		move.b	d0,(v_angle_primary).w
+		move.b	d0,(v_angle_secondary).w
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		cmpi.b	#$40,d0
@@ -5249,7 +5257,7 @@ Sonic_HitFloor:
 		move.b	objWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -5264,7 +5272,7 @@ Sonic_HitFloor:
 		move.b	objWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	(v_secanglebuffer).w,a4
+		lea	(v_angle_secondary).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
@@ -5273,10 +5281,10 @@ Sonic_HitFloor:
 		move.b	#0,d2
 
 loc_105A8:
-		move.b	(v_secanglebuffer).w,d3
+		move.b	(v_angle_secondary).w,d3
 		cmp.w	d0,d1
 		ble.s	loc_105B6
-		move.b	(v_prianglebuffer).w,d3
+		move.b	(v_angle_primary).w,d3
 		move.w	d0,d1
 
 loc_105B6:
@@ -5292,7 +5300,7 @@ locret_105BE:
 
 loc_105C8:
 		addi.w	#$A,d2
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5300,7 +5308,7 @@ loc_105C8:
 		move.b	#0,d2
 
 loc_105E2:
-		move.b	(v_prianglebuffer).w,d3
+		move.b	(v_angle_primary).w,d3
 		btst	#0,d3
 		beq.s	locret_105EE
 		move.b	d2,d3
@@ -5318,13 +5326,13 @@ ObjectHitFloor2:
 		move.b	objHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		move.b	#0,(a4)
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$D,d5
 		bsr.w	sub_101BE
-		move.b	(v_prianglebuffer).w,d3
+		move.b	(v_angle_primary).w,d3
 		btst	#0,d3
 		beq.s	locret_10626
 		move.b	#0,d3
@@ -5343,7 +5351,7 @@ loc_10628:
 		move.b	objHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5358,7 +5366,7 @@ loc_10628:
 		move.b	objHeight(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_secanglebuffer).w,a4
+		lea	(v_angle_secondary).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5374,7 +5382,7 @@ sub_1068C:
 
 loc_10694:
 		addi.w	#$A,d3
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
@@ -5386,13 +5394,13 @@ loc_10694:
 ObjectHitWallRight:
 		add.w	objX(a0),d3
 		move.w	objY(a0),d2
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		move.b	#0,(a4)
 		movea.w	#$10,a3
 		move.w	#0,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor
-		move.b	(v_prianglebuffer).w,d3
+		move.b	(v_angle_primary).w,d3
 		btst	#0,d3
 		beq.s	locret_106DE
 		move.b	#$C0,d3
@@ -5412,7 +5420,7 @@ Sonic_NoRunningOnWalls:
 		move.b	objWidth(a0),d0
 		ext.w	d0
 		add.w	d0,d3
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -5428,7 +5436,7 @@ Sonic_NoRunningOnWalls:
 		move.b	objWidth(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
-		lea	(v_secanglebuffer).w,a4
+		lea	(v_angle_secondary).w,a4
 		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -5443,7 +5451,7 @@ Sonic_NoRunningOnWalls:
 loc_10754:
 		subi.w	#$A,d2
 		eori.w	#$F,d2
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
@@ -5460,12 +5468,12 @@ ObjectHitCeiling:
 		ext.w	d0
 		sub.w	d0,d2
 		eori.w	#$F,d2
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		movea.w	#-$10,a3
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
-		move.b	(v_prianglebuffer).w,d3
+		move.b	(v_angle_primary).w,d3
 		btst	#0,d3
 		beq.s	locret_107AC
 		move.b	#$80,d3
@@ -5485,7 +5493,7 @@ loc_107AE:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
@@ -5501,8 +5509,8 @@ loc_107AE:
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
-		lea	(v_secanglebuffer).w,a4
-		movea.w	#$FFF0,a3
+		lea	(v_angle_secondary).w,a4
+		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor
@@ -5518,8 +5526,8 @@ Sonic_HitWall:
 loc_10822:
 		subi.w	#$A,d3
 		eori.w	#$F,d3
-		lea	(v_prianglebuffer).w,a4
-		movea.w	#$FFF0,a3
+		lea	(v_angle_primary).w,a4
+		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor
@@ -5530,13 +5538,13 @@ loc_10822:
 ObjectHitWallLeft:
 		add.w	objX(a0),d3
 		move.w	objY(a0),d2
-		lea	(v_prianglebuffer).w,a4
+		lea	(v_angle_primary).w,a4
 		move.b	#0,(a4)
-		movea.w	#$FFF0,a3
+		movea.w	#-$10,a3
 		move.w	#$800,d6
 		moveq	#$E,d5
 		bsr.w	FindFloor
-		move.b	(v_prianglebuffer).w,d3
+		move.b	(v_angle_primary).w,d3
 		btst	#0,d3
 		beq.s	locret_10870
 		move.b	#$40,d3
@@ -6159,7 +6167,7 @@ loc_118A2:
 		tst.w	d4
 		beq.s	loc_118D0
 		lsl.w	#6,d2
-		move.l	d0,4(a6)
+		move.l	d0,vdp_control_port-vdp_data_port(a6)
 		lea	(a1,d2.w),a3
 		move.l	(a3)+,(a6)
 		move.l	(a3)+,(a6)
@@ -6225,7 +6233,7 @@ loc_11918:
 
 loc_11922:
 		lsl.w	#6,d2
-		move.l	d0,4(a6)
+		move.l	d0,vdp_control_port-vdp_data_port(a6)
 		lea	(a1,d2.w),a3
 		move.l	(a3)+,(a6)
 		move.l	(a3)+,(a6)
@@ -6317,7 +6325,7 @@ sub_119BA:
 		lea	byte_11D26(pc),a1
 
 loc_119D4:
-		move.l	d0,4(a6)
+		move.l	d0,vdp_control_port-vdp_data_port(a6)
 		moveq	#0,d2
 		move.l	(a2)+,d3
 

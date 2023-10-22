@@ -35,7 +35,7 @@ loc_A70C:
 
 loc_A72E:
 		move.b	d0,objFrame(a1)
-		move.l	#MapLevelResults,objMap(a1)
+		move.l	#Map_Got,objMap(a1)
 		move.w	#$8580,objGfx(a1)
 		move.b	#0,objRender(a1)
 		lea	objSize(a1),a1

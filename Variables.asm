@@ -341,8 +341,8 @@ v_sonspeedacc:		rs.w 1
 v_sonspeeddec:		rs.w 1
 v_sonframenum:		rs.b 1			; frame to display for Sonic
 f_sonframechg:		rs.b 1
-v_prianglebuffer:	rs.w 1			; primary angle buffer (2 bytes)
-v_secanglebuffer:	rs.w 1			; secondary angle buffer (2 bytes)
+v_angle_primary:	rs.w 1			; primary angle buffer (2 bytes)
+v_angle_secondary:	rs.w 1			; secondary angle buffer (2 bytes)
 v_opl_routine:		rs.w 1			; ObjPosLoad - routine counter (2 bytes)
 v_opl_screen:		rs.w 1			; ObjPosLoad - screen variable (2 bytes)
 v_opl_data:		rs.b $10		; ObjPosLoad - data buffer ($10 bytes)
