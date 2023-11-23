@@ -11,3 +11,6 @@ SonLVL INI Files/dllcache/*
 build/*
 Comment.exe
 Comment.bat
+sound/z80built.prev.bin
+*.lst
+sound/z80built.bin
