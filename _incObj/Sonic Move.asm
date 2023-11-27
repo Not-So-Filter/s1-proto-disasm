@@ -189,7 +189,7 @@ loc_EB98:
 		bset	#0,objStatus(a0)
 		bne.s	loc_EBAC
 		bclr	#5,objStatus(a0)
-		move.b	#1,objNextAni(a0)
+		move.b	#id_Run,objNextAni(a0)
 
 loc_EBAC:
 		sub.w	d5,d0
@@ -233,7 +233,7 @@ Sonic_MoveRight:
 		bclr	#0,objStatus(a0)
 		beq.s	loc_EC16
 		bclr	#5,objStatus(a0)
-		move.b	#1,objNextAni(a0)
+		move.b	#id_Run,objNextAni(a0)
 
 loc_EC16:
 		add.w	d5,d0
