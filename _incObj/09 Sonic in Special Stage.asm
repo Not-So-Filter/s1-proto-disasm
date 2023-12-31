@@ -4,7 +4,7 @@
 
 SonicSpecial:
 		moveq	#0,d0
-		move.b	objRoutine(a0),d0
+		move.b	obj.Routine(a0),d0
 		move.w	Obj09_Index(pc,d0.w),d1
 		jmp	Obj09_Index(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -15,21 +15,21 @@ Obj09_Index:	dc.w Obj09_Main-Obj09_Index
 ; ---------------------------------------------------------------------------
 
 Obj09_Main:
-		addq.b	#2,objRoutine(a0)
-		move.b	#$E,objHeight(a0)
-		move.b	#7,objWidth(a0)
-		move.l	#Map_Sonic,objMap(a0)
-		move.w	#$780,objGfx(a0)
-		move.b	#4,objRender(a0)
-		move.b	#0,objPriority(a0)
-		move.b	#2,objAnim(a0)
-		bset	#2,objStatus(a0)
-		bset	#1,objStatus(a0)
+		addq.b	#2,obj.Routine(a0)
+		move.b	#$E,obj.Height(a0)
+		move.b	#7,obj.Width(a0)
+		move.l	#Map_Sonic,obj.Map(a0)
+		move.w	#$780,obj.Gfx(a0)
+		move.b	#4,obj.Render(a0)
+		move.b	#0,obj.Priority(a0)
+		move.b	#2,obj.Anim(a0)
+		bset	#2,obj.Status(a0)
+		bset	#1,obj.Status(a0)
 
 Obj09_Load:
 		move.b	#0,$30(a0)
 		moveq	#0,d0
-		move.b	objStatus(a0),d0
+		move.b	obj.Status(a0),d0
 		andi.w	#2,d0
 		move.w	Obj09_Modes(pc,d0.w),d1
 		jsr	Obj09_Modes(pc,d1.w)
@@ -92,7 +92,7 @@ loc_10DAC:
 		move.b	(v_jpadhold2).w,d0
 		andi.b	#btnL+btnR,d0
 		bne.s	loc_10DDC
-		move.w	objInertia(a0),d0
+		move.w	obj.Inertia(a0),d0
 		beq.s	loc_10DDC
 		bmi.s	loc_10DCE
 		subi.w	#$C,d0
@@ -100,7 +100,7 @@ loc_10DAC:
 		move.w	#0,d0
 
 loc_10DC8:
-		move.w	d0,objInertia(a0)
+		move.w	d0,obj.Inertia(a0)
 		bra.s	loc_10DDC
 ; ---------------------------------------------------------------------------
 
@@ -110,7 +110,7 @@ loc_10DCE:
 		move.w	#0,d0
 
 loc_10DD8:
-		move.w	d0,objInertia(a0)
+		move.w	d0,obj.Inertia(a0)
 
 loc_10DDC:
 		move.b	(v_ssangle).w,d0
@@ -118,19 +118,19 @@ loc_10DDC:
 		andi.b	#$C0,d0
 		neg.b	d0
 		jsr	(CalcSine).l
-		muls.w	objInertia(a0),d1
-		add.l	d1,objX(a0)
-		muls.w	objInertia(a0),d0
-		add.l	d0,objY(a0)
+		muls.w	obj.Inertia(a0),d1
+		add.l	d1,obj.Xpos(a0)
+		muls.w	obj.Inertia(a0),d0
+		add.l	d0,obj.Ypos(a0)
 		movem.l	d0-d1,-(sp)
-		move.l	objY(a0),d2
-		move.l	objX(a0),d3
+		move.l	obj.Ypos(a0),d2
+		move.l	obj.Xpos(a0),d3
 		bsr.w	sub_1100E
 		beq.s	loc_10E26
 		movem.l	(sp)+,d0-d1
-		sub.l	d1,objX(a0)
-		sub.l	d0,objY(a0)
-		move.w	#0,objInertia(a0)
+		sub.l	d1,obj.Xpos(a0)
+		sub.l	d0,obj.Ypos(a0)
+		move.w	#0,obj.Inertia(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -140,8 +140,8 @@ loc_10E26:
 ; ---------------------------------------------------------------------------
 
 sub_10E2C:
-		bset	#0,objStatus(a0)
-		move.w	objInertia(a0),d0
+		bset	#0,obj.Status(a0)
+		move.w	obj.Inertia(a0),d0
 		beq.s	loc_10E3A
 		bpl.s	loc_10E4E
 
@@ -152,7 +152,7 @@ loc_10E3A:
 		move.w	#$F800,d0
 
 loc_10E48:
-		move.w	d0,objInertia(a0)
+		move.w	d0,obj.Inertia(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -162,13 +162,13 @@ loc_10E4E:
 		nop
 
 loc_10E56:
-		move.w	d0,objInertia(a0)
+		move.w	d0,obj.Inertia(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 sub_10E5C:
-		bclr	#0,objStatus(a0)
-		move.w	objInertia(a0),d0
+		bclr	#0,obj.Status(a0)
+		move.w	obj.Inertia(a0),d0
 		bmi.s	loc_10E7C
 		addi.w	#$C,d0
 		cmpi.w	#$800,d0
@@ -176,7 +176,7 @@ sub_10E5C:
 		move.w	#$800,d0
 
 loc_10E76:
-		move.w	d0,objInertia(a0)
+		move.w	d0,obj.Inertia(a0)
 		bra.s	locret_10E88
 ; ---------------------------------------------------------------------------
 
@@ -186,7 +186,7 @@ loc_10E7C:
 		nop
 
 loc_10E84:
-		move.w	d0,objInertia(a0)
+		move.w	d0,obj.Inertia(a0)
 
 locret_10E88:
 		rts
@@ -203,11 +203,11 @@ Obj09_Jump:
 		jsr	(CalcSine).l
 		muls.w	#$700,d1
 		asr.l	#8,d1
-		move.w	d1,objVelX(a0)
+		move.w	d1,obj.VelX(a0)
 		muls.w	#$700,d0
 		asr.l	#8,d0
-		move.w	d0,objVelY(a0)
-		bset	#1,objStatus(a0)
+		move.w	d0,obj.VelY(a0)
+		bset	#1,obj.Status(a0)
 		move.w	#sfx_Jump,d0
 		jsr	(PlaySound_Special).l
 
@@ -216,8 +216,8 @@ locret_10ECC:
 ; ---------------------------------------------------------------------------
 
 SS_FixCamera:
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		move.w	(v_screenposx).w,d0
 		subi.w	#$A0,d3
 		bcs.s	loc_10EE6
@@ -241,7 +241,7 @@ Obj09_ExitStage:
 		blt.s	loc_10F1C
 		move.w	#0,(v_ssrotate).w
 		move.w	#$4000,(v_ssangle).w
-		addq.b	#2,objRoutine(a0)
+		addq.b	#2,obj.Routine(a0)
 		move.w	#$12C,$38(a0)
 
 loc_10F1C:
@@ -259,9 +259,9 @@ Obj09_Exit2:
 		bne.s	loc_10F66
 		clr.w	(v_ssangle).w
 		move.w	#$40,(v_ssrotate).w
-		move.w	#$458,(v_objspace+objX).w
-		move.w	#$4A0,(v_objspace+objY).w
-		clr.b	objRoutine(a0)
+		move.w	#$458,(v_objspace+obj.Xpos).w
+		move.w	#$4A0,(v_objspace+obj.Ypos).w
+		clr.b	obj.Routine(a0)
 		move.l	a0,-(sp)
 		jsr	(SS_Load).l
 		movea.l	(sp)+,a0
@@ -274,17 +274,17 @@ loc_10F66:
 ; ---------------------------------------------------------------------------
 
 Obj09_Fall:
-		move.l	objY(a0),d2
-		move.l	objX(a0),d3
+		move.l	obj.Ypos(a0),d2
+		move.l	obj.Xpos(a0),d3
 		move.b	(v_ssangle).w,d0
 		andi.b	#$FC,d0
 		jsr	(CalcSine).l
-		move.w	objVelX(a0),d4
+		move.w	obj.VelX(a0),d4
 		ext.l	d4
 		asl.l	#8,d4
 		muls.w	#$2A,d0
 		add.l	d4,d0
-		move.w	objVelY(a0),d4
+		move.w	obj.VelY(a0),d4
 		ext.l	d4
 		asl.l	#8,d4
 		muls.w	#$2A,d1
@@ -294,14 +294,14 @@ Obj09_Fall:
 		beq.s	loc_10FD6
 		sub.l	d0,d3
 		moveq	#0,d0
-		move.w	d0,objVelX(a0)
-		bclr	#1,objStatus(a0)
+		move.w	d0,obj.VelX(a0)
+		bclr	#1,obj.Status(a0)
 		add.l	d1,d2
 		bsr.w	sub_1100E
 		beq.s	loc_10FEC
 		sub.l	d1,d2
 		moveq	#0,d1
-		move.w	d1,objVelY(a0)
+		move.w	d1,obj.VelY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -311,23 +311,23 @@ loc_10FD6:
 		beq.s	loc_10FFA
 		sub.l	d1,d2
 		moveq	#0,d1
-		move.w	d1,objVelY(a0)
-		bclr	#1,objStatus(a0)
+		move.w	d1,obj.VelY(a0)
+		bclr	#1,obj.Status(a0)
 
 loc_10FEC:
 		asr.l	#8,d0
 		asr.l	#8,d1
-		move.w	d0,objVelX(a0)
-		move.w	d1,objVelY(a0)
+		move.w	d0,obj.VelX(a0)
+		move.w	d1,obj.VelY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_10FFA:
 		asr.l	#8,d0
 		asr.l	#8,d1
-		move.w	d0,objVelX(a0)
-		move.w	d1,objVelY(a0)
-		bset	#1,objStatus(a0)
+		move.w	d0,obj.VelX(a0)
+		move.w	d1,obj.VelY(a0)
+		bset	#1,obj.Status(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -390,13 +390,13 @@ loc_11078:
 sub_1107C:
 		lea	($FF0000).l,a1
 		moveq	#0,d4
-		move.w	objY(a0),d4
+		move.w	obj.Ypos(a0),d4
 		addi.w	#$50,d4
 		divu.w	#$18,d4
 		mulu.w	#$80,d4
 		adda.l	d4,a1
 		moveq	#0,d4
-		move.w	objX(a0),d4
+		move.w	obj.Xpos(a0),d4
 		addi.w	#$20,d4
 		divu.w	#$18,d4
 		adda.w	d4,a1
@@ -462,17 +462,17 @@ loc_110FE:
 		andi.w	#$7F,d2
 		mulu.w	#$18,d2
 		subi.w	#$44,d2
-		sub.w	objX(a0),d1
-		sub.w	objY(a0),d2
+		sub.w	obj.Xpos(a0),d1
+		sub.w	obj.Ypos(a0),d2
 		jsr	(CalcAngle).l
 		jsr	(CalcSine).l
 		muls.w	#$FB00,d1
 		asr.l	#8,d1
-		move.w	d1,objVelX(a0)
+		move.w	d1,obj.VelX(a0)
 		muls.w	#$FB00,d0
 		asr.l	#8,d0
-		move.w	d0,objVelY(a0)
-		bset	#1,objStatus(a0)
+		move.w	d0,obj.VelY(a0)
+		bset	#1,obj.Status(a0)
 		bsr.w	sub_10ACC
 		bne.s	loc_1116C
 		move.b	#2,(a2)
@@ -488,7 +488,7 @@ loc_1116C:
 loc_11176:
 		cmpi.b	#$14,d0
 		bne.s	loc_11182
-		addq.b	#2,objRoutine(a0)
+		addq.b	#2,obj.Routine(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

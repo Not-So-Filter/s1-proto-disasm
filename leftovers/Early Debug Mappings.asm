@@ -8,9 +8,9 @@
 
 .loop:
 		move.b	#id_Obj05,(a1)
-		move.w	(a0)+,objX(a1)
-		move.w	(a0)+,objScreenY(a1)
-		lea	objSize(a1),a1
+		move.w	(a0)+,obj.Xpos(a1)
+		move.w	(a0)+,obj.ScreenY(a1)
+		lea	obj.Size(a1),a1
 		dbf	d1,.loop
 		rts
 ; ---------------------------------------------------------------------------

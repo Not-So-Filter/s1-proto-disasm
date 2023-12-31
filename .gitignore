@@ -1,16 +1,6 @@
-sound/z80built.bin
-sound/z80built.prev.bin
-sound/z80.lst
 s1built.bin
 s1built.prev.bin
 sonic.lst
-log.txt
+sonic.log
+sonic.p
 SonLVL INI Files/dllcache/*
-
-# mainly cause Amiga-Assembly extension on VS code does this..
-build/*
-Comment.exe
-Comment.bat
-sound/z80built.prev.bin
-*.lst
-sound/z80built.bin

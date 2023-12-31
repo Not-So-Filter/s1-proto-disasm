@@ -2,7 +2,7 @@
 
 ObjMZPlatforms:
 		moveq	#0,d0
-		move.b	objRoutine(a0),d0
+		move.b	obj.Routine(a0),d0
 		move.w	off_8ECE(pc,d0.w),d1
 		jmp	off_8ECE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -18,15 +18,15 @@ off_8ED2:	dc.w ObjMZPlatforms_Slope1-off_8ED2
 ; ---------------------------------------------------------------------------
 
 loc_8EDE:
-		addq.b	#2,objRoutine(a0)
-		move.l	#Map_LGrass,objMap(a0)
-		move.w	#$C000,objGfx(a0)
-		move.b	#4,objRender(a0)
-		move.b	#5,objPriority(a0)
-		move.w	objY(a0),$2C(a0)
-		move.w	objX(a0),$2A(a0)
+		addq.b	#2,obj.Routine(a0)
+		move.l	#Map_LGrass,obj.Map(a0)
+		move.w	#$C000,obj.Gfx(a0)
+		move.b	#4,obj.Render(a0)
+		move.b	#5,obj.Priority(a0)
+		move.w	obj.Ypos(a0),$2C(a0)
+		move.w	obj.Xpos(a0),$2A(a0)
 		moveq	#0,d0
-		move.b	objSubtype(a0),d0
+		move.b	obj.Subtype(a0),d0
 		lsr.w	#2,d0
 
 loc_8F10:
@@ -35,42 +35,42 @@ loc_8F10:
 		move.w	(a1)+,d0
 		lea	off_8ED2(pc,d0.w),a2
 		move.l	a2,$30(a0)
-		move.b	(a1)+,objFrame(a0)
-		move.b	(a1),objActWid(a0)
-		andi.b	#$F,objSubtype(a0)
-		move.b	#$40,objHeight(a0)
-		bset	#4,objRender(a0)
+		move.b	(a1)+,obj.Frame(a0)
+		move.b	(a1),obj.ActWid(a0)
+		andi.b	#$F,obj.Subtype(a0)
+		move.b	#$40,obj.Height(a0)
+		bset	#4,obj.Render(a0)
 
 loc_8F3C:
 		bsr.w	sub_8FA6
-		tst.b	obj2ndRout(a0)
+		tst.b	obj.2ndRout(a0)
 		beq.s	loc_8F7C
 		moveq	#0,d1
-		move.b	objActWid(a0),d1
+		move.b	obj.ActWid(a0),d1
 		addi.w	#$B,d1
 		bsr.w	PtfmCheckExit
-		btst	#3,objStatus(a1)
+		btst	#3,obj.Status(a1)
 		bne.w	loc_8F64
-		clr.b	obj2ndRout(a0)
+		clr.b	obj.2ndRout(a0)
 		bra.s	loc_8F9E
 ; ---------------------------------------------------------------------------
 
 loc_8F64:
 		moveq	#0,d1
-		move.b	objActWid(a0),d1
+		move.b	obj.ActWid(a0),d1
 		addi.w	#$B,d1
 		movea.l	$30(a0),a2
-		move.w	objX(a0),d2
+		move.w	obj.Xpos(a0),d2
 		bsr.w	sub_61E0
 		bra.s	loc_8F9E
 ; ---------------------------------------------------------------------------
 
 loc_8F7C:
 		moveq	#0,d1
-		move.b	objActWid(a0),d1
+		move.b	obj.ActWid(a0),d1
 		addi.w	#$B,d1
 		move.w	#$20,d2
-		cmpi.b	#2,objFrame(a0)
+		cmpi.b	#2,obj.Frame(a0)
 		bne.s	loc_8F96
 		move.w	#$30,d2
 
@@ -85,7 +85,7 @@ loc_8F9E:
 
 sub_8FA6:
 		moveq	#0,d0
-		move.b	objSubtype(a0),d0
+		move.b	obj.Subtype(a0),d0
 		andi.w	#7,d0
 		add.w	d0,d0
 		move.w	off_8FBA(pc,d0.w),d1
@@ -123,7 +123,7 @@ loc_8FE6:
 		move.w	#$60,d1
 
 loc_8FEE:
-		btst	#3,objSubtype(a0)
+		btst	#3,obj.Subtype(a0)
 		beq.s	loc_8FFA
 		neg.w	d0
 		add.w	d1,d0
@@ -131,13 +131,13 @@ loc_8FEE:
 loc_8FFA:
 		move.w	$2C(a0),d1
 		sub.w	d0,d1
-		move.w	d1,objY(a0)
+		move.w	d1,obj.Ypos(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_9006:
 		move.b	$34(a0),d0
-		tst.b	obj2ndRout(a0)
+		tst.b	obj.2ndRout(a0)
 		bne.s	loc_9018
 		subq.b	#2,d0
 		bcc.s	loc_9024
@@ -157,7 +157,7 @@ loc_9024:
 		lsr.w	#4,d0
 		move.w	d0,d1
 		add.w	$2C(a0),d0
-		move.w	d0,objY(a0)
+		move.w	d0,obj.Ypos(a0)
 		cmpi.b	#$20,$34(a0)
 		bne.s	loc_9082
 		tst.b	$35(a0)
@@ -165,12 +165,12 @@ loc_9024:
 		move.b	#1,$35(a0)
 		bsr.w	FindNextFreeObj
 		bne.s	loc_9082
-		move.b	#id_GrassFire,objId(a1)
-		move.w	objX(a0),objX(a1)
+		_move.b	#id_GrassFire,obj.Id(a1)
+		move.w	obj.Xpos(a0),obj.Xpos(a1)
 		move.w	$2C(a0),$2C(a1)
 		addq.w	#8,$2C(a1)
 		subq.w	#3,$2C(a1)
-		subi.w	#$40,objX(a1)
+		subi.w	#$40,obj.Xpos(a1)
 		move.l	$30(a0),$30(a1)
 		move.l	a0,$38(a1)
 		movea.l	a0,a2
@@ -213,7 +213,7 @@ sub_90A4:
 loc_90C2:
 		tst.b	$35(a0)
 		beq.s	loc_90CE
-		tst.b	objRender(a0)
+		tst.b	obj.Render(a0)
 		bpl.s	loc_90EE
 
 loc_90CE:

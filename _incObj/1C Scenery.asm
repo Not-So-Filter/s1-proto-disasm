@@ -2,7 +2,7 @@
 
 ObjScenery:
 		moveq	#0,d0
-		move.b	objRoutine(a0),d0
+		move.b	obj.Routine(a0),d0
 		move.w	off_6718(pc,d0.w),d1
 		jmp	off_6718(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,18 +11,18 @@ off_6718:	dc.w ObjScenery_Init-off_6718, ObjScenery_Normal-off_6718, ObjScenery_
 ; ---------------------------------------------------------------------------
 
 ObjScenery_Init:
-		addq.b	#2,objRoutine(a0)
+		addq.b	#2,obj.Routine(a0)
 		moveq	#0,d0
-		move.b	objSubtype(a0),d0
+		move.b	obj.Subtype(a0),d0
 		mulu.w	#10,d0
 		lea	ObjScenery_Types(pc,d0.w),a1
-		move.l	(a1)+,objMap(a0)
-		move.w	(a1)+,objGfx(a0)
-		ori.b	#4,objRender(a0)
-		move.b	(a1)+,objFrame(a0)
-		move.b	(a1)+,objActWid(a0)
-		move.b	(a1)+,objPriority(a0)
-		move.b	(a1)+,objColType(a0)
+		move.l	(a1)+,obj.Map(a0)
+		move.w	(a1)+,obj.Gfx(a0)
+		ori.b	#4,obj.Render(a0)
+		move.b	(a1)+,obj.Frame(a0)
+		move.b	(a1)+,obj.ActWid(a0)
+		move.b	(a1)+,obj.Priority(a0)
+		move.b	(a1)+,obj.ColType(a0)
 
 ObjScenery_Normal:
 		bsr.w	DisplaySprite

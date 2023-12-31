@@ -324,7 +324,7 @@ locret_40E6:
 ; ---------------------------------------------------------------------------
 
 sub_40E8:
-		move.w	(v_player+objX).w,d0
+		move.w	(v_player+obj.Xpos).w,d0
 		sub.w	(v_screenposx).w,d0
 		subi.w	#$90,d0
 		bcs.s	loc_412C
@@ -374,14 +374,14 @@ loc_4146:
 
 ScrollVertical:
 		moveq	#0,d1
-		move.w	(v_player+objY).w,d0
+		move.w	(v_player+obj.Ypos).w,d0
 		sub.w	(v_screenposy).w,d0
-		btst	#2,(v_objspace+objStatus).w
+		btst	#2,(v_objspace+obj.Status).w
 		beq.s	loc_4160
 		subq.w	#5,d0
 
 loc_4160:
-		btst	#1,(v_player+objStatus).w
+		btst	#1,(v_player+obj.Status).w
 		beq.s	loc_4180
 		addi.w	#$20,d0
 		sub.w	(v_lookshift).w,d0

@@ -2,7 +2,7 @@
 
 DisplaySprite:
 		lea	(v_spritequeue).w,a1
-		move.b	objPriority(a0),d0
+		move.b	obj.Priority(a0),d0
 		andi.w	#7,d0
 		lsl.w	#7,d0
 		adda.w	d0,a1
@@ -18,7 +18,7 @@ locret_8768:
 
 DisplaySprite1:
 		lea	(v_spritequeue).w,a2
-		move.b	objPriority(a1),d0
+		move.b	obj.Priority(a1),d0
 		andi.w	#7,d0
 		lsl.w	#7,d0
 		adda.w	d0,a2

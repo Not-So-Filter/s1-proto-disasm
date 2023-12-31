@@ -53,79 +53,76 @@ bitDn:		= 1
 bitUp:		= 0
 
 ; Object variables
-	rsset 0
-objId:		rs.b 1	; id of object (this is put here for readability, this actually makes routines slower by 4 cycles)
-objRender:	rs.b 1	; bitfield for x/y flip, display mode
-objGfx:		rs.w 1	; palette line & VRAM setting (2 bytes)
-objMap:		rs.l 1	; mappings address (4 bytes)
-objX:		rs.w 1	; x-axis position (2-4 bytes)
-objScreenY:	rs.w 1	; y-axis position for screen-fixed items (2 bytes)
-objY:		rs.w 1	; y-axis position (2-4 bytes)
-objScreenX:	rs.w 1	; x-axis position for screen-fixed items (2 bytes)
-objVelX:	rs.w 1	; x-axis velocity (2 bytes)
-objVelY:	rs.w 1	; y-axis velocity (2 bytes)
-objInertia:	rs.w 1	; potential speed (2 bytes)
-objHeight:	rs.b 1	; height/2
-objWidth:	rs.b 1	; width/2
-objActWid:	rs.b 1	; action width
-objPriority:	rs.b 1	; sprite stack priority -- 0 is front
-objFrame:	rs.b 1	; current frame displayed
-objAniFrame:	rs.b 1	; current frame in animation script
-objAnim:	rs.b 1	; current animation
-objNextAni:	rs.b 1	; next animation
-objTimeFrame:	rs.b 1	; time to next frame
-objDelayAni:	rs.b 1	; time to delay animation
-objColType:	rs.b 1	; collision response type
-objColProp:	rs.b 1	; collision extra property
-objStatus:	rs.b 1	; orientation or mode
-objRespawnNo:	rs.b 1	; respawn list index number
-objRoutine:	rs.b 1	; routine number
-obj2ndRout:	rs.b 1	; secondary routine number
-objAngle:	rs.w 1	; angle
-objSubtype:	rs.b 1	; object subtype
-objOff_29:	rs.b 1
-objOff_2A:	rs.b 1
-objOff_2B:	rs.b 1
-objOff_2C:	rs.b 1
-objOff_2D:	rs.b 1
-objOff_2E:	rs.b 1
-objOff_2F:	rs.b 1
-objOff_30:	rs.b 1
-objOff_31:	rs.b 1
-objOff_32:	rs.b 1
-objOff_33:	rs.b 1
-objOff_34:	rs.b 1
-objOff_35:	rs.b 1
-objOff_36:	rs.b 1
-objOff_37:	rs.b 1
-objOff_38:	rs.b 1
-objOff_39:	rs.b 1
-objOff_3A:	rs.b 1
-objOff_3B:	rs.b 1
-objOff_3C:	rs.b 1
-objOff_3D:	rs.b 1
-objOff_3E:	rs.b 1
-objOff_3F:	rs.b 1
-objSize:	rs.b 1	; size for each object
-	rsreset
-
-objSolid:	= obj2ndRout ; solid status flag
+obj STRUCT DOTS
+Id		ds.b 1	; id of object (this is put here for readability, this actually makes routines slower by 4 cycles)
+Render		ds.b 1	; bitfield for x/y flip, display mode
+Gfx		ds.w 1	; palette line & VRAM setting (2 bytes)
+Map		ds.l 1	; mappings address (4 bytes)
+Xpos		ds.w 1	; x-axis position (2-4 bytes)
+ScreenY		ds.w 1	; y-axis position for screen-fixed items (2 bytes)
+Ypos		ds.w 1	; y-axis position (2-4 bytes)
+ScreenX		ds.w 1	; x-axis position for screen-fixed items (2 bytes)
+VelX		ds.w 1	; x-axis velocity (2 bytes)
+VelY		ds.w 1	; y-axis velocity (2 bytes)
+Inertia		ds.w 1	; potential speed (2 bytes)
+Height		ds.b 1	; height/2
+Width		ds.b 1	; width/2
+ActWid		ds.b 1	; action width
+Priority	ds.b 1	; sprite stack priority -- 0 is front
+Frame		ds.b 1	; current frame displayed
+AniFrame	ds.b 1	; current frame in animation script
+Anim		ds.b 1	; current animation
+NextAni		ds.b 1	; next animation
+TimeFrame	ds.b 1	; time to next frame
+DelayAni	ds.b 1	; time to delay animation
+ColType		ds.b 1	; collision response type
+ColProp		ds.b 1	; collision extra property
+Status		ds.b 1	; orientation or mode
+RespawnNo	ds.b 1	; respawn list index number
+Routine		ds.b 1	; routine number
+2ndRout			; secondary routine number
+Solid		ds.b 1	; solid status flag
+Angle		ds.w 1	; angle
+Subtype		ds.b 1	; object subtype
+Off_29		ds.b 1
+Off_2A		ds.b 1
+Off_2B		ds.b 1
+Off_2C		ds.b 1
+Off_2D		ds.b 1
+Off_2E		ds.b 1
+Off_2F		ds.b 1
+BossX
+Off_30		ds.b 1
+Off_31		ds.b 1
+Off_32		ds.b 1
+Off_33		ds.b 1
+Off_34		ds.b 1
+Off_35		ds.b 1
+Off_36		ds.b 1
+Off_37		ds.b 1
+BossY
+Off_38		ds.b 1
+Off_39		ds.b 1
+Off_3A		ds.b 1
+Off_3B		ds.b 1
+Off_3C		ds.b 1
+Off_3D		ds.b 1
+Off_3E		ds.b 1
+Off_3F		ds.b 1
+Size		ds.b 1	; size for each object
+obj ENDSTRUCT
 
 ; Object variables used by Sonic
-flashtime:	= objOff_30	; time between flashes after getting hit
-invtime:	= objOff_32	; time left for invincibility
-shoetime:	= objOff_34	; time left for speed shoes
-jumpflag:	= objOff_3C	; flag for when sonic is jumping
-standonobject:	= objOff_3D	; object Sonic stands on
-ctrllock:	= objOff_3E	; lock left and right controls (2 bytes)
+flashtime:	= obj.Off_30	; time between flashes after getting hit
+invtime:	= obj.Off_32	; time left for invincibility
+shoetime:	= obj.Off_34	; time left for speed shoes
+jumpflag:	= obj.Off_3C	; flag for when sonic is jumping
+standonobject:	= obj.Off_3D	; object Sonic stands on
+ctrllock:	= obj.Off_3E	; lock left and right controls (2 bytes)
 
 ; Object variables used by the title card
-card_mainX:	= objOff_30		; position for card to display on
-card_finalX:	= objOff_32		; position for card to finish on
-
-; Object variables used by the boss
-objBossX:	= objOff_30		; x position
-objBossY:	= objOff_38		; y position
+card_mainX:	= obj.Off_30		; position for card to display on
+card_finalX:	= obj.Off_32		; position for card to finish on
 
 ; Animation flags
 afEnd:		= $FF	; return to beginning of animation
@@ -144,13 +141,38 @@ vdp_counter:		= $C00008
 
 psg_input:		= $C00011
 
+	phase	$1FF4
+z80_stack:	ds.w 1
+zDAC_Update:	ds.b 1
+zUnk_1FF7:	ds.b 1
+zUnk_1FF8:	ds.w 1
+zUnk_1FFA:	ds.b 1
+zUnk_1FFB:	ds.b 1
+zUnk_1FFC:	ds.b 1
+zDAC_Status:	ds.b 1		; Bit 7 set if the driver is not accepting new samples, it is clear otherwise
+zUnk_1FFE:	ds.b 1
+zDAC_Sample:	ds.b 1		; Sample to play, the 68k will move into this locatiton whatever sample that's supposed to be played.
+	dephase
+
+zYM2612_A0:	equ $4000
+zYM2612_D0:	equ $4001
+zYM2612_A1:	equ $4002
+zYM2612_D1:	equ $4003
+zBankRegister:	equ $6000
+zROMWindow:	equ $8000
+
 ; Z80 addresses
 z80_ram:		= $A00000			; start of Z80 RAM
-z80_dac3_pitch:		= $A00183
-z80_dac_update:		= $A01FF6
-z80_dac_status:		= $A01FFD
-z80_dac_sample:		= $A01FFF
+z80_dac3_pitch:		= z80_ram+zTimpani_Pitch
+z80_dac_update:		= z80_ram+zDAC_Update
+z80_dac_unk1FF8:	= z80_ram+zUnk_1FF8
+z80_dac_status:		= z80_ram+zDAC_Status
+z80_dac_sample:		= z80_ram+zDAC_Sample
 z80_ram_end:		= $A02000			; end of non-reserved Z80 RAM
+ym2612_a0:		= z80_ram+zYM2612_A0
+ym2612_d0:		= z80_ram+zYM2612_D0
+ym2612_a1:		= z80_ram+zYM2612_A1
+ym2612_d1:		= z80_ram+zYM2612_D1
 z80_version:		= $A10001
 z80_port_1_data:	= $A10002
 z80_port_1_control:	= $A10008
@@ -158,10 +180,6 @@ z80_port_2_control:	= $A1000A
 z80_expansion_control:	= $A1000C
 z80_bus_request:	= $A11100
 z80_reset:		= $A11200
-ym2612_a0:		= $A04000
-ym2612_d0:		= $A04001
-ym2612_a1:		= $A04002
-ym2612_d1:		= $A04003
 
 security_addr:		= $A14000
 

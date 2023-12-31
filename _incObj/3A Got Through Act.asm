@@ -2,7 +2,7 @@
 
 ObjLevelResults:
 		moveq	#0,d0
-		move.b	objRoutine(a0),d0
+		move.b	obj.Routine(a0),d0
 		move.w	off_A6EE(pc,d0.w),d1
 		jmp	off_A6EE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -23,37 +23,37 @@ loc_A702:
 		moveq	#6,d1
 
 loc_A70C:
-		move.b	#id_GotThroughCard,objId(a1)
-		move.w	(a2)+,objX(a1)
+		_move.b	#id_GotThroughCard,obj.Id(a1)
+		move.w	(a2)+,obj.Xpos(a1)
 		move.w	(a2)+,card_mainX(a1)
-		move.w	(a2)+,objScreenY(a1)
-		move.b	(a2)+,objRoutine(a1)
+		move.w	(a2)+,obj.ScreenY(a1)
+		move.b	(a2)+,obj.Routine(a1)
 		move.b	(a2)+,d0
 		cmpi.b	#6,d0
 		bne.s	loc_A72E
 		add.b	(v_act).w,d0
 
 loc_A72E:
-		move.b	d0,objFrame(a1)
-		move.l	#Map_Got,objMap(a1)
-		move.w	#$8580,objGfx(a1)
-		move.b	#0,objRender(a1)
-		lea	objSize(a1),a1
+		move.b	d0,obj.Frame(a1)
+		move.l	#Map_Got,obj.Map(a1)
+		move.w	#$8580,obj.Gfx(a1)
+		move.b	#0,obj.Render(a1)
+		lea	obj.Size(a1),a1
 		dbf	d1,loc_A70C
 
 loc_A74E:
 		moveq	#$10,d1
 		move.w	card_mainX(a0),d0
-		cmp.w	objX(a0),d0
+		cmp.w	obj.Xpos(a0),d0
 		beq.s	loc_A774
 		bge.s	loc_A75E
 		neg.w	d1
 
 loc_A75E:
-		add.w	d1,objX(a0)
+		add.w	d1,obj.Xpos(a0)
 
 loc_A762:
-		move.w	objX(a0),d0
+		move.w	obj.Xpos(a0),d0
 		bmi.s	locret_A772
 		cmpi.w	#$200,d0
 		bcc.s	locret_A772
@@ -65,15 +65,15 @@ locret_A772:
 ; ---------------------------------------------------------------------------
 
 loc_A774:
-		cmpi.b	#4,objFrame(a0)
+		cmpi.b	#4,obj.Frame(a0)
 		bne.s	loc_A762
-		addq.b	#2,objRoutine(a0)
-		move.w	#$B4,objTimeFrame(a0)
+		addq.b	#2,obj.Routine(a0)
+		move.w	#$B4,obj.TimeFrame(a0)
 
 loc_A786:
-		subq.w	#1,objTimeFrame(a0)
+		subq.w	#1,obj.TimeFrame(a0)
 		bne.s	loc_A790
-		addq.b	#2,objRoutine(a0)
+		addq.b	#2,obj.Routine(a0)
 
 loc_A790:
 		bra.w	DisplaySprite
@@ -99,8 +99,8 @@ loc_A7C0:
 		bne.s	loc_A7DA
 		move.w	#sfx_Cash,d0
 		jsr	(PlaySound_Special).l
-		addq.b	#2,objRoutine(a0)
-		move.w	#$B4,objTimeFrame(a0)
+		addq.b	#2,obj.Routine(a0)
+		move.w	#$B4,obj.TimeFrame(a0)
 
 locret_A7D8:
 		rts

@@ -1,27 +1,14 @@
 ; ---------------------------------------------------------------------------
-; Align and pad
-; input: length to align to, value to use as padding (default is 0)
-; ---------------------------------------------------------------------------
-
-align:	macro
-	if (narg=1)
-		dcb.b \1-(*%\1),0
-	else
-		dcb.b \1-(*%\1),\2
-	endc
-		endm
-
-; ---------------------------------------------------------------------------
 ; Set a VRAM address via the VDP control port.
 ; input: 16-bit VRAM address, control port (default is ($C00004).l)
 ; ---------------------------------------------------------------------------
 
 locVRAM:	macro loc,controlport
-		if (narg=1)
-		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),(vdp_control_port).l
+		if ("controlport"=="")
+		move.l	#($40000000+(((loc)&$3FFF)<<16)+(((loc)&$C000)>>14)),(vdp_control_port).l
 		else
-		move.l	#($40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14)),controlport
-		endc
+		move.l	#($40000000+(((loc)&$3FFF)<<16)+(((loc)&$C000)>>14)),controlport
+		endif
 		endm
 
 ; ---------------------------------------------------------------------------
@@ -29,13 +16,13 @@ locVRAM:	macro loc,controlport
 ; input: source, length, destination
 ; ---------------------------------------------------------------------------
 
-writeVRAM:	macro
+writeVRAM:	macro source,length,destination
 		lea	(vdp_control_port).l,a5
-		move.l	#$94000000+(((\2>>1)&$FF00)<<8)+$9300+((\2>>1)&$FF),(a5)
-		move.l	#$96000000+(((\1>>1)&$FF00)<<8)+$9500+((\1>>1)&$FF),(a5)
-		move.w	#$9700+((((\1>>1)&$FF0000)>>16)&$7F),(a5)
-		move.w	#$4000+(\3&$3FFF),(a5)
-		move.w	#$80+((\3&$C000)>>14),(v_vdp_buffer2).w
+		move.l	#$94000000+(((length>>1)&$FF00)<<8)+$9300+((length>>1)&$FF),(a5)
+		move.l	#$96000000+(((source>>1)&$FF00)<<8)+$9500+((source>>1)&$FF),(a5)
+		move.w	#$9700+((((source>>1)&$FF0000)>>16)&$7F),(a5)
+		move.w	#$4000+((destination)&$3FFF),(a5)
+		move.w	#$80+(((destination)&$C000)>>14),(v_vdp_buffer2).w
 		move.w	(v_vdp_buffer2).w,(a5)
 		endm
 
@@ -44,13 +31,13 @@ writeVRAM:	macro
 ; input: source, length, destination
 ; ---------------------------------------------------------------------------
 
-writeCRAM:	macro
+writeCRAM:	macro source,length,destination
 		lea	(vdp_control_port).l,a5
-		move.l	#$94000000+(((\2>>1)&$FF00)<<8)+$9300+((\2>>1)&$FF),(a5)
-		move.l	#$96000000+(((\1>>1)&$FF00)<<8)+$9500+((\1>>1)&$FF),(a5)
-		move.w	#$9700+((((\1>>1)&$FF0000)>>16)&$7F),(a5)
-		move.w	#$C000+(\3&$3FFF),(a5)
-		move.w	#$80+((\3&$C000)>>14),(v_vdp_buffer2).w
+		move.l	#$94000000+(((length>>1)&$FF00)<<8)+$9300+((length>>1)&$FF),(a5)
+		move.l	#$96000000+(((source>>1)&$FF00)<<8)+$9500+((source>>1)&$FF),(a5)
+		move.w	#$9700+((((source>>1)&$FF0000)>>16)&$7F),(a5)
+		move.w	#$C000+(destination&$3FFF),(a5)
+		move.w	#$80+((destination&$C000)>>14),(v_vdp_buffer2).w
 		move.w	(v_vdp_buffer2).w,(a5)
 		endm
 
@@ -73,16 +60,16 @@ fillVRAM:	macro value,length,loc
 ; input: source, destination, width [cells], height [cells]
 ; ---------------------------------------------------------------------------
 
-copyTilemap:	macro source,loc,width,height
+copyTilemap:	macro source,destination,width,height
 		lea	(source).l,a1
-		move.l	#$40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14),d0
+		locVRAM	destination,d0
 		moveq	#width,d1
 		moveq	#height,d2
 		bsr.w	TilemapToVRAM
 		endm
 
-copyUncTilemap:	macro loc,width,height
-		move.l	#$40000000+((loc&$3FFF)<<16)+((loc&$C000)>>14),d0
+copyUncTilemap:	macro destination,width,height
+		move.l	#$40000000+((destination&$3FFF)<<16)+((destination&$C000)>>14),d0
 		moveq	#width,d1
 		moveq	#height,d2
 		bsr.w	TilemapToVRAM
@@ -107,8 +94,8 @@ stopZ80:        macro
 ; ---------------------------------------------------------------------------
 
 waitZ80:	macro
-.wait\@:        btst	#0,(z80_bus_request).l
-		bne.s	.wait\@
+.wait:		btst	#0,(z80_bus_request).l
+		bne.s	.wait
 		endm
 
 ; ---------------------------------------------------------------------------
@@ -145,16 +132,23 @@ enable_ints:	macro
 ; ---------------------------------------------------------------------------
 
 out_of_range:	macro exit,pos
-		if (narg=2)
+		if ("pos"<>"")
 		move.w	pos,d0		; get object position (if specified as not obX)
 		else
-		move.w	objX(a0),d0	; get object position
-		endc
+		move.w	obj.Xpos(a0),d0	; get object position
+		endif
 		andi.w	#$FF80,d0	; round down to nearest $80
 		move.w	(v_screenposx).w,d1 ; get screen position
 		subi.w	#128,d1
 		andi.w	#$FF80,d1
 		sub.w	d1,d0		; approx distance between object and screen
 		cmpi.w	#128+320+192,d0
-		bhi.\0	exit
+		bhi.ATTRIBUTE	exit
 		endm
+		
+; ---------------------------------------------------------------------------
+; turn a sample rate into a djnz loop counter
+; ---------------------------------------------------------------------------
+
+pcmLoopCounter function sampleRate,baseCycles, 1+(53693175/15/(sampleRate)-(baseCycles)+(13/2))/13
+dpcmLoopCounter function sampleRate, pcmLoopCounter(sampleRate,425/2) ; 425 is the number of cycles zPlayPCMLoop takes.

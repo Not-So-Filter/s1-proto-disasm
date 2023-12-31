@@ -10,6 +10,12 @@
 
 ; ---------------------------------------------------------------------------
 
+	cpu 68000
+
+zeroOffsetOptimization = 0
+;	| If 1, makes a handful of zero-offset instructions smaller
+
+		include "MacroSetup.asm"
 		include "Constants.asm"
 		include "Variables.asm"
 		include "Macros.asm"
@@ -82,7 +88,7 @@ Vectors:	dc.l v_systemstack&$FFFFFF		; Initial stack pointer value
 		dc.l ErrorTrap				; Unused (reserved)
 		dc.l ErrorTrap				; Unused (reserved)
 Console:	dc.b "SEGA MEGA DRIVE "			; Hardware system ID (Console name)
-Date:		dc.b "(C)SEGA 1989.JAN"			; Copyright holder and release date (generally year)
+		dc.b "(C)SEGA 1989.JAN"			; Copyright holder and release date (generally year)
 Title_Local:	dc.b "                                                " ; Domestic name (blank)
 Title_Int:	dc.b "                                                " ; International name (blank)
 Serial:		dc.b "GM 00000000-00"			; Serial\version number
@@ -490,7 +496,7 @@ ErrorWaitInput:
 		bne.w	ErrorWaitInput
 		rts
 ; ---------------------------------------------------------------------------
-Art_Text:	incbin "artunc\menutext.bin"
+Art_Text:	binclude "artunc/menutext.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -851,15 +857,15 @@ SoundDriverLoad:
 		move.b	(a0)+,(a1)+
 		dbf	d0,.loop
 		moveq	#0,d0
-		lea	($A01FF8).l,a1			; Write something (?) to Z80
-		move.b	d0,(a1)+
-		move.b	#$80,(a1)+
-		move.b	#7,(a1)+
-		move.b	#$80,(a1)+
-		move.b	d0,(a1)+
-		move.b	d0,(a1)+
-		move.b	d0,(a1)+
-		move.b	d0,(a1)+
+		lea	(z80_dac_unk1FF8).l,a1
+		move.b	d0,(a1)+	; Write 0 to 1FF8
+		move.b	#$80,(a1)+	; Write $80 to 1FF9
+		move.b	#7,(a1)+	; Write 7 to 1FFA
+		move.b	#$80,(a1)+	; Write $80 to 1FFB
+		move.b	d0,(a1)+	; Write 0 to 1FFC
+		move.b	d0,(a1)+	; Write 0 to 1FFD
+		move.b	d0,(a1)+	; Write 0 to 1FFE
+		move.b	d0,(a1)+	; Write 0 to 1FFF
 		resetZ80a
 		nop
 		nop
@@ -869,7 +875,7 @@ SoundDriverLoad:
 		startZ80
 		rts
 ; ---------------------------------------------------------------------------
-; This could potentially be Z80 variables for a SMPS Z80 driver, unused
+; This could potentially be leftover Z80 variables for the above, unused
 ; ---------------------------------------------------------------------------
 ;unk_119C:
 		dc.b 3
@@ -895,7 +901,7 @@ PlaySound_Unused:
 		move.b	d0,(v_snddriver_ram+v_soundqueue2).w
 		rts
 
-		include "_inc\PauseGame.asm"
+		include "_inc/PauseGame.asm"
 ; ---------------------------------------------------------------------------
 
 TilemapToVRAM:
@@ -913,7 +919,7 @@ loc_1228:
 		dbf	d2,loc_1222
 		rts
 ; ---------------------------------------------------------------------------
-		include "_inc\Nemesis Decompression.asm"
+		include "_inc/Nemesis Decompression.asm"
 ; ---------------------------------------------------------------------------
 
 AddPLC:
@@ -1118,23 +1124,23 @@ loc_14F4:
 		rts
 ; ---------------------------------------------------------------------------
 
-		include "_inc\Enigma Decompression.asm"
-		include "_inc\Kosinski Decompression.asm"
-		include "_inc\PaletteCycle.asm"
+		include "_inc/Enigma Decompression.asm"
+		include "_inc/Kosinski Decompression.asm"
+		include "_inc/PaletteCycle.asm"
 
-Cyc_Title:	incbin "palette\Cycle - Title.bin"
+Cyc_Title:	binclude "palette/Cycle - Title.bin"
 		even
-Cyc_GHZ:	incbin "palette\Cycle - GHZ.bin"
+Cyc_GHZ:	binclude "palette/Cycle - GHZ.bin"
 		even
-Cyc_LZ:		incbin "palette\Cycle - LZ (Unused).bin"
+Cyc_LZ:		binclude "palette/Cycle - LZ (Unused).bin"
 		even
-Cyc_MZ:		incbin "palette\Cycle - MZ (Unused).bin"
+Cyc_MZ:		binclude "palette/Cycle - MZ (Unused).bin"
 		even
-Cyc_SLZ:	incbin "palette\Cycle - SLZ.bin"
+Cyc_SLZ:	binclude "palette/Cycle - SLZ.bin"
 		even
-Cyc_SZ1:	incbin "palette\Cycle - SZ1.bin"
+Cyc_SZ1:	binclude "palette/Cycle - SZ1.bin"
 		even
-Cyc_SZ2:	incbin "palette\Cycle - SZ2.bin"
+Cyc_SZ2:	binclude "palette/Cycle - SZ2.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -1287,7 +1293,7 @@ PalCycSega:
 .locret:
 		rts
 ; ---------------------------------------------------------------------------
-Cyc_Sega:	incbin "palette\Cycle - Sega.bin"
+Cyc_Sega:	binclude "palette/Cycle - Sega.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -1319,31 +1325,31 @@ PalLoad2:
 		dbf	d7,.loop
 		rts
 
-		include "_inc\Palette Pointers.asm"
+		include "_inc/Palette Pointers.asm"
 
-Pal_SegaBG:	incbin "palette\Sega Screen.bin"
+Pal_SegaBG:	binclude "palette/Sega Screen.bin"
 		even
-Pal_Title:	incbin "palette\Title Screen.bin"
+Pal_Title:	binclude "palette/Title Screen.bin"
 		even
-Pal_LevelSel:	incbin "palette\Level Select.bin"
+Pal_LevelSel:	binclude "palette/Level Select.bin"
 		even
-Pal_Sonic:	incbin "palette\Sonic.bin"
+Pal_Sonic:	binclude "palette/Sonic.bin"
 		even
-Pal_GHZ:	incbin "palette\Green Hill Zone.bin"
+Pal_GHZ:	binclude "palette/Green Hill Zone.bin"
 		even
-Pal_LZ:		incbin "palette\Labyrinth Zone.bin"
+Pal_LZ:		binclude "palette/Labyrinth Zone.bin"
 		even
-Pal_Ending:	incbin "palette\Ending.bin"
+Pal_Ending:	binclude "palette/Ending.bin"
 		even
-Pal_MZ:		incbin "palette\Marble Zone.bin"
+Pal_MZ:		binclude "palette/Marble Zone.bin"
 		even
-Pal_SLZ:	incbin "palette\Star Light Zone.bin"
+Pal_SLZ:	binclude "palette/Star Light Zone.bin"
 		even
-Pal_SZ:		incbin "palette\Sparkling Zone.bin"
+Pal_SZ:		binclude "palette/Sparkling Zone.bin"
 		even
-Pal_CWZ:	incbin "palette\Clock Work Zone.bin"
+Pal_CWZ:	binclude "palette/Clock Work Zone.bin"
 		even
-Pal_Special:	incbin "palette\Special Stage.bin"
+Pal_Special:	binclude "palette/Special Stage.bin"
 		even
 
 ; ---------------------------------------------------------------------------
@@ -1386,7 +1392,7 @@ CalcSine:
 		move.w	SineTable(pc,d0.w),d0
 		rts
 ; ---------------------------------------------------------------------------
-SineTable:	incbin "misc\sinetable.dat"
+SineTable:	binclude "misc/sinetable.dat"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -1476,7 +1482,7 @@ loc_2378:
 		movem.l	(sp)+,d3-d4
 		rts
 ; ---------------------------------------------------------------------------
-AngleTable:	incbin "misc\angles.bin"
+AngleTable:	binclude "misc/angles.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -1606,7 +1612,7 @@ loc_25D8:
 		move.b	#id_TitleSonic,(v_objslot1).w	; load big sonic object
 		move.b	#id_PSBTM,(v_objslot2).w	; load press start button text
 		move.b	#id_PSBTM,(v_objslot3).w	; load object which hides sonic
-		move.b	#2,(v_objslot3+objFrame).w
+		move.b	#2,(v_objslot3+obj.Frame).w
 		moveq	#plcid_Main,d0
 		bsr.w	NewPLC
 		move.w	(v_vdp_buffer1).w,d0
@@ -1622,9 +1628,9 @@ loc_26AE:
 		bsr.w	BuildSprites
 		bsr.w	PalCycTitle
 		bsr.w	RunPLC
-		move.w	(v_objslot0+objX).w,d0
+		move.w	(v_objslot0+obj.Xpos).w,d0
 		addq.w	#2,d0				; set object scroll right speed
-		move.w	d0,(v_objslot0+objX).w		; move sonic to the right
+		move.w	d0,(v_objslot0+obj.Xpos).w	; move sonic to the right
 		cmpi.w	#$1C00,d0			; has object passed $1C00?
 		bcs.s	loc_26E4			; if not, branch
 		move.b	#id_Sega,(v_gamemode).w		; go to Sega Screen
@@ -1745,9 +1751,9 @@ loc_27FE:
 		bsr.w	DeformLayers
 		bsr.w	PaletteCycle
 		bsr.w	RunPLC
-		move.w	(v_objslot0+objX).w,d0
+		move.w	(v_objslot0+obj.Xpos).w,d0
 		addq.w	#2,d0
-		move.w	d0,(v_objslot0+objX).w
+		move.w	d0,(v_objslot0+obj.Xpos).w
 		cmpi.w	#$1C00,d0
 		bcs.s	loc_282C
 		move.b	#id_Sega,(v_gamemode).w
@@ -1937,7 +1943,7 @@ loc_29DE:
 		rts
 ; ---------------------------------------------------------------------------
 
-LevelSelectText:incbin "misc\Level Select Text.bin"
+LevelSelectText:binclude "misc/Level Select Text.bin"
 		even
 
 MusicList:	dc.b bgm_GHZ
@@ -2016,7 +2022,7 @@ loc_2C92:
 		bsr.w	ExecuteObjects
 		bsr.w	BuildSprites
 		bsr.w	RunPLC
-		move.w	(v_objslot4+objX).w,d0
+		move.w	(v_objslot4+obj.Xpos).w,d0
 		cmp.w	(v_objslot4+card_mainX).w,d0
 		bne.s	loc_2C92
 		tst.l	(v_plc_buffer).w
@@ -2097,10 +2103,10 @@ loc_2D54:
 		bsr.w	WaitForVBla
 		move.w	#$202F,(v_pfade_start).w
 		bsr.w	PaletteWhiteIn_Sub
-		addq.b	#2,(v_objslot2+objRoutine).w
-		addq.b	#4,(v_objslot3+objRoutine).w
-		addq.b	#4,(v_objslot4+objRoutine).w
-		addq.b	#4,(v_objslot5+objRoutine).w
+		addq.b	#2,(v_objslot2+obj.Routine).w
+		addq.b	#4,(v_objslot3+obj.Routine).w
+		addq.b	#4,(v_objslot4+obj.Routine).w
+		addq.b	#4,(v_objslot5+obj.Routine).w
 
 GM_LevelLoop:
 		bsr.w	PauseGame
@@ -2113,7 +2119,7 @@ GM_LevelLoop:
 		bsr.w	ExecuteObjects
 		tst.w	(v_debuguse).w
 		bne.s	loc_2E2A
-		cmpi.b	#6,(v_player+objRoutine).w
+		cmpi.b	#6,(v_player+obj.Routine).w
 		bcc.s	loc_2E2E
 
 loc_2E2A:
@@ -2173,8 +2179,8 @@ loc_2EC8:
 		bne.s	loc_2E9E
 		rts
 ; ---------------------------------------------------------------------------
-		include "leftovers\Early Debug Mappings.asm"
-		include "leftovers\Ultra Debug Mappings.asm"
+		include "leftovers/Early Debug Mappings.asm"
+		include "leftovers/Ultra Debug Mappings.asm"
 ; ---------------------------------------------------------------------------
 ; Unused, Speculated to have been for a window plane wavy masking effect
 ; involving writes during HBlank. It writes its tables in the Nemesis GFX
@@ -2203,7 +2209,7 @@ loc_3034:
 		addq.w	#2,(f_water).w
 		rts
 
-		include "_inc\LZWaterFeatures.asm"
+		include "_inc/LZWaterFeatures.asm"
 
 ; ---------------------------------------------------------------------------
 
@@ -2307,9 +2313,9 @@ sub_3178:
 		dbf	d1,.loadblocks2
 		rts
 ; ---------------------------------------------------------------------------
-Anim16Unk1:	incbin "map16\Anim Unknown 1.bin"
+Anim16Unk1:	binclude "map16/Anim Unknown 1.bin"
 Anim16Unk1_end:	even
-Anim16Unk2:	incbin "map16\Anim Unknown 2.bin"
+Anim16Unk2:	binclude "map16/Anim Unknown 2.bin"
 Anim16Unk2_end:	even
 ; ---------------------------------------------------------------------------
 
@@ -2344,9 +2350,9 @@ LoadAnimatedBlocks:
 		dbf	d1,.loadmz
 		rts
 ; ---------------------------------------------------------------------------
-Anim16GHZ:	incbin "map16\Anim GHZ.bin"
+Anim16GHZ:	binclude "map16/Anim GHZ.bin"
 Anim16GHZ_end:	even
-Anim16MZ:	incbin "map16\Anim MZ.bin"
+Anim16MZ:	binclude "map16/Anim MZ.bin"
 Anim16MZ_end:	even
 ; ---------------------------------------------------------------------------
 
@@ -2387,7 +2393,7 @@ DebugPosLoadArt:
 
 .1bpp:		dc.b 0, 6, $60, $66
 
-		include "_inc\Oscillatory Routines.asm"
+		include "_inc/Oscillatory Routines.asm"
 
 ; ---------------------------------------------------------------------------
 
@@ -2512,8 +2518,8 @@ loc_3584:
 		move.l	#0,(v_screenposx).w
 		move.l	#0,(v_screenposy).w
 		move.b	#id_SonicSpecial,(v_player).w
-		move.w	#$458,(v_player+objX).w
-		move.w	#$4A0,(v_player+objY).w
+		move.w	#$458,(v_player+obj.Xpos).w
+		move.w	#$4A0,(v_player+obj.Ypos).w
 		lea	(vdp_control_port).l,a6
 		move.w	#$8B03,(a6)
 		move.w	#$8004,(a6)
@@ -2723,7 +2729,7 @@ dword_3898:	dc.l $4000600, $6200624, $6640666, $6000820, $A640A68
 		dc.l $6200620, $8640666, $4200620, $8420842, $A860AAA
 		dc.l $6200842, $A640C86, $EA80EEE
 
-word_38E0:	incbin "palette\Cycle - SS.bin"
+word_38E0:	binclude "palette/Cycle - SS.bin"
 		even
 ; ---------------------------------------------------------------------------
 
@@ -2824,8 +2830,8 @@ byte_3A9A:	dc.b 8, 2, 4, $FF, 2, 3, 8, $FF, 4, 2, 2, 3, 8, $FD, 4
 		dc.b 2, 2, 3, 2, $FF
 ; ---------------------------------------------------------------------------
 
-		include "_inc\LevelSizeLoad & BgScrollSpeed.asm"
-		include "_inc\DeformLayers.asm"
+		include "_inc/LevelSizeLoad & BgScrollSpeed.asm"
+		include "_inc/DeformLayers.asm"
 
 ; ---------------------------------------------------------------------------
 
@@ -3409,33 +3415,33 @@ loc_4904:
 		rts
 ; ---------------------------------------------------------------------------
 
-		include "_inc\DynamicLevelEvents.asm"
+		include "_inc/DynamicLevelEvents.asm"
 
-		include "_incObj\02.asm"
-Map_02:		include "_maps\02.asm"
+		include "_incObj/02.asm"
+Map_02:		include "_maps/02.asm"
 
-		include "_incObj\03.asm"
-		include "_incObj\04.asm"
-		include "_incObj\05.asm"
-Map_05:		include "_maps\05.asm"
+		include "_incObj/03.asm"
+		include "_incObj/04.asm"
+		include "_incObj/05.asm"
+Map_05:		include "_maps/05.asm"
 
-		include "_incObj\06.asm"
-		include "_incObj\07.asm"
-		include "_incObj\11 Bridge (part 1).asm"
+		include "_incObj/06.asm"
+		include "_incObj/07.asm"
+		include "_incObj/11 Bridge (part 1).asm"
 ; ---------------------------------------------------------------------------
 
 PtfmBridge:
 		moveq	#0,d1
-		move.b	objSubtype(a0),d1
+		move.b	obj.Subtype(a0),d1
 		lsl.w	#3,d1
 		move.w	d1,d2
 		addq.w	#8,d1
 		add.w	d2,d2
 		lea	(v_objspace).w,a1
-		tst.w	objVelY(a1)
+		tst.w	obj.VelY(a1)
 		bmi.w	locret_5048
-		move.w	objX(a1),d0
-		sub.w	objX(a0),d0
+		move.w	obj.Xpos(a1),d0
+		sub.w	obj.Xpos(a0),d0
 		add.w	d1,d0
 		bmi.w	locret_5048
 		cmp.w	d2,d0
@@ -3445,10 +3451,10 @@ PtfmBridge:
 
 PtfmNormal:
 		lea	(v_objspace).w,a1
-		tst.w	objVelY(a1)
+		tst.w	obj.VelY(a1)
 		bmi.w	locret_5048
-		move.w	objX(a1),d0
-		sub.w	objX(a0),d0
+		move.w	obj.Xpos(a1),d0
+		sub.w	obj.Xpos(a0),d0
 		add.w	d1,d0
 		bmi.w	locret_5048
 		add.w	d1,d1
@@ -3456,12 +3462,12 @@ PtfmNormal:
 		bcc.w	locret_5048
 
 PtfmNormal2:
-		move.w	objY(a0),d0
+		move.w	obj.Ypos(a0),d0
 		subq.w	#8,d0
 
 PtfmNormal3:
-		move.w	objY(a1),d2
-		move.b	objHeight(a1),d1
+		move.w	obj.Ypos(a1),d2
+		move.b	obj.Height(a1),d1
 		ext.w	d1
 		add.w	d2,d1
 		addq.w	#4,d1
@@ -3469,25 +3475,25 @@ PtfmNormal3:
 		bhi.w	locret_5048
 		cmpi.w	#$FFF0,d0
 		bcs.w	locret_5048
-		cmpi.b	#6,objRoutine(a1)
+		cmpi.b	#6,obj.Routine(a1)
 		bcc.w	locret_5048
 		add.w	d0,d2
 		addq.w	#3,d2
-		move.w	d2,objY(a1)
-		addq.b	#2,objRoutine(a0)
+		move.w	d2,obj.Ypos(a1)
+		addq.b	#2,obj.Routine(a0)
 
 loc_4FD4:
-		btst	#3,objStatus(a1)
+		btst	#3,obj.Status(a1)
 		beq.s	loc_4FFC
 		moveq	#0,d0
 		move.b	standonobject(a1),d0
 		lsl.w	#6,d0
 		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a2
-		cmpi.b	#4,objRoutine(a2)
+		cmpi.b	#4,obj.Routine(a2)
 		bne.s	loc_4FFC
-		subq.b	#2,objRoutine(a2)
-		clr.b	obj2ndRout(a2)
+		subq.b	#2,obj.Routine(a2)
+		clr.b	obj.2ndRout(a2)
 
 loc_4FFC:
 		move.w	a0,d0
@@ -3495,13 +3501,13 @@ loc_4FFC:
 		lsr.w	#6,d0
 		andi.w	#$7F,d0
 		move.b	d0,standonobject(a1)
-		move.b	#0,objAngle(a1)
-		move.w	#0,objVelY(a1)
-		move.w	objVelX(a1),d0
+		move.b	#0,obj.Angle(a1)
+		move.w	#0,obj.VelY(a1)
+		move.w	obj.VelX(a1),d0
 		asr.w	#2,d0
-		sub.w	d0,objVelX(a1)
-		move.w	objVelX(a1),objInertia(a1)
-		btst	#1,objStatus(a1)
+		sub.w	d0,obj.VelX(a1)
+		move.w	obj.VelX(a1),obj.Inertia(a1)
+		btst	#1,obj.Status(a1)
 		beq.s	loc_503C
 		move.l	a0,-(sp)
 		movea.l	a1,a0
@@ -3509,8 +3515,8 @@ loc_4FFC:
 		movea.l	(sp)+,a0
 
 loc_503C:
-		bset	#3,objStatus(a1)
-		bset	#3,objStatus(a0)
+		bset	#3,obj.Status(a1)
+		bset	#3,obj.Status(a0)
 
 locret_5048:
 		rts
@@ -3518,16 +3524,16 @@ locret_5048:
 
 PtfmSloped:
 		lea	(v_objspace).w,a1
-		tst.w	objVelY(a1)
+		tst.w	obj.VelY(a1)
 		bmi.w	locret_5048
-		move.w	objX(a1),d0
-		sub.w	objX(a0),d0
+		move.w	obj.Xpos(a1),d0
+		sub.w	obj.Xpos(a0),d0
 		add.w	d1,d0
 		bmi.s	locret_5048
 		add.w	d1,d1
 		cmp.w	d1,d0
 		bcc.s	locret_5048
-		btst	#0,objRender(a0)
+		btst	#0,obj.Render(a0)
 		beq.s	loc_5074
 		not.w	d0
 		add.w	d1,d0
@@ -3536,27 +3542,27 @@ loc_5074:
 		lsr.w	#1,d0
 		moveq	#0,d3
 		move.b	(a2,d0.w),d3
-		move.w	objY(a0),d0
+		move.w	obj.Ypos(a0),d0
 		sub.w	d3,d0
 		bra.w	PtfmNormal3
 ; ---------------------------------------------------------------------------
 
 PtfmNormalHeight:
 		lea	(v_objspace).w,a1
-		tst.w	objVelY(a1)
+		tst.w	obj.VelY(a1)
 		bmi.w	locret_5048
-		move.w	objX(a1),d0
-		sub.w	objX(a0),d0
+		move.w	obj.Xpos(a1),d0
+		sub.w	obj.Xpos(a0),d0
 		add.w	d1,d0
 		bmi.w	locret_5048
 		add.w	d1,d1
 		cmp.w	d1,d0
 		bcc.w	locret_5048
-		move.w	objY(a0),d0
+		move.w	obj.Ypos(a0),d0
 		sub.w	d3,d0
 		bra.w	PtfmNormal3
 
-		include "_incObj\11 Bridge (part 2).asm"
+		include "_incObj/11 Bridge (part 2).asm"
 ; ---------------------------------------------------------------------------
 
 PtfmCheckExit:
@@ -3565,44 +3571,44 @@ PtfmCheckExit:
 PtfmCheckExit2:
 		add.w	d2,d2
 		lea	(v_objspace).w,a1
-		btst	#1,objStatus(a1)
+		btst	#1,obj.Status(a1)
 		bne.s	loc_510A
-		move.w	objX(a1),d0
-		sub.w	objX(a0),d0
+		move.w	obj.Xpos(a1),d0
+		sub.w	obj.Xpos(a0),d0
 		add.w	d1,d0
 		bmi.s	loc_510A
 		cmp.w	d2,d0
 		bcs.s	locret_511C
 
 loc_510A:
-		bclr	#3,objStatus(a1)
-		move.b	#2,objRoutine(a0)
-		bclr	#3,objStatus(a0)
+		bclr	#3,obj.Status(a1)
+		move.b	#2,obj.Routine(a0)
+		bclr	#3,obj.Status(a0)
 
 locret_511C:
 		rts
 
-		include "_incObj\11 Bridge (part 3).asm"
-MapBridge:	include "_maps\Bridge.asm"
+		include "_incObj/11 Bridge (part 3).asm"
+MapBridge:	include "_maps/Bridge.asm"
 
-		include "_incObj\15 Swinging Platform.asm"
-Map_Swing_GHZ:	include "_maps\Swinging Platforms (GHZ).asm"
-Map_Swing_SLZ:	include "_maps\Swinging Platforms (SLZ).asm"
+		include "_incObj/15 Swinging Platform.asm"
+Map_Swing_GHZ:	include "_maps/Swinging Platforms (GHZ).asm"
+Map_Swing_SLZ:	include "_maps/Swinging Platforms (SLZ).asm"
 
-		include "_incObj\17 Spiked Pole Helix.asm"
-Map_Hel:	include "_maps\Spiked Pole Helix.asm"
+		include "_incObj/17 Spiked Pole Helix.asm"
+Map_Hel:	include "_maps/Spiked Pole Helix.asm"
 
-		include "_incObj\18 Platforms.asm"
-		include "_maps\Platforms (unused).asm"
-Map_Plat_GHZ:	include "_maps\Platforms (GHZ).asm"
-Map_Plat_SZ:	include "_maps\Platforms (SZ).asm"
-Map_Plat_SLZ:	include "_maps\Platforms (SLZ).asm"
+		include "_incObj/18 Platforms.asm"
+		include "_maps/Platforms (unused).asm"
+Map_Plat_GHZ:	include "_maps/Platforms (GHZ).asm"
+Map_Plat_SZ:	include "_maps/Platforms (SZ).asm"
+Map_Plat_SLZ:	include "_maps/Platforms (SLZ).asm"
 
-		include "_incObj\19 GHZ Ball.asm"
-Map_GBall:	include "_maps\GHZ Ball.asm"
+		include "_incObj/19 GHZ Ball.asm"
+Map_GBall:	include "_maps/GHZ Ball.asm"
 
-		include "_incObj\1A Collapsing Ledge (part 1).asm"
-		include "_incObj\53 Collapsing Floors.asm"
+		include "_incObj/1A Collapsing Ledge (part 1).asm"
+		include "_incObj/53 Collapsing Floors.asm"
 ; ---------------------------------------------------------------------------
 
 loc_612A:
@@ -3611,18 +3617,18 @@ loc_612A:
 loc_6130:
 		lea	(CFlo_Data1).l,a4
 		moveq	#$18,d1
-		addq.b	#2,objFrame(a0)
+		addq.b	#2,obj.Frame(a0)
 
 loc_613C:
 		moveq	#0,d0
-		move.b	objFrame(a0),d0
+		move.b	obj.Frame(a0),d0
 		add.w	d0,d0
-		movea.l	objMap(a0),a3
+		movea.l	obj.Map(a0),a3
 		adda.w	(a3,d0.w),a3
 		addq.w	#1,a3
-		bset	#5,objRender(a0)
-		move.b	objId(a0),d4
-		move.b	objRender(a0),d5
+		bset	#5,obj.Render(a0)
+		_move.b	obj.Id(a0),d4
+		move.b	obj.Render(a0),d5
 		movea.l	a0,a1
 		bra.s	loc_6168
 ; ---------------------------------------------------------------------------
@@ -3633,15 +3639,15 @@ loc_6160:
 		addq.w	#5,a3
 
 loc_6168:
-		move.b	#6,objRoutine(a1)
-		move.b	d4,objId(a1)
-		move.l	a3,objMap(a1)
-		move.b	d5,objRender(a1)
-		move.w	objX(a0),objX(a1)
-		move.w	objY(a0),objY(a1)
-		move.w	objGfx(a0),objGfx(a1)
-		move.b	objPriority(a0),objPriority(a1)
-		move.b	objActWid(a0),objActWid(a1)
+		move.b	#6,obj.Routine(a1)
+		_move.b	d4,obj.Id(a1)
+		move.l	a3,obj.Map(a1)
+		move.b	d5,obj.Render(a1)
+		move.w	obj.Xpos(a0),obj.Xpos(a1)
+		move.w	obj.Ypos(a0),obj.Ypos(a1)
+		move.w	obj.Gfx(a0),obj.Gfx(a1)
+		move.b	obj.Priority(a0),obj.Priority(a1)
+		move.b	obj.ActWid(a0),obj.ActWid(a1)
 		move.b	(a4)+,ledge_timedelay(a1)
 		cmpa.l	a0,a1
 		bcc.s	loc_61A4
@@ -3668,13 +3674,13 @@ CFlo_Data3:	dc.b $16, $1E, $1A, $12, 6, $E, $A, 2
 
 sub_61E0:
 		lea	(v_objspace).w,a1
-		btst	#3,objStatus(a1)
+		btst	#3,obj.Status(a1)
 		beq.s	locret_6224
-		move.w	objX(a1),d0
-		sub.w	objX(a0),d0
+		move.w	obj.Xpos(a1),d0
+		sub.w	obj.Xpos(a0),d0
 		add.w	d1,d0
 		lsr.w	#1,d0
-		btst	#0,objRender(a0)
+		btst	#0,obj.Render(a0)
 		beq.s	loc_6204
 		not.w	d0
 		add.w	d1,d0
@@ -3682,14 +3688,14 @@ sub_61E0:
 loc_6204:
 		moveq	#0,d1
 		move.b	(a2,d0.w),d1
-		move.w	objY(a0),d0
+		move.w	obj.Ypos(a0),d0
 		sub.w	d1,d0
 		moveq	#0,d1
-		move.b	objHeight(a1),d1
+		move.b	obj.Height(a1),d1
 		sub.w	d1,d0
-		move.w	d0,objY(a1)
-		sub.w	objX(a0),d2
-		sub.w	d2,objX(a1)
+		move.w	d0,obj.Ypos(a1)
+		sub.w	obj.Xpos(a0),d2
+		sub.w	d2,obj.Xpos(a1)
 
 locret_6224:
 		rts
@@ -3702,26 +3708,26 @@ ObjCollapsePtfm_Slope:dc.b $20, $20, $20, $20, $20, $20, $20, $20, $21, $21
 		dc.b $30, $30, $30, $30, $30, $30, $30, $30
 		even
 
-		include "_maps\06256.asm"
-Map_Ledge:	include "_maps\Collapsing Ledge.asm"
-Map_CFlo:	include "_maps\Collapsing Floors.asm"
+		include "_maps/06256.asm"
+Map_Ledge:	include "_maps/Collapsing Ledge.asm"
+Map_CFlo:	include "_maps/Collapsing Floors.asm"
 
-		include "_incObj\1B.asm"
-Map_1B:		include "_maps\1B.asm"
+		include "_incObj/1B.asm"
+Map_1B:		include "_maps/1B.asm"
 
-		include "_incObj\1C Scenery.asm"
-Map_Scen:	include "_maps\Scenery.asm"
+		include "_incObj/1C Scenery.asm"
+Map_Scen:	include "_maps/Scenery.asm"
 
-		include "_incObj\1D Unused Switch.asm"
-Map_UnkSwitch:	include "_maps\Unknown Switch.asm"
+		include "_incObj/1D Unused Switch.asm"
+Map_UnkSwitch:	include "_maps/Unknown Switch.asm"
 
-		include "_incObj\2A Switch Door.asm"
+		include "_incObj/2A Switch Door.asm"
 ; ---------------------------------------------------------------------------
 
 sub_6936:
 		tst.w	(v_debuguse).w
 		bne.w	locret_69A6
-		cmpi.b	#6,(v_player+objRoutine).w
+		cmpi.b	#6,(v_player+obj.Routine).w
 		bcc.s	locret_69A6
 		bsr.w	Obj44_SolidWall2
 		beq.s	loc_698C
@@ -3729,49 +3735,49 @@ sub_6936:
 		tst.w	d0
 		beq.w	loc_6976
 		bmi.s	loc_6960
-		tst.w	objVelX(a1)
+		tst.w	obj.VelX(a1)
 		bmi.s	loc_6976
 		bra.s	loc_6966
 ; ---------------------------------------------------------------------------
 
 loc_6960:
-		tst.w	objVelX(a1)
+		tst.w	obj.VelX(a1)
 		bpl.s	loc_6976
 
 loc_6966:
-		sub.w	d0,objX(a1)
-		move.w	#0,objInertia(a1)
-		move.w	#0,objVelX(a1)
+		sub.w	d0,obj.Xpos(a1)
+		move.w	#0,obj.Inertia(a1)
+		move.w	#0,obj.VelX(a1)
 
 loc_6976:
-		btst	#1,objStatus(a1)
+		btst	#1,obj.Status(a1)
 		bne.s	loc_699A
-		bset	#5,objStatus(a1)
-		bset	#5,objStatus(a0)
+		bset	#5,obj.Status(a1)
+		bset	#5,obj.Status(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_698C:
-		btst	#5,objStatus(a0)
+		btst	#5,obj.Status(a0)
 		beq.s	locret_69A6
-		move.w	#id_Run,objAnim(a1)
+		move.w	#id_Run,obj.Anim(a1)
 
 loc_699A:
-		bclr	#5,objStatus(a0)
-		bclr	#5,objStatus(a1)
+		bclr	#5,obj.Status(a0)
+		bclr	#5,obj.Status(a1)
 
 locret_69A6:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_69A8:
-		tst.w	objVelY(a1)
+		tst.w	obj.VelY(a1)
 		beq.s	loc_69C0
 		bpl.s	locret_69BE
 		tst.w	d3
 		bpl.s	locret_69BE
-		sub.w	d3,objY(a1)
-		move.w	#0,objVelY(a1)
+		sub.w	d3,obj.Ypos(a1)
+		move.w	#0,obj.VelY(a1)
 
 locret_69BE:
 		rts
@@ -3787,19 +3793,19 @@ loc_69C0:
 
 Obj44_SolidWall2:
 		lea	(v_player).w,a1
-		move.w	objX(a1),d0
-		sub.w	objX(a0),d0
+		move.w	obj.Xpos(a1),d0
+		sub.w	obj.Xpos(a0),d0
 		add.w	d1,d0
 		bmi.s	loc_6A28
 		move.w	d1,d3
 		add.w	d3,d3
 		cmp.w	d3,d0
 		bhi.s	loc_6A28
-		move.b	objHeight(a1),d3
+		move.b	obj.Height(a1),d3
 		ext.w	d3
 		add.w	d3,d2
-		move.w	objY(a1),d3
-		sub.w	objY(a0),d3
+		move.w	obj.Ypos(a1),d3
+		sub.w	obj.Ypos(a0),d3
 		add.w	d2,d3
 		bmi.s	loc_6A28
 		move.w	d2,d4
@@ -3838,45 +3844,45 @@ loc_6A28:
 		moveq	#0,d4
 		rts
 ; ---------------------------------------------------------------------------
-Map_2A:		include "_maps\2A.asm"
+Map_2A:		include "_maps/2A.asm"
 
-		include "_incObj\0E Title Screen Sonic.asm"
-		include "_incObj\0F Press Start.asm"
-		include "_anim\Title Screen Sonic.asm"
-		include "_anim\Press Start.asm"
+		include "_incObj/0E Title Screen Sonic.asm"
+		include "_incObj/0F Press Start.asm"
+		include "_anim/Title Screen Sonic.asm"
+		include "_anim/Press Start.asm"
 ; ---------------------------------------------------------------------------
 
 AnimateSprite:
 		moveq	#0,d0
-		move.b	objAnim(a0),d0
-		cmp.b	objNextAni(a0),d0
+		move.b	obj.Anim(a0),d0
+		cmp.b	obj.NextAni(a0),d0
 		beq.s	loc_6B54
-		move.b	d0,objNextAni(a0)
-		move.b	#0,objAniFrame(a0)
-		move.b	#0,objTimeFrame(a0)
+		move.b	d0,obj.NextAni(a0)
+		move.b	#0,obj.AniFrame(a0)
+		move.b	#0,obj.TimeFrame(a0)
 
 loc_6B54:
 		add.w	d0,d0
 		adda.w	(a1,d0.w),a1
-		subq.b	#1,objTimeFrame(a0)
+		subq.b	#1,obj.TimeFrame(a0)
 		bpl.s	locret_6B94
-		move.b	(a1),objTimeFrame(a0)
+		move.b	(a1),obj.TimeFrame(a0)
 		moveq	#0,d1
-		move.b	objAniFrame(a0),d1
+		move.b	obj.AniFrame(a0),d1
 		move.b	1(a1,d1.w),d0
 		bmi.s	loc_6B96
 
 loc_6B70:
 		move.b	d0,d1
 		andi.b	#$1F,d0
-		move.b	d0,objFrame(a0)
-		move.b	objStatus(a0),d0
+		move.b	d0,obj.Frame(a0)
+		move.b	obj.Status(a0),d0
 		andi.b	#3,d0
-		andi.b	#$FC,objRender(a0)
+		andi.b	#$FC,obj.Render(a0)
 		lsr.b	#5,d1
 		eor.b	d0,d1
-		or.b	d1,objRender(a0)
-		addq.b	#1,objAniFrame(a0)
+		or.b	d1,obj.Render(a0)
+		addq.b	#1,obj.AniFrame(a0)
 
 locret_6B94:
 		rts
@@ -3885,8 +3891,8 @@ locret_6B94:
 loc_6B96:
 		addq.b	#1,d0
 		bne.s	loc_6BA6
-		move.b	#0,objAniFrame(a0)
-		move.b	objRender(a1),d0
+		move.b	#0,obj.AniFrame(a0)
+		move.b	obj.Render(a1),d0
 		bra.s	loc_6B70
 ; ---------------------------------------------------------------------------
 
@@ -3894,7 +3900,7 @@ loc_6BA6:
 		addq.b	#1,d0
 		bne.s	loc_6BBA
 		move.b	2(a1,d1.w),d0
-		sub.b	d0,objAniFrame(a0)
+		sub.b	d0,obj.AniFrame(a0)
 		sub.b	d0,d1
 		move.b	1(a1,d1.w),d0
 		bra.s	loc_6B70
@@ -3903,70 +3909,70 @@ loc_6BA6:
 loc_6BBA:
 		addq.b	#1,d0
 		bne.s	loc_6BC4
-		move.b	2(a1,d1.w),objAnim(a0)
+		move.b	2(a1,d1.w),obj.Anim(a0)
 
 loc_6BC4:
 		addq.b	#1,d0
 		bne.s	loc_6BCC
-		addq.b	#2,objRoutine(a0)
+		addq.b	#2,obj.Routine(a0)
 
 loc_6BCC:
 		addq.b	#1,d0
 		bne.s	locret_6BDA
-		move.b	#0,objAniFrame(a0)
-		clr.b	obj2ndRout(a0)
+		move.b	#0,obj.AniFrame(a0)
+		clr.b	obj.2ndRout(a0)
 
 locret_6BDA:
 		rts
 ; ---------------------------------------------------------------------------
-Map_TitleText:	include "_maps\Press Start.asm"
-Map_TitleSonic:	include "_maps\Title Screen Sonic.asm"
+Map_TitleText:	include "_maps/Press Start.asm"
+Map_TitleSonic:	include "_maps/Title Screen Sonic.asm"
 
-		include "_incObj\1E Ballhog.asm"
-		include "_incObj\20 Ballhog's Bomb.asm"
-		include "_incObj\24, 27 & 3F Explosions.asm"
-		include "_anim\Ball Hog.asm"
-Map_Hog:	include "_maps\Ball Hog.asm"
-		include "_maps\Ball Hog's Bomb.asm"
-		include "_maps\Ball Hog's Bomb Explosion.asm"
-		include "_maps\Explosions.asm"
+		include "_incObj/1E Ballhog.asm"
+		include "_incObj/20 Ballhog's Bomb.asm"
+		include "_incObj/24, 27 & 3F Explosions.asm"
+		include "_anim/Ball Hog.asm"
+Map_Hog:	include "_maps/Ball Hog.asm"
+		include "_maps/Ball Hog's Bomb.asm"
+		include "_maps/Ball Hog's Bomb Explosion.asm"
+		include "_maps/Explosions.asm"
 
-		include "_incObj\28 Animals.asm"
-		include "_incObj\29 Points.asm"
-Map_Animal1:	include "_maps\Animals 1.asm"
-Map_Animal2:	include "_maps\Animals 2.asm"
-Map_Animal3:	include "_maps\Animals 3.asm"
-Map_Poi:	include "_maps\Points.asm"
+		include "_incObj/28 Animals.asm"
+		include "_incObj/29 Points.asm"
+Map_Animal1:	include "_maps/Animals 1.asm"
+Map_Animal2:	include "_maps/Animals 2.asm"
+Map_Animal3:	include "_maps/Animals 3.asm"
+Map_Poi:	include "_maps/Points.asm"
 
-		include "_incObj\1F Crabmeat.asm"
-		include "_anim\Crabmeat.asm"
-Map_Crab:	include "_maps\Crabmeat.asm"
+		include "_incObj/1F Crabmeat.asm"
+		include "_anim/Crabmeat.asm"
+Map_Crab:	include "_maps/Crabmeat.asm"
 
-		include "_incObj\22 Buzz Bomber.asm"
-		include "_incObj\23 Buzz Bomber Missile.asm"
-		include "_anim\Buzz Bomber.asm"
-		include "_anim\Buzz Bomber Missile.asm"
-Map_Buzz:	include "_maps\Buzz Bomber.asm"
-Map_Missile:	include "_maps\Buzz Bomber Missile.asm"
+		include "_incObj/22 Buzz Bomber.asm"
+		include "_incObj/23 Buzz Bomber Missile.asm"
+		include "_anim/Buzz Bomber.asm"
+		include "_anim/Buzz Bomber Missile.asm"
+Map_Buzz:	include "_maps/Buzz Bomber.asm"
+Map_Missile:	include "_maps/Buzz Bomber Missile.asm"
 
-		include "_incObj\25 & 37 Rings.asm"
-		include "_incObj\4B Giant Ring Flash.asm"
-		include "_anim\Rings.asm"
-Map_Ring:	include "_maps\Rings.asm"
-Map_GRing:	include "_maps\Giant Ring.asm"
+		include "_incObj/25 & 37 Rings.asm"
+		include "_incObj/4B Giant Ring Flash.asm"
+		include "_anim/Rings.asm"
+Map_Ring:	include "_maps/Rings.asm"
+Map_GRing:	include "_maps/Giant Ring.asm"
 
-		include "_incObj\26 Monitor.asm"
-		include "_incObj\2E Monitor Content Power-Up.asm"
-		include "_incObj\26 Monitor (SolidSides subroutine).asm"
-		include "_anim\Monitor.asm"
-Map_Monitor:	include "_maps\Monitor.asm"
+		include "_incObj/26 Monitor.asm"
+		include "_incObj/2E Monitor Content Power-Up.asm"
+		include "_incObj/26 Monitor (SolidSides subroutine).asm"
+		include "_anim/Monitor.asm"
+Map_Monitor:	include "_maps/Monitor.asm"
 ; ---------------------------------------------------------------------------
 
 ExecuteObjects:
 		lea	(v_objspace).w,a0
 		moveq	#$7F,d7
 		moveq	#0,d0
-		cmpi.b	#6,(v_player+objRoutine).w	; has sonic died?
+		cmpi.b	#6,(v_player+obj.Routine).w	; has sonic died?
 		bcc.s	loc_8560	; if so, branch
 
 sub_8546:
@@ -3979,7 +3985,7 @@ sub_8546:
 		moveq	#0,d0
 
 loc_8556:
-		lea	objSize(a0),a0
+		lea	obj.Size(a0),a0
 		dbf	d7,sub_8546
 		rts
 ; ---------------------------------------------------------------------------
@@ -3993,23 +3999,23 @@ loc_8566:
 		moveq	#0,d0
 		move.b	(a0),d0
 		beq.s	loc_8576
-		tst.b	objRender(a0)
+		tst.b	obj.Render(a0)
 		bpl.s	loc_8576
 		bsr.w	DisplaySprite
 
 loc_8576:
-		lea	objSize(a0),a0
+		lea	obj.Size(a0),a0
 
 loc_857A:
 		dbf	d7,loc_8566
 		rts
 ; ---------------------------------------------------------------------------
 Obj_Index:
-		include "_inc\Object Pointers.asm"
-		include "_incObj\sub ObjectFall.asm"
-		include "_incObj\sub SpeedToPos.asm"
-		include "_incObj\sub DisplaySprite.asm"
-		include "_incObj\sub DeleteObject.asm"
+		include "_inc/Object Pointers.asm"
+		include "_incObj/sub ObjectFall.asm"
+		include "_incObj/sub SpeedToPos.asm"
+		include "_incObj/sub DisplaySprite.asm"
+		include "_incObj/sub DeleteObject.asm"
 ; ---------------------------------------------------------------------------
 
 off_8796:	dc.l 0
@@ -4033,15 +4039,15 @@ loc_87BA:
 		movea.w	(a4,d6.w),a0
 		tst.b	(a0)
 		beq.w	loc_886E
-		bclr	#7,objRender(a0)
-		move.b	objRender(a0),d0
+		bclr	#7,obj.Render(a0)
+		move.b	obj.Render(a0),d0
 		move.b	d0,d4
 		andi.w	#$C,d0
 		beq.s	loc_8826
 		movea.l	off_8796(pc,d0.w),a1
 		moveq	#0,d0
-		move.b	objActWid(a0),d0
-		move.w	objX(a0),d3
+		move.b	obj.ActWid(a0),d0
+		move.w	obj.Xpos(a0),d3
 		sub.w	(a1),d3
 		move.w	d3,d1
 		add.w	d0,d1
@@ -4054,9 +4060,9 @@ loc_87BA:
 		btst	#4,d4
 		beq.s	loc_8830
 		moveq	#0,d0
-		move.b	objHeight(a0),d0
-		move.w	objY(a0),d2
-		sub.w	objMap(a1),d2
+		move.b	obj.Height(a0),d0
+		move.w	obj.Ypos(a0),d2
+		sub.w	obj.Map(a1),d2
 		move.w	d2,d1
 		add.w	d0,d1
 		bmi.s	loc_886E
@@ -4070,13 +4076,13 @@ loc_87BA:
 
 loc_8826:
 		move.w	$A(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Xpos(a0),d3
 		bra.s	loc_8848
 ; ---------------------------------------------------------------------------
 
 loc_8830:
-		move.w	objY(a0),d2
-		sub.w	objMap(a1),d2
+		move.w	obj.Ypos(a0),d2
+		sub.w	obj.Map(a1),d2
 		addi.w	#$80,d2
 		cmpi.w	#96,d2
 		bcs.s	loc_886E
@@ -4084,11 +4090,11 @@ loc_8830:
 		bcc.s	loc_886E
 
 loc_8848:
-		movea.l	objMap(a0),a1
+		movea.l	obj.Map(a0),a1
 		moveq	#0,d1
 		btst	#5,d4
 		bne.s	loc_8864
-		move.b	objFrame(a0),d1
+		move.b	obj.Frame(a0),d1
 		add.b	d1,d1
 		adda.w	(a1,d1.w),a1
 		move.b	(a1)+,d1
@@ -4099,7 +4105,7 @@ loc_8864:
 		bsr.w	sub_8898
 
 loc_8868:
-		bset	#7,objRender(a0)
+		bset	#7,obj.Render(a0)
 
 loc_886E:
 		addq.w	#2,d6
@@ -4122,7 +4128,7 @@ loc_8890:
 ; ---------------------------------------------------------------------------
 
 sub_8898:
-		movea.w	objGfx(a0),a3
+		movea.w	obj.Gfx(a0),a3
 		btst	#0,d4
 		bne.s	loc_88DE
 		btst	#1,d4
@@ -4280,12 +4286,12 @@ locret_89C4:
 ; ---------------------------------------------------------------------------
 
 ObjectChkOffscreen:
-		move.w	objX(a0),d0
+		move.w	obj.Xpos(a0),d0
 		sub.w	(v_screenposx).w,d0
 		bmi.s	.offscreen
 		cmpi.w	#320,d0
 		bge.s	.offscreen
-		move.w	objY(a0),d1
+		move.w	obj.Ypos(a0),d1
 		sub.w	(v_screenposy).w,d1
 		bmi.s	.offscreen
 		cmpi.w	#224,d1
@@ -4459,23 +4465,23 @@ sub_8B22:
 loc_8B36:
 		bsr.w	FindFreeObj
 		bne.s	locret_8B70
-		move.w	(a0)+,objX(a1)
+		move.w	(a0)+,obj.Xpos(a1)
 		move.w	(a0)+,d0
 		move.w	d0,d1
 		andi.w	#$FFF,d0
-		move.w	d0,objY(a1)
+		move.w	d0,obj.Ypos(a1)
 		rol.w	#2,d1
 		andi.b	#3,d1
-		move.b	d1,objRender(a1)
-		move.b	d1,objStatus(a1)
+		move.b	d1,obj.Render(a1)
+		move.b	d1,obj.Status(a1)
 		move.b	(a0)+,d0
 		bpl.s	loc_8B66
 		andi.b	#$7F,d0
-		move.b	d2,objRespawnNo(a1)
+		move.b	d2,obj.RespawnNo(a1)
 
 loc_8B66:
-		move.b	d0,objId(a1)
-		move.b	(a0)+,objSubtype(a1)
+		_move.b	d0,obj.Id(a1)
+		move.b	(a0)+,obj.Subtype(a1)
 		moveq	#0,d0
 
 locret_8B70:
@@ -4489,7 +4495,7 @@ FindFreeObj:
 loc_8B7A:
 		tst.b	(a1)
 		beq.s	locret_8B86
-		lea	objSize(a1),a1
+		lea	obj.Size(a1),a1
 		dbf	d0,loc_8B7A
 
 locret_8B86:
@@ -4507,50 +4513,50 @@ FindNextFreeObj:
 loc_8B96:
 		tst.b	(a1)
 		beq.s	locret_8BA2
-		lea	objSize(a1),a1
+		lea	obj.Size(a1),a1
 		dbf	d0,loc_8B96
 
 locret_8BA2:
 		rts
 
-		include "_incObj\2B Chopper.asm"
-		include "_anim\Chopper.asm"
-Map_Chop:	include "_maps\Chopper.asm"
+		include "_incObj/2B Chopper.asm"
+		include "_anim/Chopper.asm"
+Map_Chop:	include "_maps/Chopper.asm"
 
-		include "_incObj\2C Jaws.asm"
-		include "_anim\Jaws.asm"
-Map_Jaws:	include "_maps\Jaws.asm"
+		include "_incObj/2C Jaws.asm"
+		include "_anim/Jaws.asm"
+Map_Jaws:	include "_maps/Jaws.asm"
 
-		include "_incObj\2D Burrobot.asm"
-		include "_anim\Burrobot.asm"
-Map_Burro:	include "_maps\Burrobot.asm"
+		include "_incObj/2D Burrobot.asm"
+		include "_anim/Burrobot.asm"
+Map_Burro:	include "_maps/Burrobot.asm"
 
-		include "_incObj\2F MZ Large Grassy Platforms.asm"
+		include "_incObj/2F MZ Large Grassy Platforms.asm"
 
-		include "_incObj\35 Burning Grass.asm"
-		include "_anim\Burning Grass.asm"
-Map_LGrass:	include "_maps\MZ Large Grassy Platforms.asm"
-Map_Fire:	include "_maps\Fireballs.asm"
+		include "_incObj/35 Burning Grass.asm"
+		include "_anim/Burning Grass.asm"
+Map_LGrass:	include "_maps/MZ Large Grassy Platforms.asm"
+Map_Fire:	include "_maps/Fireballs.asm"
 
-		include "_incObj\30 MZ Large Green Glass Blocks.asm"
-Map_Glass:	include "_maps\MZ Large Green Glass Blocks.asm"
+		include "_incObj/30 MZ Large Green Glass Blocks.asm"
+Map_Glass:	include "_maps/MZ Large Green Glass Blocks.asm"
 
-		include "_incObj\31 Chained Stompers.asm"
-		include "_incObj\45 Sideways Stomper.asm"
-Map_CStom:	include "_maps\Chained Stompers.asm"
-Map_SStom:	include "_maps\Sideways Stomper.asm"
+		include "_incObj/31 Chained Stompers.asm"
+		include "_incObj/45 Sideways Stomper.asm"
+Map_CStom:	include "_maps/Chained Stompers.asm"
+Map_SStom:	include "_maps/Sideways Stomper.asm"
 
-		include "_incObj\32 Button.asm"
-		include "_maps\Button.asm"
+		include "_incObj/32 Button.asm"
+		include "_maps/Button.asm"
 
-		include "_incObj\33 Pushable Blocks.asm"
-Map_Push:	include "_maps\Pushable Blocks.asm"
+		include "_incObj/33 Pushable Blocks.asm"
+Map_Push:	include "_maps/Pushable Blocks.asm"
 
-		include "_incObj\sub SolidObject.asm"
+		include "_incObj/sub SolidObject.asm"
 
-		include "_incObj\34 Title Cards.asm"
-		include "_incObj\39 Game Over.asm"
-		include "_incObj\3A Got Through Act.asm"
+		include "_incObj/34 Title Cards.asm"
+		include "_incObj/39 Game Over.asm"
+		include "_incObj/3A Got Through Act.asm"
 
 Map_TitleCard:	dc.w byte_A8A4-Map_TitleCard, byte_A8D2-Map_TitleCard, byte_A900-Map_TitleCard
 		dc.w byte_A920-Map_TitleCard, byte_A94E-Map_TitleCard, byte_A97C-Map_TitleCard
@@ -4645,7 +4651,7 @@ byte_A9DD:	dc.b $D
 		dc.b $C, 8, 0, $7C, $EC
 		even
 
-Map_Over:	include "_maps\Game Over.asm"
+Map_Over:	include "_maps/Game Over.asm"
 
 ; ---------------------------------------------------------------------------
 ; Sprite mappings - "SONIC HAS PASSED" title card
@@ -4700,16 +4706,16 @@ byte_AAD7:	dc.b 7
 		dc.b $F8, 1, 1, $70, $48
 		even
 
-		include "_incObj\36 Spikes.asm"
-		include "_maps\Spikes.asm"
+		include "_incObj/36 Spikes.asm"
+		include "_maps/Spikes.asm"
 
-		include "_incObj\3B Purple Rock.asm"
-		include "_incObj\49 Waterfall Sound.asm"
+		include "_incObj/3B Purple Rock.asm"
+		include "_incObj/49 Waterfall Sound.asm"
 
-Map_PRock:	include "_maps\Purple Rock.asm"
+Map_PRock:	include "_maps/Purple Rock.asm"
 
-		include "_incObj\3C Smashable Wall.asm"
-		include "_incObj\sub SmashObject.asm"
+		include "_incObj/3C Smashable Wall.asm"
+		include "_incObj/sub SmashObject.asm"
 
 ObjSmashWall_FragRight:dc.w $400, $FB00
 		dc.w $600, $FF00
@@ -4729,9 +4735,9 @@ ObjSmashWall_FragLeft:dc.w $FA00, $FA00
 		dc.w $FA00, $100
 		dc.w $FC00, $500
 
-MapSmashWall:	include "_maps\Smashable Walls.asm"
+MapSmashWall:	include "_maps/Smashable Walls.asm"
 
-		include "_incObj\3D Boss - Green Hill (part 1).asm"
+		include "_incObj/3D Boss - Green Hill (part 1).asm"
 
 sub_B146:
 		move.b	(v_vbla_byte).w,d0
@@ -4739,148 +4745,148 @@ sub_B146:
 		bne.s	locret_B186
 		bsr.w	FindFreeObj
 		bne.s	locret_B186
-		move.b	#id_ExplosionBomb,objId(a1)
-		move.w	objX(a0),objX(a1)
-		move.w	objY(a0),objY(a1)
+		_move.b	#id_ExplosionBomb,obj.Id(a1)
+		move.w	obj.Xpos(a0),obj.Xpos(a1)
+		move.w	obj.Ypos(a0),obj.Ypos(a1)
 		jsr	(RandomNumber).l
 		move.w	d0,d1
 		moveq	#0,d1
 		move.b	d0,d1
 		lsr.b	#2,d1
 		subi.w	#$20,d1
-		add.w	d1,objX(a1)
+		add.w	d1,obj.Xpos(a1)
 		lsr.w	#8,d0
 		lsr.b	#3,d0
-		add.w	d0,objY(a1)
+		add.w	d0,obj.Ypos(a1)
 
 locret_B186:
 		rts
 ; ---------------------------------------------------------------------------
 
 BossMove:
-		move.l	objBossX(a0),d2
-		move.l	objBossY(a0),d3
-		move.w	objVelX(a0),d0
+		move.l	obj.BossX(a0),d2
+		move.l	obj.BossY(a0),d3
+		move.w	obj.VelX(a0),d0
 		ext.l	d0
 		asl.l	#8,d0
 		add.l	d0,d2
-		move.w	objVelY(a0),d0
+		move.w	obj.VelY(a0),d0
 		ext.l	d0
 		asl.l	#8,d0
 		add.l	d0,d3
-		move.l	d2,objBossX(a0)
-		move.l	d3,objBossY(a0)
+		move.l	d2,obj.BossX(a0)
+		move.l	d3,obj.BossY(a0)
 		rts
 
-		include "_incObj\3D Boss - Green Hill (part 2).asm"
-		include "_incObj\48 Eggman's Swinging Ball.asm"
+		include "_incObj/3D Boss - Green Hill (part 2).asm"
+		include "_incObj/48 Eggman's Swinging Ball.asm"
 
-		include "_anim\Eggman.asm"
-Map_Eggman:	include "_maps\Eggman.asm"
+		include "_anim/Eggman.asm"
+Map_Eggman:	include "_maps/Eggman.asm"
 
-Map_BossItems:	include "_maps\Boss Items.asm"
+Map_BossItems:	include "_maps/Boss Items.asm"
 
-		include "_incObj\3E Prison Capsule.asm"
+		include "_incObj/3E Prison Capsule.asm"
 
-		include "_anim\Prison Capsule.asm"
-Map_Pri:	include "_maps\Prison Capsule.asm"
+		include "_anim/Prison Capsule.asm"
+Map_Pri:	include "_maps/Prison Capsule.asm"
 
-		include "_incObj\40 Motobug.asm"
+		include "_incObj/40 Motobug.asm"
 
-		include "_anim\Moto Bug.asm"
-Map_Moto:	include "_maps\Moto Bug.asm"
+		include "_anim/Moto Bug.asm"
+Map_Moto:	include "_maps/Moto Bug.asm"
 
-		include "_incObj\41 Springs.asm"
+		include "_incObj/41 Springs.asm"
 
-		include "_anim\Springs.asm"
-Map_Spring:	include "_maps\Springs.asm"
+		include "_anim/Springs.asm"
+Map_Spring:	include "_maps/Springs.asm"
 
-		include "_incObj\42 Newtron.asm"
+		include "_incObj/42 Newtron.asm"
 
-		include "_anim\Newtron.asm"
-Map_Newt:	include "_maps\Newtron.asm"
+		include "_anim/Newtron.asm"
+Map_Newt:	include "_maps/Newtron.asm"
 
-		include "_incObj\43 Roller.asm"
-		include "_anim\Roller.asm"
-Map_Roll:	include "_maps\Roller.asm"
+		include "_incObj/43 Roller.asm"
+		include "_anim/Roller.asm"
+Map_Roll:	include "_maps/Roller.asm"
 
-		include "_incObj\44 GHZ Edge Walls.asm"
-Map_Edge:	include "_maps\GHZ Edge Walls.asm"
+		include "_incObj/44 GHZ Edge Walls.asm"
+Map_Edge:	include "_maps/GHZ Edge Walls.asm"
 
-		include "_incObj\13 Lava Ball Maker.asm"
-		include "_incObj\14 Lava Ball.asm"
-		include "_anim\Fireballs.asm"
+		include "_incObj/13 Lava Ball Maker.asm"
+		include "_incObj/14 Lava Ball.asm"
+		include "_anim/Fireballs.asm"
 
-		include "_incObj\46 MZ Bricks.asm"
-Map_Brick:	include "_maps\MZ Bricks.asm"
+		include "_incObj/46 MZ Bricks.asm"
+Map_Brick:	include "_maps/MZ Bricks.asm"
 
-		include "_incObj\12 Light.asm"
-Map_Light:	include "_maps\Light.asm"
+		include "_incObj/12 Light.asm"
+Map_Light:	include "_maps/Light.asm"
 
-		include "_incObj\47 Bumper.asm"
-		include "_anim\Bumper.asm"
-Map_Bump:	include "_maps\Bumper.asm"
+		include "_incObj/47 Bumper.asm"
+		include "_anim/Bumper.asm"
+Map_Bump:	include "_maps/Bumper.asm"
 
-		include "_incObj\0D Signpost.asm"
-Ani_Sign:	include "_anim\Signpost.asm"
-Map_Sign:	include "_maps\Signpost.asm"
+		include "_incObj/0D Signpost.asm"
+Ani_Sign:	include "_anim/Signpost.asm"
+Map_Sign:	include "_maps/Signpost.asm"
 
-		include "_incObj\4C & 4D Lava Geyser Maker.asm"
+		include "_incObj/4C & 4D Lava Geyser Maker.asm"
 
-		include "_incObj\4E Wall of Lava.asm"
+		include "_incObj/4E Wall of Lava.asm"
 
-		include "_incObj\54 Lava Tag.asm"
-Map_LTag:	include "_maps\Lava Tag.asm"
-		include "_anim\Lava Geyser.asm"
-		include "_anim\Wall of Lava.asm"
-Map_Geyser:	include "_maps\Lava Geyser.asm"
-Map_LWall:	include "_maps\Wall of Lava.asm"
+		include "_incObj/54 Lava Tag.asm"
+Map_LTag:	include "_maps/Lava Tag.asm"
+		include "_anim/Lava Geyser.asm"
+		include "_anim/Wall of Lava.asm"
+Map_Geyser:	include "_maps/Lava Geyser.asm"
+Map_LWall:	include "_maps/Wall of Lava.asm"
 
-		include "_incObj\4F Splats.asm"
-Map_Splats:	include "_maps\Splats.asm"
+		include "_incObj/4F Splats.asm"
+Map_Splats:	include "_maps/Splats.asm"
 
-		include "_incObj\50 Yadrin.asm"
-Ani_Yadrin:	include "_anim\Yadrin.asm"
-Map_Yadrin:	include "_maps\Yadrin.asm"
+		include "_incObj/50 Yadrin.asm"
+Ani_Yadrin:	include "_anim/Yadrin.asm"
+Map_Yadrin:	include "_maps/Yadrin.asm"
 
-		include "_incObj\51 Smashable Green Block.asm"
+		include "_incObj/51 Smashable Green Block.asm"
 
 ObjSmashBlock_Frag:dc.w $FE00, $FE00, $FF00, $FF00, $200, $FE00, $100, $FF00
 
-MapSmashBlock:	include "_maps\Smashable Green Block.asm"
+MapSmashBlock:	include "_maps/Smashable Green Block.asm"
 
-		include "_incObj\52 Moving Blocks.asm"
-MapMovingPtfm:	include "_maps\Moving Blocks (MZ).asm"
+		include "_incObj/52 Moving Blocks.asm"
+MapMovingPtfm:	include "_maps/Moving Blocks (MZ).asm"
 
-		include "_incObj\55 Basaran.asm"
-		include "_anim\Basaran.asm"
-Map_Bas:	include "_maps\Basaran.asm"
+		include "_incObj/55 Basaran.asm"
+		include "_anim/Basaran.asm"
+Map_Bas:	include "_maps/Basaran.asm"
 
-		include "_incObj\56 Floating Blocks and Doors.asm"
-Map_FBlock:	include "_maps\Floating Blocks and Doors.asm"
+		include "_incObj/56 Floating Blocks and Doors.asm"
+Map_FBlock:	include "_maps/Floating Blocks and Doors.asm"
 
-		include "_incObj\57 Spiked Ball and Chain.asm"
-		include "_maps\Spiked Balls.asm"
+		include "_incObj/57 Spiked Ball and Chain.asm"
+		include "_maps/Spiked Balls.asm"
 
-		include "_incObj\58 Big Spiked Ball.asm"
-		include "_maps\Giant Spiked Balls.asm"
+		include "_incObj/58 Big Spiked Ball.asm"
+		include "_maps/Giant Spiked Balls.asm"
 
-		include "_incObj\59 SLZ Elevators.asm"
-Map_Elev:	include "_maps\SLZ Elevators.asm"
+		include "_incObj/59 SLZ Elevators.asm"
+Map_Elev:	include "_maps/SLZ Elevators.asm"
 
-		include "_incObj\5A SLZ Circling Platform.asm"
-Map_Circ:	include "_maps\SLZ Circling Platform.asm"
+		include "_incObj/5A SLZ Circling Platform.asm"
+Map_Circ:	include "_maps/SLZ Circling Platform.asm"
 
-		include "_incObj\5B Staircase.asm"
-Map_Stair:	include "_maps\Staircase.asm"
+		include "_incObj/5B Staircase.asm"
+Map_Stair:	include "_maps/Staircase.asm"
 
-		include "_incObj\5C Pylon.asm"
-Map_Pylon:	include "_maps\Pylon.asm"
+		include "_incObj/5C Pylon.asm"
+Map_Pylon:	include "_maps/Pylon.asm"
 
-		include "_incObj\5D Fan.asm"
-Map_Fan:	include "_maps\Fan.asm"
+		include "_incObj/5D Fan.asm"
+Map_Fan:	include "_maps/Fan.asm"
 
-		include "_incObj\5E Seesaw.asm"
+		include "_incObj/5E Seesaw.asm"
 
 ObjSeeSaw_SlopeTilt:dc.b $24, $24, $26, $28, $2A, $2C, $2A, $28, $26, $24
 		dc.b $23, $22, $21, $20, $1F, $1E, $1D, $1C, $1B, $1A
@@ -4894,14 +4900,14 @@ ObjSeeSaw_SlopeLine:dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15
 
-Map_Seesaw:	include "_maps\Seesaw.asm"
+Map_Seesaw:	include "_maps/Seesaw.asm"
 ; ---------------------------------------------------------------------------
 
 SonicPlayer:
 		tst.w	(v_debuguse).w
 		bne.w	DebugMode
 		moveq	#0,d0
-		move.b	objRoutine(a0),d0
+		move.b	obj.Routine(a0),d0
 		move.w	off_E826(pc,d0.w),d1
 		jmp	off_E826(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -4914,20 +4920,20 @@ off_E826:	dc.w loc_E830-off_E826
 ; ---------------------------------------------------------------------------
 
 loc_E830:
-		addq.b	#2,objRoutine(a0)
-		move.b	#$13,objHeight(a0)
-		move.b	#9,objWidth(a0)
-		move.l	#Map_Sonic,objMap(a0)
-		move.w	#$780,objGfx(a0)
-		move.b	#2,objPriority(a0)
-		move.b	#$18,objActWid(a0)
-		move.b	#4,objRender(a0)
+		addq.b	#2,obj.Routine(a0)
+		move.b	#$13,obj.Height(a0)
+		move.b	#9,obj.Width(a0)
+		move.l	#Map_Sonic,obj.Map(a0)
+		move.w	#$780,obj.Gfx(a0)
+		move.b	#2,obj.Priority(a0)
+		move.b	#$18,obj.ActWid(a0)
+		move.b	#4,obj.Render(a0)
 		move.w	#$600,(v_sonspeedmax).w
 		move.w	#$C,(v_sonspeedacc).w
 		move.w	#$40,(v_sonspeeddec).w
 
 loc_E872:
-		andi.w	#$7FF,objY(a0)
+		andi.w	#$7FF,obj.Ypos(a0)
 		andi.w	#$7FF,(v_screenposy).w
 		tst.w	(f_debugmode).w
 		beq.s	loc_E892
@@ -4937,7 +4943,7 @@ loc_E872:
 
 loc_E892:
 		moveq	#0,d0
-		move.b	objStatus(a0),d0
+		move.b	obj.Status(a0),d0
 		andi.w	#6,d0
 		move.w	off_E8C8(pc,d0.w),d1
 		jsr	off_E8C8(pc,d1.w)
@@ -4965,8 +4971,8 @@ MusicList2:	dc.b bgm_GHZ
 		dc.b bgm_CWZ
 		even
 
-		include "_incObj\Sonic Display.asm"
-		include "_incObj\Sonic RecordPosition.asm"
+		include "_incObj/Sonic Display.asm"
+		include "_incObj/Sonic RecordPosition.asm"
 ; ---------------------------------------------------------------------------
 
 sub_E96C:
@@ -5011,48 +5017,48 @@ loc_E9C6:
 		bsr.w	Sonic_Floor
 		rts
 
-		include "_incObj\Sonic Move.asm"
-		include "_incObj\Sonic RollSpeed.asm"
-		include "_incObj\Sonic JumpDirection.asm"
+		include "_incObj/Sonic Move.asm"
+		include "_incObj/Sonic RollSpeed.asm"
+		include "_incObj/Sonic JumpDirection.asm"
 ; ---------------------------------------------------------------------------
 
 ;Sonic_Squish:
-		move.b	objAngle(a0),d0
+		move.b	obj.Angle(a0),d0
 		addi.b	#$20,d0
 		andi.b	#$C0,d0
 		bne.s	locret_EDF8
 		bsr.w	Sonic_NoRunningOnWalls
 		tst.w	d1
 		bpl.s	locret_EDF8
-		move.w	#0,objInertia(a0)
-		move.w	#0,objVelX(a0)
-		move.w	#0,objVelY(a0)
-		move.b	#id_Warp3,objAnim(a0)
+		move.w	#0,obj.Inertia(a0)
+		move.w	#0,obj.VelX(a0)
+		move.w	#0,obj.VelY(a0)
+		move.b	#id_Warp3,obj.Anim(a0)
 
 locret_EDF8:
 		rts
 
-		include "_incObj\Sonic LevelBound.asm"
-		include "_incObj\Sonic Roll.asm"
-		include "_incObj\Sonic Jump.asm"
-		include "_incObj\Sonic JumpHeight.asm"
-		include "_incObj\Sonic SlopeResist.asm"
-		include "_incObj\Sonic RollRepel.asm"
-		include "_incObj\Sonic SlopeRepel.asm"
-		include "_incObj\Sonic JumpAngle.asm"
-		include "_incObj\Sonic Floor.asm"
-		include "_incObj\Sonic ResetOnFloor.asm"
+		include "_incObj/Sonic LevelBound.asm"
+		include "_incObj/Sonic Roll.asm"
+		include "_incObj/Sonic Jump.asm"
+		include "_incObj/Sonic JumpHeight.asm"
+		include "_incObj/Sonic SlopeResist.asm"
+		include "_incObj/Sonic RollRepel.asm"
+		include "_incObj/Sonic SlopeRepel.asm"
+		include "_incObj/Sonic JumpAngle.asm"
+		include "_incObj/Sonic Floor.asm"
+		include "_incObj/Sonic ResetOnFloor.asm"
 ; ---------------------------------------------------------------------------
 
 ;loc_F26A:
 		lea	(v_objslot10).w,a1
-		move.w	objX(a0),d0
+		move.w	obj.Xpos(a0),d0
 		bsr.w	sub_F290
 		lea	(v_objslot14).w,a1
-		move.w	objY(a0),d0
+		move.w	obj.Ypos(a0),d0
 		bsr.w	sub_F290
 		lea	(v_objslot18).w,a1
-		move.w	objInertia(a0),d0
+		move.w	obj.Inertia(a0),d0
 		bsr.w	sub_F290
 		rts
 ; ---------------------------------------------------------------------------
@@ -5073,7 +5079,7 @@ sub_F290:
 		move.b	d0,$DA(a1)
 		rts
 
-		include "_incObj\Sonic (part 2).asm"
+		include "_incObj/Sonic (part 2).asm"
 ; ---------------------------------------------------------------------------
 		dc.b $12
 		dc.b 9
@@ -5100,29 +5106,29 @@ sub_F290:
 		dc.b 7
 		dc.b $A
 
-		include "_incObj\Sonic Loops.asm"
-		include "_incObj\Sonic Animate.asm"
+		include "_incObj/Sonic Loops.asm"
+		include "_incObj/Sonic Animate.asm"
 ; ---------------------------------------------------------------------------
 Ani_Sonic:
-		include "_anim\Sonic.asm"
-		include "_incObj\Sonic LoadGfx.asm"
+		include "_anim/Sonic.asm"
+		include "_incObj/Sonic LoadGfx.asm"
 
-		include "_incObj\38 Shield and Invincibility.asm"
-		include "_incObj\4A Giant Ring.asm"
+		include "_incObj/38 Shield and Invincibility.asm"
+		include "_incObj/4A Giant Ring.asm"
 
-		include "_anim\Shield.asm"
-		include "_maps\Shield.asm"
+		include "_anim/Shield.asm"
+		include "_maps/Shield.asm"
 		even
-		include "_anim\Special Stage Entry (Unused).asm"
-Map_Vanish:	include "_maps\Special Stage Entry (Unused).asm"
+		include "_anim/Special Stage Entry (Unused).asm"
+Map_Vanish:	include "_maps/Special Stage Entry (Unused).asm"
 
-		include "_incObj\sub ReactToItem.asm"
+		include "_incObj/sub ReactToItem.asm"
 
-		include "_incObj\Sonic AnglePos.asm"
+		include "_incObj/Sonic AnglePos.asm"
 
-		include "_incObj\sub FindNearestTile.asm"
-		include "_incObj\sub FindFloor.asm"
-		include "_incObj\sub FindWall.asm"
+		include "_incObj/sub FindNearestTile.asm"
+		include "_incObj/sub FindFloor.asm"
+		include "_incObj/sub FindWall.asm"
 ; ---------------------------------------------------------------------------
 
 LogCollision:
@@ -5205,13 +5211,13 @@ loc_104C6:
 ; ---------------------------------------------------------------------------
 
 Sonic_WalkSpeed:
-		move.l	objX(a0),d3
-		move.l	objY(a0),d2
-		move.w	objVelX(a0),d1
+		move.l	obj.Xpos(a0),d3
+		move.l	obj.Ypos(a0),d2
+		move.w	obj.VelX(a0),d1
 		ext.l	d1
 		asl.l	#8,d1
 		add.l	d1,d3
-		move.w	objVelY(a0),d1
+		move.w	obj.VelY(a0),d1
 		ext.l	d1
 		asl.l	#8,d1
 		add.l	d1,d2
@@ -5248,13 +5254,13 @@ sub_10520:
 		beq.w	loc_10628
 
 Sonic_HitFloor:
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		move.b	objWidth(a0),d0
+		move.b	obj.Width(a0),d0
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_angle_primary).w,a4
@@ -5263,13 +5269,13 @@ Sonic_HitFloor:
 		moveq	#$D,d5
 		bsr.w	sub_101BE
 		move.w	d1,-(sp)
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		move.b	objWidth(a0),d0
+		move.b	obj.Width(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
 		lea	(v_angle_secondary).w,a4
@@ -5295,8 +5301,8 @@ loc_105B6:
 locret_105BE:
 		rts
 ; ---------------------------------------------------------------------------
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 
 loc_105C8:
 		addi.w	#$A,d2
@@ -5318,12 +5324,12 @@ locret_105EE:
 ; ---------------------------------------------------------------------------
 
 ObjectHitFloor:
-		move.w	objX(a0),d3
+		move.w	obj.Xpos(a0),d3
 
 ObjectHitFloor2:
-		move.w	objY(a0),d2
+		move.w	obj.Ypos(a0),d2
 		moveq	#0,d0
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		add.w	d0,d2
 		lea	(v_angle_primary).w,a4
@@ -5342,13 +5348,13 @@ locret_10626:
 ; ---------------------------------------------------------------------------
 
 loc_10628:
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objWidth(a0),d0
+		move.b	obj.Width(a0),d0
 		ext.w	d0
 		sub.w	d0,d2
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_angle_primary).w,a4
@@ -5357,13 +5363,13 @@ loc_10628:
 		moveq	#$E,d5
 		bsr.w	FindFloor
 		move.w	d1,-(sp)
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objWidth(a0),d0
+		move.b	obj.Width(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_angle_secondary).w,a4
@@ -5377,8 +5383,8 @@ loc_10628:
 ; ---------------------------------------------------------------------------
 
 sub_1068C:
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 
 loc_10694:
 		addi.w	#$A,d3
@@ -5392,8 +5398,8 @@ loc_10694:
 ; ---------------------------------------------------------------------------
 
 ObjectHitWallRight:
-		add.w	objX(a0),d3
-		move.w	objY(a0),d2
+		add.w	obj.Xpos(a0),d3
+		move.w	obj.Ypos(a0),d2
 		lea	(v_angle_primary).w,a4
 		move.b	#0,(a4)
 		movea.w	#$10,a3
@@ -5410,14 +5416,14 @@ locret_106DE:
 ; ---------------------------------------------------------------------------
 
 Sonic_NoRunningOnWalls:
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		sub.w	d0,d2
 		eori.w	#$F,d2
-		move.b	objWidth(a0),d0
+		move.b	obj.Width(a0),d0
 		ext.w	d0
 		add.w	d0,d3
 		lea	(v_angle_primary).w,a4
@@ -5426,14 +5432,14 @@ Sonic_NoRunningOnWalls:
 		moveq	#$E,d5
 		bsr.w	sub_101BE
 		move.w	d1,-(sp)
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		sub.w	d0,d2
 		eori.w	#$F,d2
-		move.b	objWidth(a0),d0
+		move.b	obj.Width(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
 		lea	(v_angle_secondary).w,a4
@@ -5445,8 +5451,8 @@ Sonic_NoRunningOnWalls:
 		move.b	#$80,d2
 		bra.w	loc_105A8
 ; ---------------------------------------------------------------------------
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 
 loc_10754:
 		subi.w	#$A,d2
@@ -5461,10 +5467,10 @@ loc_10754:
 ; ---------------------------------------------------------------------------
 
 ObjectHitCeiling:
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		sub.w	d0,d2
 		eori.w	#$F,d2
@@ -5483,13 +5489,13 @@ locret_107AC:
 ; ---------------------------------------------------------------------------
 
 loc_107AE:
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objWidth(a0),d0
+		move.b	obj.Width(a0),d0
 		ext.w	d0
 		sub.w	d0,d2
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
@@ -5499,13 +5505,13 @@ loc_107AE:
 		moveq	#$E,d5
 		bsr.w	FindFloor
 		move.w	d1,-(sp)
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 		moveq	#0,d0
-		move.b	objWidth(a0),d0
+		move.b	obj.Width(a0),d0
 		ext.w	d0
 		add.w	d0,d2
-		move.b	objHeight(a0),d0
+		move.b	obj.Height(a0),d0
 		ext.w	d0
 		sub.w	d0,d3
 		eori.w	#$F,d3
@@ -5520,8 +5526,8 @@ loc_107AE:
 ; ---------------------------------------------------------------------------
 
 Sonic_HitWall:
-		move.w	objY(a0),d2
-		move.w	objX(a0),d3
+		move.w	obj.Ypos(a0),d2
+		move.w	obj.Xpos(a0),d3
 
 loc_10822:
 		subi.w	#$A,d3
@@ -5536,8 +5542,8 @@ loc_10822:
 ; ---------------------------------------------------------------------------
 
 ObjectHitWallLeft:
-		add.w	objX(a0),d3
-		move.w	objY(a0),d2
+		add.w	obj.Xpos(a0),d3
+		move.w	obj.Ypos(a0),d2
 		lea	(v_angle_primary).w,a4
 		move.b	#0,(a4)
 		movea.w	#-$10,a3
@@ -5879,7 +5885,7 @@ loc_10BC8:
 		rts
 ; ---------------------------------------------------------------------------
 
-		include "_inc\Special Stage Mappings & VRAM Pointers.asm"
+		include "_inc/Special Stage Mappings & VRAM Pointers.asm"
 
 ;sub_10C98:
 		lea	(v_startofram&$FFFFFF+$1020).l,a1
@@ -5896,13 +5902,13 @@ loc_10CA8:
 		dbf	d1,loc_10CA6
 		rts
 
-		include "_incObj\09 Sonic in Special Stage.asm"
-		include "_incObj\10 Sonic Animation Test.asm"
+		include "_incObj/09 Sonic in Special Stage.asm"
+		include "_incObj/10 Sonic Animation Test.asm"
 
-		include "_inc\AnimateLevelGfx.asm"
+		include "_inc/AnimateLevelGfx.asm"
 
-		include "_incObj\21 HUD.asm"
-Map_HUD:	include "_maps\HUD.asm"
+		include "_incObj/21 HUD.asm"
+Map_HUD:	include "_maps/HUD.asm"
 ; ---------------------------------------------------------------------------
 
 ScoreAdd:
@@ -6098,11 +6104,11 @@ sub_1181E:
 		locVRAM $DC40
 		move.w	(v_screenposx).w,d1
 		swap	d1
-		move.w	(v_player+objX).w,d1
+		move.w	(v_player+obj.Xpos).w,d1
 		bsr.s	sub_1183E
 		move.w	(v_screenposy).w,d1
 		swap	d1
-		move.w	(v_player+objY).w,d1
+		move.w	(v_player+obj.Ypos).w,d1
 
 sub_1183E:
 		moveq	#7,d6
@@ -6375,360 +6381,360 @@ loc_11A1A:
 		bra.s	loc_11A08
 ; ---------------------------------------------------------------------------
 
-byte_11A26:	incbin "artunc\HUD Numbers.bin"
+byte_11A26:	binclude "artunc/HUD Numbers.bin"
 		even
-byte_11D26:	incbin "artunc\Lives Counter Numbers.bin"
+byte_11D26:	binclude "artunc/Lives Counter Numbers.bin"
 		even
 
-		include "_incObj\DebugMode.asm"
-		include "_inc\DebugList.asm"
-		include "_inc\LevelHeaders.asm"
-		include "_inc\Pattern Load Cues.asm"
+		include "_incObj/DebugMode.asm"
+		include "_inc/DebugList.asm"
+		include "_inc/LevelHeaders.asm"
+		include "_inc/Pattern Load Cues.asm"
 
-		align $8000,$FF		; Padding
+		align $8000		; Padding
 ; ===========================================================================
 ; Unused 8x8 Font Art
 ; ===========================================================================
 ;byte_18000:
-		incbin "leftovers\0x18000.bin"		; Some similar art to this is used in other prototypes, such as Sonic 2 Nick Arcade
+		binclude "leftovers/0x18000.bin"		; Some similar art to this is used in other prototypes, such as Sonic 2 Nick Arcade
 		even
 ; ===========================================================================
-; Sega Screen\Title Screen Art and Mappings
+; Sega Screen/Title Screen Art and Mappings
 ; ===========================================================================
-Nem_SegaLogo:	incbin "artnem\Sega Logo.bin"
+Nem_SegaLogo:	binclude "artnem/Sega Logo.bin"
 		even
-Eni_SegaLogo:	incbin "tilemaps\Sega Logo.bin"
+Eni_SegaLogo:	binclude "tilemaps/Sega Logo.bin"
 		even
-Unc_Title:	incbin "tilemaps\Title Screen.bin"
+Unc_Title:	binclude "tilemaps/Title Screen.bin"
 		even
-Nem_TitleFg:	incbin "artnem\Title Screen Foreground.bin"
+Nem_TitleFg:	binclude "artnem/Title Screen Foreground.bin"
 		even
-Nem_TitleSonic:	incbin "artnem\Title Screen Sonic.bin"
+Nem_TitleSonic:	binclude "artnem/Title Screen Sonic.bin"
 		even
-Map_Sonic:	include "_maps\Sonic.asm"
-SonicDynPLC:	include "_maps\Sonic - Dynamic Gfx Script.asm"
+Map_Sonic:	include "_maps/Sonic.asm"
+SonicDynPLC:	include "_maps/Sonic - Dynamic Gfx Script.asm"
 
 ; ---------------------------------------------------------------------------
 ; Uncompressed graphics	- Sonic
 ; ---------------------------------------------------------------------------
-Art_Sonic:	incbin "artunc\Sonic.bin"
+Art_Sonic:	binclude "artunc/Sonic.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-Nem_Smoke:	incbin "artnem\Smoke.bin"
+Nem_Smoke:	binclude "artnem/Smoke.bin"
 		even
-Nem_Shield:	incbin "artnem\Shield.bin"
+Nem_Shield:	binclude "artnem/Shield.bin"
 		even
-Nem_Stars:	incbin "artnem\Stars.bin"
+Nem_Stars:	binclude "artnem/Stars.bin"
 		even
-Nem_Flash:	incbin "artnem\Flash.bin"
+Nem_Flash:	binclude "artnem/Flash.bin"
 		even
 ;byte_26E90:
-		incbin "artnem\Unused - Goggles.bin"
+		binclude "artnem/Unused - Goggles.bin"
 		even
 
-		align $400,$FF		; Padding
+		align $400		; Padding
 
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff
 ; ---------------------------------------------------------------------------
-byte_27400:	incbin "artnem\ghz flower stalk.nem"
+byte_27400:	binclude "artnem/ghz flower stalk.nem"
 		even
-byte_2744A:	incbin "artnem\ghz swing.nem"
+byte_2744A:	binclude "artnem/ghz swing.nem"
 		even
-ArtBridge:	incbin "artnem\GHZ Bridge.bin"
+ArtBridge:	binclude "artnem/GHZ Bridge.bin"
 		even
-byte_27698:	incbin "artnem\ghz checkered ball.nem"
+byte_27698:	binclude "artnem/ghz checkered ball.nem"
 		even
-ArtSpikes:	incbin "artnem\Spikes.bin"
+ArtSpikes:	binclude "artnem/Spikes.bin"
 		even
-ArtSpikeLogs:	incbin "artnem\GHZ Spiked Log.bin"
+ArtSpikeLogs:	binclude "artnem/GHZ Spiked Log.bin"
 		even
-ArtPurpleRock:	incbin "artnem\GHZ Purple Rock.bin"
+ArtPurpleRock:	binclude "artnem/GHZ Purple Rock.bin"
 		even
-ArtSmashWall:	incbin "artnem\GHZ Breakable Wall.bin"
+ArtSmashWall:	binclude "artnem/GHZ Breakable Wall.bin"
 		even
-ArtWall:	incbin "artnem\GHZ Edge Wall.bin"
+ArtWall:	binclude "artnem/GHZ Edge Wall.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - MZ stuff
 ; ---------------------------------------------------------------------------
-ArtChainPtfm:	incbin "artnem\MZ Metal Blocks.bin"
+ArtChainPtfm:	binclude "artnem/MZ Metal Blocks.bin"
 		even
-ArtButtonMZ:	incbin "artnem\MZ Switch.bin"
+ArtButtonMZ:	binclude "artnem/MZ Switch.bin"
 		even
-byte_2816E:	incbin "artnem\mz piston.nem"
+byte_2816E:	binclude "artnem/mz piston.nem"
 		even
-byte_2827A:	incbin "artnem\mz fire ball.nem"
+byte_2827A:	binclude "artnem/mz fire ball.nem"
 		even
-byte_28558:	incbin "artnem\mz lava.nem"
+byte_28558:	binclude "artnem/mz lava.nem"
 		even
-byte_28E6E:	incbin "artnem\MZ Green Pushable Block.bin"
+byte_28E6E:	binclude "artnem/MZ Green Pushable Block.bin"
 		even
-		incbin "artnem\Unused - MZ Background.bin"
+		binclude "artnem/Unused - MZ Background.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SLZ stuff
 ; ---------------------------------------------------------------------------
-ArtSeesaw:	incbin "artnem\SLZ Seesaw.bin"
+ArtSeesaw:	binclude "artnem/SLZ Seesaw.bin"
 		even
-ArtFan:		incbin "artnem\SLZ Fan.bin"
+ArtFan:		binclude "artnem/SLZ Fan.bin"
 		even
-byte_294DA:	incbin "artnem\slz platform.nem"
+byte_294DA:	binclude "artnem/slz platform.nem"
 		even
-byte_2953C:	incbin "artnem\slz girders.nem"
+byte_2953C:	binclude "artnem/slz girders.nem"
 		even
-byte_2961E:	incbin "artnem\slz spiked platforms.nem"
+byte_2961E:	binclude "artnem/slz spiked platforms.nem"
 		even
-byte_297B6:	incbin "artnem\slz misc platforms.nem"
+byte_297B6:	binclude "artnem/slz misc platforms.nem"
 		even
-byte_29D4A:	incbin "artnem\slz metal block.nem"
+byte_29D4A:	binclude "artnem/slz metal block.nem"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SZ stuff
 ; ---------------------------------------------------------------------------
-ArtBumper:	incbin "artnem\SZ Bumper.bin"
+ArtBumper:	binclude "artnem/SZ Bumper.bin"
 		even
-byte_29FC0:	incbin "artnem\SZ small spiked ball.nem"
+byte_29FC0:	binclude "artnem/SZ small spiked ball.nem"
 		even
-ArtButton:	incbin "artnem\Switch.bin"
+ArtButton:	binclude "artnem/Switch.bin"
 		even
-byte_2A104:	incbin "artnem\swinging spiked ball.nem"
+byte_2A104:	binclude "artnem/swinging spiked ball.nem"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - enemies
 ; ---------------------------------------------------------------------------
-Nem_Ballhog:    incbin "artnem\Enemy Ballhog.bin"
+Nem_Ballhog:    binclude "artnem/Enemy Ballhog.bin"
 		even
-Nem_Crabmeat:	incbin "artnem\Enemy Crabmeat.bin"
+Nem_Crabmeat:	binclude "artnem/Enemy Crabmeat.bin"
 		even
-Nem_Buzzbomber:	incbin "artnem\Enemy Buzz Bomber.bin"
+Nem_Buzzbomber:	binclude "artnem/Enemy Buzz Bomber.bin"
 		even
-byte_2ADFE:     incbin "artnem\Ballhog's Bomb Explosion.bin"
+byte_2ADFE:     binclude "artnem/Ballhog's Bomb Explosion.bin"
 		even
-Nem_Burrobot:   incbin "artnem\Enemy Burrobot.bin"
+Nem_Burrobot:   binclude "artnem/Enemy Burrobot.bin"
 		even
-ArtChopper:	incbin "artnem\Enemy Chopper.bin"
+ArtChopper:	binclude "artnem/Enemy Chopper.bin"
 		even
-Nem_Jaws:	incbin "artnem\Enemy Jaws.bin"
+Nem_Jaws:	binclude "artnem/Enemy Jaws.bin"
 		even
-byte_2BBC2:     incbin "artnem\Ballhog's Bomb.bin"
+byte_2BBC2:     binclude "artnem/Ballhog's Bomb.bin"
 		even
-Nem_Roller:	incbin "artnem\Enemy Roller.bin"
+Nem_Roller:	binclude "artnem/Enemy Roller.bin"
 		even
-ArtMotobug:	incbin "artnem\Enemy Motobug.bin"
+ArtMotobug:	binclude "artnem/Enemy Motobug.bin"
 		even
-ArtNewtron:	incbin "artnem\Enemy Newtron.bin"
+ArtNewtron:	binclude "artnem/Enemy Newtron.bin"
 		even
-ArtYardin:	incbin "artnem\Enemy Yadrin.bin"
+ArtYardin:	binclude "artnem/Enemy Yadrin.bin"
 		even
-ArtBasaran:	incbin "artnem\Enemy Basaran.bin"
+ArtBasaran:	binclude "artnem/Enemy Basaran.bin"
 		even
-ArtSplats:	incbin "artnem\Enemy Splats.bin"
+ArtSplats:	binclude "artnem/Enemy Splats.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-Nem_TitleCard:	incbin "artnem\Title Cards.bin"
+Nem_TitleCard:	binclude "artnem/Title Cards.bin"
 		even
-Nem_HUD:	incbin "artnem\HUD.bin"
+Nem_HUD:	binclude "artnem/HUD.bin"
 		even
-Nem_Lives:	incbin "artnem\HUD - Life Counter Icon.bin"
+Nem_Lives:	binclude "artnem/HUD - Life Counter Icon.bin"
 		even
-Nem_Rings:	incbin "artnem\Rings.bin"
+Nem_Rings:	binclude "artnem/Rings.bin"
 		even
-Nem_Monitors:	incbin "artnem\Monitors.bin"
+Nem_Monitors:	binclude "artnem/Monitors.bin"
 		even
-ArtExplosions:	incbin "artnem\Explosion.bin"
+ArtExplosions:	binclude "artnem/Explosion.bin"
 		even
-byte_2E6C8:	incbin "artnem\score points.nem"
+byte_2E6C8:	binclude "artnem/score points.nem"
 		even
-ArtGameOver:	incbin "artnem\Game Over.bin"
+ArtGameOver:	binclude "artnem/Game Over.bin"
 		even
-ArtSpringHoriz:	incbin "artnem\Spring Horizontal.bin"
+ArtSpringHoriz:	binclude "artnem/Spring Horizontal.bin"
 		even
-ArtSpringVerti:	incbin "artnem\Spring Vertical.bin"
+ArtSpringVerti:	binclude "artnem/Spring Vertical.bin"
 		even
-ArtSignPost:	incbin "artnem\Signpost.bin"
+ArtSignPost:	binclude "artnem/Signpost.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals
 ; ---------------------------------------------------------------------------
-ArtAnimalPocky:	incbin "artnem\Animal Rabbit.bin"
+ArtAnimalPocky:	binclude "artnem/Animal Rabbit.bin"
 		even
-ArtAnimalCucky:	incbin "artnem\Animal Chicken.bin"
+ArtAnimalCucky:	binclude "artnem/Animal Chicken.bin"
 		even
-ArtAnimalPecky:	incbin "artnem\Animal Blackbird.bin"
+ArtAnimalPecky:	binclude "artnem/Animal Blackbird.bin"
 		even
-ArtAnimalRocky:	incbin "artnem\Animal Seal.bin"
+ArtAnimalRocky:	binclude "artnem/Animal Seal.bin"
 		even
-ArtAnimalPicky:	incbin "artnem\Animal Pig.bin"
+ArtAnimalPicky:	binclude "artnem/Animal Pig.bin"
 		even
-ArtAnimalFlicky:incbin "artnem\Animal Flicky.bin"
+ArtAnimalFlicky:binclude "artnem/Animal Flicky.bin"
 		even
-ArtAnimalRicky:	incbin "artnem\Animal Squirrel.bin"
+ArtAnimalRicky:	binclude "artnem/Animal Squirrel.bin"
 		even
 
-		align $1000,$FF		; Padding
+		align $1000		; Padding
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns
 ; Blocks are Uncompressed
 ; ---------------------------------------------------------------------------
-Blk16_GHZ:	incbin "map16\GHZ.bin"
+Blk16_GHZ:	binclude "map16/GHZ.bin"
 		even
-Nem_GHZ_1st:	incbin "artnem\8x8 - GHZ1.bin"
+Nem_GHZ_1st:	binclude "artnem/8x8 - GHZ1.bin"
 		even
-Nem_GHZ_2nd:	incbin "artnem\8x8 - GHZ2.bin"
+Nem_GHZ_2nd:	binclude "artnem/8x8 - GHZ2.bin"
 		even
-Blk256_GHZ:	incbin "map256\GHZ.bin"
+Blk256_GHZ:	binclude "map256/GHZ.bin"
 		even
-Blk16_LZ:	incbin "map16\LZ.bin"
+Blk16_LZ:	binclude "map16/LZ.bin"
 		even
-Nem_LZ:         incbin "artnem\8x8 - LZ.bin"
+Nem_LZ:         binclude "artnem/8x8 - LZ.bin"
 		even
-Blk256_LZ:	incbin "map256\LZ.bin"
+Blk256_LZ:	binclude "map256/LZ.bin"
 		even
-Blk16_MZ:	incbin "map16\MZ.bin"
+Blk16_MZ:	binclude "map16/MZ.bin"
 		even
-Nem_MZ:         incbin "artnem\8x8 - MZ.bin"
+Nem_MZ:         binclude "artnem/8x8 - MZ.bin"
 		even
-Blk256_MZ:	incbin "map256\MZ.bin"
+Blk256_MZ:	binclude "map256/MZ.bin"
 		even
-byte_3DB70:	incbin "unknown\3DB70.dat"
+byte_3DB70:	binclude "unknown/3DB70.dat"
 		even
-Blk16_SLZ:	incbin "map16\SLZ.bin"
+Blk16_SLZ:	binclude "map16/SLZ.bin"
 		even
-Nem_SLZ:	incbin "artnem\8x8 - SLZ.bin"
+Nem_SLZ:	binclude "artnem/8x8 - SLZ.bin"
 		even
-Blk256_SLZ:	incbin "map256\SLZ.bin"
+Blk256_SLZ:	binclude "map256/SLZ.bin"
 		even
-Blk16_SZ:	incbin "map16\SZ.bin"
+Blk16_SZ:	binclude "map16/SZ.bin"
 		even
-Nem_SZ:	        incbin "artnem\8x8 - SZ.bin"
+Nem_SZ:	        binclude "artnem/8x8 - SZ.bin"
 		even
-Blk256_SZ:	incbin "map256\SZ.bin"
+Blk256_SZ:	binclude "map256/SZ.bin"
 		even
-Blk16_CWZ:	incbin "map16\CWZ.bin"
+Blk16_CWZ:	binclude "map16/CWZ.bin"
 		even
-Nem_CWZ:	incbin "artnem\8x8 - CWZ.bin"
+Nem_CWZ:	binclude "artnem/8x8 - CWZ.bin"
 		even
-Blk256_CWZ:	incbin "map256\CWZ.bin"
+Blk256_CWZ:	binclude "map256/CWZ.bin"
 		even
-byte_570FC:	incbin "unknown\570FC.dat"
+byte_570FC:	binclude "unknown/570FC.dat"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
-byte_60000:	incbin "artnem\Boss - Main.bin"
+byte_60000:	binclude "artnem/Boss - Main.bin"
 		even
-byte_60864:	incbin "artnem\Boss - Weapons.bin"
+byte_60864:	binclude "artnem/Boss - Weapons.bin"
 		even
-byte_60BB0:	incbin "artnem\Prison Capsule.bin"
+byte_60BB0:	binclude "artnem/Prison Capsule.bin"
 		even
 ; ===========================================================================
 ; Demos
 ; ===========================================================================
-byte_61434:	incbin "demodata\Intro - GHZ.bin"	; Green Hill's demo (act 2?)
+byte_61434:	binclude "demodata/Intro - GHZ.bin"	; Green Hill's demo (act 2?)
 		even
-byte_614C6:	incbin "demodata\Intro - MZ.bin"	; Marble's demo
+byte_614C6:	binclude "demodata/Intro - MZ.bin"	; Marble's demo
 		even
-byte_61578:	incbin "demodata\Intro - SZ.bin"	; Sparkling's demo (?)
+byte_61578:	binclude "demodata/Intro - SZ.bin"	; Sparkling's demo (?)
 		even
-byte_6161E:	incbin "demodata\Intro - Special Stage.bin" ; Special stage demo
+byte_6161E:	binclude "demodata/Intro - Special Stage.bin" ; Special stage demo
 		even
 
-		align $3000,$FF		; Padding
+		align $3000		; Padding
 
-		include "_maps\SS Walls.asm"
+		include "_maps/SS Walls.asm"
 
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - special stage
 ; ---------------------------------------------------------------------------
-ArtSpecialBlocks:incbin "artnem\Art Blocks.nem"
+ArtSpecialBlocks:binclude "artnem/Art Blocks.nem"
 		even
-byte_639B8:	incbin "tilemaps\SS Background 1.bin"
+byte_639B8:	binclude "tilemaps/SS Background 1.bin"
 		even
-ArtSpecialAnimals:incbin "artnem\Special Birds & Fish.bin"
+ArtSpecialAnimals:binclude "artnem/Special Birds & Fish.bin"
 		even
-byte_6477C:	incbin "tilemaps\SS Background 2.bin"
+byte_6477C:	binclude "tilemaps/SS Background 2.bin"
 		even
-byte_64A7C:	incbin "artnem\ss bg misc.nem"
+byte_64A7C:	binclude "artnem/ss bg misc.nem"
 		even
-ArtSpecialGoal:	incbin "artnem\Special GOAL.bin"
+ArtSpecialGoal:	binclude "artnem/Special GOAL.bin"
 		even
-ArtSpecialR:	incbin "artnem\Special R.bin"
+ArtSpecialR:	binclude "artnem/Special R.bin"
 		even
-ArtSpecialSkull:incbin "artnem\Special Skull.bin"
+ArtSpecialSkull:binclude "artnem/Special Skull.bin"
 		even
-ArtSpecialU:	incbin "artnem\Special U.bin"
+ArtSpecialU:	binclude "artnem/Special U.bin"
 		even
-ArtSpecial1up:	incbin "artnem\Special 1UP.bin"
+ArtSpecial1up:	binclude "artnem/Special 1UP.bin"
 		even
-ArtSpecialStars:incbin "artnem\Art Stars.nem"
+ArtSpecialStars:binclude "artnem/Art Stars.nem"
 		even
-byte_65432:	incbin "artnem\ss red white.nem"
+byte_65432:	binclude "artnem/ss red white.nem"
 		even
-ArtSpecialZone1:incbin "artnem\Special ZONE1.bin"
+ArtSpecialZone1:binclude "artnem/Special ZONE1.bin"
 		even
-ArtSpecialZone2:incbin "artnem\Special ZONE2.bin"
+ArtSpecialZone2:binclude "artnem/Special ZONE2.bin"
 		even
-ArtSpecialZone3:incbin "artnem\Special ZONE3.bin"
+ArtSpecialZone3:binclude "artnem/Special ZONE3.bin"
 		even
-ArtSpecialZone4:incbin "artnem\Special ZONE4.bin"
+ArtSpecialZone4:binclude "artnem/Special ZONE4.bin"
 		even
-ArtSpecialZone5:incbin "artnem\Special ZONE5.bin"
+ArtSpecialZone5:binclude "artnem/Special ZONE5.bin"
 		even
-ArtSpecialZone6:incbin "artnem\Special ZONE6.bin"
+ArtSpecialZone6:binclude "artnem/Special ZONE6.bin"
 		even
-ArtSpecialUpDown:incbin "artnem\Special UP-DOWN.bin"
+ArtSpecialUpDown:binclude "artnem/Special UP-DOWN.bin"
 		even
-ArtSpecialEmerald:incbin "artnem\Special Emeralds.bin"
+ArtSpecialEmerald:binclude "artnem/Special Emeralds.bin"
 		even
 
-		align $4000,$FF		; Padding
+		align $4000		; Padding
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------
-colAngles:	incbin "collide\Angle Map.bin"
+colAngles:	binclude "collide/Angle Map.bin"
 		even
-colWidth:	incbin "collide\Collision Array (Normal).bin"
+colWidth:	binclude "collide/Collision Array (Normal).bin"
 		even
-colHeight:	incbin "collide\Collision Array (Rotated).bin"
+colHeight:	binclude "collide/Collision Array (Rotated).bin"
 		even
-colGHZ:		incbin "collide\GHZ.bin"
+colGHZ:		binclude "collide/GHZ.bin"
 		even
-colLZ:		incbin "collide\LZ.bin"
+colLZ:		binclude "collide/LZ.bin"
 		even
-colMZ:		incbin "collide\MZ.bin"
+colMZ:		binclude "collide/MZ.bin"
 		even
-colSLZ:		incbin "collide\SLZ.bin"
+colSLZ:		binclude "collide/SLZ.bin"
 		even
-colSZ:		incbin "collide\SZ.bin"
+colSZ:		binclude "collide/SZ.bin"
 		even
-colCWZ:		incbin "collide\CWZ.bin"
+colCWZ:		binclude "collide/CWZ.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Special Stage layout (uncompressed)
 ; ---------------------------------------------------------------------------
-SS_1:           incbin "sslayout\1.bin"
+SS_1:           binclude "sslayout/1.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Animated uncompressed graphics
 ; ---------------------------------------------------------------------------
-Art_GhzWater:	incbin "artunc\GHZ Waterfall.bin"
+Art_GhzWater:	binclude "artunc/GHZ Waterfall.bin"
 		even
-Art_GhzFlower1:	incbin "artunc\GHZ Flower Large.bin"
+Art_GhzFlower1:	binclude "artunc/GHZ Flower Large.bin"
 		even
-Art_GhzFlower2:	incbin "artunc\GHZ Flower Small.bin"
+Art_GhzFlower2:	binclude "artunc/GHZ Flower Small.bin"
 		even
-Art_MzLava1:	incbin "artunc\MZ Lava Surface.bin"
+Art_MzLava1:	binclude "artunc/MZ Lava Surface.bin"
 		even
-Art_MzLava2:	incbin "artunc\MZ Lava.bin"
+Art_MzLava2:	binclude "artunc/MZ Lava.bin"
 		even
-Art_MzSaturns:	incbin "artunc\MZ Saturns.bin"
+Art_MzSaturns:	binclude "artunc/MZ Saturns.bin"
 		even
-Art_MzTorch:	incbin "artunc\MZ Background torch.bin"
+Art_MzTorch:	binclude "artunc/MZ Background torch.bin"
 		even
 
 ; ---------------------------------------------------------------------------
@@ -6770,93 +6776,93 @@ LayoutArray:	; GHZ
 		dc.w byte_6E3D2-LayoutArray, byte_6E3D2-LayoutArray, byte_6E3D2-LayoutArray
 		dc.w byte_6E3D6-LayoutArray, byte_6E3D6-LayoutArray, byte_6E3D6-LayoutArray
 
-LayoutGHZ1FG:	incbin "levels\ghz1.bin"
+LayoutGHZ1FG:	binclude "levels/ghz1.bin"
 		even
-LayoutGHZ1BG:	incbin "levels\ghzbg1.bin"
+LayoutGHZ1BG:	binclude "levels/ghzbg1.bin"
 		even
 
 byte_6CE54:	dc.l 0
-LayoutGHZ2FG:	incbin "levels\ghz2.bin"
+LayoutGHZ2FG:	binclude "levels/ghz2.bin"
 		even
-LayoutGHZ2BG:	incbin "levels\ghzbg2.bin"
+LayoutGHZ2BG:	binclude "levels/ghzbg2.bin"
 		even
 
 byte_6CF3C:	dc.l 0
-LayoutGHZ3FG:	incbin "levels\ghz3.bin"
+LayoutGHZ3FG:	binclude "levels/ghz3.bin"
 		even
-LayoutGHZ3BG:	incbin "levels\ghzbg3.bin"
+LayoutGHZ3BG:	binclude "levels/ghzbg3.bin"
 		even
 
 byte_6D084:	dc.l 0
 byte_6D088:	dc.l 0
-LayoutLZ1FG:	incbin "levels\lz1.bin"
+LayoutLZ1FG:	binclude "levels/lz1.bin"
 		even
-LayoutLZBG:	incbin "levels\lzbg.bin"
+LayoutLZBG:	binclude "levels/lzbg.bin"
 		even
 
 byte_6D190:	dc.l 0
-LayoutLZ2FG:	incbin "levels\lz2.bin"
+LayoutLZ2FG:	binclude "levels/lz2.bin"
 		even
 
 byte_6D216:	dc.l 0
-LayoutLZ3FG:	incbin "levels\lz3.bin"
+LayoutLZ3FG:	binclude "levels/lz3.bin"
 		even
 
 byte_6D31C:	dc.l 0
 byte_6D320:	dc.l 0
-LayoutMZ1FG:	incbin "levels\mz1.bin"
+LayoutMZ1FG:	binclude "levels/mz1.bin"
 		even
-LayoutMZ1BG:	incbin "levels\mzbg1.bin"
+LayoutMZ1BG:	binclude "levels/mzbg1.bin"
 		even
-LayoutMZ2FG:	incbin "levels\mz2.bin"
+LayoutMZ2FG:	binclude "levels/mz2.bin"
 		even
-LayoutMZ2BG:	incbin "levels\mzbg2.bin"
+LayoutMZ2BG:	binclude "levels/mzbg2.bin"
 		even
 
 byte_6D614:	dc.l 0
-LayoutMZ3FG:	incbin "levels\mz3.bin"
+LayoutMZ3FG:	binclude "levels/mz3.bin"
 		even
-LayoutMZ3BG:	incbin "levels\mzbg3.bin"
+LayoutMZ3BG:	binclude "levels/mzbg3.bin"
 		even
 
 byte_6D7DC:	dc.l 0
 byte_6D7E0:	dc.l 0
-LayoutSLZ1FG:	incbin "levels\slz1.bin"
+LayoutSLZ1FG:	binclude "levels/slz1.bin"
 		even
-LayoutSLZBG:	incbin "levels\slzbg.bin"
+LayoutSLZBG:	binclude "levels/slzbg.bin"
 		even
-LayoutSLZ2FG:	incbin "levels\slz2.bin"
+LayoutSLZ2FG:	binclude "levels/slz2.bin"
 		even
-LayoutSLZ3FG:	incbin "levels\slz3.bin"
+LayoutSLZ3FG:	binclude "levels/slz3.bin"
 		even
 
 byte_6DBE4:	dc.l 0
-LayoutSZ1FG:	incbin "levels\sz1.bin"
+LayoutSZ1FG:	binclude "levels/sz1.bin"
 		even
-LayoutSZBG:	incbin "levels\szbg.bin"
+LayoutSZBG:	binclude "levels/szbg.bin"
 		even
 
 byte_6DCD8:	dc.l 0
-LayoutSZ2FG:	incbin "levels\sz2.bin"
+LayoutSZ2FG:	binclude "levels/sz2.bin"
 		even
 
 byte_6DDDA:	dc.l 0
-LayoutSZ3FG:	incbin "levels\sz3.bin"
+LayoutSZ3FG:	binclude "levels/sz3.bin"
 		even
 
 byte_6DF30:	dc.l 0
 byte_6DF34:	dc.l 0
-LayoutCWZ1:	incbin "levels\cwz1.bin"
+LayoutCWZ1:	binclude "levels/cwz1.bin"
 		even
-LayoutCWZ2:	incbin "levels\cwz2.bin"
+LayoutCWZ2:	binclude "levels/cwz2.bin"
 		even
-byte_6E33C:	incbin "levels\cwz2bg.bin"
+byte_6E33C:	binclude "levels/cwz2bg.bin"
 		even
-LayoutCWZ3:	incbin "levels\cwz3.bin"
+LayoutCWZ3:	binclude "levels/cwz3.bin"
 		even
 
 byte_6E344:	dc.l 0
-LayoutTest:     incbin "leftovers\test.bin"		; Seems to be a test layout
+LayoutTest:     binclude "leftovers/test.bin"		; Seems to be a test layout
 		even
 
 byte_6E3CA:     dc.l 0
@@ -6864,7 +6870,7 @@ byte_6E3CE:	dc.l 0
 byte_6E3D2:	dc.l 0
 byte_6E3D6:	dc.l 0
 
-		align $2000,$FF				; Padding
+		align $2000				; Padding
 ; ===========================================================================
 ; Object Layout Index
 ; ===========================================================================
@@ -6900,52 +6906,55 @@ ObjPos_Index:   ; GHZ
 		dc.w ObjPos_CWZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w $FFFF, 0, 0
 
-ObjPos_GHZ1:	incbin "objpos\ghz1.bin"
+ObjPos_GHZ1:	binclude "objpos/ghz1.bin"
 		even
-ObjPos_GHZ2:	incbin "objpos\ghz2.bin"
+ObjPos_GHZ2:	binclude "objpos/ghz2.bin"
 		even
-ObjPos_GHZ3:	incbin "objpos\ghz3.bin"
+ObjPos_GHZ3:	binclude "objpos/ghz3.bin"
 		even
-ObjPos_LZ1:	incbin "objpos\lz1.bin"
+ObjPos_LZ1:	binclude "objpos/lz1.bin"
 		even
-ObjPos_LZ2:	incbin "objpos\lz2.bin"
+ObjPos_LZ2:	binclude "objpos/lz2.bin"
 		even
-ObjPos_LZ3:	incbin "objpos\lz3.bin"
+ObjPos_LZ3:	binclude "objpos/lz3.bin"
 		even
-ObjPos_MZ1:	incbin "objpos\mz1.bin"
+ObjPos_MZ1:	binclude "objpos/mz1.bin"
 		even
-ObjPos_MZ2:	incbin "objpos\mz2.bin"
+ObjPos_MZ2:	binclude "objpos/mz2.bin"
 		even
-ObjPos_MZ3:	incbin "objpos\mz3.bin"
+ObjPos_MZ3:	binclude "objpos/mz3.bin"
 		even
-ObjPos_SLZ1:	incbin "objpos\slz1.bin"
+ObjPos_SLZ1:	binclude "objpos/slz1.bin"
 		even
-ObjPos_SLZ2:	incbin "objpos\slz2.bin"
+ObjPos_SLZ2:	binclude "objpos/slz2.bin"
 		even
-ObjPos_SLZ3:	incbin "objpos\slz3.bin"
+ObjPos_SLZ3:	binclude "objpos/slz3.bin"
 		even
-ObjPos_SZ1:	incbin "objpos\sz1.bin"
+ObjPos_SZ1:	binclude "objpos/sz1.bin"
 		even
-ObjPos_SZ2:	incbin "objpos\sz2.bin"
+ObjPos_SZ2:	binclude "objpos/sz2.bin"
 		even
-byte_729CA:	incbin "leftovers\sz1.bin"		; Leftover from earlier builds
+byte_729CA:	binclude "leftovers/sz1.bin"		; Leftover from earlier builds
 		even
-ObjPos_SZ3:	incbin "objpos\sz3.bin"
+ObjPos_SZ3:	binclude "objpos/sz3.bin"
 		even
-ObjPos_CWZ1:	incbin "objpos\cwz1.bin"
+ObjPos_CWZ1:	binclude "objpos/cwz1.bin"
 		even
-ObjPos_CWZ2:	incbin "objpos\cwz2.bin"
+ObjPos_CWZ2:	binclude "objpos/cwz2.bin"
 		even
-ObjPos_CWZ3:	incbin "objpos\cwz3.bin"
+ObjPos_CWZ3:	binclude "objpos/cwz3.bin"
 		even
 
 ObjPos_Null:	dc.w $FFFF, 0, 0
 
-		align $2000,$FF				; Padding
+		align $2000		; Padding
 
 		include "s1.proto.sounddriver.asm"
 
-		align $4000,$FF				; Padding
+		align $2000		; Padding
+
+		cnop -1,2<<lastbit(*-1)
+		dc.b $FF
 
 EndOfROM:
 

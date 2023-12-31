@@ -40,7 +40,7 @@ oscInit:
 ; Oscillate values
 
 oscUpdate:
-		cmpi.b	#6,(v_objspace+objRoutine).w
+		cmpi.b	#6,(v_objspace+obj.Routine).w
 		bcc.s	.end
 		lea	(v_oscillate).w,a1
 		lea	(.settings).l,a2
@@ -57,8 +57,8 @@ oscUpdate:
 		move.w	2(a1),d0			; get current rate
 		add.w	d2,d0				; add frequency
 		move.w	d0,2(a1)
-		add.w	d0,0(a1)			; add rate to value
-		cmp.b	0(a1),d4
+		_add.w	d0,0(a1)			; add rate to value
+		_cmp.b	0(a1),d4
 		bhi.s	.next
 		bset	d1,d3
 		bra.s	.next
@@ -67,8 +67,8 @@ oscUpdate:
 		move.w	2(a1),d0
 		sub.w	d2,d0
 		move.w	d0,2(a1)
-		add.w	d0,0(a1)
-		cmp.b	0(a1),d4
+		_add.w	d0,0(a1)
+		_cmp.b	0(a1),d4
 		bls.s	.next
 		bclr	d1,d3
 

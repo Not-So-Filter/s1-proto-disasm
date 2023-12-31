@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 
 Sonic_Roll:
-		move.w	objInertia(a0),d0
+		move.w	obj.Inertia(a0),d0
 		bpl.s	loc_EE54
 		neg.w	d0
 
@@ -19,22 +19,22 @@ locret_EE6C:
 ; ---------------------------------------------------------------------------
 
 Sonic_CheckRoll:
-		btst	#2,objStatus(a0)
+		btst	#2,obj.Status(a0)
 		beq.s	Sonic_DoRoll
 		rts
 ; ---------------------------------------------------------------------------
 
 Sonic_DoRoll:
-		bset	#2,objStatus(a0)
-		move.b	#$E,objHeight(a0)
-		move.b	#7,objWidth(a0)
-		move.b	#id_Roll,objAnim(a0)
-		addq.w	#5,objY(a0)
+		bset	#2,obj.Status(a0)
+		move.b	#$E,obj.Height(a0)
+		move.b	#7,obj.Width(a0)
+		move.b	#id_Roll,obj.Anim(a0)
+		addq.w	#5,obj.Ypos(a0)
 		move.w	#sfx_Roll,d0
 		jsr	(PlaySound_Special).l
-		tst.w	objInertia(a0)
+		tst.w	obj.Inertia(a0)
 		bne.s	locret_EEAA
-		move.w	#$200,objInertia(a0)
+		move.w	#$200,obj.Inertia(a0)
 
 locret_EEAA:
 		rts

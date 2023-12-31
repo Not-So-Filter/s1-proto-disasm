@@ -2,7 +2,7 @@
 
 ObjAnimals:
 		moveq	#0,d0
-		move.b	objRoutine(a0),d0
+		move.b	obj.Routine(a0),d0
 		move.w	off_732C(pc,d0.w),d1
 		jmp	off_732C(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -29,7 +29,7 @@ word_734A:	dc.w $FE00, $FC00
 ; ---------------------------------------------------------------------------
 
 loc_7382:
-		addq.b	#2,objRoutine(a0)
+		addq.b	#2,obj.Routine(a0)
 		bsr.w	RandomNumber
 		andi.w	#1,d0
 		moveq	#0,d1
@@ -42,58 +42,58 @@ loc_7382:
 		lea	word_734A(pc,d0.w),a1
 		move.w	(a1)+,$32(a0)
 		move.w	(a1)+,$34(a0)
-		move.l	(a1)+,objMap(a0)
-		move.w	#$580,objGfx(a0)
+		move.l	(a1)+,obj.Map(a0)
+		move.w	#$580,obj.Gfx(a0)
 		btst	#0,$30(a0)
 		beq.s	loc_73C6
-		move.w	#$592,objGfx(a0)
+		move.w	#$592,obj.Gfx(a0)
 
 loc_73C6:
-		move.b	#$C,objHeight(a0)
-		move.b	#4,objRender(a0)
-		bset	#0,objRender(a0)
-		move.b	#6,objPriority(a0)
-		move.b	#8,objActWid(a0)
-		move.b	#7,objTimeFrame(a0)
-		move.b	#2,objFrame(a0)
-		move.w	#-$400,objVelY(a0)
+		move.b	#$C,obj.Height(a0)
+		move.b	#4,obj.Render(a0)
+		bset	#0,obj.Render(a0)
+		move.b	#6,obj.Priority(a0)
+		move.b	#8,obj.ActWid(a0)
+		move.b	#7,obj.TimeFrame(a0)
+		move.b	#2,obj.Frame(a0)
+		move.w	#-$400,obj.VelY(a0)
 		tst.b	(v_bossstatus).w
 		bne.s	loc_7438
 		bsr.w	FindFreeObj
 		bne.s	loc_7414
-		move.b	#id_Points,objId(a1)
-		move.w	objX(a0),objX(a1)
-		move.w	objY(a0),objY(a1)
+		_move.b	#id_Points,obj.Id(a1)
+		move.w	obj.Xpos(a0),obj.Xpos(a1)
+		move.w	obj.Ypos(a0),obj.Ypos(a1)
 
 loc_7414:
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 
 loc_7418:
-		tst.b	objRender(a0)
+		tst.b	obj.Render(a0)
 		bpl.w	DeleteObject
 		bsr.w	ObjectFall
-		tst.w	objVelY(a0)
+		tst.w	obj.VelY(a0)
 		bmi.s	loc_746E
 		jsr	(ObjectHitFloor).l
 		tst.w	d1
 		bpl.s	loc_746E
-		add.w	d1,objY(a0)
+		add.w	d1,obj.Ypos(a0)
 
 loc_7438:
-		move.w	$32(a0),objVelX(a0)
-		move.w	$34(a0),objVelY(a0)
-		move.b	#1,objFrame(a0)
+		move.w	$32(a0),obj.VelX(a0)
+		move.w	$34(a0),obj.VelY(a0)
+		move.b	#1,obj.Frame(a0)
 		move.b	$30(a0),d0
 		add.b	d0,d0
 		addq.b	#4,d0
-		move.b	d0,objRoutine(a0)
+		move.b	d0,obj.Routine(a0)
 		tst.b	(v_bossstatus).w
 		beq.s	loc_746E
 		btst	#4,(v_vbla_byte).w
 		beq.s	loc_746E
-		neg.w	objVelX(a0)
-		bchg	#0,objRender(a0)
+		neg.w	obj.VelX(a0)
+		bchg	#0,obj.Render(a0)
 
 loc_746E:
 		bra.w	DisplaySprite
@@ -101,41 +101,41 @@ loc_746E:
 
 loc_7472:
 		bsr.w	ObjectFall
-		move.b	#1,objFrame(a0)
-		tst.w	objVelY(a0)
+		move.b	#1,obj.Frame(a0)
+		tst.w	obj.VelY(a0)
 		bmi.s	loc_749C
-		move.b	#0,objFrame(a0)
+		move.b	#0,obj.Frame(a0)
 		jsr	(ObjectHitFloor).l
 		tst.w	d1
 		bpl.s	loc_749C
-		add.w	d1,objY(a0)
-		move.w	$34(a0),objVelY(a0)
+		add.w	d1,obj.Ypos(a0)
+		move.w	$34(a0),obj.VelY(a0)
 
 loc_749C:
-		tst.b	objRender(a0)
+		tst.b	obj.Render(a0)
 		bpl.w	DeleteObject
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 
 loc_74A8:
 		bsr.w	SpeedToPos
-		addi.w	#$18,objVelY(a0)
-		tst.w	objVelY(a0)
+		addi.w	#$18,obj.VelY(a0)
+		tst.w	obj.VelY(a0)
 		bmi.s	loc_74CC
 		jsr	(ObjectHitFloor).l
 		tst.w	d1
 		bpl.s	loc_74CC
-		add.w	d1,objY(a0)
-		move.w	$34(a0),objVelY(a0)
+		add.w	d1,obj.Ypos(a0)
+		move.w	$34(a0),obj.VelY(a0)
 
 loc_74CC:
-		subq.b	#1,objTimeFrame(a0)
+		subq.b	#1,obj.TimeFrame(a0)
 		bpl.s	loc_74E2
-		move.b	#1,objTimeFrame(a0)
-		addq.b	#1,objFrame(a0)
-		andi.b	#1,objFrame(a0)
+		move.b	#1,obj.TimeFrame(a0)
+		addq.b	#1,obj.Frame(a0)
+		andi.b	#1,obj.Frame(a0)
 
 loc_74E2:
-		tst.b	objRender(a0)
+		tst.b	obj.Render(a0)
 		bpl.w	DeleteObject
 		bra.w	DisplaySprite

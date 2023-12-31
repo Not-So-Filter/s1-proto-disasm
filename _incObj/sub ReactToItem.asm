@@ -8,10 +8,10 @@
 TouchObjects:
 		nop
 		moveq	#0,d5
-		move.b	objHeight(a0),d5
+		move.b	obj.Height(a0),d5
 		subq.b	#3,d5
-		move.w	objX(a0),d2
-		move.w	objY(a0),d3
+		move.w	obj.Xpos(a0),d2
+		move.w	obj.Ypos(a0),d3
 		subq.w	#8,d2
 		sub.w	d5,d3
 		move.w	#$10,d4
@@ -20,13 +20,13 @@ TouchObjects:
 		move.w	#$5F,d6
 
 loc_FB6E:
-		tst.b	objRender(a1)
+		tst.b	obj.Render(a1)
 		bpl.s	loc_FB7A
-		move.b	objColType(a1),d0
+		move.b	obj.ColType(a1),d0
 		bne.s	loc_FBB8			; if nonzero, branch
 
 	loc_FB7A:
-		lea	objSize(a1),a1			; next object RAM
+		lea	obj.Size(a1),a1			; next object RAM
 		dbf	d6,loc_FB6E			; repeat $5F more times
 
 		moveq	#0,d0
@@ -66,7 +66,7 @@ loc_FBB8:
 		lea	RTI_sizes-2(pc,d0.w),a2
 		moveq	#0,d1
 		move.b	(a2)+,d1
-		move.w	objX(a1),d0
+		move.w	obj.Xpos(a1),d0
 		sub.w	d1,d0
 		sub.w	d2,d0
 		bcc.s	loc_FBD8
@@ -83,7 +83,7 @@ loc_FBD8:
 loc_FBDC:
 		moveq	#0,d1
 		move.b	(a2)+,d1
-		move.w	objY(a1),d0
+		move.w	obj.Ypos(a1),d0
 		sub.w	d1,d0
 		sub.w	d3,d0
 		bcc.s	loc_FBF2
@@ -98,45 +98,45 @@ loc_FBF2:
 		bhi.s	loc_FB7A
 
 loc_FBF6:
-		move.b	objColType(a1),d1
+		move.b	obj.ColType(a1),d1
 		andi.b	#$C0,d1
 		beq.w	loc_FC6A
 		cmpi.b	#$C0,d1
 		beq.w	loc_FDC4
 		tst.b	d1
 		bmi.w	loc_FCE0
-		move.b	objColType(a1),d0
+		move.b	obj.ColType(a1),d0
 		andi.b	#$3F,d0
 		cmpi.b	#6,d0
 		beq.s	loc_FC2E
 		cmpi.w	#$5A,$30(a0)
 		bcc.w	locret_FC2C
-		addq.b	#2,objRoutine(a1)
+		addq.b	#2,obj.Routine(a1)
 
 locret_FC2C:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_FC2E:
-		tst.w	objVelY(a0)
+		tst.w	obj.VelY(a0)
 		bpl.s	loc_FC58
-		move.w	objY(a0),d0
+		move.w	obj.Ypos(a0),d0
 		subi.w	#$10,d0
-		cmp.w	objY(a1),d0
+		cmp.w	obj.Ypos(a1),d0
 		bcs.s	locret_FC68
-		neg.w	objVelY(a0)
-		move.w	#$FE80,objVelY(a1)
-		tst.b	obj2ndRout(a1)
+		neg.w	obj.VelY(a0)
+		move.w	#$FE80,obj.VelY(a1)
+		tst.b	obj.2ndRout(a1)
 		bne.s	locret_FC68
-		addq.b	#4,obj2ndRout(a1)
+		addq.b	#4,obj.2ndRout(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_FC58:
-		cmpi.b	#2,objAnim(a0)
+		cmpi.b	#2,obj.Anim(a0)
 		bne.s	locret_FC68
-		neg.w	objVelY(a0)
-		addq.b	#2,objRoutine(a1)
+		neg.w	obj.VelY(a0)
+		addq.b	#2,obj.Routine(a1)
 
 locret_FC68:
 		rts
@@ -145,47 +145,47 @@ locret_FC68:
 loc_FC6A:
 		tst.b	(v_invinc).w
 		bne.s	loc_FC78
-		cmpi.b	#2,objAnim(a0)
+		cmpi.b	#2,obj.Anim(a0)
 		bne.s	loc_FCE0
 
 loc_FC78:
-		tst.b	objColProp(a1)
+		tst.b	obj.ColProp(a1)
 		beq.s	loc_FCA2
-		neg.w	objVelX(a0)
-		neg.w	objVelY(a0)
-		asr	objVelX(a0)
-		asr	objVelY(a0)
-		move.b	#0,objColType(a1)
-		subq.b	#1,objColProp(a1)
+		neg.w	obj.VelX(a0)
+		neg.w	obj.VelY(a0)
+		asr	obj.VelX(a0)
+		asr	obj.VelY(a0)
+		move.b	#0,obj.ColType(a1)
+		subq.b	#1,obj.ColProp(a1)
 		bne.s	locret_FCA0
-		bset	#7,objStatus(a1)
+		bset	#7,obj.Status(a1)
 
 locret_FCA0:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_FCA2:
-		bset	#7,objStatus(a1)
+		bset	#7,obj.Status(a1)
 		moveq	#10,d0
 		bsr.w	ScoreAdd
-		move.b	#id_ExplosionItem,objId(a1)
-		move.b	#0,objRoutine(a1)
-		tst.w	objVelY(a0)
+		_move.b	#id_ExplosionItem,obj.Id(a1)
+		move.b	#0,obj.Routine(a1)
+		tst.w	obj.VelY(a0)
 		bmi.s	loc_FCD0
-		move.w	objY(a0),d0
-		cmp.w	objY(a1),d0
+		move.w	obj.Ypos(a0),d0
+		cmp.w	obj.Ypos(a1),d0
 		bcc.s	loc_FCD8
-		neg.w	objVelY(a0)
+		neg.w	obj.VelY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_FCD0:
-		addi.w	#$100,objVelY(a0)
+		addi.w	#$100,obj.VelY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_FCD8:
-		subi.w	#$100,objVelY(a0)
+		subi.w	#$100,obj.VelY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -211,25 +211,25 @@ loc_FCF4:
 		beq.s	loc_FD72
 		bsr.w	FindFreeObj
 		bne.s	loc_FD18
-		move.b	#id_RingLoss,objId(a1)
-		move.w	objX(a0),objX(a1)
-		move.w	objY(a0),objY(a1)
+		_move.b	#id_RingLoss,obj.Id(a1)
+		move.w	obj.Xpos(a0),obj.Xpos(a1)
+		move.w	obj.Ypos(a0),obj.Ypos(a1)
 
 loc_FD18:
 		move.b	#0,(v_shield).w
-		move.b	#4,objRoutine(a0)
+		move.b	#4,obj.Routine(a0)
 		bsr.w	Sonic_ResetOnFloor
-		bset	#1,objStatus(a0)
-		move.w	#$FC00,objVelY(a0)
-		move.w	#$FE00,objVelX(a0)
-		move.w	objX(a0),d0
-		cmp.w	objX(a2),d0
+		bset	#1,obj.Status(a0)
+		move.w	#$FC00,obj.VelY(a0)
+		move.w	#$FE00,obj.VelX(a0)
+		move.w	obj.Xpos(a0),d0
+		cmp.w	obj.Xpos(a2),d0
 		bcs.s	loc_FD48
-		neg.w	objVelX(a0)
+		neg.w	obj.VelX(a0)
 
 loc_FD48:
-		move.w	#0,objInertia(a0)
-		move.b	#$1A,objAnim(a0)
+		move.w	#0,obj.Inertia(a0)
+		move.b	#$1A,obj.Anim(a0)
 		move.w	#$258,$30(a0)
 		move.w	#sfx_Death,d0
 		cmpi.b	#$36,(a2)
@@ -249,14 +249,14 @@ loc_FD72:
 loc_FD78:
 		tst.w	(v_debuguse).w
 		bne.s	loc_FDC0
-		move.b	#6,objRoutine(a0)
+		move.b	#6,obj.Routine(a0)
 		bsr.w	Sonic_ResetOnFloor
-		bset	#1,objStatus(a0)
-		move.w	#$F900,objVelY(a0)
-		move.w	#0,objVelX(a0)
-		move.w	#0,objInertia(a0)
-		move.w	objY(a0),$38(a0)
-		move.b	#$18,objAnim(a0)
+		bset	#1,obj.Status(a0)
+		move.w	#$F900,obj.VelY(a0)
+		move.w	#0,obj.VelX(a0)
+		move.w	#0,obj.Inertia(a0)
+		move.w	obj.Ypos(a0),$38(a0)
+		move.b	#$18,obj.Anim(a0)
 		move.w	#sfx_Death,d0
 		cmpi.b	#$36,(a2)
 		bne.s	loc_FDBA
@@ -271,7 +271,7 @@ loc_FDC0:
 ; ---------------------------------------------------------------------------
 
 loc_FDC4:
-		move.b	objColType(a1),d1
+		move.b	obj.ColType(a1),d1
 		andi.b	#$3F,d1
 		cmpi.b	#$C,d1
 		beq.s	loc_FDDA
@@ -284,9 +284,9 @@ loc_FDDA:
 		sub.w	d0,d5
 		cmpi.w	#8,d5
 		bcc.s	loc_FE08
-		move.w	objX(a1),d0
+		move.w	obj.Xpos(a1),d0
 		subq.w	#4,d0
-		btst	#0,objStatus(a1)
+		btst	#0,obj.Status(a1)
 		beq.s	loc_FDF4
 		subi.w	#$10,d0
 
@@ -311,5 +311,5 @@ loc_FE08:
 ; ---------------------------------------------------------------------------
 
 loc_FE0C:
-		addq.b	#1,objColProp(a1)
+		addq.b	#1,obj.ColProp(a1)
 		rts

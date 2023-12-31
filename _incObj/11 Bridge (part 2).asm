@@ -8,7 +8,7 @@ loc_50B2:
 
 Bridge_ChkExit:
 		moveq	#0,d1
-		move.b	objSubtype(a0),d1
+		move.b	obj.Subtype(a0),d1
 		lsl.w	#3,d1
 		move.w	d1,d2
 		addq.w	#8,d1

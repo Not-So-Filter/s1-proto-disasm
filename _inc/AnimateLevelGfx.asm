@@ -341,7 +341,7 @@ loc_11590:
 loc_1159E:
 		move.l	$C(a1),d0
 		rol.l	#8,d0
-		move.b	0(a1),d0
+		_move.b	0(a1),d0
 		move.l	d0,(a6)
 		lea	$10(a1),a1
 		dbf	d1,loc_1159E
@@ -350,14 +350,14 @@ loc_1159E:
 
 loc_115B4:
 		move.w	$E(a1),(a6)
-		move.w	0(a1),(a6)
+		_move.w	0(a1),(a6)
 		lea	$10(a1),a1
 		dbf	d1,loc_115B4
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_115C6:
-		move.l	0(a1),d0
+		_move.l	0(a1),d0
 		move.b	$F(a1),d0
 		ror.l	#8,d0
 		move.l	d0,(a6)

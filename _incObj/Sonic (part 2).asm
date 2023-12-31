@@ -3,7 +3,7 @@
 Sonic_Hurt:
 		bsr.w	Sonic_HurtStop
 		bsr.w	SpeedToPos
-		addi.w	#$30,objVelY(a0)
+		addi.w	#$30,obj.VelY(a0)
 		bsr.w	Sonic_LevelBound
 		bsr.w	sub_E952
 		bsr.w	Sonic_Animate
@@ -14,17 +14,17 @@ Sonic_Hurt:
 Sonic_HurtStop:
 		move.w	(v_limitbtm2).w,d0
 		addi.w	#$E0,d0
-		cmp.w	objY(a0),d0
+		cmp.w	obj.Ypos(a0),d0
 		bcs.w	loc_FD78
 		bsr.w	loc_F07C
-		btst	#1,objStatus(a0)
+		btst	#1,obj.Status(a0)
 		bne.s	locret_F318
 		moveq	#0,d0
-		move.w	d0,objVelY(a0)
-		move.w	d0,objVelX(a0)
-		move.w	d0,objInertia(a0)
-		move.b	#id_Walk,objAnim(a0)
-		subq.b	#2,objRoutine(a0)
+		move.w	d0,obj.VelY(a0)
+		move.w	d0,obj.VelX(a0)
+		move.w	d0,obj.Inertia(a0)
+		move.b	#id_Walk,obj.Anim(a0)
+		subq.b	#2,obj.Routine(a0)
 		move.w	#120,flashtime(a0)	; set sonic to be invulnerable for 2 seconds
 
 locret_F318:
@@ -43,17 +43,17 @@ Sonic_Death:
 Sonic_GameOver:
 		move.w	(v_limitbtm2).w,d0
 		addi.w	#$100,d0
-		cmp.w	objY(a0),d0
+		cmp.w	obj.Ypos(a0),d0
 		bcc.w	locret_F3AE
-		move.w	#-$38,objVelY(a0)
-		addq.b	#2,objRoutine(a0)
+		move.w	#-$38,obj.VelY(a0)
+		addq.b	#2,obj.Routine(a0)
 		addq.b	#1,(f_lifecount).w
 		subq.b	#1,(v_lives).w
 		bne.s	loc_F380
 		move.w	#0,$3A(a0)
 		move.b	#id_GameOverCard,(v_objslot2).w
 		move.b	#id_GameOverCard,(v_objslot3).w
-		move.b	#1,(v_objslot3+objFrame).w
+		move.b	#1,(v_objslot3+obj.Frame).w
 		move.w	#bgm_GameOver,d0
 		jsr	(PlaySound_Special).l
 		moveq	#plcid_GameOver,d0
@@ -71,9 +71,9 @@ loc_F380:
 		beq.s	locret_F3AE
 		andi.b	#btnA,d0
 		bne.s	loc_F3B0
-		move.b	#id_Walk,objAnim(a0)		; Respawns you after a death
-		subq.b	#4,objRoutine(a0)	; The lines above seem to make the code do nothing
-		move.w	$38(a0),objY(a0)
+		move.b	#id_Walk,obj.Anim(a0)		; Respawns you after a death
+		subq.b	#4,obj.Routine(a0)	; The lines above seem to make the code do nothing
+		move.w	$38(a0),obj.Ypos(a0)
 		move.w	#120,flashtime(a0)	; set sonic to be invulnerable for 2 seconds
 
 locret_F3AE:

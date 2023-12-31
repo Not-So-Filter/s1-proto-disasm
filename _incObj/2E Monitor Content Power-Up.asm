@@ -2,7 +2,7 @@
 
 ObjMonitorItem:
 		moveq	#0,d0
-		move.b	objRoutine(a0),d0
+		move.b	obj.Routine(a0),d0
 		move.w	off_8242(pc,d0.w),d1
 		jsr	off_8242(pc,d1.w)
 		bra.w	DisplaySprite
@@ -13,34 +13,34 @@ off_8242:	dc.w loc_8248-off_8242, loc_8288-off_8242
 ; ---------------------------------------------------------------------------
 
 loc_8248:
-		addq.b	#2,objRoutine(a0)
-		move.w	#$680,objGfx(a0)
-		move.b	#$24,objRender(a0)
-		move.b	#3,objPriority(a0)
-		move.b	#8,objActWid(a0)
-		move.w	#-$300,objVelY(a0)
+		addq.b	#2,obj.Routine(a0)
+		move.w	#$680,obj.Gfx(a0)
+		move.b	#$24,obj.Render(a0)
+		move.b	#3,obj.Priority(a0)
+		move.b	#8,obj.ActWid(a0)
+		move.w	#-$300,obj.VelY(a0)
 		moveq	#0,d0
-		move.b	objAnim(a0),d0
+		move.b	obj.Anim(a0),d0
 		addq.b	#2,d0
-		move.b	d0,objFrame(a0)
+		move.b	d0,obj.Frame(a0)
 		movea.l	#Map_Monitor,a1
 		add.b	d0,d0
 		adda.w	(a1,d0.w),a1
 		addq.w	#1,a1
-		move.l	a1,objMap(a0)
+		move.l	a1,obj.Map(a0)
 
 loc_8288:
-		tst.w	objVelY(a0)
+		tst.w	obj.VelY(a0)
 		bpl.w	loc_829C
 		bsr.w	SpeedToPos
-		addi.w	#$18,objVelY(a0)
+		addi.w	#$18,obj.VelY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_829C:
-		addq.b	#2,objRoutine(a0)
-		move.w	#$1D,objTimeFrame(a0)
-		move.b	objAnim(a0),d0
+		addq.b	#2,obj.Routine(a0)
+		move.w	#$1D,obj.TimeFrame(a0)
+		move.b	obj.Anim(a0),d0
 		cmpi.b	#1,d0
 		bne.s	loc_82B2
 		rts
@@ -84,13 +84,13 @@ loc_8314:
 		move.b	#1,(v_invinc).w
 		move.w	#$4B0,(v_objspace+invtime).w
 		move.b	#id_ShieldItem,(v_objslot8).w
-		move.b	#1,(v_objslot8+objAnim).w
+		move.b	#1,(v_objslot8+obj.Anim).w
 		move.b	#id_ShieldItem,(v_objslot9).w
-		move.b	#2,(v_objslot9+objAnim).w
+		move.b	#2,(v_objslot9+obj.Anim).w
 		move.b	#id_ShieldItem,(v_objslotA).w
-		move.b	#3,(v_objslotA+objAnim).w
+		move.b	#3,(v_objslotA+obj.Anim).w
 		move.b	#id_ShieldItem,(v_objslotB).w
-		move.b	#4,(v_objslotB+objAnim).w
+		move.b	#4,(v_objslotB+obj.Anim).w
 		move.w	#bgm_Invincible,d0
 		jmp	(PlaySound).l
 ; ---------------------------------------------------------------------------
@@ -124,6 +124,6 @@ locret_83A8:
 ; ---------------------------------------------------------------------------
 
 loc_83AA:
-		subq.w	#1,objTimeFrame(a0)
+		subq.w	#1,obj.TimeFrame(a0)
 		bmi.w	DeleteObject
 		rts
