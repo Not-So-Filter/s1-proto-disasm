@@ -43,7 +43,6 @@ loc_5F4E:
 		beq.w	loc_6130
 		move.b	#1,ledge_collapse_flag(a0)
 		subq.b	#1,ledge_timedelay(a0)
-; ---------------------------------------------------------------------------
 
 sub_5F60:
 		move.w	#$30,d1

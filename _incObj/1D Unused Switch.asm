@@ -15,12 +15,12 @@ loc_67CE:
 		move.l	#Map_UnkSwitch,obj.Map(a0)
 		move.w	#$4000,obj.Gfx(a0)
 		move.b	#4,obj.Render(a0)
-		move.w	obj.Ypos(a0),$30(a0)
+		move.w	obj.Ypos(a0),obj.Off_30(a0)
 		move.b	#$10,obj.ActWid(a0)
 		move.b	#5,obj.Priority(a0)
 
 loc_67F8:
-		move.w	$30(a0),obj.Ypos(a0)
+		move.w	obj.Off_30(a0),obj.Ypos(a0)
 		move.w	#$10,d1
 		bsr.w	sub_683C
 		beq.s	loc_6812
