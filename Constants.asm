@@ -124,6 +124,59 @@ ctrllock:	= obj.Off_3E				; lock left and right controls (2 bytes)
 card_mainX:	= obj.Off_30				; position for card to display on
 card_finalX:	= obj.Off_32				; position for card to finish on
 
+; Compatibility constants with Sonic Retro's Sonic 1 disassembly
+obID:		equ obj.Id
+obRender:	equ obj.Render
+obGfx:		equ obj.Gfx
+obMap:		equ obj.Map
+obX:		equ obj.Xpos
+obScreenY:	equ obj.ScreenY
+obY:		equ obj.Ypos
+obVelX:		equ obj.VelX
+obVelY:		equ obj.VelY
+obInertia:	equ obj.Inertia
+obHeight:	equ obj.Height
+obWidth:	equ obj.Width
+obPriority:	equ obj.Priority
+obFrame:	equ obj.Frame
+obAniFrame:	equ obj.AniFrame
+obAnim:		equ obj.Anim
+obTimeFrame:	equ obj.TimeFrame
+obDelayAni:	equ obj.DelayAni
+obColType:	equ obj.ColType
+obColProp:	equ obj.ColProp
+obStatus:	equ obj.Status
+obRespawnNo:	equ obj.RespawnNo
+obRoutine:	equ obj.Routine
+ob2ndRout:	equ obj.2ndRout
+obAngle:	equ obj.Angle
+obSubtype:	equ obj.Subtype
+obSolid:	equ obj.Solid
+objoff_25:	equ obj.Solid
+objoff_26:	equ obj.Angle
+objoff_29:	equ obj.Off_29
+objoff_2A:	equ obj.Off_2A
+objoff_2B:	equ obj.Off_2B
+objoff_2C:	equ obj.Off_2C
+objoff_2E:	equ obj.Off_2E
+objoff_2F:	equ obj.Off_2F
+objoff_30:	equ obj.Off_30
+objoff_32:	equ obj.Off_32
+objoff_33:	equ obj.Off_33
+objoff_34:	equ obj.Off_34
+objoff_35:	equ obj.Off_35
+objoff_36:	equ obj.Off_36
+objoff_37:	equ obj.Off_37
+objoff_38:	equ obj.Off_38
+objoff_39:	equ obj.Off_39
+objoff_3A:	equ obj.Off_3A
+objoff_3B:	equ obj.Off_3B
+objoff_3C:	equ obj.Off_3C
+objoff_3D:	equ obj.Off_3D
+objoff_3E:	equ obj.Off_3E
+objoff_3F:	equ obj.Off_3F
+object_size:	equ obj.Size
+
 ; Animation flags
 afEnd:		= $FF					; return to beginning of animation
 afBack:		= $FE					; go back (specified number) bytes
