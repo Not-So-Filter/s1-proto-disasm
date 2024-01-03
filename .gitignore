@@ -4,3 +4,7 @@ sonic.lst
 sonic.log
 sonic.p
 SonLVL INI Files/dllcache/*
+
+# Hivebrains comment utility
+Comment.bat
+Comment.exe

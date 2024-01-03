@@ -160,8 +160,8 @@ AniArt_MZ_Saturns:
 		moveq	#0,d0
 		move.b	(v_lani2_frame).w,d0
 		addq.b	#1,d0
-		cmpi.b	#5,d0	; are we on frame 5? (this check should be 6, causing one of the frames for the saturns to be skipped)
-		bne.s	AniArt_MZ_Torch	; if not, then we move onto the MZ Torch
+		cmpi.b	#5,d0				; are we on frame 5? (this check should be 6, causing one of the frames for the saturns to be skipped)
+		bne.s	AniArt_MZ_Torch			; if not, then we move onto the MZ Torch
 		moveq	#0,d0
 
 AniArt_MZ_Torch:

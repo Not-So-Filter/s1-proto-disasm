@@ -56,19 +56,19 @@ Obj09_Display:
 		bsr.w	sub_110DE
 		jsr	(SpeedToPos).l
 		bsr.w	SS_FixCamera
-		btst	#bitA,(v_jpadhold1).w	; is button A held?
-		beq.s	loc_10D66	; if not, branch
-		subq.w	#2,(v_ssrotate).w	; reverse rotation of the special stage
+		btst	#bitA,(v_jpadhold1).w		; is button A held?
+		beq.s	loc_10D66			; if not, branch
+		subq.w	#2,(v_ssrotate).w		; reverse rotation of the special stage
 
 loc_10D66:
-		btst	#bitB,(v_jpadhold1).w	; is button B held?
-		beq.s	loc_10D72	; if not, branch
-		addq.w	#2,(v_ssrotate).w	; increase rotation of the special stage
+		btst	#bitB,(v_jpadhold1).w		; is button B held?
+		beq.s	loc_10D72			; if not, branch
+		addq.w	#2,(v_ssrotate).w		; increase rotation of the special stage
 
 loc_10D72:
 		btst	#bitStart,(v_jpadpress1).w	; is Start Button pressed?
-		beq.s	loc_10D80	; if not, branch
-		move.w	#0,(v_ssrotate).w	; stop rotation of the special stage
+		beq.s	loc_10D80			; if not, branch
+		move.w	#0,(v_ssrotate).w		; stop rotation of the special stage
 
 loc_10D80:
 		move.w	(v_ssangle).w,d0

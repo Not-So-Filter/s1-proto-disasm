@@ -21,10 +21,10 @@ byte_9657:	dc.b 6
 		dc.b $1C, $C, $10, 0, $E0
 		dc.b $1C, $C, $18, 0, 0
 byte_9676:	dc.b 2
-		dc.b 8,	6, 0, $14, $F0	; reflected shine on block
+		dc.b 8,	6, 0, $14, $F0			; reflected shine on block
 		dc.b 0,	6, 0, $14, 0
 byte_9681:	dc.b $A
-		dc.b $C8, $C, 0, 0, $E0	; short block
+		dc.b $C8, $C, 0, 0, $E0			; short block
 		dc.b $C8, $C, 8, 0, 0
 		dc.b $D0, $F, 0, 4, $E0
 		dc.b $D0, $F, 8, 4, 0

@@ -25,7 +25,7 @@ Sonic_HurtStop:
 		move.w	d0,obj.Inertia(a0)
 		move.b	#id_Walk,obj.Anim(a0)
 		subq.b	#2,obj.Routine(a0)
-		move.w	#120,flashtime(a0)	; set sonic to be invulnerable for 2 seconds
+		move.w	#120,flashtime(a0)		; set sonic to be invulnerable for 2 seconds
 
 locret_F318:
 		rts
@@ -72,9 +72,9 @@ loc_F380:
 		andi.b	#btnA,d0
 		bne.s	loc_F3B0
 		move.b	#id_Walk,obj.Anim(a0)		; Respawns you after a death
-		subq.b	#4,obj.Routine(a0)	; The lines above seem to make the code do nothing
+		subq.b	#4,obj.Routine(a0)		; The lines above seem to make the code do nothing
 		move.w	$38(a0),obj.Ypos(a0)
-		move.w	#120,flashtime(a0)	; set sonic to be invulnerable for 2 seconds
+		move.w	#120,flashtime(a0)		; set sonic to be invulnerable for 2 seconds
 
 locret_F3AE:
 		rts

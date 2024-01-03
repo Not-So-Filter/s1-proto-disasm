@@ -858,14 +858,14 @@ SoundDriverLoad:
 		dbf	d0,.loop
 		moveq	#0,d0
 		lea	(z80_dac_unk1FF8).l,a1
-		move.b	d0,(a1)+	; Write 0 to 1FF8
-		move.b	#$80,(a1)+	; Write $80 to 1FF9
-		move.b	#7,(a1)+	; Write 7 to 1FFA
-		move.b	#$80,(a1)+	; Write $80 to 1FFB
-		move.b	d0,(a1)+	; Write 0 to 1FFC
-		move.b	d0,(a1)+	; Write 0 to 1FFD
-		move.b	d0,(a1)+	; Write 0 to 1FFE
-		move.b	d0,(a1)+	; Write 0 to 1FFF
+		move.b	d0,(a1)+			; Write 0 to 1FF8
+		move.b	#$80,(a1)+			; Write $80 to 1FF9
+		move.b	#7,(a1)+			; Write 7 to 1FFA
+		move.b	#$80,(a1)+			; Write $80 to 1FFB
+		move.b	d0,(a1)+			; Write 0 to 1FFC
+		move.b	d0,(a1)+			; Write 0 to 1FFD
+		move.b	d0,(a1)+			; Write 0 to 1FFE
+		move.b	d0,(a1)+			; Write 0 to 1FFF
 		resetZ80a
 		nop
 		nop
@@ -968,16 +968,16 @@ NewPLC:
 		lea	(ArtLoadCues).l,a1
 		add.w	d0,d0
 		move.w	(a1,d0.w),d0
-		lea	(a1,d0.w),a1	; jump to relevant PLC
-		bsr.s	ClearPLC	; erase any data in PLC buffer space
+		lea	(a1,d0.w),a1			; jump to relevant PLC
+		bsr.s	ClearPLC			; erase any data in PLC buffer space
 		lea	(v_plc_buffer).w,a2
-		move.w	(a1)+,d0	; get length of PLC
-		bmi.s	.skip		; if it's negative, skip the next loop
+		move.w	(a1)+,d0			; get length of PLC
+		bmi.s	.skip				; if it's negative, skip the next loop
 
 	.loop:
 		move.l	(a1)+,(a2)+
-		move.w	(a1)+,(a2)+	; copy PLC to RAM
-		dbf	d0,.loop		; repeat for length of PLC
+		move.w	(a1)+,(a2)+			; copy PLC to RAM
+		dbf	d0,.loop			; repeat for length of PLC
 
 	.skip:
 		movem.l	(sp)+,a1-a2
@@ -994,8 +994,8 @@ NewPLC:
 
 
 ClearPLC:
-		lea	(v_plc_buffer).w,a2 ; PLC buffer space in RAM
-		moveq	#(v_plc_buffer_end-v_plc_buffer)/3-1,d0	; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
+		lea	(v_plc_buffer).w,a2		; PLC buffer space in RAM
+		moveq	#(v_plc_buffer_end-v_plc_buffer)/3-1,d0 ; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
 
 	.loop:
 		clr.l	(a2)+
@@ -1719,26 +1719,26 @@ loc_27AA:
 		bsr.w	PlaySound_Special
 		rts
 ; ---------------------------------------------------------------------------
-LevSelOrder:	dc.b id_GHZ, 0	; GHZ1
-		dc.b id_GHZ, 1	; GHZ2
-		dc.b id_GHZ, 2	; GHZ3
-		dc.b id_LZ, 0	; LZ1
-		dc.b id_LZ, 1	; LZ2
-		dc.b id_LZ, 2	; LZ3
-		dc.b id_MZ, 0	; MZ1
-		dc.b id_MZ, 1	; MZ2
-		dc.b id_MZ, 2	; MZ3
-		dc.b id_SLZ, 0	; SLZ1
-		dc.b id_SLZ, 1	; SLZ2
-		dc.b id_SLZ, 2	; SLZ3
-		dc.b id_SZ, 0	; SZ1
-		dc.b id_SZ, 1	; SZ2
-		dc.b id_SZ, 2	; SZ3
-		dc.b id_CWZ, 0	; CWZ1
-		dc.b id_CWZ, 1	; CWZ2
-		dc.b id_CWZ+$80, 0 ; CWZ3
-		dc.b id_SS, 0	; SS
-		dc.b id_SS, 0	; SS (Sound Select)
+LevSelOrder:	dc.b id_GHZ, 0				; GHZ1
+		dc.b id_GHZ, 1				; GHZ2
+		dc.b id_GHZ, 2				; GHZ3
+		dc.b id_LZ, 0				; LZ1
+		dc.b id_LZ, 1				; LZ2
+		dc.b id_LZ, 2				; LZ3
+		dc.b id_MZ, 0				; MZ1
+		dc.b id_MZ, 1				; MZ2
+		dc.b id_MZ, 2				; MZ3
+		dc.b id_SLZ, 0				; SLZ1
+		dc.b id_SLZ, 1				; SLZ2
+		dc.b id_SLZ, 2				; SLZ3
+		dc.b id_SZ, 0				; SZ1
+		dc.b id_SZ, 1				; SZ2
+		dc.b id_SZ, 2				; SZ3
+		dc.b id_CWZ, 0				; CWZ1
+		dc.b id_CWZ, 1				; CWZ2
+		dc.b id_CWZ+$80, 0			; CWZ3
+		dc.b id_SS, 0				; SS
+		dc.b id_SS, 0				; SS (Sound Select)
 		dc.w $8000
 ; ---------------------------------------------------------------------------
 
@@ -1872,7 +1872,7 @@ LevSelTextLoad:
 		lea	(vdp_data_port).l,a6
 		move.l	#$62100003,d4
 		move.w	#$E680,d3
-		moveq	#$13,d1	; Only load 13 lines.
+		moveq	#$13,d1				; Only load 13 lines.
 
 loc_2944:
 		move.l	d4,vdp_control_port-vdp_data_port(a6)
@@ -1896,8 +1896,8 @@ loc_2944:
 		move.l	d4,vdp_control_port-vdp_data_port(a6)
 		bsr.w	sub_29CC
 		move.w	#$E680,d3
-		cmpi.w	#$13,(v_levselitem).w	; are we on Sound Select?
-		bne.s	loc_2996	; if not, branch
+		cmpi.w	#$13,(v_levselitem).w		; are we on Sound Select?
+		bne.s	loc_2996			; if not, branch
 		move.w	#$C680,d3
 
 loc_2996:
@@ -3973,7 +3973,7 @@ ExecuteObjects:
 		moveq	#$7F,d7
 		moveq	#0,d0
 		cmpi.b	#6,(v_player+obj.Routine).w	; has sonic died?
-		bcc.s	loc_8560	; if so, branch
+		bcc.s	loc_8560			; if so, branch
 
 sub_8546:
 		move.b	(a0),d0
@@ -5709,7 +5709,7 @@ loc_109E0:
 		move.b	#7,(v_ani2_time).w
 		bra.s	loc_10A02
 ; ---------------------------------------------------------------------------
-		addq.b	#1,(v_ani2_frame).w	; the GOAL blocks were meant to flash yellow
+		addq.b	#1,(v_ani2_frame).w		; the GOAL blocks were meant to flash yellow
 		andi.b	#1,(v_ani2_frame).w
 
 loc_10A02:
@@ -6391,12 +6391,12 @@ byte_11D26:	binclude "artunc/Lives Counter Numbers.bin"
 		include "_inc/LevelHeaders.asm"
 		include "_inc/Pattern Load Cues.asm"
 
-		align $8000		; Padding
+		align $8000				; Padding
 ; ===========================================================================
 ; Unused 8x8 Font Art
 ; ===========================================================================
 ;byte_18000:
-		binclude "leftovers/0x18000.bin"		; Some similar art to this is used in other prototypes, such as Sonic 2 Nick Arcade
+		binclude "leftovers/0x18000.bin"	; Some similar art to this is used in other prototypes, such as Sonic 2 Nick Arcade
 		even
 ; ===========================================================================
 ; Sega Screen/Title Screen Art and Mappings
@@ -6434,7 +6434,7 @@ Nem_Flash:	binclude "artnem/Flash.bin"
 		binclude "artnem/Unused - Goggles.bin"
 		even
 
-		align $400		; Padding
+		align $400				; Padding
 
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - GHZ stuff
@@ -6576,7 +6576,7 @@ ArtAnimalFlicky:binclude "artnem/Animal Flicky.bin"
 ArtAnimalRicky:	binclude "artnem/Animal Squirrel.bin"
 		even
 
-		align $1000		; Padding
+		align $1000				; Padding
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - primary patterns
 ; Blocks are Uncompressed
@@ -6644,7 +6644,7 @@ byte_61578:	binclude "demodata/Intro - SZ.bin"	; Sparkling's demo (?)
 byte_6161E:	binclude "demodata/Intro - Special Stage.bin" ; Special stage demo
 		even
 
-		align $3000		; Padding
+		align $3000				; Padding
 
 		include "_maps/SS Walls.asm"
 
@@ -6692,7 +6692,7 @@ ArtSpecialUpDown:binclude "artnem/Special UP-DOWN.bin"
 ArtSpecialEmerald:binclude "artnem/Special Emeralds.bin"
 		even
 
-		align $4000		; Padding
+		align $4000				; Padding
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------
@@ -6947,11 +6947,11 @@ ObjPos_CWZ3:	binclude "objpos/cwz3.bin"
 
 ObjPos_Null:	dc.w $FFFF, 0, 0
 
-		align $2000		; Padding
+		align $2000				; Padding
 
 		include "s1.proto.sounddriver.asm"
 
-		align $2000		; Padding
+		align $2000				; Padding
 
 		cnop -1,2<<lastbit(*-1)
 		dc.b $FF

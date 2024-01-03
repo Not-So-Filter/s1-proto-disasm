@@ -7,7 +7,7 @@ Map_CFlo_internal:
 		dc.w byte_878C-Map_CFlo_internal
 		dc.w byte_87A1-Map_CFlo_internal
 byte_874E:	dc.b 4
-		dc.b $F8, $D, 0, 0, $E0	; MZ and SBZ blocks
+		dc.b $F8, $D, 0, 0, $E0			; MZ and SBZ blocks
 		dc.b 8,	$D, 0, 0, $E0
 		dc.b $F8, $D, 0, 0, 0
 		dc.b 8,	$D, 0, 0, 0
@@ -21,7 +21,7 @@ byte_8763:	dc.b 8
 		dc.b 8,	5, 0, 0, 0
 		dc.b 8,	5, 0, 0, $10
 byte_878C:	dc.b 4
-		dc.b $F8, $D, 0, 0, $E0	; SLZ blocks
+		dc.b $F8, $D, 0, 0, $E0			; SLZ blocks
 		dc.b 8,	$D, 0, 8, $E0
 		dc.b $F8, $D, 0, 0, 0
 		dc.b 8,	$D, 0, 8, 0

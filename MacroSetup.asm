@@ -1,7 +1,7 @@
-	padding off	; we don't want AS padding out dc.b instructions
-	listing purecode	; Want listing file, but only the final code in expanded macros
-	page	0	; Don't want form feeds
-	supmode on	; we don't need warnings about privileged instructions
+	padding off					; we don't want AS padding out dc.b instructions
+	listing purecode				; Want listing file, but only the final code in expanded macros
+	page	0					; Don't want form feeds
+	supmode on					; we don't need warnings about privileged instructions
 
 notZ80 function cpu,(cpu<>128)&&(cpu<>32988)
 
@@ -32,7 +32,7 @@ org0 macro address
 		error "too much stuff before org0 $\{address} ($\{(-diff)} bytes)"
 	else
 		while .diff > 1024
-			; AS can only generate 1 kb of code on a single line
+							; AS can only generate 1 kb of code on a single line
 			dc.b [1024]0
 .diff := .diff - 1024
 		endm
@@ -68,7 +68,7 @@ align0 macro alignment
 even macro
 	if notZ80(MOMCPU)
 		if (*)&1
-			dc.b 0 ;ds.b 1 
+			dc.b 0				;ds.b 1 
 		endif
 	else
 		if ($)&1

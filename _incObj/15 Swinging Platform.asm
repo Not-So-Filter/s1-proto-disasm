@@ -21,8 +21,8 @@ ObjSwingPtfm_Init:
 		move.b	#8,obj.Height(a0)
 		move.w	obj.Ypos(a0),$38(a0)
 		move.w	obj.Xpos(a0),$3A(a0)
-		cmpi.b	#id_SLZ,(v_zone).w	; are we on Star Light Zone?
-		bne.s	ObjSwingPtfm_NotSLZ	; if not, branch
+		cmpi.b	#id_SLZ,(v_zone).w		; are we on Star Light Zone?
+		bne.s	ObjSwingPtfm_NotSLZ		; if not, branch
 		move.l	#Map_Swing_SLZ,obj.Map(a0)
 		move.w	#$43DC,obj.Gfx(a0)
 		move.b	#$20,obj.ActWid(a0)

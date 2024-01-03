@@ -133,15 +133,15 @@ enable_ints:	macro
 
 out_of_range:	macro exit,pos
 		if ("pos"<>"")
-		move.w	pos,d0		; get object position (if specified as not obX)
+		move.w	pos,d0				; get object position (if specified as not obX)
 		else
-		move.w	obj.Xpos(a0),d0	; get object position
+		move.w	obj.Xpos(a0),d0			; get object position
 		endif
-		andi.w	#$FF80,d0	; round down to nearest $80
-		move.w	(v_screenposx).w,d1 ; get screen position
+		andi.w	#$FF80,d0			; round down to nearest $80
+		move.w	(v_screenposx).w,d1		; get screen position
 		subi.w	#128,d1
 		andi.w	#$FF80,d1
-		sub.w	d1,d0		; approx distance between object and screen
+		sub.w	d1,d0				; approx distance between object and screen
 		cmpi.w	#128+320+192,d0
 		bhi.ATTRIBUTE	exit
 		endm

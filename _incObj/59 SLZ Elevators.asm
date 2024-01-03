@@ -2,9 +2,9 @@
 ; Object 59 - platforms	that move when you stand on them (SLZ)
 ; ---------------------------------------------------------------------------
 
-elev_origX:	= obj.Off_32		; original x-axis position
-elev_origY:	= obj.Off_30		; original y-axis position
-elev_dist:	= obj.Off_3C		; distance to move (2 bytes)
+elev_origX:	= obj.Off_32				; original x-axis position
+elev_origY:	= obj.Off_30				; original y-axis position
+elev_dist:	= obj.Off_3C				; distance to move (2 bytes)
 
 ObjSLZMovingPtfm:
 		moveq	#0,d0
