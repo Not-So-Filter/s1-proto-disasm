@@ -270,7 +270,7 @@ loc_32C:
 		cmp.w	(a1),d1
 		nop
 		nop
-		lea	(v_systemstack).w,a6
+		lea	(v_crossresetram).w,a6
 		moveq	#0,d7
 		move.w	#$7F,d6
 
@@ -4328,7 +4328,7 @@ loc_8A00:
 		adda.w	2(a1,d0.w),a1
 		move.l	a1,(v_opl_data+8).w
 		move.l	a1,(v_opl_data+$C).w
-		lea	(v_regbuffer).w,a2
+		lea	(v_objstate).w,a2
 		move.w	#$101,(a2)+
 		move.w	#$5E,d0
 
@@ -4338,7 +4338,7 @@ loc_8A38:
 		move.w	#-1,(v_opl_screen).w
 
 loc_8A44:
-		lea	(v_regbuffer).w,a2
+		lea	(v_objstate).w,a2
 		moveq	#0,d2
 		move.w	(v_screenposx).w,d6
 		andi.w	#$FF80,d6

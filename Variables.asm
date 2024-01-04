@@ -24,7 +24,7 @@ v_sgfx_buffer:		ds.b $300			; sonic graphics ram buffer ($300 bytes)
 v_tracksonic:		ds.b $100			; sonic position table ($100 bytes)
 v_hscrolltablebuffer:	ds.b $400
 v_hscrolltablebuffer_end:
-v_objspace:						; RAM for object space ($600 bytes)
+v_objspace:		ds.b 0				; RAM for object space ($600 bytes)
 v_player:		ds.b 0
 v_objslot0:		ds.b obj.Size
 v_objslot1:		ds.b obj.Size
@@ -50,8 +50,7 @@ v_objslot14:		ds.b obj.Size
 v_objslot15:		ds.b obj.Size
 v_objslot16:		ds.b obj.Size
 v_objslot17:		ds.b obj.Size
-v_objslot18:		ds.b 0
-f_victory:		ds.b obj.Size			; flag for victory animation (1 byte)
+v_objslot18:		ds.b obj.Size			; flag for victory animation (1 byte)
 v_objslot19:		ds.b obj.Size
 v_objslot1A:		ds.b obj.Size
 v_objslot1B:		ds.b obj.Size
@@ -156,11 +155,12 @@ v_lvlobjspace:		ds.b 0
 			ds.b obj.Size
 			ds.b obj.Size
 			ds.b obj.Size
+v_lvlobjend:		ds.b 0
+v_objend:		ds.b 0
 ; $FFFFF000
 v_snddriver_ram:	ds.b $600			; start of RAM for the sound driver data ($600 bytes)
 v_snddriver_ram_end:	ds.b 0
 			dephase
-			!org 0
 
 ; =================================================================================
 ; From here on, until otherwise stated, all offsets are relative to v_snddriver_ram
@@ -200,7 +200,6 @@ f_speedup:		ds.b 1				; flag indicating whether speed shoes tempo is on ($80) or
 v_ring_speaker:		ds.b 1				; which speaker the "ring" sound is played in (00 = right; 01 = left)
 f_push_playing:		ds.b 1				; if set, prevents further push sounds from playing
 			dephase
-			!org 0
 
 			phase $40
 
@@ -247,7 +246,6 @@ v_spcsfx_track_ram_end:
 v_1up_ram_copy:		ds.b TrackSz
 
 			dephase
-			!org 0
 
 ; =================================================================================
 ; From here on, no longer relative to sound driver RAM
@@ -396,11 +394,13 @@ v_spritetablebuffer:	ds.b $200
 			ds.b $100			; unused
 v_pal_dry:		ds.b $80
 v_pal_dry_dup:		ds.b $80
-v_regbuffer:		ds.b $40			; stores registeds d0-a7 during an error event ($40 bytes)
-v_spbuffer:		ds.l 1				; stores most recent sp address (4 bytes)
-v_errortype:		ds.b 1				; error type
-			ds.b $1BB			; unused
-v_systemstack:		ds.w 1
+v_objstate:		ds.b $C0				; object state list
+v_objstate_end:		ds.b 0
+			ds.b $140				; stack
+v_systemstack:		ds.b 0
+
+v_crossresetram:	ds.b 0
+			ds.w 1
 f_restart:		ds.w 1				; restart level flag (2 bytes)
 v_framecount:		ds.b 1				; frame counter (adds 1 every frame) (2 bytes)
 v_framebyte:		ds.b 1				; low byte for frame counter
@@ -450,9 +450,9 @@ v_ani3_time:		ds.b 1				; synchronised sprite animation 3 - time until next fram
 v_ani3_frame:		ds.b 1				; synchronised sprite animation 3 - current frame
 v_ani3_buf:		ds.w 1				; synchronised sprite animation 3 - info buffer (2 bytes)
 			ds.b $116			; unused
-word_FFFFE0:		ds.w 1				; value that's set to 1 during initation, unused elsewhere (2 bytes)
+word_FFFFE0:		ds.w 1				; value that's set to 1 during initation, unused otherwise (2 bytes)
 			ds.b 6				; unused
-word_FFFFE8:		ds.w 1				; value that's set to 0 during initation of a level, unused elsewhere (2 bytes)
+word_FFFFE8:		ds.w 1				; value that's set to 0 during initation of a level, unused otherwise (2 bytes)
 			ds.b 6				; unused
 f_demo:			ds.w 1
 v_demonum:		ds.w 1
@@ -465,4 +465,14 @@ v_init:			ds.b 1				; 'init' text string (4 bytes)
 			ds.w 1				; unused
 v_endofram:		ds.b 0
 			dephase
+
+	phase v_objstate
+v_regbuffer:		ds.b	$40				; stores registers d0-a7 during an error event
+v_spbuffer:		ds.l	1				; stores most recent sp address
+v_errortype:		ds.b	1				; error type
+	dephase
+
+	phase v_objslot18
+f_victory:		ds.b 1					; flag for victory animation (1 byte)
+	dephase
 			!org 0
