@@ -1588,7 +1588,7 @@ loc_25D8:
 		bsr.w	NemDec
 		lea	(Blk16_GHZ).l,a0
 		lea	(v_16x16).w,a4
-		move.w	#$5FF,d0
+		move.w	#(v_16x16_end-v_16x16)/4-1,d0
 
 .loadblocks:
 		move.l	(a0)+,(a4)+
@@ -3308,7 +3308,7 @@ LoadLevelData:
 		addq.l	#4,a2
 		movea.l	(a2)+,a0
 		lea	(v_16x16).w,a4
-		move.w	#$5FF,d0
+		move.w	#(v_16x16_end-v_16x16)/4-1,d0
 
 .loadblocks:
 		move.l	(a0)+,(a4)+

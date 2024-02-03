@@ -20,6 +20,7 @@ v_ngfx_buffer:		ds.b $200
 v_ngfx_buffer_end:
 v_spritequeue:		ds.b $400
 v_16x16:		ds.b $1800			; 16x16 tile mappings ($1800 bytes)
+v_16x16_end:
 v_sgfx_buffer:		ds.b $300			; sonic graphics ram buffer ($300 bytes)
 v_tracksonic:		ds.b $100			; sonic position table ($100 bytes)
 v_hscrolltablebuffer:	ds.b $400
