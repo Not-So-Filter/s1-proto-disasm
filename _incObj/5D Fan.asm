@@ -19,17 +19,17 @@ loc_E570:
 		move.b	#4,obj.Priority(a0)
 
 loc_E594:
-		btst	#1,$28(a0)
+		btst	#1,obj.Subtype(a0)
 		bne.s	loc_E5B6
-		subq.w	#1,$30(a0)
+		subq.w	#1,obj.Off_30(a0)
 		bpl.s	loc_E5B6
-		move.w	#$78,$30(a0)
-		bchg	#0,$32(a0)
+		move.w	#$78,obj.Off_30(a0)
+		bchg	#0,obj.Off_32(a0)
 		beq.s	loc_E5B6
-		move.w	#$B4,$30(a0)
+		move.w	#$B4,obj.Off_30(a0)
 
 loc_E5B6:
-		tst.b	$32(a0)
+		tst.b	obj.Off_32(a0)
 		bne.w	loc_E64E
 		lea	(v_objspace).w,a1
 		move.w	obj.Xpos(a1),d0

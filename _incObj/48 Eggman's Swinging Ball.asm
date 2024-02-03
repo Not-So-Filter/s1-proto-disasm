@@ -37,7 +37,7 @@ loc_B376:
 
 loc_B3AC:
 		move.w	a1,d5
-		subi.w	#$D000,d5
+		subi.w	#v_objspace,d5
 		lsr.w	#6,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+

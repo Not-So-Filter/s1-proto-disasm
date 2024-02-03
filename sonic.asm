@@ -6202,8 +6202,8 @@ Hud_100000:	dc.l 100000
 Hud_10000:	dc.l 10000
 Hud_1000:	dc.l 1000
 Hud_100:	dc.l 100
-Hud_10:	        dc.l 10
-Hud_1:	        dc.l 1
+Hud_10:		dc.l 10
+Hud_1:		dc.l 1
 ; ---------------------------------------------------------------------------
 
 sub_118F4:
@@ -6505,21 +6505,21 @@ byte_2A104:	binclude "artnem/swinging spiked ball.nem"
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - enemies
 ; ---------------------------------------------------------------------------
-Nem_Ballhog:    binclude "artnem/Enemy Ballhog.bin"
+Nem_Ballhog:	binclude "artnem/Enemy Ballhog.bin"
 		even
 Nem_Crabmeat:	binclude "artnem/Enemy Crabmeat.bin"
 		even
 Nem_Buzzbomber:	binclude "artnem/Enemy Buzz Bomber.bin"
 		even
-byte_2ADFE:     binclude "artnem/Ballhog's Bomb Explosion.bin"
+byte_2ADFE:	binclude "artnem/Ballhog's Bomb Explosion.bin"
 		even
-Nem_Burrobot:   binclude "artnem/Enemy Burrobot.bin"
+Nem_Burrobot:	binclude "artnem/Enemy Burrobot.bin"
 		even
 ArtChopper:	binclude "artnem/Enemy Chopper.bin"
 		even
 Nem_Jaws:	binclude "artnem/Enemy Jaws.bin"
 		even
-byte_2BBC2:     binclude "artnem/Ballhog's Bomb.bin"
+byte_2BBC2:	binclude "artnem/Ballhog's Bomb.bin"
 		even
 Nem_Roller:	binclude "artnem/Enemy Roller.bin"
 		even
@@ -6591,13 +6591,13 @@ Blk256_GHZ:	binclude "map256/GHZ.bin"
 		even
 Blk16_LZ:	binclude "map16/LZ.bin"
 		even
-Nem_LZ:         binclude "artnem/8x8 - LZ.bin"
+Nem_LZ:		binclude "artnem/8x8 - LZ.bin"
 		even
 Blk256_LZ:	binclude "map256/LZ.bin"
 		even
 Blk16_MZ:	binclude "map16/MZ.bin"
 		even
-Nem_MZ:         binclude "artnem/8x8 - MZ.bin"
+Nem_MZ:		binclude "artnem/8x8 - MZ.bin"
 		even
 Blk256_MZ:	binclude "map256/MZ.bin"
 		even
@@ -6611,7 +6611,7 @@ Blk256_SLZ:	binclude "map256/SLZ.bin"
 		even
 Blk16_SZ:	binclude "map16/SZ.bin"
 		even
-Nem_SZ:	        binclude "artnem/8x8 - SZ.bin"
+Nem_SZ:		binclude "artnem/8x8 - SZ.bin"
 		even
 Blk256_SZ:	binclude "map256/SZ.bin"
 		even
@@ -6717,7 +6717,7 @@ colCWZ:		binclude "collide/CWZ.bin"
 ; ---------------------------------------------------------------------------
 ; Special Stage layout (uncompressed)
 ; ---------------------------------------------------------------------------
-SS_1:           binclude "sslayout/1.bin"
+SS_1:		binclude "sslayout/1.bin"
 		even
 ; ---------------------------------------------------------------------------
 ; Animated uncompressed graphics
@@ -6862,10 +6862,10 @@ LayoutCWZ3:	binclude "levels/cwz3.bin"
 		even
 
 byte_6E344:	dc.l 0
-LayoutTest:     binclude "leftovers/test.bin"		; Seems to be a test layout
+LayoutTest:	binclude "leftovers/test.bin"		; Seems to be a test layout
 		even
 
-byte_6E3CA:     dc.l 0
+byte_6E3CA:	dc.l 0
 byte_6E3CE:	dc.l 0
 byte_6E3D2:	dc.l 0
 byte_6E3D6:	dc.l 0
@@ -6874,7 +6874,7 @@ byte_6E3D6:	dc.l 0
 ; ===========================================================================
 ; Object Layout Index
 ; ===========================================================================
-ObjPos_Index:   ; GHZ
+ObjPos_Index:	; GHZ
 		dc.w ObjPos_GHZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_GHZ2-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_GHZ3-ObjPos_Index, ObjPos_Null-ObjPos_Index

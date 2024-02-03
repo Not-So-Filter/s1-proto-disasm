@@ -46,10 +46,10 @@ off_8D72:	dc.w loc_8D78-off_8D72, loc_8DA2-off_8D72, loc_8E10-off_8D72
 ; ---------------------------------------------------------------------------
 
 loc_8D78:
-		subq.w	#1,$30(a0)
+		subq.w	#1,obj.Off_30(a0)
 		bpl.s	locret_8DA0
 		addq.b	#2,obj.2ndRout(a0)
-		move.w	#$FF,$30(a0)
+		move.w	#$FF,obj.Off_30(a0)
 		move.w	#$80,obj.VelX(a0)
 		move.b	#1,obj.Anim(a0)
 		bchg	#0,obj.Status(a0)
@@ -61,10 +61,10 @@ locret_8DA0:
 ; ---------------------------------------------------------------------------
 
 loc_8DA2:
-		subq.w	#1,$30(a0)
+		subq.w	#1,obj.Off_30(a0)
 		bmi.s	loc_8DDE
 		bsr.w	SpeedToPos
-		bchg	#0,$32(a0)
+		bchg	#0,obj.Off_32(a0)
 		bne.s	loc_8DD4
 		move.w	obj.Xpos(a0),d3
 		addi.w	#$C,d3
@@ -89,7 +89,7 @@ loc_8DDE:
 		btst	#2,(v_vbla_byte).w
 		beq.s	loc_8DFE
 		subq.b	#2,obj.2ndRout(a0)
-		move.w	#$3B,$30(a0)
+		move.w	#$3B,obj.Off_30(a0)
 		move.w	#0,obj.VelX(a0)
 		move.b	#0,obj.Anim(a0)
 		rts
@@ -113,7 +113,7 @@ loc_8E10:
 		add.w	d1,obj.Ypos(a0)
 		move.w	#0,obj.VelY(a0)
 		move.b	#1,obj.Anim(a0)
-		move.w	#$FF,$30(a0)
+		move.w	#$FF,obj.Off_30(a0)
 		subq.b	#2,obj.2ndRout(a0)
 
 locret_8E44:

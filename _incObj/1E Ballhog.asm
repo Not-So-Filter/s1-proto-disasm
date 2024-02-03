@@ -45,10 +45,10 @@ off_6FB2:	dc.w loc_6FB6-off_6FB2, loc_701C-off_6FB2
 ; ---------------------------------------------------------------------------
 
 loc_6FB6:
-		subq.w	#1,$30(a0)
+		subq.w	#1,obj.Off_30(a0)
 		bpl.s	loc_6FE6
 		addq.b	#2,obj.2ndRout(a0)
-		move.w	#$FF,$30(a0)
+		move.w	#$FF,obj.Off_30(a0)
 		move.w	#$40,obj.VelX(a0)
 		move.b	#1,obj.Anim(a0)
 		bchg	#0,obj.Status(a0)
@@ -56,12 +56,12 @@ loc_6FB6:
 		neg.w	obj.VelX(a0)
 
 loc_6FDE:
-		move.b	#0,$32(a0)
+		move.b	#0,obj.Off_32(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_6FE6:
-		tst.b	$32(a0)
+		tst.b	obj.Off_32(a0)
 		bne.s	locret_6FF4
 		cmpi.b	#2,obj.Frame(a0)
 		beq.s	loc_6FF6
@@ -71,7 +71,7 @@ locret_6FF4:
 ; ---------------------------------------------------------------------------
 
 loc_6FF6:
-		move.b	#1,$32(a0)
+		move.b	#1,obj.Off_32(a0)
 		bsr.w	FindFreeObj
 		bne.s	locret_701A
 		_move.b	#id_Cannonball,obj.Id(a1)
@@ -84,7 +84,7 @@ locret_701A:
 ; ---------------------------------------------------------------------------
 
 loc_701C:
-		subq.w	#1,$30(a0)
+		subq.w	#1,obj.Off_30(a0)
 		bmi.s	loc_7032
 		bsr.w	SpeedToPos
 		jsr	(ObjectHitFloor).l
@@ -94,7 +94,7 @@ loc_701C:
 
 loc_7032:
 		subq.b	#2,obj.2ndRout(a0)
-		move.w	#$3B,$30(a0)
+		move.w	#$3B,obj.Off_30(a0)
 		move.w	#0,obj.VelX(a0)
 		move.b	#0,obj.Anim(a0)
 		tst.b	obj.Render(a0)

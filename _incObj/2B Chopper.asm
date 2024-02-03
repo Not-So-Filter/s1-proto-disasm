@@ -20,14 +20,14 @@ loc_8BBA:
 		move.b	#9,obj.ColType(a0)
 		move.b	#$10,obj.ActWid(a0)
 		move.w	#$F900,obj.VelY(a0)
-		move.w	obj.Ypos(a0),$30(a0)
+		move.w	obj.Ypos(a0),obj.Off_30(a0)
 
 loc_8BF0:
 		lea	(Ani_Chop).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	SpeedToPos
 		addi.w	#$18,obj.VelY(a0)
-		move.w	$30(a0),d0
+		move.w	obj.Off_30(a0),d0
 		cmp.w	obj.Ypos(a0),d0
 		bcc.s	loc_8C18
 		move.w	d0,obj.Ypos(a0)

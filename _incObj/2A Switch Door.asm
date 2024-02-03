@@ -16,7 +16,7 @@ loc_68A4:
 		move.b	#4,obj.Render(a0)
 		move.w	obj.Ypos(a0),d0
 		subi.w	#$20,d0
-		move.w	d0,$30(a0)
+		move.w	d0,obj.Off_30(a0)
 		move.b	#$B,obj.ActWid(a0)
 		move.b	#5,obj.Priority(a0)
 		tst.b	obj.Subtype(a0)
@@ -30,7 +30,7 @@ loc_68F0:
 		tst.w	(f_switch).w
 		beq.s	loc_6906
 		subq.w	#1,obj.Ypos(a0)
-		move.w	$30(a0),d0
+		move.w	obj.Off_30(a0),d0
 		cmp.w	obj.Ypos(a0),d0
 		beq.w	DeleteObject
 
