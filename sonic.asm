@@ -292,7 +292,7 @@ loc_348:
 loc_36A:
 		lea	(v_startofram&$FFFFFF).l,a6
 		moveq	#0,d7
-		move.w	#$3F7F,d6
+		move.w	#(v_crossresetram-v_startofram)/4-1,d6
 
 loc_376:
 		move.l	d7,(a6)+
@@ -836,14 +836,14 @@ ClearScreen:
 		move.l	#0,(v_scrposx_dup).w
 		lea	(v_spritetablebuffer).w,a1
 		moveq	#0,d0
-		move.w	#($280/4),d1			; This should be ($280/4)-1
+		move.w	#(v_spritetablebuffer_end-v_spritetablebuffer)/4,d1	; This should have a -1.
 
 loc_111C:
 		move.l	d0,(a1)+
 		dbf	d1,loc_111C
 		lea	(v_hscrolltablebuffer).w,a1
 		moveq	#0,d0
-		move.w	#($400/4),d1			; This should be ($400/4)-1, leading to a slight bug (first bit of the Sonic object's RAM is cleared)
+		move.w	#(v_hscrolltablebuffer_end_padded-v_hscrolltablebuffer)/4,d1	; This should have a -1, leading to a slight bug (first bit of the Sonic object's RAM is cleared)
 
 loc_112C:
 		move.l	d0,(a1)+
@@ -1002,7 +1002,7 @@ NewPLC:
 
 ClearPLC:
 		lea	(v_plc_buffer).w,a2		; PLC buffer space in RAM
-		moveq	#(v_plc_buffer_end-v_plc_buffer)/3-1,d0 ; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
+		moveq	#(v_plc_buffer_end-v_plc_buffer)/4-1,d0 ; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
 
 	.loop:
 		clr.l	(a2)+
@@ -1102,7 +1102,7 @@ locret_14D0:
 
 ShiftPLC:
 		lea	(v_plc_buffer).w,a0
-		moveq	#$15,d0
+		moveq	#(v_plc_buffer_only_end-v_plc_buffer-6)/4-1,d0
 
 loc_14D8:
 		move.l	6(a0),(a0)+
@@ -1310,7 +1310,7 @@ PalLoad1:
 		adda.w	d0,a1
 		movea.l	(a1)+,a2
 		movea.w	(a1)+,a3
-		adda.w	#$80,a3
+		adda.w	#v_pal_dry_dup-v_pal_dry,a3
 		move.w	(a1)+,d7
 
 .loop:
@@ -1399,11 +1399,11 @@ CalcSine:
 		move.w	SineTable(pc,d0.w),d0
 		rts
 ; ---------------------------------------------------------------------------
-SineTable:	binclude "misc/sinetable.dat"
+SineTable:	binclude "misc/sinewave.bin"
 		even
 ; ---------------------------------------------------------------------------
 
-GetSqrt:						; Leftover in the final game (REV00 only)
+;GetSqrt:						; Leftover in the final game (REV00 only)
 		movem.l	d1-d2,-(sp)
 		move.w	d0,d1
 		swap	d1
@@ -1799,18 +1799,8 @@ loc_2878:
 		rts
 ; ---------------------------------------------------------------------------
 
-DemoLevels:	dc.w 0
-		dc.w $600
-		dc.w $200
-		dc.w $600
-		dc.w $400
-		dc.w $600
-		dc.w $300
-		dc.w $600
-		dc.w $200
-		dc.w $600
-		dc.w $400
-		dc.w $600
+DemoLevels:	binclude "misc/Demo Level Order - Intro.bin"
+		even
 ; ---------------------------------------------------------------------------
 
 sub_28A6:

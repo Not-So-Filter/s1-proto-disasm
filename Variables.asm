@@ -23,8 +23,10 @@ v_16x16:		ds.b $1800			; 16x16 tile mappings ($1800 bytes)
 v_16x16_end:
 v_sgfx_buffer:		ds.b $300			; sonic graphics ram buffer ($300 bytes)
 v_tracksonic:		ds.b $100			; sonic position table ($100 bytes)
-v_hscrolltablebuffer:	ds.b $400
+v_hscrolltablebuffer:	ds.b $380
 v_hscrolltablebuffer_end:
+			ds.b $80
+v_hscrolltablebuffer_end_padded:
 v_objspace:						; RAM for object space ($600 bytes)
 v_player:
 v_objslot0:		ds.b obj.Size
@@ -295,8 +297,8 @@ v_levseldelay:		ds.w 1				; level select - time until change when up/down is hel
 v_levselitem:		ds.w 1				; level select - item selected (2 bytes)
 v_levselsound:		ds.w 1				; level select - sound selected (2 bytes)
 			ds.b $14			; unused
-v_plc_buffer:		ds.b $60			; pattern load cues buffer (maximum $10 PLCs) ($60 bytes)
-v_plc_buffer_end:
+v_plc_buffer:		ds.b 6*16			; pattern load cues buffer (maximum $10 PLCs) ($60 bytes)
+v_plc_buffer_only_end:
 v_plc_buffer_reg0:	ds.l 1				; pattern load cues buffer (4 bytes)
 v_plc_buffer_reg4:	ds.l 1				; pattern load cues buffer (4 bytes)
 v_plc_buffer_reg8:	ds.l 1				; pattern load cues buffer (4 bytes)
@@ -306,6 +308,7 @@ v_plc_buffer_reg14:	ds.l 1				; pattern load cues buffer (4 bytes)
 f_plc_execute:		ds.w 1				; flag set for pattern load cue execution (2 bytes)
 v_plc_buffer_reg1A:	ds.w 1
 			ds.l 1				; unused
+v_plc_buffer_end:
 v_screenposx:		ds.l 1
 v_screenposy:		ds.l 1
 v_bgscreenposx:		ds.l 1
@@ -391,13 +394,14 @@ f_switch:		ds.w 1
 			ds.b $E				; unused
 v_scroll_block_1_size:	ds.w 1
 			ds.b $E				; unused
-v_spritetablebuffer:	ds.b $200
-			ds.b $100			; unused
+v_spritetablebuffer:	ds.b $280
+v_spritetablebuffer_end
+			ds.b $80			; unused
 v_pal_dry:		ds.b $80
 v_pal_dry_dup:		ds.b $80
-v_objstate:		ds.b $C0				; object state list
+v_objstate:		ds.b $C0			; object state list
 v_objstate_end:
-			ds.b $140				; stack
+			ds.b $140			; stack
 v_systemstack:
 v_crossresetram:
 			ds.w 1
@@ -468,12 +472,12 @@ v_endofram:
 			dephase
 
 	phase v_objstate
-v_regbuffer:		ds.b	$40				; stores registers d0-a7 during an error event
-v_spbuffer:		ds.l	1				; stores most recent sp address
-v_errortype:		ds.b	1				; error type
+v_regbuffer:		ds.b	$40			; stores registers d0-a7 during an error event
+v_spbuffer:		ds.l	1			; stores most recent sp address
+v_errortype:		ds.b	1			; error type
 	dephase
 
 	phase v_objslot18
-f_victory:		ds.b 1					; flag for victory animation (1 byte)
+f_victory:		ds.b 1				; flag for victory animation (1 byte)
 	dephase
 			!org 0

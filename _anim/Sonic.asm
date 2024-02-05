@@ -39,7 +39,7 @@ byte_F664:	dc.b $FE, $2E, $2F, $32, $30, $31, $32, afEnd
 byte_F66C:	dc.b $FD, $45, $46, $47, $48, afEnd, afEnd, afEnd
 		even
 byte_F674:	dc.b $17, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 2, 2
-		dc.b 2, 3, 4, $FE, 2
+		dc.b 2, 3, 4, afBack, 2
 		even
 byte_F68A:	dc.b $1F, $3A, $3B, afEnd
 		even
@@ -65,9 +65,9 @@ byte_F6B6:	dc.b $2F, $40, $FD
 		even
 byte_F6BA:	dc.b 4, $41, $42, afEnd
 		even
-byte_F6BE:	dc.b $F, $43, $43, $43, $FE, 1
+byte_F6BE:	dc.b $F, $43, $43, $43, afBack, 1
 		even
-byte_F6C4:	dc.b $F, $43, $44, $FE, 1
+byte_F6C4:	dc.b $F, $43, $44, afBack, 1
 		even
 byte_F6CA:	dc.b $3F, $49, afEnd
 		even
@@ -79,7 +79,7 @@ byte_F6D6:	dc.b 3, $4C, afEnd
 		even
 byte_F6DA:	dc.b 3, $4D, afEnd
 		even
-byte_F6DE:	dc.b 3, $4E, $4F, $50, $51, $52, 0, $FE, 1
+byte_F6DE:	dc.b 3, $4E, $4F, $50, $51, $52, 0, afBack, 1
 		even
 byte_F6E8:	dc.b 3, $55, afEnd
 		even
