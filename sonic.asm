@@ -97,7 +97,7 @@ Checksum:	dc.w 0					; Checksum
 RomStartLoc:	dc.l StartOfROM				; Start address of ROM
 RomEndLoc:      dc.l EndOfROM-1				; End address of ROM
 RamStartLoc:	dc.l v_startofram&$FFFFFF		; Start address of RAM
-RamEndLoc:      dc.l v_endofram&$FFFFFF			; End address of RAM
+RamEndLoc:      dc.l (v_endofram-1)&$FFFFFF			; End address of RAM
 SRAMSupport:	dc.l $20202020				; SRAM (none)
                 dc.l $20202020				; SRAM start ($200001)
                 dc.l $20202020				; SRAM end ($20xxxx)
@@ -278,7 +278,7 @@ loc_32C:
 		nop
 		lea	(v_crossresetram).w,a6
 		moveq	#0,d7
-		move.w	#$7F,d6
+		move.w	#(v_endofram-v_crossresetram)/4-1,d6
 
 loc_348:
 		move.l	d7,(a6)+

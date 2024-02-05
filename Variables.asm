@@ -464,7 +464,8 @@ f_debugmode:		ds.b 1
 			ds.b 1				; unused
 v_init:			ds.b 1				; 'init' text string (4 bytes)
 			ds.w 1				; unused
-v_endofram:		ds.b 0
+			ds.b 1				; unused
+v_endofram:
 			dephase
 
 	phase v_objstate
