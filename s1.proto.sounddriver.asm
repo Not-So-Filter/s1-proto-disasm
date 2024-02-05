@@ -251,7 +251,15 @@ DACUpdateTrack:
 		rts
 ; ---------------------------------------------------------------------------
 
-.timpanipitch:	dc.b $12, $15, $1C, $1D, $FF, $FF, $FF, $FF
+.timpanipitch:	dc.b dpcmLoopCounter(8250)
+		dc.b dpcmLoopCounter(7500)
+		dc.b dpcmLoopCounter(6350)
+		dc.b dpcmLoopCounter(6250)
+		dc.b $FF
+		dc.b $FF
+		dc.b $FF
+		dc.b $FF
+		even
 ; ---------------------------------------------------------------------------
 
 FMUpdateTrack:
