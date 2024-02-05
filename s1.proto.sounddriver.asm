@@ -32,6 +32,7 @@ PSG8:		binclude "sound/psg/psg8.bin"
 PSG9:		binclude "sound/psg/psg9.bin"
 
 ModulationIndex:dc.b $D, 1, 7, 4, 1, 1, 1, 4, 2, 1, 2, 4, 8, 1, 6, 4
+		even
 ; ---------------------------------------------------------------------------
 ; New tempos for songs during speed shoes
 ; ---------------------------------------------------------------------------
@@ -43,6 +44,7 @@ SpeedUpIndex:	dc.b 7					; GHZ
 		dc.b 8					; SBZ
 		dc.b $FF				; Invincibility
 		dc.b 5					; Extra Life
+		even
 		; All songs after will use their music index pointer instead
 
 ; ---------------------------------------------------------------------------
@@ -481,6 +483,7 @@ FM3SpcUpdateFreq:
 		dc.b $AC, $A8
 		dc.b $AE, $AA
 		dc.b $A6, $A2
+		even
 ; ---------------------------------------------------------------------------
 
 FMPan_Set:
@@ -2036,6 +2039,7 @@ cfSetLFO:
 
 LFO_Reg_Table:	dc.b $60, $68, $64, $6C
 LFO_Reg_Table_End:
+		even
 ; ---------------------------------------------------------------------------
 
 cfSetTempo:
@@ -2129,6 +2133,7 @@ locret_75454:
 ; ---------------------------------------------------------------------------
 
 FMSlotMask:	dc.b 8,	8, 8, 8, $A, $E, $E, $F
+		even
 ; ---------------------------------------------------------------------------
 
 SendVoiceTL:
@@ -2203,6 +2208,7 @@ FMInstrumentOperatorTable:
 		dc.b  $84				; Secondary amplitude/release rate operator 2
 		dc.b  $8C				; Secondary amplitude/release rate operator 4
 FMInstrumentOperatorTable_End
+		even
 
 FMInstrumentTLTable:
 		dc.b  $40				; Total level operator 1
@@ -2210,6 +2216,7 @@ FMInstrumentTLTable:
 		dc.b  $44				; Total level operator 2
 		dc.b  $4C				; Total level operator 4
 FMInstrumentTLTable_End
+		even
 ; ---------------------------------------------------------------------------
 
 cfModulation:
@@ -2455,7 +2462,7 @@ SSG_Reg_Table:	dc.b $90, $50, $98, $58
 		even
 
 Unc_Z80:	include	"sound/z80.asm"
-Unc_Z80_End:
+Unc_Z80_End:	even
 Music81:	binclude	"sound/music/Mus81 - GHZ.bin"
 		even
 Music82:	binclude	"sound/music/Mus82 - LZ.bin"

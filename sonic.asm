@@ -217,37 +217,43 @@ SetupValues:	dc.l $8000				; VDP register start number
 		dc.b 0
 		dc.b 0
 		dc.b $80
+		even
 
 		; Z80 initalization
-		dc.b $AF				; xor	a
-		dc.b $01,$D7,$1F			; ld	bc,1FD7h
-		dc.b $11,$29,$00			; ld	de,29h
-		dc.b $21,$28,$00			; ld	hl,28h
-		dc.b $F9				; ld	sp,hl
-		dc.b $77				; ld	(hl),a
-		dc.b $ED,$B0				; ldir
-		dc.b $DD,$E1				; pop	ix
-		dc.b $FD,$E1				; pop	iy
-		dc.b $ED,$47				; ld	i,a
-		dc.b $ED,$4F				; ld	r,a
-		dc.b $08				; ex	af,af'
-		dc.b $D9				; exx
-		dc.b $F1				; pop	af
-		dc.b $C1				; pop	bc
-		dc.b $D1				; pop	de
-		dc.b $E1				; pop	hl
-		dc.b $08				; ex	af,af'
-		dc.b $D9				; exx
-		dc.b $F1				; pop	af
-		dc.b $D1				; pop	de
-		dc.b $E1				; pop	hl
-		dc.b $F9				; ld	sp,hl
-		dc.b $F3				; di
-		dc.b $ED,$56				; im	1
-		dc.b $36,$E9				; ld	(hl),0E9h
-		dc.b $E9				; jp	(hl)
+	save
+	cpu z80
+		xor	a
+		ld	bc,1FD7h
+		ld	de,29h
+		ld	hl,28h
+		ld	sp,hl
+		ld	(hl),a
+		ldir
+		pop	ix
+		pop	iy
+		ld	i,a
+		ld	r,a
+		ex	af,af'
+		exx
+		pop	af
+		pop	bc
+		pop	de
+		pop	hl
+		ex	af,af'
+		exx
+		pop	af
+		pop	de
+		pop	hl
+		ld	sp,hl
+		di
+		im	1
+		ld	(hl),0E9h
+		jp	(hl)
+	restore
+	padding off
 
 		dc.b $9F,$BF,$DF,$FF			; values for PSG channel volumes
+		even
 ; ---------------------------------------------------------------------------
 
 loc_306:
@@ -886,6 +892,7 @@ SoundDriverLoad:
 		dc.b 0
 		dc.b 0
 		dc.b 0
+		even
 ; ---------------------------------------------------------------------------
 
 PlaySound:
@@ -1740,6 +1747,7 @@ LevSelOrder:	dc.b id_GHZ, 0				; GHZ1
 		dc.b id_SS, 0				; SS
 		dc.b id_SS, 0				; SS (Sound Select)
 		dc.w $8000
+		even
 ; ---------------------------------------------------------------------------
 
 loc_27F8:
@@ -2281,6 +2289,7 @@ off_3100:	dc.l byte_614C6
 		dc.b 0, $8B, 8, $37, 0, $42, 8, $5C, 0, $6A, 8, $5F, 0, $2F, 8, $2C
 		dc.b 0, $21, 8, 3, $28, $30, 8, 8, 0, $2E, 8, $15, 0, $F, 8, $46
 		dc.b 0, $1A, 8, $FF, 8, $CA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		even
 ; ---------------------------------------------------------------------------
 ;sub_314C:
 		cmpi.b	#id_06,(v_zone).w
@@ -2392,6 +2401,7 @@ DebugPosLoadArt:
 ; ---------------------------------------------------------------------------
 
 .1bpp:		dc.b 0, 6, $60, $66
+		even
 
 		include "_inc/Oscillatory Routines.asm"
 
@@ -2720,14 +2730,17 @@ byte_380A:	dc.b 3, 0, 7, $92, 3, 0, 7, $90, 3, 0, 7, $8E, 3, 0, 7
 		dc.b $8A, 3, 0, 6, $8C, 3, 0, 6, $8E, 3, 0, 6, $90, 3
 		dc.b 0, 6, $92, 7, 2, 6, $24, 7, 4, 6, $30, $FF, 6, 6
 		dc.b $3C, $FF, 6, 6, $3C, 7, 4, 6, $30, 7, 2, 6, $24
+		even
 
 byte_388A:	dc.b $10, 1, $18, 0, $18, 1, $20, 0, $20, 1, $28, 0, $28
 		dc.b 1
+		even
 
 dword_3898:	dc.l $4000600, $6200624, $6640666, $6000820, $A640A68
 		dc.l $AA60AAA, $8000C42, $E860ECA, $EEC0EEE, $4000420
 		dc.l $6200620, $8640666, $4200620, $8420842, $A860AAA
 		dc.l $6200842, $A640C86, $EA80EEE
+		even
 
 word_38E0:	binclude "palette/Cycle - SS.bin"
 		even
@@ -2823,11 +2836,14 @@ loc_3A72:
 
 byte_3A86:	dc.b 9, $28, $18, $10, $28, $18, $10, $30, $18, 8, $10
 		dc.b 0
+		even
 
 byte_3A92:	dc.b 6, $30, $30, $30, $28, $18, $18, $18
+		even
 
 byte_3A9A:	dc.b 8, 2, 4, $FF, 2, 3, 8, $FF, 4, 2, 2, 3, 8, $FD, 4
 		dc.b 2, 2, 3, 2, $FF
+		even
 ; ---------------------------------------------------------------------------
 
 		include "_inc/LevelSizeLoad & BgScrollSpeed.asm"
@@ -4725,6 +4741,7 @@ ObjSmashWall_FragRight:dc.w $400, $FB00
 		dc.w $800, $FE00
 		dc.w $800, $200
 		dc.w $600, $600
+		even
 
 ObjSmashWall_FragLeft:dc.w $FA00, $FA00
 		dc.w $F800, $FE00
@@ -4734,6 +4751,7 @@ ObjSmashWall_FragLeft:dc.w $FA00, $FA00
 		dc.w $FA00, $FF00
 		dc.w $FA00, $100
 		dc.w $FC00, $500
+		even
 
 MapSmashWall:	include "_maps/Smashable Walls.asm"
 
@@ -4893,12 +4911,14 @@ ObjSeeSaw_SlopeTilt:dc.b $24, $24, $26, $28, $2A, $2C, $2A, $28, $26, $24
 		dc.b $19, $18, $17, $16, $15, $14, $13, $12, $11, $10
 		dc.b $F, $E, $D, $C, $B, $A, 9, 8, 7, 6, 5, 4, 3, 2, 2
 		dc.b 2, 2, 2
+		even
 
 ObjSeeSaw_SlopeLine:dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15, $15, $15
 		dc.b $15, $15, $15, $15, $15, $15, $15, $15
+		even
 
 Map_Seesaw:	include "_maps/Seesaw.asm"
 ; ---------------------------------------------------------------------------
@@ -5105,6 +5125,7 @@ sub_F290:
 		dc.b $E
 		dc.b 7
 		dc.b $A
+		even
 
 		include "_incObj/Sonic Loops.asm"
 		include "_incObj/Sonic Animate.asm"
@@ -5814,6 +5835,7 @@ locret_10B32:
 ; ---------------------------------------------------------------------------
 
 byte_10B34:	dc.b $17, $18, $19, $1A, 0, 0
+		even
 ; ---------------------------------------------------------------------------
 
 SS_AniBumper:
@@ -5839,6 +5861,7 @@ locret_10B68:
 		rts
 ; ---------------------------------------------------------------------------
 byte_10B6A:	dc.b $1B, $1C, $1B, $1C, 0, 0
+		even
 ; ---------------------------------------------------------------------------
 
 SS_Load:
@@ -6096,8 +6119,9 @@ loc_11802:
 ; ---------------------------------------------------------------------------
 
 byte_1180E:	dc.b $16, $FF, $FF, $FF, $FF, $FF, $FF, 0, 0, $14, 0, 0
-
+		even
 byte_1181A:	dc.b $FF, $FF, 0, 0
+		even
 ; ---------------------------------------------------------------------------
 
 sub_1181E:
