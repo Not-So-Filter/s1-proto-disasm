@@ -25,8 +25,8 @@ v_sgfx_buffer:		ds.b $300			; sonic graphics ram buffer ($300 bytes)
 v_tracksonic:		ds.b $100			; sonic position table ($100 bytes)
 v_hscrolltablebuffer:	ds.b $400
 v_hscrolltablebuffer_end:
-v_objspace:		ds.b 0				; RAM for object space ($600 bytes)
-v_player:		ds.b 0
+v_objspace:						; RAM for object space ($600 bytes)
+v_player:
 v_objslot0:		ds.b obj.Size
 v_objslot1:		ds.b obj.Size
 v_objslot2:		ds.b obj.Size
@@ -59,7 +59,7 @@ v_objslot1C:		ds.b obj.Size
 v_objslot1D:		ds.b obj.Size
 v_objslot1E:		ds.b obj.Size
 v_objslot1F:		ds.b obj.Size
-v_lvlobjspace:		ds.b 0
+v_lvlobjspace:
 			ds.b obj.Size
 			ds.b obj.Size
 			ds.b obj.Size
@@ -156,11 +156,11 @@ v_lvlobjspace:		ds.b 0
 			ds.b obj.Size
 			ds.b obj.Size
 			ds.b obj.Size
-v_lvlobjend:		ds.b 0
-v_objend:		ds.b 0
+v_lvlobjend:
+v_objend:
 ; $FFFFF000
 v_snddriver_ram:	ds.b $600			; start of RAM for the sound driver data ($600 bytes)
-v_snddriver_ram_end:	ds.b 0
+v_snddriver_ram_end:
 			dephase
 
 ; =================================================================================
@@ -168,7 +168,7 @@ v_snddriver_ram_end:	ds.b 0
 ; =================================================================================
 
 			phase 0
-v_startofvariables:	ds.b 0
+v_startofvariables:
 v_sndprio:		ds.b 1				; sound priority (priority of new music/SFX must be higher or =al to this value or it won't play; bit 7 of priority being set prevents this value from changing)
 v_main_tempo_timeout:	ds.b 1				; Counts down to zero; when zero, resets to next value and delays song by 1 frame
 v_main_tempo:		ds.b 1				; Used for music only
@@ -296,7 +296,7 @@ v_levselitem:		ds.w 1				; level select - item selected (2 bytes)
 v_levselsound:		ds.w 1				; level select - sound selected (2 bytes)
 			ds.b $14			; unused
 v_plc_buffer:		ds.b $60			; pattern load cues buffer (maximum $10 PLCs) ($60 bytes)
-v_plc_buffer_end:	ds.b 0
+v_plc_buffer_end:
 v_plc_buffer_reg0:	ds.l 1				; pattern load cues buffer (4 bytes)
 v_plc_buffer_reg4:	ds.l 1				; pattern load cues buffer (4 bytes)
 v_plc_buffer_reg8:	ds.l 1				; pattern load cues buffer (4 bytes)
@@ -396,11 +396,10 @@ v_spritetablebuffer:	ds.b $200
 v_pal_dry:		ds.b $80
 v_pal_dry_dup:		ds.b $80
 v_objstate:		ds.b $C0				; object state list
-v_objstate_end:		ds.b 0
+v_objstate_end:
 			ds.b $140				; stack
-v_systemstack:		ds.b 0
-
-v_crossresetram:	ds.b 0
+v_systemstack:
+v_crossresetram:
 			ds.w 1
 f_restart:		ds.w 1				; restart level flag (2 bytes)
 v_framecount:		ds.b 1				; frame counter (adds 1 every frame) (2 bytes)
