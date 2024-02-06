@@ -17,22 +17,22 @@ TouchObjects:
 		move.w	#$10,d4
 		add.w	d5,d5
 		lea	(v_lvlobjspace).w,a1
-		move.w	#$5F,d6
+		move.w	#(v_lvlobjend-v_lvlobjspace)/object_size-1,d6
 
-loc_FB6E:
+.loop:
 		tst.b	obj.Render(a1)
-		bpl.s	loc_FB7A
+		bpl.s	.next
 		move.b	obj.ColType(a1),d0
-		bne.s	loc_FBB8			; if nonzero, branch
+		bne.s	.proximity			; if nonzero, branch
 
-	loc_FB7A:
+	.next:
 		lea	obj.Size(a1),a1			; next object RAM
-		dbf	d6,loc_FB6E			; repeat $5F more times
+		dbf	d6,.loop			; repeat $5F more times
 
 		moveq	#0,d0
 		rts
 ; ---------------------------------------------------------------------------
-RTI_sizes:	;   width, height
+.sizes:		;   width, height
 		dc.b  $14, $14				; $01
 		dc.b   $C, $14				; $02
 		dc.b  $14,  $C				; $03
@@ -60,44 +60,44 @@ RTI_sizes:	;   width, height
 		dc.b  $20,   8				; $19
 ; ---------------------------------------------------------------------------
 
-loc_FBB8:
+.proximity:
 		andi.w	#$3F,d0
 		add.w	d0,d0
-		lea	RTI_sizes-2(pc,d0.w),a2
+		lea	.sizes-2(pc,d0.w),a2
 		moveq	#0,d1
 		move.b	(a2)+,d1
 		move.w	obj.Xpos(a1),d0
 		sub.w	d1,d0
 		sub.w	d2,d0
-		bcc.s	loc_FBD8
+		bcc.s	.outsidex
 		add.w	d1,d1
 		add.w	d1,d0
-		bcs.s	loc_FBDC
-		bra.s	loc_FB7A
+		bcs.s	.withinx
+		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-loc_FBD8:
+.outsidex:
 		cmp.w	d4,d0
-		bhi.s	loc_FB7A
+		bhi.s	.next
 
-loc_FBDC:
+.withinx:
 		moveq	#0,d1
 		move.b	(a2)+,d1
 		move.w	obj.Ypos(a1),d0
 		sub.w	d1,d0
 		sub.w	d3,d0
-		bcc.s	loc_FBF2
+		bcc.s	.outsidey
 		add.w	d1,d1
 		add.w	d0,d1
-		bcs.s	loc_FBF6
-		bra.s	loc_FB7A
+		bcs.s	.withiny
+		bra.s	.next
 ; ---------------------------------------------------------------------------
 
-loc_FBF2:
+.outsidey:
 		cmp.w	d5,d0
-		bhi.s	loc_FB7A
+		bhi.s	.next
 
-loc_FBF6:
+.withiny:
 		move.b	obj.ColType(a1),d1
 		andi.b	#$C0,d1
 		beq.w	loc_FC6A
@@ -200,7 +200,7 @@ loc_FCE6:
 
 loc_FCEA:
 		nop
-		tst.w	$30(a0)
+		tst.w	flashtime(a0)
 		bne.s	loc_FCE6
 		movea.l	a1,a2
 
@@ -232,7 +232,7 @@ loc_FD48:
 		move.b	#$1A,obj.Anim(a0)
 		move.w	#$258,$30(a0)
 		move.w	#sfx_Death,d0
-		cmpi.b	#$36,(a2)
+		cmpi.b	#id_Spikes,obj.Id(a2)
 		bne.s	loc_FD68
 		move.w	#sfx_HitSpikes,d0
 
@@ -258,7 +258,7 @@ loc_FD78:
 		move.w	obj.Ypos(a0),$38(a0)
 		move.b	#$18,obj.Anim(a0)
 		move.w	#sfx_Death,d0
-		cmpi.b	#$36,(a2)
+		cmpi.b	#id_Spikes,obj.Id(a2)
 		bne.s	loc_FDBA
 		move.w	#sfx_HitSpikes,d0
 

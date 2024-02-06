@@ -1561,7 +1561,7 @@ GM_Title:
 		bsr.w	ClearScreen
 		lea	(v_objspace).w,a1
 		moveq	#0,d0
-		move.w	#$7FF,d1
+		move.w	#(v_objend-v_objspace)/4-1,d1
 
 loc_2592:
 		move.l	d0,(a1)+
@@ -1986,7 +1986,7 @@ loc_2C0A:
 		move.w	#$8720,(a6)
 		lea	(v_objspace).w,a1
 		moveq	#0,d0
-		move.w	#$7FF,d1
+		move.w	#(v_objend-v_objspace)/4-1,d1
 
 loc_2C4C:
 		move.l	d0,(a1)+
@@ -2486,7 +2486,7 @@ loc_3534:
 		bsr.w	ssLoadBG
 		lea	(v_objspace).w,a1
 		moveq	#0,d0
-		move.w	#$7FF,d1
+		move.w	#(v_objend-v_objspace)/4-1,d1
 
 loc_3554:
 		move.l	d0,(a1)+
@@ -4336,7 +4336,7 @@ loc_8A00:
 		move.l	a1,(v_opl_data+$C).w
 		lea	(v_objstate).w,a2
 		move.w	#$101,(a2)+
-		move.w	#$5E,d0
+		move.w	#(v_objstate_end-v_objstate-2)/2-1,d0
 
 loc_8A38:
 		clr.l	(a2)+
@@ -4496,7 +4496,7 @@ locret_8B70:
 
 FindFreeObj:
 		lea	(v_lvlobjspace).w,a1
-		move.w	#$5F,d0
+		move.w	#(v_lvlobjend-v_lvlobjspace)/object_size-1,d0
 
 loc_8B7A:
 		tst.b	(a1)
@@ -4510,7 +4510,7 @@ locret_8B86:
 
 FindNextFreeObj:
 		movea.l	a0,a1
-		move.w	#$F000,d0
+		move.w	#v_lvlobjend,d0
 		sub.w	a0,d0
 		lsr.w	#6,d0
 		subq.w	#1,d0

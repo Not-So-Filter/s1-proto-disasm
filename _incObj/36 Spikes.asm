@@ -72,7 +72,7 @@ loc_AB9E:
 loc_ABBE:
 		move.l	a0,-(sp)
 		movea.l	a0,a2
-		lea	(v_objspace).w,a0
+		lea	(v_player).w,a0
 		move.l	obj.Ypos(a0),d3
 		move.w	obj.VelY(a0),d0
 		ext.l	d0

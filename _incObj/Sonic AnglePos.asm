@@ -57,7 +57,7 @@ loc_FE26:
 		tst.w	d1
 		beq.s	locret_FEC6
 		bpl.s	loc_FEC8
-		cmpi.w	#$FFF2,d1
+		cmpi.w	#-$E,d1
 		blt.s	locret_FEE8
 		add.w	d1,obj.Ypos(a0)
 
@@ -194,7 +194,7 @@ loc_FFD6:
 		tst.w	d1
 		beq.s	locret_FFF2
 		bpl.s	loc_FFF4
-		cmpi.w	#$FFF2,d1
+		cmpi.w	#-$E,d1
 		blt.w	locret_FF0C
 		add.w	d1,obj.Xpos(a0)
 
@@ -255,7 +255,7 @@ Sonic_WalkCeiling:
 		tst.w	d1
 		beq.s	locret_1008E
 		bpl.s	loc_10090
-		cmpi.w	#$FFF2,d1
+		cmpi.w	#-$E,d1
 		blt.w	locret_FEE8
 		sub.w	d1,obj.Ypos(a0)
 
@@ -314,7 +314,7 @@ Sonic_WalkVertL:
 		tst.w	d1
 		beq.s	locret_1012A
 		bpl.s	loc_1012C
-		cmpi.w	#$FFF2,d1
+		cmpi.w	#-$E,d1
 		blt.w	locret_FF0C
 		sub.w	d1,obj.Xpos(a0)
 

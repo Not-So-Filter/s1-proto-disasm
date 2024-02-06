@@ -2273,7 +2273,7 @@ cfStopTrack:
 		subq.b	#2,d0
 		lsl.b	#2,d0
 		movea.l	(a0,d0.w),a5
-		tst.b	(a5)
+		tst.b	TrackPlaybackControl(a5)
 		bpl.s	.checkfm3
 		movea.l	v_voice_ptr(a6),a1
 
@@ -2296,7 +2296,7 @@ cfStopTrack:
 
 .getpsg:
 		lea	v_spcsfx_psg3_track(a6),a0
-		tst.b	(a0)
+		tst.b	TrackPlaybackControl(a0)
 		bpl.s	.normalpsg
 		cmpi.b	#$E0,d0
 		beq.s	.unint
@@ -2463,6 +2463,12 @@ SSG_Reg_Table:	dc.b $90, $50, $98, $58
 
 Unc_Z80:	include	"sound/z80.asm"
 Unc_Z80_End:	even
+; ---------------------------------------------------------------------------
+; SMPS2ASM - A collection of macros that make SMPS's bytecode human-readable.
+; ---------------------------------------------------------------------------
+SonicDriverVer = 1 ; Tell SMPS2ASM that we're using Sonic 1's driver.
+		include "sound/_smps2asm_inc.asm"
+
 Music81:	binclude	"sound/music/Mus81 - GHZ.bin"
 		even
 Music82:	binclude	"sound/music/Mus82 - LZ.bin"
@@ -2481,7 +2487,7 @@ Music88:	binclude	"sound/music/Mus88 - Extra Life.bin"
 		even
 Music89:	binclude	"sound/music/Mus89 - Special Stage.bin"
 		even
-Music8A:	binclude	"sound/music/Mus8A - Title Screen.bin"
+Music8A:	include	"sound/music/Mus8A - Title Screen.asm"
 		even
 Music8B:	binclude	"sound/music/Mus8B - Ending.bin"
 		even
