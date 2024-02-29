@@ -40,7 +40,7 @@ Bridge_MakeLog:
 		bne.s	loc_4EE6
 		addi.w	#$10,d3
 		move.w	d2,obj.Ypos(a0)
-		move.w	d2,$3C(a0)
+		move.w	d2,obj.Off_3C(a0)
 		move.w	a0,d5
 		subi.w	#v_objspace,d5
 		lsr.w	#6,d5
@@ -57,7 +57,7 @@ loc_4EE6:
 		move.b	#$A,obj.Routine(a1)
 		_move.b	d4,obj.Id(a1)
 		move.w	d2,obj.Ypos(a1)
-		move.w	d2,$3C(a1)
+		move.w	d2,obj.Off_3C(a1)
 		move.w	d3,obj.Xpos(a1)
 		move.l	#MapBridge,obj.Map(a1)
 		move.w	#$438E,obj.Gfx(a1)
@@ -69,9 +69,9 @@ loc_4EE6:
 
 loc_4F32:
 		bsr.s	PtfmBridge
-		tst.b	$3E(a0)
+		tst.b	obj.Off_3E(a0)
 		beq.s	loc_4F42
-		subq.b	#4,$3E(a0)
+		subq.b	#4,obj.Off_3E(a0)
 		bsr.w	Bridge_UpdateBend
 
 loc_4F42:

@@ -147,9 +147,9 @@ sub_10E2C:
 
 loc_10E3A:
 		subi.w	#$C,d0
-		cmpi.w	#$F800,d0
+		cmpi.w	#-$800,d0
 		bgt.s	loc_10E48
-		move.w	#$F800,d0
+		move.w	#-$800,d0
 
 loc_10E48:
 		move.w	d0,obj.Inertia(a0)

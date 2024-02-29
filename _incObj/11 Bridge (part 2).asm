@@ -15,11 +15,11 @@ Bridge_ChkExit:
 		bsr.s	PtfmCheckExit2
 		bcc.s	locret_50E8
 		lsr.w	#4,d0
-		move.b	d0,$3F(a0)
-		move.b	$3E(a0),d0
+		move.b	d0,obj.Off_3F(a0)
+		move.b	obj.Off_3E(a0),d0
 		cmpi.b	#$40,d0
 		beq.s	loc_50E0
-		addq.b	#4,$3E(a0)
+		addq.b	#4,obj.Off_3E(a0)
 
 loc_50E0:
 		bsr.w	Bridge_UpdateBend

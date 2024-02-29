@@ -401,11 +401,11 @@ smpsNop macro val
 
 ; Return (used after smpsCall)
 smpsReturn macro val
-	if SonicDriverVer>=3
+;	if SonicDriverVer>=3
 		dc.b	$F9
-	else
-		dc.b	$E3
-	endif
+;	else
+;		dc.b	$E3
+;	endif
 	endm
 
 ; Fade in previous song (ie. 1-Up)
@@ -435,7 +435,7 @@ smpsChanTempoDiv macro val
 	elseif SonicDriverVer==3
 		fatal "Coord. Flag to set tempo divider of a single channel does not exist in S3 driver. Use Flamewing's modified S&K sound driver instead."
 	else
-		dc.b	$E5,val
+		dc.b	$FA,val
 	endif
 	endm
 
@@ -486,7 +486,7 @@ smpsSetTempoDiv macro val
 	if SonicDriverVer>=3
 		dc.b	$FF,$04,val
 	else
-		dc.b	$EB,val
+		dc.b	$EA,val
 	endif
 	endm
 
@@ -754,7 +754,7 @@ smpsFMFlutter macro
 	endm
 
 smpsWeirdD1LRR macro
-	smpsMaxRelRate ALLARGS
+	message "Coord. Flag does not exist in the Sonic 1 Prototype!"
 	endm
 
 smpsSetvoice macro

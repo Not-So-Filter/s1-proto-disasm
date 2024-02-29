@@ -2,8 +2,8 @@
 
 Bridge_PlayerPos:
 		moveq	#0,d0
-		move.b	$3F(a0),d0
-		move.b	$29(a0,d0.w),d0
+		move.b	obj.Off_3F(a0),d0
+		move.b	obj.Off_29(a0,d0.w),d0
 		lsl.w	#6,d0
 		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a2
@@ -18,7 +18,7 @@ Bridge_PlayerPos:
 ; ---------------------------------------------------------------------------
 
 Bridge_UpdateBend:
-		move.b	$3E(a0),d0
+		move.b	obj.Off_3E(a0),d0
 		bsr.w	CalcSine
 		move.w	d0,d4
 		lea	(byte_5306).l,a4
@@ -26,7 +26,7 @@ Bridge_UpdateBend:
 		move.b	obj.Subtype(a0),d0
 		lsl.w	#4,d0
 		moveq	#0,d3
-		move.b	$3F(a0),d3
+		move.b	obj.Off_3F(a0),d3
 		move.w	d3,d2
 		add.w	d0,d3
 		moveq	#0,d5
@@ -35,7 +35,7 @@ Bridge_UpdateBend:
 		andi.w	#$F,d3
 		lsl.w	#4,d3
 		lea	(a4,d3.w),a3
-		lea	$29(a0),a2
+		lea	obj.Off_29(a0),a2
 
 loc_5186:
 		moveq	#0,d0
@@ -49,13 +49,13 @@ loc_5186:
 		mulu.w	d5,d0
 		mulu.w	d4,d0
 		swap	d0
-		add.w	$3C(a1),d0
+		add.w	obj.Off_3C(a1),d0
 		move.w	d0,obj.Ypos(a1)
 		dbf	d2,loc_5186
 		moveq	#0,d0
 		move.b	obj.Subtype(a0),d0
 		moveq	#0,d3
-		move.b	$3F(a0),d3
+		move.b	obj.Off_3F(a0),d3
 		addq.b	#1,d3
 		sub.b	d0,d3
 		neg.b	d3
@@ -79,7 +79,7 @@ loc_51CE:
 		mulu.w	d5,d0
 		mulu.w	d4,d0
 		swap	d0
-		add.w	$3C(a1),d0
+		add.w	obj.Off_3C(a1),d0
 		move.w	d0,obj.Ypos(a1)
 		dbf	d2,loc_51CE
 
@@ -104,7 +104,7 @@ byte_51F6:	dc.b 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2
 		dc.b $A, 8, 6, 4, 2, 0, 0, 2, 4, 6, 8, $A, $C, $E, $10
 		dc.b $E, $C, $A, 8, 6, 4, 2, 0, 2, 4, 6, 8, $A, $C, $E
 		dc.b $10, $10, $E, $C, $A, 8, 6, 4, 2
-
+		even
 byte_5306:	dc.b $FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		dc.b $B5, $FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		dc.b $7E, $DB, $FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -126,6 +126,7 @@ byte_5306:	dc.b $FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 		dc.b $DB, $E7, $F3, $F9, $FE, $FF, 0, $19, $31, $4A, $61
 		dc.b $78, $8E, $A2, $B5, $C5, $D4, $E1, $EC, $F4, $FB
 		dc.b $FE, $FF
+		even
 ; ---------------------------------------------------------------------------
 
 Bridge_ChkDelete:

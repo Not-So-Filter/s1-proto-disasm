@@ -436,7 +436,7 @@ FMUpdateFreq:
 		add.w	d0,d6
 		btst	#2,TrackPlaybackControl(a5)
 		bne.s	locret_744E0
-		tst.b	TrackSavedDuration(a6)
+		tst.b	v_se_mode_flag(a6)
 		beq.s	.nofm3sm
 		cmpi.b	#2,TrackVoiceControl(a5)
 		beq.s	FM3SpcUpdateFreq
@@ -461,7 +461,7 @@ FMSetRest:
 
 FM3SpcUpdateFreq:
 		lea	.fm3freqs(pc),a1
-		lea	TrackFreq(a6),a2
+		lea	v_detune_freq1(a6),a2
 		moveq	#3,d7
 
 .loopfm3:
@@ -960,7 +960,7 @@ dPlaySnd_SFX:
 		moveq	#0,d0
 		move.w	(a1)+,d0
 		add.l	a3,d0
-		move.l	d0,TrackModulationVal(a6)
+		move.l	d0,v_lfo_voice_ptr(a6)
 		move.b	(a1)+,d5
 		move.b	(a1)+,d7
 		subq.b	#1,d7
@@ -2287,7 +2287,7 @@ cfStopTrack:
 		movea.l	a3,a5
 		cmpi.b	#2,TrackVoiceControl(a5)
 		bne.s	.exit
-		clr.b	$F(a6)
+		clr.b	v_se_mode_flag(a6)
 		moveq	#0,d1
 		moveq	#$27,d0
 		jsr	WriteFMI(pc)
@@ -2429,13 +2429,13 @@ cfStopSpecialFM4:
 ; ---------------------------------------------------------------------------
 
 cfFE_SpcFM3Mode:
-		lea	$10(a6),a0
-		moveq	#7,d0
+		lea	v_detune_freq1(a6),a0
+		moveq	#8-1,d0
 
 .clear:
 		move.b	(a4)+,(a0)+
 		dbf	d0,.clear
-		move.b	#$80,$F(a6)
+		move.b	#$80,v_se_mode_flag(a6)
 		move.b	#$27,d0
 		moveq	#$40,d1
 		bra.w	WriteFMI

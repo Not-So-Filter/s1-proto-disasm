@@ -19,7 +19,6 @@ zeroOffsetOptimization = 0
 		include "Constants.asm"
 		include "Variables.asm"
 		include "Macros.asm"
-
 ; ---------------------------------------------------------------------------
 
 StartOfROM:
@@ -2282,12 +2281,12 @@ off_3100:	dc.l byte_614C6
 		even
 ; ---------------------------------------------------------------------------
 ;sub_314C:
-		cmpi.b	#id_06,(v_zone).w
-		bne.s	locret_3176
+		cmpi.b	#id_06,(v_zone).w	; are we on Zone 6?
+		bne.s	locret_3176	; if not, branch
 		bsr.w	sub_3178
-		lea	(v_startofram&$FFFFFF+$900).l,a1
+		lea	(v_256x256&$FFFFFF+$900).l,a1
 		bsr.s	sub_3166
-		lea	(v_startofram&$FFFFFF+$3380).l,a1
+		lea	(v_256x256&$FFFFFF+$3380).l,a1
 
 sub_3166:
 		lea	(Anim16Unk1).l,a0
@@ -2302,7 +2301,7 @@ locret_3176:
 ; ---------------------------------------------------------------------------
 
 sub_3178:
-		lea	(v_startofram&$FFFFFF).l,a1
+		lea	(v_256x256&$FFFFFF).l,a1
 		lea	(Anim16Unk2).l,a0
 		move.w	#(Anim16Unk2_end-Anim16Unk2)/2-1,d1
 
@@ -2319,17 +2318,17 @@ Anim16Unk2_end:	even
 ; ---------------------------------------------------------------------------
 
 LoadAnimatedBlocks:
-		cmpi.b	#id_MZ,(v_zone).w
-		beq.s	.ismz
-		cmpi.b	#id_SLZ,(v_zone).w
-		beq.s	.isslz
-		tst.b	(v_zone).w
-		bne.s	.notghz
+		cmpi.b	#id_MZ,(v_zone).w	; are we on Marble Zone?
+		beq.s	.ismz	; if yes, branch
+		cmpi.b	#id_SLZ,(v_zone).w	; are we on Star Light Zone?
+		beq.s	.isslz	; if yes, branch
+		tst.b	(v_zone).w	; are we on Green Hill Zone?
+		bne.s	.notghz	; if not, branch
 
 .isslz:
-		lea	(v_16x16+$1790).w,a1
-		lea	(Anim16GHZ).l,a0
-		move.w	#(Anim16GHZ_end-Anim16GHZ)/2-1,d1
+		lea	(v_16x16+$1790).w,a1	; load ROM address for animated blocks to load in the main block RAM into a1.
+		lea	(Anim16GHZ).l,a0	; load animated GHZ blocks into a0.
+		move.w	#(Anim16GHZ_end-Anim16GHZ)/2-1,d1	; load approximate size of the blocks into d1.
 
 .loadghz:
 		move.w	(a0)+,(a1)+
@@ -2340,9 +2339,9 @@ LoadAnimatedBlocks:
 ; ---------------------------------------------------------------------------
 
 .ismz:
-		lea	(v_16x16+$17A0).w,a1
-		lea	(Anim16MZ).l,a0
-		move.w	#(Anim16MZ_end-Anim16MZ)/2-1,d1
+		lea	(v_16x16+$17A0).w,a1	; load ROM address for animated blocks to load in the main block RAM into a1.
+		lea	(Anim16MZ).l,a0	; load animated MZ blocks into a0.
+		move.w	#(Anim16MZ_end-Anim16MZ)/2-1,d1	; load approximate size of the blocks into d1.
 
 .loadmz:
 		move.w	(a0)+,(a1)+
@@ -3380,8 +3379,10 @@ locret_48B8:
 ; ---------------------------------------------------------------------------
 
 LevelLayoutLoad:
+		; This is bugged, the size is too large!
+		; To fix this, divide by 4 (longword), not 2 (word).
 		lea	(v_lvllayout).w,a3
-		move.w	#$1FF,d1
+		move.w	#(v_lvllayout_end-v_lvllayout)/2-1,d1
 		moveq	#0,d0
 
 loc_48C4:
@@ -5459,7 +5460,7 @@ Sonic_NoRunningOnWalls:
 		moveq	#$E,d5
 		bsr.w	sub_101BE
 		move.w	(sp)+,d0
-		move.b	#$80,d2
+		move.b	#-$80,d2
 		bra.w	loc_105A8
 ; ---------------------------------------------------------------------------
 		move.w	obj.Ypos(a0),d2
@@ -5473,7 +5474,7 @@ loc_10754:
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
-		move.b	#$80,d2
+		move.b	#-$80,d2
 		bra.w	loc_105E2
 ; ---------------------------------------------------------------------------
 
@@ -5493,7 +5494,7 @@ ObjectHitCeiling:
 		move.b	(v_angle_primary).w,d3
 		btst	#0,d3
 		beq.s	locret_107AC
-		move.b	#$80,d3
+		move.b	#-$80,d3
 
 locret_107AC:
 		rts
@@ -6601,41 +6602,41 @@ Nem_GHZ_1st:	binclude "artnem/8x8 - GHZ1.bin"
 		even
 Nem_GHZ_2nd:	binclude "artnem/8x8 - GHZ2.bin"
 		even
-Blk256_GHZ:	binclude "map256/GHZ.bin"
+Blk256_GHZ:	binclude "map256/GHZ.kos"
 		even
 Blk16_LZ:	binclude "map16/LZ.bin"
 		even
 Nem_LZ:		binclude "artnem/8x8 - LZ.bin"
 		even
-Blk256_LZ:	binclude "map256/LZ.bin"
+Blk256_LZ:	binclude "map256/LZ.kos"
 		even
 Blk16_MZ:	binclude "map16/MZ.bin"
 		even
 Nem_MZ:		binclude "artnem/8x8 - MZ.bin"
 		even
-Blk256_MZ:	binclude "map256/MZ.bin"
+Blk256_MZ:	binclude "map256/MZ.kos"
 		even
-byte_3DB70:	binclude "unknown/3DB70.dat"
+		binclude "unknown/3DA48.dat"
 		even
 Blk16_SLZ:	binclude "map16/SLZ.bin"
 		even
 Nem_SLZ:	binclude "artnem/8x8 - SLZ.bin"
 		even
-Blk256_SLZ:	binclude "map256/SLZ.bin"
+Blk256_SLZ:	binclude "map256/SLZ.kos"
 		even
 Blk16_SZ:	binclude "map16/SZ.bin"
 		even
 Nem_SZ:		binclude "artnem/8x8 - SZ.bin"
 		even
-Blk256_SZ:	binclude "map256/SZ.bin"
+Blk256_SZ:	binclude "map256/SZ.kos"
 		even
 Blk16_CWZ:	binclude "map16/CWZ.bin"
 		even
 Nem_CWZ:	binclude "artnem/8x8 - CWZ.bin"
 		even
-Blk256_CWZ:	binclude "map256/CWZ.bin"
+Blk256_CWZ:	binclude "map256/CWZ.kos"
 		even
-byte_570FC:	binclude "unknown/570FC.dat"
+		binclude "unknown/570DC.dat"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence

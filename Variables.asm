@@ -62,102 +62,9 @@ v_objslot1D:		ds.b obj.Size
 v_objslot1E:		ds.b obj.Size
 v_objslot1F:		ds.b obj.Size
 v_lvlobjspace:
+	rept 96
 			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
-			ds.b obj.Size
+	endm
 v_lvlobjend:
 v_objend:
 ; $FFFFF000
@@ -181,13 +88,18 @@ v_fadeout_delay:	ds.b 1
 v_communication_byte:	ds.b 1				; used in Ristar to sync with a boss' attacks; unused here
 f_updating_dac:		ds.b 1				; $80 if updating DAC, $00 otherwise
 v_sound_id:		ds.b 1				; sound or music copied from below
-v_soundqueue_start:	ds.b 0
+v_soundqueue_start:
 v_soundqueue0:		ds.b 1				; sound or music to play
 v_soundqueue1:		ds.b 1				; special sound to play
 v_soundqueue2:		ds.b 1				; unused sound to play
-v_soundqueue_end:	ds.b 0
+v_soundqueue_end:
 			ds.b 1				; unused
-f_voice_selector:	ds.b 10				; $00 = use music voice pointer; $40 = use special voice pointer; $80 = use track voice pointer
+f_voice_selector:	ds.b 1				; $00 = use music voice pointer; $40 = use special voice pointer; $80 = use track voice pointer
+v_se_mode_flag:		ds.b 1				; effect mode
+v_detune_freq1:		ds.w 1				; store slot 1 detune freq (2 bytes)
+v_detune_freq2:		ds.w 1				; store slot 2 detune freq (2 bytes)
+v_detune_freq3:		ds.w 1				; store slot 3 detune freq (2 bytes)
+v_detune_freq4:		ds.w 1				; store slot 4 detune freq (2 bytes)
 
 v_voice_ptr:		ds.l 1				; voice data pointer (4 bytes)
 v_lfo_voice_ptr:	ds.l 1				; lfo voice data pointer (4 bytes)
