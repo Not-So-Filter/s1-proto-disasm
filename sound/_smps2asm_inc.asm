@@ -340,7 +340,7 @@ smpsHeaderPSG macro loc,pitch,vol,mod,voice
 		dc.b	0
 	else
 		if (MOMPASS==2) && (SonicDriverVer<3) && (SourceDriver>=3) && (mod<>0)
-			message "This track header specifies a frequency envelope, but this driver does not support them."			
+			message "This track header specifies a frequency envelope, but this driver does not support them."
 		endif
 		dc.b	mod
 	endif
@@ -464,11 +464,7 @@ smpsNoteFill macro val
 
 ; Add xx to channel pitch
 smpsChangeTransposition macro val
-	if SonicDriverVer>=3
-		dc.b	$FB,val
-	else
-		dc.b	$E9,val
-	endif
+	dc.b	$FB,val
 	endm
 
 ; Set music tempo modifier to xx
@@ -516,7 +512,7 @@ smpsClearPush macro
 ; Stops special SFX (S1 only) and restarts overridden music track
 smpsStopSpecial macro
 	if SonicDriverVer==1
-		dc.b	$EE
+		dc.b	$FD
 	else
 		message "Coord. Flag to stop special SFX does not exist in S2 or S3 drivers. Complain to Flamewing to add it. With adequate caution, smpsStop can do this job."
 		smpsStop
@@ -609,7 +605,12 @@ smpsCall macro loc
 	if SonicDriverVer<>1
 		dc.w	z80_ptr(loc)
 	else
+	if loc==$14F7
+	; This is an exception for the commands that go unused in Sound D2.
+		dc.w	loc-1
+	else
 		dc.w	loc-*-1
+	endif
 	endif
 	endm
 ; ---------------------------------------------------------------------------
