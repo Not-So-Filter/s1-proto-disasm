@@ -206,6 +206,7 @@ zDAC_Status:	ds.b 1					; Bit 7 set if the driver is not accepting new samples, 
 zUnk_1FFE:	ds.b 1
 zDAC_Sample:	ds.b 1					; Sample to play, the 68k will move into this locatiton whatever sample that's supposed to be played.
 	dephase
+	!org 0
 
 zYM2612_A0:	equ $4000
 zYM2612_D0:	equ $4001
@@ -237,41 +238,44 @@ z80_reset:		= $A11200
 security_addr:		= $A14000
 
 ; Sound driver constants
-TrackPlaybackControl:	= 0				; All tracks
-TrackVoiceControl:	= 1				; All tracks
-TrackTempoDivider:	= 2				; All tracks
-TrackDataPointer:	= 4				; All tracks (4 bytes)
-TrackTranspose:		= 8				; FM/PSG only (sometimes written to as a word, to include TrackVolume)
-TrackVolume:		= 9				; FM/PSG only
-TrackAMSFMSPan:		= $A				; FM/DAC only
-TrackVoiceIndex:	= $B				; FM/PSG only
-TrackVolEnvIndex:	= $C				; PSG only
-TrackStackPointer:	= $D				; All tracks
-TrackDurationTimeout:	= $E				; All tracks
-TrackSavedDuration:	= $F				; All tracks
-TrackSavedDAC:		= $10				; DAC only
-TrackFreq:		= $10				; FM/PSG only (2 bytes)
-TrackNoteTimeout:	= $12				; FM/PSG only
-TrackNoteTimeoutMaster:	= $13				; FM/PSG only
-TrackModulationPtr:	= $14				; FM/PSG only (4 bytes)
-TrackModulationWait:	= $18				; FM/PSG only
-TrackModulationSpeed:	= $19				; FM/PSG only
-TrackModulationDelta:	= $1A				; FM/PSG only
-TrackModulationSteps:	= $1B				; FM/PSG only
-TrackModulationVal:	= $1C				; FM/PSG only (2 bytes)
-TrackDetune:		= $1E				; FM/PSG only
-TrackVoicePtr:		= $1C				; FM SFX only (4 bytes)
-TrackPanNumber:		= $1F				; FM only
-TrackPanTable:		= $20				; FM only
-TrackPanStart:		= $21				; FM only
-TrackPanLimit:		= $22				; FM only
-TrackPanLength:		= $23				; FM only
-TrackPanContinue:	= $24				; FM only
-TrackFeedbackAlgo:	= $25				; FM only
-TrackPSGNoise:		= $26				; PSG only
-TrackLoopCounters:	= $28				; All tracks (multiple bytes)
-TrackSz:		= $30
-TrackGoSubStack:	= TrackSz			; All tracks (multiple bytes. This constant won't get to be used because of an optimisation that just uses TrackSz)
+Track STRUCT DOTS
+PlaybackControl:	ds.b 1		; All tracks
+VoiceControl:		ds.b 1		; All tracks
+TempoDivider:		ds.b 1		; All tracks
+	ds.b 1
+DataPointer:		ds.l 1		; All tracks (4 bytes)
+Transpose:		ds.b 1		; FM/PSG only (sometimes written to as a word, to include TrackVolume)
+Volume:			ds.b 1		; FM/PSG only
+AMSFMSPan:		ds.b 1		; FM/DAC only
+VoiceIndex:		ds.b 1		; FM/PSG only
+VolEnvIndex:		ds.b 1		; PSG only
+StackPointer:		ds.b 1		; All tracks
+DurationTimeout:	ds.b 1		; All tracks
+SavedDuration:		ds.b 1		; All tracks
+SavedDAC:				; DAC only
+Freq:			ds.w 1		; FM/PSG only (2 bytes)
+NoteTimeout:		ds.b 1		; FM/PSG only
+NoteTimeoutMaster:	ds.b 1		; FM/PSG only
+ModulationPtr:		ds.l 1		; FM/PSG only (4 bytes)
+ModulationWait:		ds.b 1		; FM/PSG only
+ModulationSpeed:	ds.b 1		; FM/PSG only
+ModulationDelta:	ds.b 1		; FM/PSG only
+ModulationSteps:	ds.b 1		; FM/PSG only
+ModulationVal:		ds.w 1		; FM/PSG only (2 bytes)
+Detune:			ds.b 1		; FM/PSG only
+PanNumber:		ds.b 1		; FM only
+PanTable:		ds.b 1		; FM only
+PanStart:		ds.b 1		; FM only
+PanLimit:		ds.b 1		; FM only
+PanLength:		ds.b 1		; FM only
+PanContinue:		ds.b 1		; FM only
+FeedbackAlgo:		ds.b 1		; FM only
+PSGNoise:		ds.b 1		; PSG only
+	ds.b 1
+LoopCounters:		ds.l 2		; All tracks (multiple bytes)
+GoSubStack:				; All tracks (multiple bytes. This constant won't get to be used because of an optimisation that just uses TrackSz)
+Sz:
+Track ENDSTRUCT
 
 ; Background music
 bgm__First:	= $81

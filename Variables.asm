@@ -96,10 +96,12 @@ v_soundqueue_end:
 			ds.b 1				; unused
 f_voice_selector:	ds.b 1				; $00 = use music voice pointer; $40 = use special voice pointer; $80 = use track voice pointer
 v_se_mode_flag:		ds.b 1				; effect mode
+v_detune_start:
 v_detune_freq1:		ds.w 1				; store slot 1 detune freq (2 bytes)
 v_detune_freq2:		ds.w 1				; store slot 2 detune freq (2 bytes)
 v_detune_freq3:		ds.w 1				; store slot 3 detune freq (2 bytes)
 v_detune_freq4:		ds.w 1				; store slot 4 detune freq (2 bytes)
+v_detune_end:
 
 v_voice_ptr:		ds.l 1				; voice data pointer (4 bytes)
 v_lfo_voice_ptr:	ds.l 1				; lfo voice data pointer (4 bytes)
@@ -121,44 +123,44 @@ f_push_playing:		ds.b 1				; if set, prevents further push sounds from playing
 v_music_track_ram:					; Start of music RAM
 
 v_music_fmdac_tracks:
-v_music_dac_track:	ds.b TrackSz
+v_music_dac_track:	ds.b Track.Sz
 v_music_fm_tracks:
-v_music_fm1_track:	ds.b TrackSz
-v_music_fm2_track:	ds.b TrackSz
-v_music_fm3_track:	ds.b TrackSz
-v_music_fm4_track:	ds.b TrackSz
-v_music_fm5_track:	ds.b TrackSz
-v_music_fm6_track:	ds.b TrackSz
+v_music_fm1_track:	ds.b Track.Sz
+v_music_fm2_track:	ds.b Track.Sz
+v_music_fm3_track:	ds.b Track.Sz
+v_music_fm4_track:	ds.b Track.Sz
+v_music_fm5_track:	ds.b Track.Sz
+v_music_fm6_track:	ds.b Track.Sz
 v_music_fm_tracks_end:
 v_music_fmdac_tracks_end:
 v_music_psg_tracks:
-v_music_psg1_track:	ds.b TrackSz
-v_music_psg2_track:	ds.b TrackSz
-v_music_psg3_track:	ds.b TrackSz
+v_music_psg1_track:	ds.b Track.Sz
+v_music_psg2_track:	ds.b Track.Sz
+v_music_psg3_track:	ds.b Track.Sz
 v_music_psg_tracks_end:
 v_music_track_ram_end:
 
 v_sfx_track_ram:					; Start of SFX RAM, straight after the end of music RAM
 
 v_sfx_fm_tracks:
-v_sfx_fm3_track:	ds.b TrackSz
-v_sfx_fm4_track:	ds.b TrackSz
-v_sfx_fm5_track:	ds.b TrackSz
+v_sfx_fm3_track:	ds.b Track.Sz
+v_sfx_fm4_track:	ds.b Track.Sz
+v_sfx_fm5_track:	ds.b Track.Sz
 v_sfx_fm_tracks_end:
 v_sfx_psg_tracks:
-v_sfx_psg1_track:	ds.b TrackSz
-v_sfx_psg2_track:	ds.b TrackSz
-v_sfx_psg3_track:	ds.b TrackSz
+v_sfx_psg1_track:	ds.b Track.Sz
+v_sfx_psg2_track:	ds.b Track.Sz
+v_sfx_psg3_track:	ds.b Track.Sz
 v_sfx_psg_tracks_end:
 v_sfx_track_ram_end:
 
 v_spcsfx_track_ram:					; Start of special SFX RAM, straight after the end of SFX RAM
 
-v_spcsfx_fm4_track:	ds.b TrackSz
-v_spcsfx_psg3_track:	ds.b TrackSz
+v_spcsfx_fm4_track:	ds.b Track.Sz
+v_spcsfx_psg3_track:	ds.b Track.Sz
 v_spcsfx_track_ram_end:
 
-v_1up_ram_copy:		ds.b TrackSz
+v_1up_ram_copy:		ds.b Track.Sz
 
 			dephase
 
