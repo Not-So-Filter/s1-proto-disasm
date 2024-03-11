@@ -1,5 +1,9 @@
-@ECHO OFF
+call build_tools/md5.bat s1built.bin md5
 
-"build_tools/Lua/lua.exe" chkbitperfect.lua
+if "%md5%" equ "b06578c3412de1c5be765a59dec5ff1f" (
+      echo MD5 identical!
+) else (
+      echo MD5 does not match.
+)
 
 pause

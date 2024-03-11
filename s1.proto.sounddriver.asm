@@ -1925,7 +1925,7 @@ cfE3_GlobalMod:
 		subq.b	#1,d0
 		lsl.w	#2,d0
 		adda.w	d0,a0
-		bset	#3,Track.PlaybackControl(a5)
+		bset	#3,Track.PlaybackControl(a5)	; Enable modulation
 		move.l	a0,Track.ModulationPtr(a5)
 		move.b	(a0)+,Track.ModulationWait(a5)
 		move.b	(a0)+,Track.ModulationSpeed(a5)

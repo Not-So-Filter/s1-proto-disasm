@@ -11,3 +11,4 @@ byte_66F5:	dc.b 4
 		dc.b $E8, $F, 8, $9A, 0
 		dc.b 8, $D, 0, $AA, $E0
 		dc.b 8, $D, 8, $AA, 0
+		even

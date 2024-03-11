@@ -425,7 +425,7 @@ ErrorPrint:
 		lea	(vdp_data_port).l,a6
 		locVRAM	$F800
 		lea	(Art_Text).l,a0
-		move.w	#$27F,d1
+		move.w	#(Art_Text_end-Art_Text)/2-$10-1,d1
 
 .loadart:
 		move.w	(a0)+,(a6)
@@ -502,22 +502,22 @@ ErrorWaitInput:
 		rts
 ; ---------------------------------------------------------------------------
 Art_Text:	binclude "artunc/menutext.bin"
-		even
+Art_Text_end:	even
 ; ---------------------------------------------------------------------------
 
 VBlank:
 		movem.l	d0-a6,-(sp)
 		tst.b	(v_vbla_routine).w
-		beq.s	loc_B58
+		beq.s	VBla_Exit
 		move.w	(vdp_control_port).l,d0
 		move.l	#$40000010,(vdp_control_port).l
 		move.l	(v_scrposy_dup).w,(vdp_data_port).l
-		btst	#6,(v_megadrive).w
-		beq.s	loc_B3C
-		move.w	#$700,d0
+		btst	#6,(v_megadrive).w	; are we on a PAL machine?
+		beq.s	.notPAL	; if not, branch
+		move.w	#$700,d0	; intentionally lag the system to move the CRAM dots
 		dbf	d0,*
 
-loc_B3C:
+.notPAL:
 		move.b	(v_vbla_routine).w,d0
 		move.b	#0,(v_vbla_routine).w
 		move.w	#1,(f_hblank).w
@@ -525,7 +525,7 @@ loc_B3C:
 		move.w	VBla_Index(pc,d0.w),d0
 		jsr	VBla_Index(pc,d0.w)
 
-loc_B58:
+VBla_Exit:
 		addq.l	#1,(v_vbla_count).w
 		jsr	(UpdateMusic).l
 		movem.l	(sp)+,d0-a6
@@ -590,11 +590,11 @@ VBla_08:
 		move.w	(v_bg3scrposy_vdp).w,(v_bg3scrposy_vdp_dup).w
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
 		tst.b	(f_sonframechg).w
-		beq.s	loc_C7A
+		beq.s	.nochg
 		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
 		move.b	#0,(f_sonframechg).w
 
-loc_C7A:
+.nochg:
 		startZ80
 		bsr.w	mapLevelLoad
 		jsr	(AnimateLevelGfx).l
@@ -627,11 +627,11 @@ VBla_0A:
 		startZ80
 		bsr.w	SS_PalCycle
 		tst.b	(f_sonframechg).w
-		beq.s	loc_D7A
+		beq.s	.nochg
 		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
 		move.b	#0,(f_sonframechg).w
 
-loc_D7A:
+.nochg:
 		tst.w	(v_demolength).w
 		beq.w	.end
 		subq.w	#1,(v_demolength).w
@@ -648,11 +648,11 @@ VBla_0C:
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		tst.b	(f_sonframechg).w
-		beq.s	loc_E3A
+		beq.s	.nochg
 		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
 		move.b	#0,(f_sonframechg).w
 
-loc_E3A:
+.nochg:
 		startZ80
 		bsr.w	mapLevelLoad
 		jsr	(AnimateLevelGfx).l
@@ -698,9 +698,9 @@ HBlank:
 		rte
 ; ---------------------------------------------------------------------------
 
-;sub_F3C:
+HBlank2:
 		tst.w	(f_hblank).w
-		beq.s	locret_F7E
+		beq.s	.locret
 		movem.l	d0/a0/a5,-(sp)
 		move.w	#0,(f_hblank).w
 		move.w	#$8405,(vdp_control_port).l
@@ -708,14 +708,14 @@ HBlank:
 		locVRAM $F800
 		lea	(v_spritetablebuffer).w,a0
 		lea	(vdp_data_port).l,a5
-		move.w	#$9F,d0
+		move.w	#(v_spritetablebuffer_end-v_spritetablebuffer)/4-1,d0
 
 .loop:
 		move.l	(a0)+,(a5)
 		dbf	d0,.loop
 		movem.l	(sp)+,d0/a0/a5
 
-locret_F7E:
+.locret:
 		rte
 ; ---------------------------------------------------------------------------
 
@@ -1574,7 +1574,7 @@ loc_2592:
 		lea	(vdp_data_port).l,a6
 		locVRAM $D000,vdp_control_port-vdp_data_port(a6)
 		lea	(Art_Text).l,a5
-		move.w	#$28F,d1
+		move.w	#(Art_Text_end-Art_Text)/2-1,d1
 
 loc_25D8:
 		move.w	(a5)+,(a6)
@@ -1654,7 +1654,7 @@ loc_26E4:
 		bsr.w	PalLoad2
 		lea	(v_hscrolltablebuffer).w,a1
 		moveq	#0,d0
-		move.w	#$DF,d1
+		move.w	#(v_hscrolltablebuffer_end-v_hscrolltablebuffer)/4-1,d1
 
 loc_2710:
 		move.l	d0,(a1)+
@@ -1990,16 +1990,16 @@ loc_2C0A:
 loc_2C4C:
 		move.l	d0,(a1)+
 		dbf	d1,loc_2C4C
-		lea	(v_screenposx).w,a1
+		lea	(v_misc_variables).w,a1
 		moveq	#0,d0
-		move.w	#$3F,d1
+		move.w	#(v_misc_variables_end-v_misc_variables)/4-1,d1
 
 loc_2C5C:
 		move.l	d0,(a1)+
 		dbf	d1,loc_2C5C
-		lea	(v_oscillate+2).w,a1
+		lea	(v_timingandscreenvariables).w,a1
 		moveq	#0,d0
-		move.w	#$27,d1
+		move.w	#(v_timingandscreenvariables_end-v_timingandscreenvariables)/4-1,d1
 
 loc_2C6C:
 		move.l	d0,(a1)+
@@ -2088,7 +2088,7 @@ loc_2D54:
 		move.b	#1,(f_extralife).w
 		move.b	#1,(f_timecount).w
 		move.w	#0,(v_btnpushtime1).w
-		lea	(off_3100).l,a1
+		lea	(DemoDataPtr).l,a1
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lsl.w	#2,d0
@@ -2176,8 +2176,7 @@ loc_2EC8:
 		bne.s	loc_2E9E
 		rts
 ; ---------------------------------------------------------------------------
-		include "leftovers/Early Debug Mappings.asm"
-		include "leftovers/Ultra Debug Mappings.asm"
+		include "leftovers/Debug Coordinate Sprites.asm"
 ; ---------------------------------------------------------------------------
 ; Unused, Speculated to have been for a window plane wavy masking effect
 ; involving writes during HBlank. It writes its tables in the Nemesis GFX
@@ -2217,7 +2216,7 @@ DemoPlayback:
 ; ---------------------------------------------------------------------------
 
 ;DemoRecord:
-		lea	($80000).l,a1
+		lea	(EndOfROM).l,a1
 		move.w	(v_btnpushtime1).w,d0
 		adda.w	d0,a1
 		move.b	(v_jpadhold1).w,d0
@@ -2243,7 +2242,7 @@ loc_30B8:
 		move.b	#id_Title,(v_gamemode).w
 
 loc_30C4:
-		lea	(off_3100).l,a1
+		lea	(DemoDataPtr).l,a1
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lsl.w	#2,d0
@@ -2267,7 +2266,7 @@ locret_30FE:
 		rts
 ; ---------------------------------------------------------------------------
 
-off_3100:	dc.l byte_614C6
+DemoDataPtr:	dc.l byte_614C6
 		dc.l byte_614C6
 		dc.l byte_614C6
 		dc.l byte_61434
@@ -2359,11 +2358,11 @@ DebugPosLoadArt:
 ; ---------------------------------------------------------------------------
 		locVRAM $9E00
 		lea	(Art_Text).l,a0
-		move.w	#$9F,d1
+		move.w	#(Art_Text_end-Art_Text)/2-$1F0-1,d1
 		bsr.s	.loadtext
 		lea	(Art_Text).l,a0
 		adda.w	#$220,a0
-		move.w	#$5F,d1
+		move.w	#(Art_Text_end-Art_Text)/2-$230-1,d1
 
 .loadtext:
 		move.w	(a0)+,(vdp_data_port).l
@@ -2490,23 +2489,23 @@ loc_3534:
 loc_3554:
 		move.l	d0,(a1)+
 		dbf	d1,loc_3554
-		lea	(v_screenposx).w,a1
+		lea	(v_misc_variables).w,a1
 		moveq	#0,d0
-		move.w	#$3F,d1
+		move.w	#(v_misc_variables_end-v_misc_variables)/4-1,d1
 
 loc_3564:
 		move.l	d0,(a1)+
 		dbf	d1,loc_3564
-		lea	(v_oscillate+2).w,a1
+		lea	(v_timingandscreenvariables).w,a1
 		moveq	#0,d0
-		move.w	#$27,d1
+		move.w	#(v_timingandscreenvariables_end-v_timingandscreenvariables)/4-1,d1
 
 loc_3574:
 		move.l	d0,(a1)+
 		dbf	d1,loc_3574
 		lea	(v_ngfx_buffer).w,a1
 		moveq	#0,d0
-		move.w	#$7F,d1
+		move.w	#(v_ngfx_buffer_end-v_ngfx_buffer)/4-1,d1
 
 loc_3584:
 		move.l	d0,(a1)+
@@ -2530,7 +2529,7 @@ loc_3584:
 		move.w	#bgm_SS,d0
 		bsr.w	PlaySound_Special
 		move.w	#0,(v_btnpushtime1).w
-		lea	(off_3100).l,a1
+		lea	(DemoDataPtr).l,a1
 		moveq	#0,d0
 		move.b	(v_zone).w,d0
 		lsl.w	#2,d0
@@ -2780,7 +2779,7 @@ loc_3A1C:
 		cmpi.w	#$C,d0
 		bne.s	loc_3A42
 		subq.w	#1,(v_bg3screenposx).w
-		lea	($FFFFAB00).w,a3
+		lea	(v_ssscroll_buffer).w,a3
 		move.l	#$18000,d2
 		moveq	#6,d1
 
@@ -2792,7 +2791,7 @@ loc_3A32:
 		dbf	d1,loc_3A32
 
 loc_3A42:
-		lea	($FFFFAB00).w,a3
+		lea	(v_ssscroll_buffer).w,a3
 		lea	(byte_3A92).l,a2
 
 loc_3A4C:
@@ -3977,13 +3976,13 @@ Map_Monitor:	include "_maps/Monitor.asm"
 
 ExecuteObjects:
 		lea	(v_objspace).w,a0
-		moveq	#$7F,d7
+		moveq	#(v_objend-v_objspace)/obj.Size-1,d7
 		moveq	#0,d0
 		cmpi.b	#6,(v_player+obj.Routine).w	; has sonic died?
 		bcc.s	loc_8560			; if so, branch
 
 sub_8546:
-		move.b	(a0),d0
+		move.b	obj.Id(a0),d0
 		beq.s	loc_8556
 		add.w	d0,d0
 		add.w	d0,d0
@@ -3998,13 +3997,13 @@ loc_8556:
 ; ---------------------------------------------------------------------------
 
 loc_8560:
-		moveq	#$1F,d7
+		moveq	#(v_lvlobjspace-v_objspace)/obj.Size-1,d7
 		bsr.s	sub_8546
-		moveq	#$5F,d7
+		moveq	#(v_lvlobjend-v_lvlobjspace)/obj.Size-1,d7
 
 loc_8566:
 		moveq	#0,d0
-		move.b	(a0),d0
+		move.b	obj.Id(a0),d0
 		beq.s	loc_8576
 		tst.b	obj.Render(a0)
 		bpl.s	loc_8576
@@ -4012,8 +4011,6 @@ loc_8566:
 
 loc_8576:
 		lea	obj.Size(a0),a0
-
-loc_857A:
 		dbf	d7,loc_8566
 		rts
 ; ---------------------------------------------------------------------------
@@ -4082,7 +4079,7 @@ loc_87BA:
 ; ---------------------------------------------------------------------------
 
 loc_8826:
-		move.w	$A(a0),d2
+		move.w	obj.ScreenY(a0),d2
 		move.w	obj.Xpos(a0),d3
 		bra.s	loc_8848
 ; ---------------------------------------------------------------------------
@@ -4497,7 +4494,7 @@ locret_8B70:
 
 FindFreeObj:
 		lea	(v_lvlobjspace).w,a1
-		move.w	#(v_lvlobjend-v_lvlobjspace)/object_size-1,d0
+		move.w	#(v_lvlobjend-v_lvlobjspace)/obj.Size-1,d0
 
 loc_8B7A:
 		tst.b	(a1)
@@ -6411,7 +6408,7 @@ byte_11D26:	binclude "artunc/Lives Counter Numbers.bin"
 ; Unused 8x8 Font Art
 ; ===========================================================================
 ;byte_18000:
-		binclude "leftovers/0x18000.bin"	; Some similar art to this is used in other prototypes, such as Sonic 2 Nick Arcade
+		binclude "leftovers/8x8 Compressed Font.bin"	; Some similar art to this is used in other prototypes, such as Sonic 2 Nick Arcade
 		even
 ; ===========================================================================
 ; Sega Screen/Title Screen Art and Mappings

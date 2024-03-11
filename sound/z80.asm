@@ -1,6 +1,8 @@
 
-zmake68kPtr  function addr,zROMWindow+(addr&7FFFh)
-zmake68kBank function addr,(((addr&0FF8000h)/zROMWindow))
+		save
+		phase	0				; set Z80 location to 0
+		cpu z80					; use Z80 cpu
+		listing purecode			; add to listing file
 
 ; function to decide whether an offset's full range won't fit in one byte
 offsetover1byte function from,maxsize, ((from&0FFh)>(100h-maxsize))
@@ -19,11 +21,6 @@ endpad := $
 	    endif
 	endif
     endm
-
-		save
-		phase	0				; set Z80 location to 0
-		cpu z80					; use Z80 cpu
-		listing purecode			; add to listing file
 
 ; =============== S U B R O U T I N E =======================================
 
@@ -260,15 +257,15 @@ zTimpani_Pitch = $+0Bh
 
 ; DPCM data
 zDAC_Kick:
-	binclude "sound/dac/kick.dpcm"
+	binclude "dac/kick.dpcm"
 zDAC_Kick_End:
 
 zDAC_Snare:
-	binclude "sound/dac/snare.dpcm"
+	binclude "dac/snare.dpcm"
 zDAC_Snare_End:
 
 zDAC_Timpani:
-	binclude "sound/dac/timpani.dpcm"
+	binclude "dac/timpani.dpcm"
 zDAC_Timpani_End:
 
 		restore

@@ -1,6 +1,7 @@
 ; VRAM data
-vram_fg:	= $C000					; foreground namespace
-vram_bg:	= $E000					; background namespace
+window_plane:	= $A000					; window plane
+vram_fg:	= $C000					; plane A (foreground namespace)
+vram_bg:	= $E000					; plane B (background namespace)
 vram_sonic:	= $F000					; Sonic graphics
 vram_sprites:	= $F800					; sprite table
 vram_hscroll:	= $FC00					; horizontal scroll table
@@ -54,36 +55,36 @@ bitUp:		= 0
 
 ; Object variables
 obj STRUCT DOTS
-Id		ds.b 1					; id of object (this is put here for readability, this actually makes routines slower by 4 cycles)
-Render		ds.b 1					; bitfield for x/y flip, display mode
-Gfx		ds.w 1					; palette line & VRAM setting (2 bytes)
-Map		ds.l 1					; mappings address (4 bytes)
-Xpos		ds.w 1					; x-axis position (2-4 bytes)
-ScreenY		ds.w 1					; y-axis position for screen-fixed items (2 bytes)
-Ypos		ds.w 1					; y-axis position (2-4 bytes)
-ScreenX		ds.w 1					; x-axis position for screen-fixed items (2 bytes)
-VelX		ds.w 1					; x-axis velocity (2 bytes)
-VelY		ds.w 1					; y-axis velocity (2 bytes)
-Inertia		ds.w 1					; potential speed (2 bytes)
-Height		ds.b 1					; height/2
-Width		ds.b 1					; width/2
-ActWid		ds.b 1					; action width
-Priority	ds.b 1					; sprite stack priority -- 0 is front
-Frame		ds.b 1					; current frame displayed
-AniFrame	ds.b 1					; current frame in animation script
-Anim		ds.b 1					; current animation
-NextAni		ds.b 1					; next animation
-TimeFrame	ds.b 1					; time to next frame
-DelayAni	ds.b 1					; time to delay animation
-ColType		ds.b 1					; collision response type
-ColProp		ds.b 1					; collision extra property
-Status		ds.b 1					; orientation or mode
-RespawnNo	ds.b 1					; respawn list index number
-Routine		ds.b 1					; routine number
-2ndRout							; secondary routine number
-Solid		ds.b 1					; solid status flag
-Angle		ds.w 1					; angle
-Subtype		ds.b 1					; object subtype
+Id		ds.b 1		; id of object (this is put here for readability, this actually makes routines slower by 4 cycles)
+Render		ds.b 1		; bitfield for x/y flip, display mode
+Gfx		ds.w 1		; palette line & VRAM setting (2 bytes)
+Map		ds.l 1		; mappings address (4 bytes)
+Xpos		ds.w 1		; x-axis position (2-4 bytes)
+ScreenY		ds.w 1		; y-axis position for screen-fixed items (2 bytes)
+Ypos		ds.w 1		; y-axis position (2-4 bytes)
+ScreenX		ds.w 1		; x-axis position for screen-fixed items (2 bytes)
+VelX		ds.w 1		; x-axis velocity (2 bytes)
+VelY		ds.w 1		; y-axis velocity (2 bytes)
+Inertia		ds.w 1		; potential speed (2 bytes)
+Height		ds.b 1		; height/2
+Width		ds.b 1		; width/2
+ActWid		ds.b 1		; action width
+Priority	ds.b 1		; sprite stack priority -- 0 is front
+Frame		ds.b 1		; current frame displayed
+AniFrame	ds.b 1		; current frame in animation script
+Anim		ds.b 1		; current animation
+NextAni		ds.b 1		; next animation
+TimeFrame	ds.b 1		; time to next frame
+DelayAni	ds.b 1		; time to delay animation
+ColType		ds.b 1		; collision response type
+ColProp		ds.b 1		; collision extra property
+Status		ds.b 1		; orientation or mode
+RespawnNo	ds.b 1		; respawn list index number
+Routine		ds.b 1		; routine number
+2ndRout				; secondary routine number
+Solid		ds.b 1		; solid status flag
+Angle		ds.w 1		; angle
+Subtype		ds.b 1		; object subtype
 Off_29		ds.b 1
 Off_2A		ds.b 1
 Off_2B		ds.b 1
@@ -111,6 +112,7 @@ Off_3E		ds.b 1
 Off_3F		ds.b 1
 Size		ds.b 1					; size for each object
 obj ENDSTRUCT
+	!org 0
 
 ; Object variables used by Sonic
 flashtime:	= obj.Off_30				; time between flashes after getting hit
@@ -175,6 +177,7 @@ objoff_3C:	equ obj.Off_3C
 objoff_3D:	equ obj.Off_3D
 objoff_3E:	equ obj.Off_3E
 objoff_3F:	equ obj.Off_3F
+object_size_bits:	equ 6
 object_size:	equ obj.Size
 
 ; Animation flags
@@ -241,8 +244,7 @@ security_addr:		= $A14000
 Track STRUCT DOTS
 PlaybackControl:	ds.b 1		; All tracks
 VoiceControl:		ds.b 1		; All tracks
-TempoDivider:		ds.b 1		; All tracks
-	ds.b 1
+TempoDivider:		ds.w 1		; All tracks
 DataPointer:		ds.l 1		; All tracks (4 bytes)
 Transpose:		ds.b 1		; FM/PSG only (sometimes written to as a word, to include TrackVolume)
 Volume:			ds.b 1		; FM/PSG only
@@ -270,12 +272,12 @@ PanLimit:		ds.b 1		; FM only
 PanLength:		ds.b 1		; FM only
 PanContinue:		ds.b 1		; FM only
 FeedbackAlgo:		ds.b 1		; FM only
-PSGNoise:		ds.b 1		; PSG only
-	ds.b 1
+PSGNoise:		ds.w 1		; PSG only
 LoopCounters:		ds.l 2		; All tracks (multiple bytes)
 GoSubStack:				; All tracks (multiple bytes. This constant won't get to be used because of an optimisation that just uses TrackSz)
 Sz:
 Track ENDSTRUCT
+	!org 0
 
 ; Background music
 bgm__First:	= $81
