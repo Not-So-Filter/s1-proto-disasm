@@ -2525,7 +2525,7 @@ Music89:	binclude	"sound/music/Mus89 - Special Stage.bin"
 		even
 Music8A:	include	"sound/music/Mus8A - Title Screen.asm"
 		even
-Music8B:	binclude	"sound/music/Mus8B - Ending.bin"
+Music8B:	include	"sound/music/Mus8B - Ending.asm"
 		even
 Music8C:	include	"sound/music/Mus8C - Boss.asm"
 		even
