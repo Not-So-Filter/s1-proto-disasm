@@ -2527,7 +2527,7 @@ Music8A:	include	"sound/music/Mus8A - Title Screen.asm"
 		even
 Music8B:	binclude	"sound/music/Mus8B - Ending.bin"
 		even
-Music8C:	binclude	"sound/music/Mus8C - Boss.bin"
+Music8C:	include	"sound/music/Mus8C - Boss.asm"
 		even
 Music8D:	include	"sound/music/Mus8D - FZ.asm"
 		even

@@ -44,7 +44,7 @@ AniArt_GHZ_Waterfall:
 
 	.isframe0:
 		locVRAM $6F00
-		move.w	#7,d1
+		move.w	#8-1,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ AniArt_GHZ_Bigflower:
 
 	.isframe0:
 		locVRAM $6B80
-		move.w	#$F,d1
+		move.w	#16-1,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ AniArt_GHZ_Smallflower:
 		locVRAM $6D80
 		lea	(Art_GhzFlower2).l,a1
 		lea	(a1,d0.w),a1
-		move.w	#$B,d1
+		move.w	#12-1,d1
 		bsr.w	LoadTiles
 
 .end:
@@ -95,6 +95,7 @@ AniArt_GHZ_Smallflower:
 ; ---------------------------------------------------------------------------
 
 .sequence:	dc.b 0, 1, 2, 1
+		even
 ; ---------------------------------------------------------------------------
 
 AniArt_MZ:
@@ -117,7 +118,7 @@ AniArt_MZ_Lava:
 		mulu.w	#$100,d0
 		adda.w	d0,a1
 		locVRAM $5C40
-		move.w	#7,d1
+		move.w	#8-1,d1
 		bsr.w	LoadTiles
 
 AniArt_MZ_Magma:
@@ -169,7 +170,7 @@ AniArt_MZ_Torch:
 		mulu.w	#$100,d0
 		adda.w	d0,a1
 		locVRAM $5D40
-		move.w	#7,d1
+		move.w	#8-1,d1
 		bsr.w	LoadTiles
 		lea	(Art_MzTorch).l,a1
 		moveq	#0,d0
@@ -179,7 +180,7 @@ AniArt_MZ_Torch:
 		mulu.w	#$C0,d0
 		adda.w	d0,a1
 		locVRAM $5E40
-		move.w	#5,d1
+		move.w	#6-1,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------
 
