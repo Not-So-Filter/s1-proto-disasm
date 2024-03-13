@@ -605,12 +605,7 @@ smpsCall macro loc
 	if SonicDriverVer<>1
 		dc.w	z80_ptr(loc)
 	else
-	if loc==$14F7
-	; This is an exception for the commands that go unused in Sound D2.
-		dc.w	loc-1
-	else
 		dc.w	loc-*-1
-	endif
 	endif
 	endm
 ; ---------------------------------------------------------------------------

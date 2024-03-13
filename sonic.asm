@@ -560,7 +560,7 @@ VBla_02:
 
 VBla_04:
 		bsr.w	sub_E78
-		bsr.w	sub_43B6
+		bsr.w	LoadTilesAsYouMove_BGOnly
 		bsr.w	sub_1438
 		tst.w	(v_demolength).w
 		beq.w	.end
@@ -596,7 +596,7 @@ VBla_08:
 
 .nochg:
 		startZ80
-		bsr.w	mapLevelLoad
+		bsr.w	LoadTilesAsYouMove
 		jsr	(AnimateLevelGfx).l
 		jsr	(UpdateHUD).l
 		bsr.w	loc_1454
@@ -654,7 +654,7 @@ VBla_0C:
 
 .nochg:
 		startZ80
-		bsr.w	mapLevelLoad
+		bsr.w	LoadTilesAsYouMove
 		jsr	(AnimateLevelGfx).l
 		jsr	(UpdateHUD).l
 		bsr.w	sub_1438
@@ -2032,7 +2032,7 @@ loc_2C92:
 		bsr.w	DeformLayers
 		bsr.w	LoadLevelData
 		bsr.w	LoadAnimatedBlocks
-		bsr.w	mapLevelLoadFull
+		bsr.w	LoadTilesFromStart
 		jsr	(LogCollision).l
 		move.l	#colGHZ,(v_collindex).w		; Load Green Hill's collision - what follows are some C style conditional statements, really unnecessary and replaced with a table in the final game
 		cmpi.b	#id_LZ,(v_zone).w		; Is the current zone Labyrinth?
@@ -2839,7 +2839,8 @@ byte_3A9A:	dc.b 8, 2, 4, $FF, 2, 3, 8, $FF, 4, 2, 2, 3, 8, $FD, 4
 
 ; ---------------------------------------------------------------------------
 
-sub_43B6:
+; sub_43B6:
+LoadTilesAsYouMove_BGOnly:
 		lea	(vdp_control_port).l,a5
 		lea	(vdp_data_port).l,a6
 		lea	(v_bg1_scroll_flags).w,a2
@@ -2852,7 +2853,7 @@ sub_43B6:
 		bra.w	sub_4524
 ; ---------------------------------------------------------------------------
 
-mapLevelLoad:
+LoadTilesAsYouMove:
 		lea	(vdp_control_port).l,a5
 		lea	(vdp_data_port).l,a6
 		lea	(v_bg1_scroll_flags).w,a2
@@ -3085,7 +3086,7 @@ loc_4612:
 		addq.b	#4,d1
 		andi.b	#$7F,d1
 		movem.l	(sp)+,d4-d5
-		addi.w	#$10,d5
+		addi.w	#16,d5
 		dbf	d6,loc_4612
 		rts
 ; ---------------------------------------------------------------------------
@@ -3105,7 +3106,7 @@ loc_463E:
 		addi.w	#$100,d1
 		andi.w	#$FFF,d1
 		movem.l	(sp)+,d4-d5
-		addi.w	#$10,d4
+		addi.w	#16,d4
 		dbf	d6,loc_463E
 		rts
 ; ---------------------------------------------------------------------------
@@ -3252,7 +3253,7 @@ sub_476E:
 		rts
 ; ---------------------------------------------------------------------------
 
-mapLevelLoadFull:
+LoadTilesFromStart:
 		lea	(vdp_control_port).l,a5
 		lea	(vdp_data_port).l,a6
 		lea	(v_screenposx).w,a3
@@ -3277,7 +3278,7 @@ loc_47B4:
 		moveq	#$1F,d6
 		bsr.w	sub_460A
 		movem.l	(sp)+,d4-d6
-		addi.w	#$10,d4
+		addi.w	#16,d4
 		dbf	d6,loc_47B4
 		rts
 ; ---------------------------------------------------------------------------
@@ -3297,7 +3298,7 @@ loc_47E6:
 		moveq	#$1F,d6
 		bsr.w	sub_460A
 		movem.l	(sp)+,d4-d6
-		addi.w	#$10,d4
+		addi.w	#16,d4
 		dbf	d6,loc_47E6
 		rts
 ; ---------------------------------------------------------------------------
@@ -3493,7 +3494,7 @@ loc_4FD4:
 		beq.s	loc_4FFC
 		moveq	#0,d0
 		move.b	standonobject(a1),d0
-		lsl.w	#6,d0
+		lsl.w	#object_size_bits,d0
 		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a2
 		cmpi.b	#4,obj.Routine(a2)
@@ -3504,7 +3505,7 @@ loc_4FD4:
 loc_4FFC:
 		move.w	a0,d0
 		subi.w	#v_objspace,d0
-		lsr.w	#6,d0
+		lsr.w	#object_size_bits,d0
 		andi.w	#$7F,d0
 		move.b	d0,standonobject(a1)
 		move.b	#0,obj.Angle(a1)

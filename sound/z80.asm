@@ -89,7 +89,7 @@ loc_31:
 		sub	7				; 7
 
 loc_73:
-		add	a,a				; 4
+		add	a,a				; 4	; Multiply by 12
 		add	a,a				; 4
 		ld	c,a				; 4
 		add	a,a				; 4

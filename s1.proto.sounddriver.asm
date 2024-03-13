@@ -31,7 +31,8 @@ PSG7:		binclude "sound/psg/psg7.bin"
 PSG8:		binclude "sound/psg/psg8.bin"
 PSG9:		binclude "sound/psg/psg9.bin"
 
-ModulationIndex:dc.b $D, 1, 7, 4, 1, 1, 1, 4, 2, 1, 2, 4, 8, 1, 6, 4
+ModulationIndex:
+		dc.b $D, 1, 7, 4, 1, 1, 1, 4, 2, 1, 2, 4, 8, 1, 6, 4
 		even
 ; ---------------------------------------------------------------------------
 ; New tempos for songs during speed shoes
@@ -1921,10 +1922,10 @@ cfE2_SetComm:
 cfE3_GlobalMod:
 		movea.l	(Go_Modulation).l,a0
 		moveq	#0,d0
-		move.b	(a4)+,d0
-		subq.b	#1,d0
-		lsl.w	#2,d0
-		adda.w	d0,a0
+		move.b	(a4)+,d0	; move first byte into d0
+		subq.b	#1,d0	; subtract 1
+		lsl.w	#2,d0	; multiply by 4
+		adda.w	d0,a0	; add d0 to the modulation index
 		bset	#3,Track.PlaybackControl(a5)	; Enable modulation
 		move.l	a0,Track.ModulationPtr(a5)
 		move.b	(a0)+,Track.ModulationWait(a5)
@@ -2528,7 +2529,7 @@ Music8B:	binclude	"sound/music/Mus8B - Ending.bin"
 		even
 Music8C:	binclude	"sound/music/Mus8C - Boss.bin"
 		even
-Music8D:	binclude	"sound/music/Mus8D - FZ.bin"
+Music8D:	include	"sound/music/Mus8D - FZ.asm"
 		even
 Music8E:	include	"sound/music/Mus8E - Sonic Got Through.asm"
 		even

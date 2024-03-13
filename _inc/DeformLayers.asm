@@ -57,7 +57,7 @@ Deform_GHZ:
 		move.w	d0,d4
 		bsr.w	sub_4344
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
-		move.w	#$6F,d1
+		move.w	#112-1,d1
 		sub.w	d4,d1
 		move.w	(v_screenposx).w,d0
 		cmpi.b	#id_Title,(v_gamemode).w
@@ -73,7 +73,7 @@ loc_3EA8:
 loc_3EB2:
 		move.l	d0,(a1)+
 		dbf	d1,loc_3EB2
-		move.w	#$27,d1
+		move.w	#40-1,d1
 		move.w	(v_bg2screenposx).w,d0
 		neg.w	d0
 
@@ -92,7 +92,7 @@ loc_3EC2:
 		asl.l	#8,d2
 		moveq	#0,d3
 		move.w	d0,d3
-		move.w	#$47,d1
+		move.w	#72-1,d1
 		add.w	d4,d1
 
 loc_3EF0:
@@ -108,7 +108,7 @@ loc_3EF0:
 
 Deform_LZ:
 		lea	(v_hscrolltablebuffer).w,a1
-		move.w	#$DF,d1
+		move.w	#224-1,d1
 		move.w	(v_screenposx).w,d0
 		neg.w	d0
 		swap	d0
@@ -146,7 +146,7 @@ loc_3F50:
 		bsr.w	sub_4344
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
 		lea	(v_hscrolltablebuffer).w,a1
-		move.w	#$DF,d1
+		move.w	#224-1,d1
 		move.w	(v_screenposx).w,d0
 		neg.w	d0
 		swap	d0
@@ -271,7 +271,7 @@ Deform_SZ:
 		bsr.w	sub_4298
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
 		lea	(v_hscrolltablebuffer).w,a1
-		move.w	#$DF,d1
+		move.w	#224-1,d1
 		move.w	(v_screenposx).w,d0
 		neg.w	d0
 		swap	d0
@@ -286,7 +286,7 @@ loc_408A:
 
 Deform_CWZ:
 		lea	(v_hscrolltablebuffer).w,a1
-		move.w	#$DF,d1
+		move.w	#224-1,d1
 		move.w	(v_screenposx).w,d0
 		neg.w	d0
 		swap	d0

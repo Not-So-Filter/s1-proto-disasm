@@ -53,6 +53,8 @@ SndD2_Voices:
 	smpsVcTotalLevel    $FF, $1A, $00, $F7
 
 ; Unreachable
-	smpsCall            $14F7
+;	smpsCall            $14F7
+	dc.b	$F8
+        dc.w	$14F7-1
 	dc.b	$FF, $FD
 	smpsStop
