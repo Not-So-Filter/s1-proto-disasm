@@ -2521,7 +2521,7 @@ Music87:	include	"sound/music/Mus87 - Invincibility.asm"
 		even
 Music88:	include	"sound/music/Mus88 - Extra Life.asm"
 		even
-Music89:	binclude	"sound/music/Mus89 - Special Stage.bin"
+Music89:	include	"sound/music/Mus89 - Special Stage.asm"
 		even
 Music8A:	include	"sound/music/Mus8A - Title Screen.asm"
 		even
