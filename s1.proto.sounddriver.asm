@@ -2509,7 +2509,7 @@ Music81:	binclude	"sound/music/Mus81 - GHZ.bin"
 		even
 Music82:	binclude	"sound/music/Mus82 - LZ.bin"
 		even
-Music83:	binclude	"sound/music/Mus83 - MZ.bin"
+Music83:	include	"sound/music/Mus83 - MZ.asm"
 		even
 Music84:	binclude	"sound/music/Mus84 - SLZ.bin"
 		even
