@@ -270,7 +270,7 @@ DoChecksum:
 loc_32C:
 		add.w	(a0)+,d1
 		cmp.l	a0,d0
-		bcc.s	loc_32C
+		bhs.s	loc_32C
 		movea.l	#Checksum,a1
 		cmp.w	(a1),d1
 		nop
@@ -604,7 +604,7 @@ VBla_08:
 		move.b	(byte_FFF628).w,d0
 		move.b	(byte_FFF629).w,d1
 		cmp.b	d0,d1
-		bcc.s	loc_CA8
+		bhs.s	loc_CA8
 		move.b	d0,(byte_FFF629).w
 
 loc_CA8:
@@ -1415,7 +1415,7 @@ loc_22F4:
 		add.w	d0,d0
 		addq.w	#1,d0
 		sub.w	d0,d1
-		bcc.s	loc_230E
+		bhs.s	loc_230E
 		add.w	d0,d1
 		subq.w	#1,d0
 		dbf	d2,loc_22F4
@@ -1452,7 +1452,7 @@ loc_2336:
 
 loc_233E:
 		cmp.w	d3,d4
-		bcc.w	loc_2350
+		bhs.w	loc_2350
 		lsl.l	#8,d4
 		divu.w	d3,d4
 		moveq	#0,d0
@@ -1818,7 +1818,7 @@ loc_28B6:
 		btst	#bitUp,d1
 		beq.s	loc_28D6
 		subq.w	#1,d0
-		bcc.s	loc_28D6
+		bhs.s	loc_28D6
 		moveq	#$13,d0
 
 loc_28D6:
@@ -1845,7 +1845,7 @@ loc_28F0:
 		btst	#bitL,d1
 		beq.s	loc_2912
 		subq.w	#1,d0
-		bcc.s	loc_2912
+		bhs.s	loc_2912
 		moveq	#$4F,d0
 
 loc_2912:
@@ -2117,7 +2117,7 @@ GM_LevelLoop:
 		tst.w	(v_debuguse).w
 		bne.s	loc_2E2A
 		cmpi.b	#6,(v_player+obj.Routine).w
-		bcc.s	loc_2E2E
+		bhs.s	loc_2E2E
 
 loc_2E2A:
 		bsr.w	DeformLayers
@@ -2258,7 +2258,7 @@ loc_30C4:
 		and.b	d1,d0
 		move.b	d0,(a0)+
 		subq.b	#1,(v_btnpushtime2).w
-		bcc.s	locret_30FE
+		bhs.s	locret_30FE
 		move.b	3(a1),(v_btnpushtime2).w
 		addq.w	#2,(v_btnpushtime1).w
 
@@ -2582,7 +2582,7 @@ loc_368C:
 		moveq	#3,d6
 		moveq	#0,d4
 		cmpi.w	#3,d7
-		bcc.s	loc_369A
+		bhs.s	loc_369A
 		moveq	#1,d4
 
 loc_369A:
@@ -2742,7 +2742,7 @@ SpecialAnimateBG:
 
 loc_39C4:
 		cmpi.w	#8,d0
-		bcc.s	loc_3A1C
+		bhs.s	loc_3A1C
 		cmpi.w	#6,d0
 		bne.s	loc_39DE
 		addq.w	#1,(v_bg3screenposx).w
@@ -3006,7 +3006,7 @@ sub_4524:
 		blt.s	loc_456E
 		lsr.w	#4,d6
 		subi.w	#$E,d6
-		bcc.s	loc_456E
+		bhs.s	loc_456E
 		neg.w	d6
 		bsr.w	sub_4636
 
@@ -3029,7 +3029,7 @@ loc_456E:
 		blt.s	locret_45B0
 		lsr.w	#4,d6
 		subi.w	#$E,d6
-		bcc.s	locret_45B0
+		bhs.s	locret_45B0
 		neg.w	d6
 		bsr.w	sub_4636
 
@@ -3452,7 +3452,7 @@ PtfmBridge:
 		add.w	d1,d0
 		bmi.w	locret_5048
 		cmp.w	d2,d0
-		bcc.w	locret_5048
+		bhs.w	locret_5048
 		bra.s	PtfmNormal2
 ; ---------------------------------------------------------------------------
 
@@ -3466,7 +3466,7 @@ PtfmNormal:
 		bmi.w	locret_5048
 		add.w	d1,d1
 		cmp.w	d1,d0
-		bcc.w	locret_5048
+		bhs.w	locret_5048
 
 PtfmNormal2:
 		move.w	obj.Ypos(a0),d0
@@ -3483,7 +3483,7 @@ PtfmNormal3:
 		cmpi.w	#$FFF0,d0
 		bcs.w	locret_5048
 		cmpi.b	#6,obj.Routine(a1)
-		bcc.w	locret_5048
+		bhs.w	locret_5048
 		add.w	d0,d2
 		addq.w	#3,d2
 		move.w	d2,obj.Ypos(a1)
@@ -3539,7 +3539,7 @@ PtfmSloped:
 		bmi.s	locret_5048
 		add.w	d1,d1
 		cmp.w	d1,d0
-		bcc.s	locret_5048
+		bhs.s	locret_5048
 		btst	#0,obj.Render(a0)
 		beq.s	loc_5074
 		not.w	d0
@@ -3564,7 +3564,7 @@ PtfmNormalHeight:
 		bmi.w	locret_5048
 		add.w	d1,d1
 		cmp.w	d1,d0
-		bcc.w	locret_5048
+		bhs.w	locret_5048
 		move.w	obj.Ypos(a0),d0
 		sub.w	d3,d0
 		bra.w	PtfmNormal3
@@ -3657,7 +3657,7 @@ loc_6168:
 		move.b	obj.ActWid(a0),obj.ActWid(a1)
 		move.b	(a4)+,ledge_timedelay(a1)
 		cmpa.l	a0,a1
-		bcc.s	loc_61A4
+		bhs.s	loc_61A4
 		bsr.w	DisplaySprite1
 
 loc_61A4:
@@ -3735,7 +3735,7 @@ sub_6936:
 		tst.w	(v_debuguse).w
 		bne.w	locret_69A6
 		cmpi.b	#6,(v_player+obj.Routine).w
-		bcc.s	locret_69A6
+		bhs.s	locret_69A6
 		bsr.w	Obj44_SolidWall2
 		beq.s	loc_698C
 		bmi.w	loc_69A8
@@ -3818,10 +3818,10 @@ Obj44_SolidWall2:
 		move.w	d2,d4
 		add.w	d4,d4
 		cmp.w	d4,d3
-		bcc.s	loc_6A28
+		bhs.s	loc_6A28
 		move.w	d0,d5
 		cmp.w	d0,d1
-		bcc.s	loc_6A10
+		bhs.s	loc_6A10
 		add.w	d1,d1
 		sub.w	d1,d0
 		move.w	d0,d5
@@ -3830,7 +3830,7 @@ Obj44_SolidWall2:
 loc_6A10:
 		move.w	d3,d1
 		cmp.w	d3,d2
-		bcc.s	loc_6A1C
+		bhs.s	loc_6A1C
 		sub.w	d4,d3
 		move.w	d3,d1
 		neg.w	d1
@@ -3980,7 +3980,7 @@ ExecuteObjects:
 		moveq	#(v_objend-v_objspace)/obj.Size-1,d7
 		moveq	#0,d0
 		cmpi.b	#6,(v_player+obj.Routine).w	; has sonic died?
-		bcc.s	loc_8560			; if so, branch
+		bhs.s	loc_8560			; if so, branch
 
 sub_8546:
 		move.b	obj.Id(a0),d0
@@ -4092,7 +4092,7 @@ loc_8830:
 		cmpi.w	#96,d2
 		bcs.s	loc_886E
 		cmpi.w	#384,d2
-		bcc.s	loc_886E
+		bhs.s	loc_886E
 
 loc_8848:
 		movea.l	obj.Map(a0),a1
@@ -5186,7 +5186,7 @@ loc_10496:
 
 loc_104A2:
 		lsr.w	#1,d0
-		bcc.s	loc_104A8
+		bhs.s	loc_104A8
 		addq.b	#1,d2
 
 loc_104A8:
@@ -5200,7 +5200,7 @@ loc_104AE:
 
 loc_104B4:
 		lsl.w	#1,d0
-		bcc.s	loc_104BA
+		bhs.s	loc_104BA
 		subq.b	#1,d2
 
 loc_104BA:
@@ -5573,7 +5573,7 @@ Special_ShowLayout:
 		bsr.w	Special_AniWallsandRings
 		bsr.w	Special_AniItems
 		move.w	d5,-(sp)
-		lea	(v_startofram+$8000).w,a1
+		lea	(v_ssbuffer3).w,a1
 		move.b	(v_ssangle).w,d0
 		andi.b	#$FC,d0
 		jsr	(CalcSine).l
@@ -5593,7 +5593,7 @@ Special_ShowLayout:
 		swap	d3
 		neg.w	d3
 		addi.w	#-$B4,d3
-		move.w	#$F,d7
+		move.w	#16-1,d7
 
 loc_108C2:
 		movem.w	d0-d2,-(sp)
@@ -5608,7 +5608,7 @@ loc_108C2:
 		muls.w	d3,d1
 		add.l	d0,d1
 		move.l	d6,d2
-		move.w	#$F,d6
+		move.w	#16-1,d6
 
 loc_108E4:
 		move.l	d2,d0
@@ -5626,7 +5626,7 @@ loc_108E4:
 		dbf	d7,loc_108C2
 
 		move.w	(sp)+,d5
-		lea	(v_startofram&$FFFFFF).l,a0
+		lea	(v_ssbuffer1).l,a0
 		moveq	#0,d0
 		move.w	(v_screenposy).w,d0
 		divu.w	#$18,d0
@@ -5636,11 +5636,11 @@ loc_108E4:
 		move.w	(v_screenposx).w,d0
 		divu.w	#$18,d0
 		adda.w	d0,a0
-		lea	(v_startofram+$8000).w,a4
-		move.w	#$F,d7
+		lea	(v_ssbuffer3).w,a4
+		move.w	#16-1,d7
 
 loc_10930:
-		move.w	#$F,d6
+		move.w	#16-1,d6
 
 loc_10934:
 		moveq	#0,d0
@@ -5651,14 +5651,14 @@ loc_10934:
 		cmpi.w	#$70,d3
 		bcs.s	loc_10986
 		cmpi.w	#$1D0,d3
-		bcc.s	loc_10986
+		bhs.s	loc_10986
 		move.w	2(a4),d2
 		addi.w	#$F0,d2
 		cmpi.w	#$70,d2
 		bcs.s	loc_10986
 		cmpi.w	#$170,d2
-		bcc.s	loc_10986
-		lea	(v_startofram&$FFFFFF+$4000).l,a5
+		bhs.s	loc_10986
+		lea	(v_ssbuffer2).l,a5
 		lsl.w	#3,d0
 		lea	(a5,d0.w),a5
 		movea.l	(a5)+,a1
@@ -5739,19 +5739,19 @@ loc_10A26:
 		move.b	(v_ani0_frame).w,d0
 		add.w	d0,d0
 		lea	(a0,d0.w),a0
-		move.w	(a0),(a1)
+		move.w	0(a0),0(a1)
 		move.w	2(a0),8(a1)
 		move.w	4(a0),$10(a1)
 		move.w	6(a0),$18(a1)
 		adda.w	#$10,a0
 		adda.w	#$20,a1
-		move.w	(a0),(a1)
+		move.w	0(a0),0(a1)
 		move.w	2(a0),8(a1)
 		move.w	4(a0),$10(a1)
 		move.w	6(a0),$18(a1)
 		adda.w	#$10,a0
 		adda.w	#$20,a1
-		move.w	(a0),(a1)
+		move.w	0(a0),0(a1)
 		move.w	2(a0),8(a1)
 		move.w	4(a0),$10(a1)
 		move.w	6(a0),$18(a1)
@@ -5766,10 +5766,11 @@ SS_WaRiVramSet:	dc.w $142, $142, $142, $2142
 		dc.w $4142, $4142, $4142, $4142
 		dc.w $6142, $6142, $6142, $2142
 		dc.w $6142, $6142, $6142, $6142
+		even
 ; ---------------------------------------------------------------------------
 
 sub_10ACC:
-		lea	(v_startofram&$FFFFFF+$4400).l,a2
+		lea	(v_ssitembuffer).l,a2
 		move.w	#$1F,d0
 
 loc_10AD6:
@@ -5783,7 +5784,7 @@ locret_10AE0:
 ; ---------------------------------------------------------------------------
 
 Special_AniItems:
-		lea	(v_startofram&$FFFFFF+$4400).l,a0
+		lea	(v_ssitembuffer).l,a0
 		move.w	#$1F,d7
 
 loc_10AEC:
@@ -5854,7 +5855,7 @@ byte_10B6A:	dc.b $1B, $1C, $1B, $1C, 0, 0
 ; ---------------------------------------------------------------------------
 
 SS_Load:
-		lea	(v_startofram&$FFFFFF).l,a1
+		lea	(v_ssbuffer1).l,a1
 		move.w	#$FFF,d0
 
 loc_10B7A:
@@ -5886,7 +5887,7 @@ loc_10BAC:
 		move.w	(a0)+,(a1)+
 		dbf	d1,loc_10BAC
 
-		lea	(v_startofram&$FFFFFF+$4400).l,a1
+		lea	(v_ssitembuffer).l,a1
 		move.w	#$3F,d1
 
 loc_10BC8:

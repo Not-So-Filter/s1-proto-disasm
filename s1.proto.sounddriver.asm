@@ -2507,7 +2507,7 @@ SonicDriverVer = 1 ; Tell SMPS2ASM that we're using Sonic 1's driver.
 
 Music81:	binclude	"sound/music/Mus81 - GHZ.bin"
 		even
-Music82:	binclude	"sound/music/Mus82 - LZ.bin"
+Music82:	include	"sound/music/Mus82 - LZ.asm"
 		even
 Music83:	include	"sound/music/Mus83 - MZ.asm"
 		even
