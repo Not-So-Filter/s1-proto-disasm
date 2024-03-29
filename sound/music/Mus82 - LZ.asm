@@ -74,7 +74,7 @@ Mus82_LZ_FM3:
 	dc.b	nA6, $06, nF6, $06, nD6, $06
 	smpsNoteFill        $00
 	dc.b	nG6, $0A, nRst, $02, nG6, $03, nRst, nG6, $03, nRst, $09
-	
+
 Mus82_LZ_Jump07:
 	dc.b	nRst, $30, nRst, $30, nRst, $30, nRst, $30, nRst, $30, nRst, $30, nRst
 	dc.b	$30, nRst, $30, nRst, $30, nRst, $30, $E3, $02
@@ -227,14 +227,14 @@ Mus82_LZ_Call00:
 	dc.b	nMaxPSG, $0C
 	smpsNoteFill        $03
 	dc.b	$06, $06, $06, $06, $06, $06
-	smpsMaxRelRate
+	smpsReturn
 
 Mus82_LZ_Call01:
 	smpsNoteFill        $0E
 	dc.b	nMaxPSG, $0C
 	smpsNoteFill        $03
 	dc.b	$06, $06, $06, $06, $06, $03, $03
-	smpsMaxRelRate
+	smpsReturn
 
 Mus82_LZ_Call02:
 	dc.b	nRst, $03
@@ -250,7 +250,7 @@ Mus82_LZ_Call02:
 	dc.b	$06
 	smpsNoteFill        $03
 	dc.b	$06, $06, $06, $06, $06, $06, $06, $06, $06, $06, $06, $06
-	smpsMaxRelRate
+	smpsReturn
 
 ; DAC Data
 Mus82_LZ_DAC:

@@ -2,7 +2,7 @@
 
 	phase $FFFF0000
 v_startofram:
-v_256x256:		ds.b $A400	; 256x256 tile mappings ($A400 bytes)
+v_256x256:		ds.b $52*$200	; 256x256 tile mappings ($A400 bytes)
 v_256x256_end:
 
 layoutsize:		= $40

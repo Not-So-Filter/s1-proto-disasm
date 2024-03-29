@@ -32,7 +32,10 @@ PSG8:		binclude "sound/psg/psg8.bin"
 PSG9:		binclude "sound/psg/psg9.bin"
 
 ModulationIndex:
-		dc.b $D, 1, 7, 4, 1, 1, 1, 4, 2, 1, 2, 4, 8, 1, 6, 4
+		dc.b $D, 1, 7, 4
+                dc.b 1, 1, 1, 4
+                dc.b 2, 1, 2, 4
+                dc.b 8, 1, 6, 4
 		even
 ; ---------------------------------------------------------------------------
 ; New tempos for songs during speed shoes
@@ -234,8 +237,8 @@ DACUpdateTrack:
 		beq.s	.nodelay
 		btst	#3,d0
 		bne.s	.timpani
-		tst.b	(z80_dac_update).l
-		bne.s	.nodelay
+		tst.b	(z80_dac_update).l	; is the dac update flag set?
+		bne.s	.nodelay	; if not, branch
 		move.b	d0,(z80_dac_sample).l
 
 .nodelay:
@@ -245,12 +248,12 @@ DACUpdateTrack:
 .timpani:
 		subi.b	#$88,d0
 		move.b	.timpanipitch(pc,d0.w),d0
-		tst.b	(z80_dac_update).l
-		bne.s	.noupdate
+		tst.b	(z80_dac_update).l	; is the dac update flag set?
+		bne.s	.nodac		; if not, branch
 		move.b	d0,(z80_dac3_pitch).l
-		move.b	#$83,(z80_dac_sample).l
+		move.b	#$83,(z80_dac_sample).l	; use timpani sample
 
-.noupdate:
+.nodac:
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -258,6 +261,7 @@ DACUpdateTrack:
 		dc.b dpcmLoopCounter(7500)
 		dc.b dpcmLoopCounter(6350)
 		dc.b dpcmLoopCounter(6250)
+		; the values below are invalid and will play at a very slow rate.
 		dc.b $FF
 		dc.b $FF
 		dc.b $FF
@@ -549,7 +553,7 @@ loc_7457E:
 		move.b	Track.PanTable(a5),d0
 		subq.w	#1,d0
 		lsl.w	#2,d0
-		movea.l	FMPanTable(pc,d0.w),a0
+		movea.l	FM_Pan_Table(pc,d0.w),a0
 		moveq	#0,d0
 		move.b	Track.PanStart(a5),d0
 		subq.w	#1,d0
@@ -565,13 +569,15 @@ locret_745AE:
 		rts
 ; ---------------------------------------------------------------------------
 
-FMPanTable:	dc.l pd01, pd02, pd03
+FM_Pan_Table:	dc.l pan_1_data
+		dc.l pan_2_data
+		dc.l pan_3_data
 
-pd01:		dc.b $40, $80
+pan_1_data:	dc.b $40, $80
 
-pd02:		dc.b $40, $C0, $80
+pan_2_data:	dc.b $40, $C0, $80
 
-pd03:		dc.b $C0, $80, $C0, $40
+pan_3_data:	dc.b $C0, $80, $C0, $40
 		even
 ; ---------------------------------------------------------------------------
 
@@ -963,6 +969,8 @@ dPlaySnd_SFX:
 		add.l	a3,d0
 		move.l	d0,v_lfo_voice_ptr(a6)
 		move.b	(a1)+,d5
+		; DANGER! there is a missing 'moveq	#0,d7' here, without which SFXes whose
+		; index entry is above $3F will cause a crash. This was fixed in Ristar's driver.
 		move.b	(a1)+,d7
 		subq.b	#1,d7
 		moveq	#Track.Sz,d6
@@ -1037,6 +1045,7 @@ SFX_BGMChannelRAM:
 		dc.l (v_snddriver_ram+v_music_psg2_track)&$FFFFFF
 		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF ; Plain PSG3
 		dc.l (v_snddriver_ram+v_music_psg3_track)&$FFFFFF ; Noise
+		even
 
 SFX_SFXChannelRAM:
 		dc.l (v_snddriver_ram+v_sfx_fm3_track)&$FFFFFF
@@ -1047,6 +1056,7 @@ SFX_SFXChannelRAM:
 		dc.l (v_snddriver_ram+v_sfx_psg2_track)&$FFFFFF
 		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF ; Plain PSG3
 		dc.l (v_snddriver_ram+v_sfx_psg3_track)&$FFFFFF ; Noise
+		even
 ; ---------------------------------------------------------------------------
 
 dPlaySnd_SpecSFX:
@@ -1920,21 +1930,21 @@ cfE2_SetComm:
 ; ---------------------------------------------------------------------------
 
 cfE3_GlobalMod:
-		movea.l	(Go_Modulation).l,a0
-		moveq	#0,d0
-		move.b	(a4)+,d0	; move first byte into d0
-		subq.b	#1,d0	; subtract 1
-		lsl.w	#2,d0	; multiply by 4
-		adda.w	d0,a0	; add d0 to the modulation index
+		movea.l	(Go_Modulation).l,a0		; Get global modulation index
+		moveq	#0,d0				; Clear high bit of d0
+		move.b	(a4)+,d0			; Move first byte into d0
+		subq.b	#1,d0				; Subtract 1 from d0
+		lsl.w	#2,d0				; Multiply by 4
+		adda.w	d0,a0				; Add d0 to the modulation index
 		bset	#3,Track.PlaybackControl(a5)	; Enable modulation
-		move.l	a0,Track.ModulationPtr(a5)
-		move.b	(a0)+,Track.ModulationWait(a5)
-		move.b	(a0)+,Track.ModulationSpeed(a5)
-		move.b	(a0)+,Track.ModulationDelta(a5)
-		move.b	(a0)+,d0
-		lsr.b	#1,d0
-		move.b	d0,Track.ModulationSteps(a5)
-		clr.w	Track.ModulationVal(a5)
+		move.l	a0,Track.ModulationPtr(a5)	; Save pointer to modulation data
+		move.b	(a0)+,Track.ModulationWait(a5)	; Modulation delay
+		move.b	(a0)+,Track.ModulationSpeed(a5)	; Modulation speed
+		move.b	(a0)+,Track.ModulationDelta(a5)	; Modulation delta
+		move.b	(a0)+,d0			; Modulation steps...
+		lsr.b	#1,d0				; ... divided by 2...
+		move.b	d0,Track.ModulationSteps(a5)	; ... before being stored
+		clr.w	Track.ModulationVal(a5)		; Total accumulated modulation frequency change
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1948,7 +1958,7 @@ cfFadeInToPrevious:
 		move.l	(a1)+,(a0)+
 		dbf	d0,.restoreramloop
 
-		bset	#2,v_music_dac_track(a6)
+		bset	#2,v_music_dac_track+Track.PlaybackControl(a6)
 		movea.l	a5,a3
 		move.b	#$28,d6
 		sub.b	v_fadein_counter(a6),d6		; If fade already in progress, this adjusts track volume accordingly
@@ -2492,9 +2502,11 @@ cfSSG_Reg:
 		rts
 ; ---------------------------------------------------------------------------
 
-SSG_Reg_Table:	dc.b $90, $50, $98, $58
-		dc.b $94, $54, $9C, $5C
-SSG_Reg_Table_End:	
+SSG_Reg_Table:	dc.b $90, $50
+		dc.b $98, $58
+		dc.b $94, $54
+		dc.b $9C, $5C
+SSG_Reg_Table_End:
 		even
 
 Unc_Z80:	include	"sound/z80.asm"
@@ -2511,11 +2523,11 @@ Music82:	include	"sound/music/Mus82 - LZ.asm"
 		even
 Music83:	include	"sound/music/Mus83 - MZ.asm"
 		even
-Music84:	binclude	"sound/music/Mus84 - SLZ.bin"
+Music84:	include	"sound/music/Mus84 - SLZ.asm"
 		even
 Music85:	binclude	"sound/music/Mus85 - SZ.bin"
 		even
-Music86:	binclude	"sound/music/Mus86 - CWZ.bin"
+Music86:	include	"sound/music/Mus86 - CWZ.asm"
 		even
 Music87:	include	"sound/music/Mus87 - Invincibility.asm"
 		even

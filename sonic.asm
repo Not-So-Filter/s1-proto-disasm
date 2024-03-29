@@ -768,7 +768,7 @@ VDPSetupGame:
 		lea	(vdp_control_port).l,a0
 		lea	(vdp_data_port).l,a1
 		lea	(VDPSetupArray).l,a2
-		moveq	#$12,d7
+		moveq	#(VDPSetupArray_End-VDPSetupArray)/2-1,d7
 
 loc_101E:
 		move.w	(a2)+,(a0)
@@ -777,7 +777,7 @@ loc_101E:
 		move.w	d0,(v_vdp_buffer1).w
 		moveq	#0,d0
 		move.l	#$C0000000,(vdp_control_port).l
-		move.w	#$3F,d7
+		move.w	#($80/2)-1,d7
 
 loc_103E:
 		move.w	d0,(a1)
@@ -787,10 +787,10 @@ loc_103E:
 		move.l	d1,-(sp)
 		fillVRAM	0,$FFFF,0
 
-loc_1070:
+.waitDMA:
 		move.w	(a5),d1
 		btst	#1,d1
-		bne.s	loc_1070
+		bne.s	.waitDMA
 		move.w	#$8F02,(a5)
 		move.l	(sp)+,d1
 		rts
@@ -814,6 +814,8 @@ VDPSetupArray:	dc.w $8004
 		dc.w $9001
 		dc.w $9100
 		dc.w $9200
+VDPSetupArray_End:
+		even
 ; ---------------------------------------------------------------------------
 
 ClearScreen:
@@ -835,7 +837,7 @@ ClearScreen:
 		move.l	#0,(v_scrposx_dup).w
 		lea	(v_spritetablebuffer).w,a1
 		moveq	#0,d0
-		move.w	#(v_spritetablebuffer_end-v_spritetablebuffer)/4,d1	; This should have a -1.
+		move.w	#(v_spritetablebuffer_end-v_spritetablebuffer)/4,d1	; This should have a -1, but this won't effect much since water palette lines don't exist.
 
 loc_111C:
 		move.l	d0,(a1)+
@@ -863,14 +865,14 @@ SoundDriverLoad:
 		dbf	d0,.loop
 		moveq	#0,d0
 		lea	(z80_dac_unk1FF8).l,a1
-		move.b	d0,(a1)+			; Write 0 to 1FF8
-		move.b	#$80,(a1)+			; Write $80 to 1FF9
-		move.b	#7,(a1)+			; Write 7 to 1FFA
-		move.b	#$80,(a1)+			; Write $80 to 1FFB
-		move.b	d0,(a1)+			; Write 0 to 1FFC
-		move.b	d0,(a1)+			; Write 0 to 1FFD
-		move.b	d0,(a1)+			; Write 0 to 1FFE
-		move.b	d0,(a1)+			; Write 0 to 1FFF
+		move.b	d0,(a1)+	; Write 0 to 1FF8
+		move.b	#$80,(a1)+	; Write $80 to 1FF9
+		move.b	#7,(a1)+	; Write 7 to 1FFA
+		move.b	#$80,(a1)+	; Write $80 to 1FFB
+		move.b	d0,(a1)+	; Write 0 to 1FFC
+		move.b	d0,(a1)+	; Write 0 to 1FFD
+		move.b	d0,(a1)+	; Write 0 to 1FFE
+		move.b	d0,(a1)+	; Write 0 to 1FFF
 		resetZ80a
 		nop
 		nop
@@ -1506,8 +1508,6 @@ GM_Sega:
 		move.w	(v_vdp_buffer1).w,d0
 		andi.b	#$BF,d0
 		move.w	d0,(vdp_control_port).l
-
-loc_24BC:
 		bsr.w	ClearScreen
 		locVRAM 0
 		lea	(Nem_SegaLogo).l,a0
@@ -1517,7 +1517,7 @@ loc_24BC:
 		move.w	#0,d0
 		bsr.w	EniDec
 
-		copyTilemap	v_startofram&$FFFFFF,$C61C,$B,3
+		copyTilemap	v_startofram&$FFFFFF,$C61C,12-1,4-1
 
 		moveq	#palid_SegaBG,d0
 		bsr.w	PalLoad2
@@ -1582,7 +1582,7 @@ loc_25D8:
 
 		lea	(Unc_Title).l,a1
 
-		copyUncTilemap	$C206,$21,$15
+		copyUncTilemap	$C206,34-1,22-1
 
 		move.w	#0,(v_debuguse).w
 		move.w	#0,(f_demo).w
@@ -2291,9 +2291,9 @@ sub_3166:
 		lea	(Anim16Unk1).l,a0
 		move.w	#(Anim16Unk1_end-Anim16Unk1)/2-1,d1
 
-.loadblocks:
+.loadchunks:
 		move.w	(a0)+,(a1)+
-		dbf	d1,.loadblocks
+		dbf	d1,.loadchunks
 
 locret_3176:
 		rts
@@ -2304,10 +2304,10 @@ sub_3178:
 		lea	(Anim16Unk2).l,a0
 		move.w	#(Anim16Unk2_end-Anim16Unk2)/2-1,d1
 
-.loadblocks2:
+.loadchunks2:
 		move.w	(a0)+,d0
 		ori.w	#$2000,(a1,d0.w)
-		dbf	d1,.loadblocks2
+		dbf	d1,.loadchunks2
 		rts
 ; ---------------------------------------------------------------------------
 Anim16Unk1:	binclude "map16/Anim Unknown 1.bin"
@@ -2598,8 +2598,8 @@ loc_369C:
 
 loc_36B0:
 		movem.l	d0-d4,-(sp)
-		moveq	#7,d1
-		moveq	#7,d2
+		moveq	#8-1,d1
+		moveq	#8-1,d2
 		bsr.w	TilemapToVRAM
 		movem.l	(sp)+,d0-d4
 
@@ -2622,8 +2622,8 @@ loc_36EA:
 		lea	(byte_6477C).l,a0
 		move.w	#$4000,d0
 		bsr.w	EniDec
-		copyTilemap	v_startofram&$FFFFFF,$C000,$3F,$1F
-		copyTilemap	v_startofram&$FFFFFF,$D000,$3F,$3F
+		copyTilemap	v_startofram&$FFFFFF,$C000,64-1,32-1
+		copyTilemap	v_startofram&$FFFFFF,$D000,64-1,64-1
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -2882,10 +2882,10 @@ LoadTilesAsYouMove:
 loc_4438:
 		bclr	#1,(a2)
 		beq.s	loc_4452
-		move.w	#$E0,d4
+		move.w	#224,d4
 		moveq	#-16,d5
 		bsr.w	sub_4752
-		move.w	#$E0,d4
+		move.w	#224,d4
 		moveq	#-16,d5
 		bsr.w	sub_4608
 
@@ -2903,10 +2903,10 @@ loc_4468:
 		bclr	#3,(a2)
 		beq.s	locret_4482
 		moveq	#-16,d4
-		move.w	#$140,d5
+		move.w	#320,d5
 		bsr.w	sub_4752
 		moveq	#-16,d4
-		move.w	#$140,d5
+		move.w	#320,d5
 		bsr.w	sub_4634
 
 locret_4482:
@@ -2962,10 +2962,10 @@ loc_44EE:
 		bclr	#3,(a2)
 		beq.s	locret_4522
 		moveq	#-16,d4
-		move.w	#$140,d5
+		move.w	#320,d5
 		bsr.w	sub_4752
 		moveq	#-16,d4
-		move.w	#$140,d5
+		move.w	#320,d5
 		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
 		andi.w	#$FFF0,d1
@@ -3018,10 +3018,10 @@ loc_456E:
 		andi.w	#$FFF0,d1
 		sub.w	d1,d4
 		move.w	d4,-(sp)
-		move.w	#$140,d5
+		move.w	#320,d5
 		bsr.w	sub_4752
 		move.w	(sp)+,d4
-		move.w	#$140,d5
+		move.w	#320,d5
 		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
 		andi.w	#$FFF0,d1
@@ -3060,10 +3060,10 @@ loc_45DC:
 		andi.w	#$FFF0,d1
 		sub.w	d1,d4
 		move.w	d4,-(sp)
-		move.w	#$140,d5
+		move.w	#320,d5
 		bsr.w	sub_476E
 		move.w	(sp)+,d4
-		move.w	#$140,d5
+		move.w	#320,d5
 		moveq	#2,d6
 		bsr.w	sub_4636
 
@@ -4498,7 +4498,7 @@ FindFreeObj:
 		move.w	#(v_lvlobjend-v_lvlobjspace)/obj.Size-1,d0
 
 loc_8B7A:
-		tst.b	(a1)
+		tst.b	obj.Id(a1)
 		beq.s	locret_8B86
 		lea	obj.Size(a1),a1
 		dbf	d0,loc_8B7A
@@ -4511,12 +4511,12 @@ FindNextFreeObj:
 		movea.l	a0,a1
 		move.w	#v_lvlobjend,d0
 		sub.w	a0,d0
-		lsr.w	#6,d0
+		lsr.w	#object_size_bits,d0
 		subq.w	#1,d0
 		bcs.s	locret_8BA2
 
 loc_8B96:
-		tst.b	(a1)
+		tst.b	obj.Id(a1)
 		beq.s	locret_8BA2
 		lea	obj.Size(a1),a1
 		dbf	d0,loc_8B96
@@ -4687,7 +4687,7 @@ byte_AA75:	dc.b 6
 		dc.b $F8, 5, 0, $10, $10
 		dc.b $F8, 5, 0, $C, $20
 byte_AA94:	dc.b 6
-byte_AA95:	dc.b $F8, $D, 1, $4A, $B0
+		dc.b $F8, $D, 1, $4A, $B0
 		dc.b $F8, 1, 1, $62, $D0
 		dc.b $F8, 9, 1, $64, $18
 		dc.b $F8, $D, 1, $6A, $30
@@ -4858,7 +4858,9 @@ Map_Yadrin:	include "_maps/Yadrin.asm"
 
 		include "_incObj/51 Smashable Green Block.asm"
 
-ObjSmashBlock_Frag:dc.w $FE00, $FE00, $FF00, $FF00, $200, $FE00, $100, $FF00
+ObjSmashBlock_Frag:
+		dc.w $FE00, $FE00, $FF00, $FF00, $200, $FE00, $100, $FF00
+		even
 
 MapSmashBlock:	include "_maps/Smashable Green Block.asm"
 
@@ -5458,7 +5460,7 @@ Sonic_NoRunningOnWalls:
 		moveq	#$E,d5
 		bsr.w	sub_101BE
 		move.w	(sp)+,d0
-		move.b	#-$80,d2
+		move.b	#$80,d2
 		bra.w	loc_105A8
 ; ---------------------------------------------------------------------------
 		move.w	obj.Ypos(a0),d2
@@ -5472,7 +5474,7 @@ loc_10754:
 		move.w	#$1000,d6
 		moveq	#$E,d5
 		bsr.w	sub_101BE
-		move.b	#-$80,d2
+		move.b	#$80,d2
 		bra.w	loc_105E2
 ; ---------------------------------------------------------------------------
 
@@ -5492,7 +5494,7 @@ ObjectHitCeiling:
 		move.b	(v_angle_primary).w,d3
 		btst	#0,d3
 		beq.s	locret_107AC
-		move.b	#-$80,d3
+		move.b	#$80,d3
 
 locret_107AC:
 		rts
@@ -5771,7 +5773,7 @@ SS_WaRiVramSet:	dc.w $142, $142, $142, $2142
 
 sub_10ACC:
 		lea	(v_ssitembuffer).l,a2
-		move.w	#$1F,d0
+		move.w	#(v_ssitembuffer_end-v_ssitembuffer)/8-1,d0
 
 loc_10AD6:
 		tst.b	(a2)
@@ -5785,7 +5787,7 @@ locret_10AE0:
 
 Special_AniItems:
 		lea	(v_ssitembuffer).l,a0
-		move.w	#$1F,d7
+		move.w	#(v_ssitembuffer_end-v_ssitembuffer)/8-1,d7
 
 loc_10AEC:
 		moveq	#0,d0
@@ -5888,7 +5890,7 @@ loc_10BAC:
 		dbf	d1,loc_10BAC
 
 		lea	(v_ssitembuffer).l,a1
-		move.w	#$3F,d1
+		move.w	#(v_ssitembuffer_end-v_ssitembuffer)/4-1,d1
 
 loc_10BC8:
 
@@ -6415,15 +6417,15 @@ byte_11D26:	binclude "artunc/Lives Counter Numbers.bin"
 ; ===========================================================================
 ; Sega Screen/Title Screen Art and Mappings
 ; ===========================================================================
-Nem_SegaLogo:	binclude "artnem/Sega Logo.bin"
+Nem_SegaLogo:	binclude "artnem/Sega Logo.nem"
 		even
 Eni_SegaLogo:	binclude "tilemaps/Sega Logo.bin"
 		even
 Unc_Title:	binclude "tilemaps/Title Screen.bin"
 		even
-Nem_TitleFg:	binclude "artnem/Title Screen Foreground.bin"
+Nem_TitleFg:	binclude "artnem/Title Screen Foreground.nem"
 		even
-Nem_TitleSonic:	binclude "artnem/Title Screen Sonic.bin"
+Nem_TitleSonic:	binclude "artnem/Title Screen Sonic.nem"
 		even
 Map_Sonic:	include "_maps/Sonic.asm"
 SonicDynPLC:	include "_maps/Sonic - Dynamic Gfx Script.asm"
@@ -6436,16 +6438,16 @@ Art_Sonic:	binclude "artunc/Sonic.bin"
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-Nem_Smoke:	binclude "artnem/Smoke.bin"
+Nem_Smoke:	binclude "artnem/Smoke.nem"
 		even
-Nem_Shield:	binclude "artnem/Shield.bin"
+Nem_Shield:	binclude "artnem/Shield.nem"
 		even
-Nem_Stars:	binclude "artnem/Stars.bin"
+Nem_Stars:	binclude "artnem/Stars.nem"
 		even
-Nem_Flash:	binclude "artnem/Flash.bin"
+Nem_Flash:	binclude "artnem/Flash.nem"
 		even
-;byte_26E90:
-		binclude "artnem/Unused - Goggles.bin"
+;Nem_Goggles:
+		binclude "artnem/Unused - Goggles.nem"
 		even
 
 		align $400				; Padding
@@ -6457,26 +6459,26 @@ byte_27400:	binclude "artnem/ghz flower stalk.nem"
 		even
 byte_2744A:	binclude "artnem/ghz swing.nem"
 		even
-ArtBridge:	binclude "artnem/GHZ Bridge.bin"
+ArtBridge:	binclude "artnem/GHZ Bridge.nem"
 		even
 byte_27698:	binclude "artnem/ghz checkered ball.nem"
 		even
-ArtSpikes:	binclude "artnem/Spikes.bin"
+ArtSpikes:	binclude "artnem/Spikes.nem"
 		even
-ArtSpikeLogs:	binclude "artnem/GHZ Spiked Log.bin"
+ArtSpikeLogs:	binclude "artnem/GHZ Spiked Log.nem"
 		even
-ArtPurpleRock:	binclude "artnem/GHZ Purple Rock.bin"
+ArtPurpleRock:	binclude "artnem/GHZ Purple Rock.nem"
 		even
-ArtSmashWall:	binclude "artnem/GHZ Breakable Wall.bin"
+ArtSmashWall:	binclude "artnem/GHZ Breakable Wall.nem"
 		even
-ArtWall:	binclude "artnem/GHZ Edge Wall.bin"
+ArtWall:	binclude "artnem/GHZ Edge Wall.nem"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - MZ stuff
 ; ---------------------------------------------------------------------------
-ArtChainPtfm:	binclude "artnem/MZ Metal Blocks.bin"
+ArtChainPtfm:	binclude "artnem/MZ Metal Blocks.nem"
 		even
-ArtButtonMZ:	binclude "artnem/MZ Switch.bin"
+ArtButtonMZ:	binclude "artnem/MZ Switch.nem"
 		even
 byte_2816E:	binclude "artnem/mz piston.nem"
 		even
@@ -6484,16 +6486,16 @@ byte_2827A:	binclude "artnem/mz fire ball.nem"
 		even
 byte_28558:	binclude "artnem/mz lava.nem"
 		even
-byte_28E6E:	binclude "artnem/MZ Green Pushable Block.bin"
+byte_28E6E:	binclude "artnem/MZ Green Pushable Block.nem"
 		even
-		binclude "artnem/Unused - MZ Background.bin"
+		binclude "artnem/Unused - MZ Background.nem"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SLZ stuff
 ; ---------------------------------------------------------------------------
-ArtSeesaw:	binclude "artnem/SLZ Seesaw.bin"
+ArtSeesaw:	binclude "artnem/SLZ Seesaw.nem"
 		even
-ArtFan:		binclude "artnem/SLZ Fan.bin"
+ArtFan:		binclude "artnem/SLZ Fan.nem"
 		even
 byte_294DA:	binclude "artnem/slz platform.nem"
 		even
@@ -6508,86 +6510,89 @@ byte_29D4A:	binclude "artnem/slz metal block.nem"
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - SZ stuff
 ; ---------------------------------------------------------------------------
-ArtBumper:	binclude "artnem/SZ Bumper.bin"
+ArtBumper:	binclude "artnem/SZ Bumper.nem"
 		even
 byte_29FC0:	binclude "artnem/SZ small spiked ball.nem"
 		even
-ArtButton:	binclude "artnem/Switch.bin"
+ArtButton:	binclude "artnem/Switch.nem"
 		even
 byte_2A104:	binclude "artnem/swinging spiked ball.nem"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - enemies
 ; ---------------------------------------------------------------------------
-Nem_Ballhog:	binclude "artnem/Enemy Ballhog.bin"
+;Nem_BallHog:
+		binclude "artnem/Unused - Enemy Ball Hog.nem"
 		even
-Nem_Crabmeat:	binclude "artnem/Enemy Crabmeat.bin"
+Nem_Crabmeat:	binclude "artnem/Enemy Crabmeat.nem"
 		even
-Nem_Buzzbomber:	binclude "artnem/Enemy Buzz Bomber.bin"
+Nem_Buzzbomber:	binclude "artnem/Enemy Buzz Bomber.nem"
 		even
-byte_2ADFE:	binclude "artnem/Ballhog's Bomb Explosion.bin"
+;Nem_Ball_Explosion:
+		binclude "artnem/Unused - Ball Hog's Bomb Explosion.nem"
 		even
-Nem_Burrobot:	binclude "artnem/Enemy Burrobot.bin"
+Nem_Burrobot:	binclude "artnem/Enemy Burrobot.nem"
 		even
-ArtChopper:	binclude "artnem/Enemy Chopper.bin"
+ArtChopper:	binclude "artnem/Enemy Chopper.nem"
 		even
-Nem_Jaws:	binclude "artnem/Enemy Jaws.bin"
+Nem_Jaws:	binclude "artnem/Enemy Jaws.nem"
 		even
-byte_2BBC2:	binclude "artnem/Ballhog's Bomb.bin"
+;Nem_BallBomb:
+		binclude "artnem/Unused - Ball Hog's Bomb.nem"
 		even
-Nem_Roller:	binclude "artnem/Enemy Roller.bin"
+Nem_Roller:	binclude "artnem/Enemy Roller.nem"
 		even
-ArtMotobug:	binclude "artnem/Enemy Motobug.bin"
+ArtMotobug:	binclude "artnem/Enemy Motobug.nem"
 		even
-ArtNewtron:	binclude "artnem/Enemy Newtron.bin"
+ArtNewtron:	binclude "artnem/Enemy Newtron.nem"
 		even
-ArtYardin:	binclude "artnem/Enemy Yadrin.bin"
+ArtYardin:	binclude "artnem/Enemy Yadrin.nem"
 		even
-ArtBasaran:	binclude "artnem/Enemy Basaran.bin"
+ArtBasaran:	binclude "artnem/Enemy Basaran.nem"
 		even
-ArtSplats:	binclude "artnem/Enemy Splats.bin"
+ArtSplats:	binclude "artnem/Enemy Splats.nem"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - various
 ; ---------------------------------------------------------------------------
-Nem_TitleCard:	binclude "artnem/Title Cards.bin"
+Nem_TitleCard:	binclude "artnem/Title Cards.nem"
 		even
-Nem_HUD:	binclude "artnem/HUD.bin"
+Nem_HUD:	binclude "artnem/HUD.nem"
 		even
-Nem_Lives:	binclude "artnem/HUD - Life Counter Icon.bin"
+Nem_Lives:	binclude "artnem/HUD - Life Counter Icon.nem"
 		even
-Nem_Rings:	binclude "artnem/Rings.bin"
+Nem_Rings:	binclude "artnem/Rings.nem"
 		even
-Nem_Monitors:	binclude "artnem/Monitors.bin"
+Nem_Monitors:	binclude "artnem/Monitors.nem"
 		even
-ArtExplosions:	binclude "artnem/Explosion.bin"
+ArtExplosions:	binclude "artnem/Explosion.nem"
 		even
 byte_2E6C8:	binclude "artnem/score points.nem"
 		even
-ArtGameOver:	binclude "artnem/Game Over.bin"
+ArtGameOver:	binclude "artnem/Game Over.nem"
 		even
-ArtSpringHoriz:	binclude "artnem/Spring Horizontal.bin"
+ArtSpringHoriz:	binclude "artnem/Spring Horizontal.nem"
 		even
-ArtSpringVerti:	binclude "artnem/Spring Vertical.bin"
+ArtSpringVerti:	binclude "artnem/Spring Vertical.nem"
 		even
-ArtSignPost:	binclude "artnem/Signpost.bin"
+ArtSignPost:	binclude "artnem/Signpost.nem"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - animals
 ; ---------------------------------------------------------------------------
-ArtAnimalPocky:	binclude "artnem/Animal Rabbit.bin"
+ArtAnimalPocky:	binclude "artnem/Animal Rabbit.nem"
 		even
-ArtAnimalCucky:	binclude "artnem/Animal Chicken.bin"
+ArtAnimalCucky:	binclude "artnem/Animal Chicken.nem"
 		even
-ArtAnimalPecky:	binclude "artnem/Animal Blackbird.bin"
+ArtAnimalPecky:	binclude "artnem/Animal Blackbird.nem"
 		even
-ArtAnimalRocky:	binclude "artnem/Animal Seal.bin"
+ArtAnimalRocky:	binclude "artnem/Animal Seal.nem"
 		even
-ArtAnimalPicky:	binclude "artnem/Animal Pig.bin"
+ArtAnimalPicky:	binclude "artnem/Animal Pig.nem"
 		even
-ArtAnimalFlicky:binclude "artnem/Animal Flicky.bin"
+ArtAnimalFlicky:binclude "artnem/Animal Flicky.nem"
 		even
-ArtAnimalRicky:	binclude "artnem/Animal Squirrel.bin"
+ArtAnimalRicky:	binclude "artnem/Animal Squirrel.nem"
 		even
 
 		align $1000				; Padding
@@ -6597,54 +6602,56 @@ ArtAnimalRicky:	binclude "artnem/Animal Squirrel.bin"
 ; ---------------------------------------------------------------------------
 Blk16_GHZ:	binclude "map16/GHZ.bin"
 		even
-Nem_GHZ_1st:	binclude "artnem/8x8 - GHZ1.bin"
+Nem_GHZ_1st:	binclude "artnem/8x8 - GHZ1.nem"
 		even
-Nem_GHZ_2nd:	binclude "artnem/8x8 - GHZ2.bin"
+Nem_GHZ_2nd:	binclude "artnem/8x8 - GHZ2.nem"
 		even
 Blk256_GHZ:	binclude "map256/GHZ.kos"
 		even
 Blk16_LZ:	binclude "map16/LZ.bin"
 		even
-Nem_LZ:		binclude "artnem/8x8 - LZ.bin"
+Nem_LZ:		binclude "artnem/8x8 - LZ.nem"
 		even
 Blk256_LZ:	binclude "map256/LZ.kos"
 		even
 Blk16_MZ:	binclude "map16/MZ.bin"
 		even
-Nem_MZ:		binclude "artnem/8x8 - MZ.bin"
+Nem_MZ:		binclude "artnem/8x8 - MZ.nem"
 		even
 Blk256_MZ:	binclude "map256/MZ.kos"
 		even
+;0x3DA48
 		binclude "unknown/3DA48.dat"
 		even
 Blk16_SLZ:	binclude "map16/SLZ.bin"
 		even
-Nem_SLZ:	binclude "artnem/8x8 - SLZ.bin"
+Nem_SLZ:	binclude "artnem/8x8 - SLZ.nem"
 		even
 Blk256_SLZ:	binclude "map256/SLZ.kos"
 		even
 Blk16_SZ:	binclude "map16/SZ.bin"
 		even
-Nem_SZ:		binclude "artnem/8x8 - SZ.bin"
+Nem_SZ:		binclude "artnem/8x8 - SZ.nem"
 		even
 Blk256_SZ:	binclude "map256/SZ.kos"
 		even
 Blk16_CWZ:	binclude "map16/CWZ.bin"
 		even
-Nem_CWZ:	binclude "artnem/8x8 - CWZ.bin"
+Nem_CWZ:	binclude "artnem/8x8 - CWZ.nem"
 		even
 Blk256_CWZ:	binclude "map256/CWZ.kos"
 		even
+;0x570DC
 		binclude "unknown/570DC.dat"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
 ; ---------------------------------------------------------------------------
-byte_60000:	binclude "artnem/Boss - Main.bin"
+byte_60000:	binclude "artnem/Boss - Main.nem"
 		even
-byte_60864:	binclude "artnem/Boss - Weapons.bin"
+byte_60864:	binclude "artnem/Boss - Weapons.nem"
 		even
-byte_60BB0:	binclude "artnem/Prison Capsule.bin"
+byte_60BB0:	binclude "artnem/Prison Capsule.nem"
 		even
 ; ===========================================================================
 ; Demos
@@ -6669,41 +6676,41 @@ ArtSpecialBlocks:binclude "artnem/Art Blocks.nem"
 		even
 byte_639B8:	binclude "tilemaps/SS Background 1.bin"
 		even
-ArtSpecialAnimals:binclude "artnem/Special Birds & Fish.bin"
+ArtSpecialAnimals:binclude "artnem/Special Birds & Fish.nem"
 		even
 byte_6477C:	binclude "tilemaps/SS Background 2.bin"
 		even
 byte_64A7C:	binclude "artnem/ss bg misc.nem"
 		even
-ArtSpecialGoal:	binclude "artnem/Special GOAL.bin"
+ArtSpecialGoal:	binclude "artnem/Special GOAL.nem"
 		even
-ArtSpecialR:	binclude "artnem/Special R.bin"
+ArtSpecialR:	binclude "artnem/Special R.nem"
 		even
-ArtSpecialSkull:binclude "artnem/Special Skull.bin"
+ArtSpecialSkull:binclude "artnem/Special Skull.nem"
 		even
-ArtSpecialU:	binclude "artnem/Special U.bin"
+ArtSpecialU:	binclude "artnem/Special U.nem"
 		even
-ArtSpecial1up:	binclude "artnem/Special 1UP.bin"
+ArtSpecial1up:	binclude "artnem/Special 1UP.nem"
 		even
 ArtSpecialStars:binclude "artnem/Art Stars.nem"
 		even
 byte_65432:	binclude "artnem/ss red white.nem"
 		even
-ArtSpecialZone1:binclude "artnem/Special ZONE1.bin"
+ArtSpecialZone1:binclude "artnem/Special ZONE1.nem"
 		even
-ArtSpecialZone2:binclude "artnem/Special ZONE2.bin"
+ArtSpecialZone2:binclude "artnem/Special ZONE2.nem"
 		even
-ArtSpecialZone3:binclude "artnem/Special ZONE3.bin"
+ArtSpecialZone3:binclude "artnem/Special ZONE3.nem"
 		even
-ArtSpecialZone4:binclude "artnem/Special ZONE4.bin"
+ArtSpecialZone4:binclude "artnem/Special ZONE4.nem"
 		even
-ArtSpecialZone5:binclude "artnem/Special ZONE5.bin"
+ArtSpecialZone5:binclude "artnem/Special ZONE5.nem"
 		even
-ArtSpecialZone6:binclude "artnem/Special ZONE6.bin"
+ArtSpecialZone6:binclude "artnem/Special ZONE6.nem"
 		even
-ArtSpecialUpDown:binclude "artnem/Special UP-DOWN.bin"
+ArtSpecialUpDown:binclude "artnem/Special UP-DOWN.nem"
 		even
-ArtSpecialEmerald:binclude "artnem/Special Emeralds.bin"
+ArtSpecialEmerald:binclude "artnem/Special Emeralds.nem"
 		even
 
 		align $4000				; Padding
@@ -6876,7 +6883,7 @@ LayoutCWZ3:	binclude "levels/cwz3.bin"
 		even
 
 byte_6E344:	dc.l 0
-LayoutTest:	binclude "leftovers/test.bin"		; Seems to be a test layout
+LayoutTest:	binclude "leftovers/levels/test.bin"		; Seems to be a test layout
 		even
 
 byte_6E3CA:	dc.l 0
@@ -6948,7 +6955,8 @@ ObjPos_SZ1:	binclude "objpos/sz1.bin"
 		even
 ObjPos_SZ2:	binclude "objpos/sz2.bin"
 		even
-byte_729CA:	binclude "leftovers/sz1.bin"		; Leftover from earlier builds
+;0x729CA
+		binclude "leftovers/levels/sz1.bin"		; Leftover from earlier builds
 		even
 ObjPos_SZ3:	binclude "objpos/sz3.bin"
 		even
