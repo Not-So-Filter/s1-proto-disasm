@@ -2,7 +2,7 @@
 
 ObjCollapsePtfm:
 		moveq	#0,d0
-		move.b	obj.Routine(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_5EEE(pc,d0.w),d1
 		jmp	off_5EEE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -10,19 +10,19 @@ ObjCollapsePtfm:
 off_5EEE:	dc.w loc_5EFA-off_5EEE, loc_5F2A-off_5EEE, loc_5F4E-off_5EEE, loc_5F7E-off_5EEE, loc_5FDE-off_5EEE
 		dc.w sub_5F60-off_5EEE
 
-ledge_timedelay: = obj.Off_38				; time between touching the ledge and it collapsing
-ledge_collapse_flag: = obj.Off_3A			; collapse flag
+ledge_timedelay: equ obj.Off_38				; time between touching the ledge and it collapsing
+ledge_collapse_flag: equ obj.Off_3A			; collapse flag
 ; ---------------------------------------------------------------------------
 
 loc_5EFA:
-		addq.b	#2,obj.Routine(a0)
-		move.l	#Map_Ledge,obj.Map(a0)
-		move.w	#$4000,obj.Gfx(a0)
-		ori.b	#4,obj.Render(a0)
-		move.b	#4,obj.Priority(a0)
+		addq.b	#2,obRoutine(a0)
+		move.l	#Map_Ledge,obMap(a0)
+		move.w	#$4000,obGfx(a0)
+		ori.b	#4,obRender(a0)
+		move.b	#4,obPriority(a0)
 		move.b	#7,ledge_timedelay(a0)
-		move.b	#$64,obj.ActWid(a0)
-		move.b	obj.Subtype(a0),obj.Frame(a0)
+		move.b	#$64,obActWid(a0)
+		move.b	obSubtype(a0),obFrame(a0)
 
 loc_5F2A:
 		tst.b	ledge_collapse_flag(a0)
@@ -49,7 +49,7 @@ sub_5F60:
 		bsr.w	PtfmCheckExit
 		move.w	#$30,d1
 		lea	(ObjCollapsePtfm_Slope).l,a2
-		move.w	obj.Xpos(a0),d2
+		move.w	obX(a0),d2
 		bsr.w	sub_61E0
 		bra.w	RememberState
 ; ---------------------------------------------------------------------------
@@ -66,18 +66,18 @@ loc_5F7E:
 loc_5F94:
 		subq.b	#1,ledge_timedelay(a0)
 		bsr.w	sub_5F60
-		lea	(v_objspace).w,a1
-		btst	#3,obj.Status(a1)
+		lea	(v_player).w,a1
+		btst	#3,obStatus(a1)
 		beq.s	loc_5FC0
 		tst.b	ledge_timedelay(a0)
 		bne.s	locret_5FCC
-		bclr	#3,obj.Status(a1)
-		bclr	#5,obj.Status(a1)
-		move.b	#1,obj.NextAni(a1)
+		bclr	#3,obStatus(a1)
+		bclr	#5,obStatus(a1)
+		move.b	#1,obNextAni(a1)
 
 loc_5FC0:
 		move.b	#0,ledge_collapse_flag(a0)
-		move.b	#6,obj.Routine(a0)
+		move.b	#6,obRoutine(a0)
 
 locret_5FCC:
 		rts
@@ -86,7 +86,7 @@ locret_5FCC:
 loc_5FCE:
 		bsr.w	ObjectFall
 		bsr.w	DisplaySprite
-		tst.b	obj.Render(a0)
+		tst.b	obRender(a0)
 		bpl.s	loc_5FDE
 		rts
 ; ---------------------------------------------------------------------------

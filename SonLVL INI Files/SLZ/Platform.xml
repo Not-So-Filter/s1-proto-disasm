@@ -2,7 +2,7 @@
 <ObjDef xmlns="http://www.sonicretro.org" Name="Platform" Image="img1">
   <Images>
     <ImageFromMappings id="img1">
-      <ArtFile filename="LevelArt"/>
+      <ArtFile filename="../artnem/SLZ Platforms.nem"/>
       <MapFile type="ASM" filename="../_maps/Platforms (SLZ).asm" frame="0" startpal="2"/>
     </ImageFromMappings>
   </Images>

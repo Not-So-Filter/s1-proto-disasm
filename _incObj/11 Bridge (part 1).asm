@@ -2,7 +2,7 @@
 
 Bridge:
 		moveq	#0,d0
-		move.b	obj.Routine(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_4E64(pc,d0.w),d1
 		jmp	off_4E64(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -12,16 +12,16 @@ off_4E64:	dc.w Bridge_Init-off_4E64, loc_4F32-off_4E64, loc_50B2-off_4E64, Bridg
 ; ---------------------------------------------------------------------------
 
 Bridge_Init:
-		addq.b	#2,obj.Routine(a0)
-		move.l	#MapBridge,obj.Map(a0)
-		move.w	#$438E,obj.Gfx(a0)
-		move.b	#4,obj.Render(a0)
-		move.b	#3,obj.Priority(a0)
-		move.b	#$80,obj.ActWid(a0)
-		move.w	obj.Ypos(a0),d2
-		move.w	obj.Xpos(a0),d3
-		_move.b	obj.Id(a0),d4
-		lea	obj.Subtype(a0),a2
+		addq.b	#2,obRoutine(a0)
+		move.l	#MapBridge,obMap(a0)
+		move.w	#$438E,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#3,obPriority(a0)
+		move.b	#$80,obActWid(a0)
+		move.w	obY(a0),d2
+		move.w	obX(a0),d3
+		_move.b	obID(a0),d4
+		lea	obSubtype(a0),a2
 		moveq	#0,d1
 		move.b	(a2),d1
 		move.b	#0,(a2)+
@@ -35,18 +35,18 @@ Bridge_Init:
 Bridge_MakeLog:
 		bsr.w	FindFreeObj
 		bne.s	loc_4F32
-		addq.b	#1,obj.Subtype(a0)
-		cmp.w	obj.Xpos(a0),d3
+		addq.b	#1,obSubtype(a0)
+		cmp.w	obX(a0),d3
 		bne.s	loc_4EE6
 		addi.w	#$10,d3
-		move.w	d2,obj.Ypos(a0)
-		move.w	d2,obj.Off_3C(a0)
+		move.w	d2,obY(a0)
+		move.w	d2,objoff_3C(a0)
 		move.w	a0,d5
 		subi.w	#v_objspace,d5
 		lsr.w	#6,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
-		addq.b	#1,obj.Subtype(a0)
+		addq.b	#1,obSubtype(a0)
 
 loc_4EE6:
 		move.w	a1,d5
@@ -54,24 +54,24 @@ loc_4EE6:
 		lsr.w	#6,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
-		move.b	#$A,obj.Routine(a1)
-		_move.b	d4,obj.Id(a1)
-		move.w	d2,obj.Ypos(a1)
-		move.w	d2,obj.Off_3C(a1)
-		move.w	d3,obj.Xpos(a1)
-		move.l	#MapBridge,obj.Map(a1)
-		move.w	#$438E,obj.Gfx(a1)
-		move.b	#4,obj.Render(a1)
-		move.b	#3,obj.Priority(a1)
-		move.b	#8,obj.ActWid(a1)
+		move.b	#$A,obRoutine(a1)
+		_move.b	d4,obID(a1)
+		move.w	d2,obY(a1)
+		move.w	d2,objoff_3C(a1)
+		move.w	d3,obX(a1)
+		move.l	#MapBridge,obMap(a1)
+		move.w	#$438E,obGfx(a1)
+		move.b	#4,obRender(a1)
+		move.b	#3,obPriority(a1)
+		move.b	#8,obActWid(a1)
 		addi.w	#$10,d3
 		dbf	d1,Bridge_MakeLog
 
 loc_4F32:
 		bsr.s	PtfmBridge
-		tst.b	obj.Off_3E(a0)
+		tst.b	objoff_3E(a0)
 		beq.s	loc_4F42
-		subq.b	#4,obj.Off_3E(a0)
+		subq.b	#4,objoff_3E(a0)
 		bsr.w	Bridge_UpdateBend
 
 loc_4F42:

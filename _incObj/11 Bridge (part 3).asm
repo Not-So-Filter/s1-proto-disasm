@@ -2,31 +2,31 @@
 
 Bridge_PlayerPos:
 		moveq	#0,d0
-		move.b	obj.Off_3F(a0),d0
-		move.b	obj.Off_29(a0,d0.w),d0
+		move.b	objoff_3F(a0),d0
+		move.b	objoff_29(a0,d0.w),d0
 		lsl.w	#6,d0
 		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a2
 		lea	(v_objspace).w,a1
-		move.w	obj.Ypos(a2),d0
+		move.w	obY(a2),d0
 		subq.w	#8,d0
 		moveq	#0,d1
-		move.b	obj.Height(a1),d1
+		move.b	obHeight(a1),d1
 		sub.w	d1,d0
-		move.w	d0,obj.Ypos(a1)
+		move.w	d0,obY(a1)
 		rts
 ; ---------------------------------------------------------------------------
 
 Bridge_UpdateBend:
-		move.b	obj.Off_3E(a0),d0
+		move.b	objoff_3E(a0),d0
 		bsr.w	CalcSine
 		move.w	d0,d4
 		lea	(byte_5306).l,a4
 		moveq	#0,d0
-		move.b	obj.Subtype(a0),d0
+		move.b	obSubtype(a0),d0
 		lsl.w	#4,d0
 		moveq	#0,d3
-		move.b	obj.Off_3F(a0),d3
+		move.b	objoff_3F(a0),d3
 		move.w	d3,d2
 		add.w	d0,d3
 		moveq	#0,d5
@@ -35,7 +35,7 @@ Bridge_UpdateBend:
 		andi.w	#$F,d3
 		lsl.w	#4,d3
 		lea	(a4,d3.w),a3
-		lea	obj.Off_29(a0),a2
+		lea	objoff_29(a0),a2
 
 loc_5186:
 		moveq	#0,d0
@@ -49,13 +49,13 @@ loc_5186:
 		mulu.w	d5,d0
 		mulu.w	d4,d0
 		swap	d0
-		add.w	obj.Off_3C(a1),d0
-		move.w	d0,obj.Ypos(a1)
+		add.w	objoff_3C(a1),d0
+		move.w	d0,obY(a1)
 		dbf	d2,loc_5186
 		moveq	#0,d0
-		move.b	obj.Subtype(a0),d0
+		move.b	obSubtype(a0),d0
 		moveq	#0,d3
-		move.b	obj.Off_3F(a0),d3
+		move.b	objoff_3F(a0),d3
 		addq.b	#1,d3
 		sub.b	d0,d3
 		neg.b	d3
@@ -79,8 +79,8 @@ loc_51CE:
 		mulu.w	d5,d0
 		mulu.w	d4,d0
 		swap	d0
-		add.w	obj.Off_3C(a1),d0
-		move.w	d0,obj.Ypos(a1)
+		add.w	objoff_3C(a1),d0
+		move.w	d0,obY(a1)
 		dbf	d2,loc_51CE
 
 locret_51F4:
@@ -136,7 +136,7 @@ Bridge_ChkDelete:
 
 Bridge_DeleteAll:
 		moveq	#0,d2
-		lea	obj.Subtype(a0),a2
+		lea	obSubtype(a0),a2
 		move.b	(a2)+,d2
 		subq.b	#1,d2
 		bcs.s	Bridge_GoDelete

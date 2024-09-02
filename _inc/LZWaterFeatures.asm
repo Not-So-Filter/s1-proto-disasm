@@ -15,7 +15,7 @@ LZWaterFeatures:
 		btst	#bitDn,(v_jpadhold1).w		; Are we holding down?
 		beq.s	.donothing			; If not, return
 		subq.w	#1,(v_bg3screenposy).w
-		cmpi.b	#$DF,(v_hbla_line).w
+		cmpi.b	#224-1,(v_hbla_line).w
 		beq.s	.donothing
 		addq.b	#1,(v_hbla_line).w
 

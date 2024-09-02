@@ -43,7 +43,7 @@ AniArt_GHZ_Waterfall:
 		lea	$100(a1),a1
 
 	.isframe0:
-		locVRAM $6F00
+		locVRAM ArtTile_GHZ_Waterfall*tile_size
 		move.w	#8-1,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ AniArt_GHZ_Bigflower:
 		lea	$200(a1),a1
 
 	.isframe0:
-		locVRAM $6B80
+		locVRAM ArtTile_GHZ_Big_Flower_1*tile_size
 		move.w	#16-1,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ AniArt_GHZ_Smallflower:
 		move.w	d0,d1
 		add.w	d0,d0
 		add.w	d1,d0
-		locVRAM $6D80
+		locVRAM ArtTile_GHZ_Small_Flower*tile_size
 		lea	(Art_GhzFlower2).l,a1
 		lea	(a1,d0.w),a1
 		move.w	#12-1,d1
@@ -117,7 +117,7 @@ AniArt_MZ_Lava:
 		move.b	d0,(v_lani0_frame).w
 		mulu.w	#$100,d0
 		adda.w	d0,a1
-		locVRAM $5C40
+		locVRAM ArtTile_MZ_Animated_Lava*tile_size
 		move.w	#8-1,d1
 		bsr.w	LoadTiles
 
@@ -131,12 +131,12 @@ AniArt_MZ_Magma:
 		lea	(Art_MzLava2).l,a4
 		ror.w	#7,d0
 		adda.w	d0,a4
-		locVRAM $5A40
+		locVRAM ArtTile_MZ_Animated_Magma*tile_size
 		moveq	#0,d3
 		move.b	(v_lani1_frame).w,d3
 		addq.b	#1,(v_lani1_frame).w
 		move.b	(v_oscillate+$A).w,d3
-		move.w	#3,d2
+		move.w	#4-1,d2
 
 	.loop:
 		move.w	d3,d0
@@ -169,7 +169,7 @@ AniArt_MZ_Torch:
 		move.b	d0,(v_lani2_frame).w
 		mulu.w	#$100,d0
 		adda.w	d0,a1
-		locVRAM $5D40
+		locVRAM ArtTile_MZ_Saturns*tile_size
 		move.w	#8-1,d1
 		bsr.w	LoadTiles
 		lea	(Art_MzTorch).l,a1
@@ -179,7 +179,7 @@ AniArt_MZ_Torch:
 		andi.b	#3,(v_lani3_frame).w
 		mulu.w	#$C0,d0
 		adda.w	d0,a1
-		locVRAM $5E40
+		locVRAM ArtTile_MZ_Torch*tile_size
 		move.w	#6-1,d1
 		bra.w	LoadTiles
 ; ---------------------------------------------------------------------------

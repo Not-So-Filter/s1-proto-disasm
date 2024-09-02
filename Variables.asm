@@ -1,13 +1,19 @@
+		include	"s1.sounddriver.ram.asm"
+
+; sign-extends a 32-bit integer to 64-bit
+; all RAM addresses are run through this function to allow them to work in both 16-bit and 32-bit addressing modes
+ramaddr function x,(-(x&$80000000)<<1)|x
+
 ; Variables (v) and Flags (f)
 
-	phase $FFFF0000
+	phase ramaddr($FFFF0000)
 v_startofram:
 v_256x256:		ds.b $52*$200	; 256x256 tile mappings ($A400 bytes)
 v_256x256_end:
 
 layoutsize:		= $40
 
-v_lvllayout:		ds.b $400	; level layout buffer ($400 bytes)
+v_lvllayout:		ds.b layoutsize*$10	; level layout buffer ($400 bytes)
 v_lvllayoutbg:		= v_lvllayout+layoutsize
 v_lvllayout_end:
 
@@ -64,107 +70,9 @@ v_lvlobjspace:
 v_lvlobjend:
 v_objend:
 ; $FFFFF000
-v_snddriver_ram:	ds.b $600	; start of RAM for the sound driver data ($600 bytes)
+v_snddriver_ram:	SMPS_RAM	; start of RAM for the sound driver data ($600 bytes)
+			ds.b $40	; unused
 v_snddriver_ram_end:
-	dephase
-
-; =================================================================================
-; From here on, until otherwise stated, all offsets are relative to v_snddriver_ram
-; =================================================================================
-
-	phase 0
-v_startofvariables:
-v_sndprio:		ds.b 1		; sound priority (priority of new music/SFX must be higher or =al to this value or it won't play; bit 7 of priority being set prevents this value from changing)
-v_main_tempo_timeout:	ds.b 1		; Counts down to zero; when zero, resets to next value and delays song by 1 frame
-v_main_tempo:		ds.b 1		; Used for music only
-f_pausemusic:		ds.b 1		; flag set to stop music when paused
-v_fadeout_counter:	ds.b 1
-			ds.b 1		; unused
-v_fadeout_delay:	ds.b 1
-v_communication_byte:	ds.b 1		; used in Ristar to sync with a boss' attacks; unused here
-f_updating_dac:		ds.b 1		; $80 if updating DAC, $00 otherwise
-v_sound_id:		ds.b 1		; sound or music copied from below
-v_soundqueue_start:
-v_soundqueue0:		ds.b 1		; sound or music to play
-v_soundqueue1:		ds.b 1		; special sound to play
-v_soundqueue2:		ds.b 1		; unused sound to play
-v_soundqueue_end:
-			ds.b 1		; unused
-f_voice_selector:	ds.b 1		; $00 = use music voice pointer; $40 = use special voice pointer; $80 = use track voice pointer
-v_se_mode_flag:		ds.b 1		; effect mode
-v_detune_start:
-v_detune_freq1:		ds.w 1		; store slot 1 detune freq (2 bytes)
-v_detune_freq2:		ds.w 1		; store slot 2 detune freq (2 bytes)
-v_detune_freq3:		ds.w 1		; store slot 3 detune freq (2 bytes)
-v_detune_freq4:		ds.w 1		; store slot 4 detune freq (2 bytes)
-v_detune_end:
-
-v_voice_ptr:		ds.l 1		; voice data pointer (4 bytes)
-v_lfo_voice_ptr:	ds.l 1		; lfo voice data pointer (4 bytes)
-v_special_voice_ptr:	ds.l 1		; voice data pointer for special SFX ($D0-$DF) (4 bytes)
-
-f_fadein_flag:		ds.b 1		; Flag for fade in
-v_fadein_delay:		ds.b 1
-v_fadein_counter:	ds.b 1		; Timer for fade in/out
-f_1up_playing:		ds.b 1		; flag indicating 1-up song is playing
-v_tempo_mod:		ds.b 1		; music - tempo modifier
-v_speeduptempo:		ds.b 1		; music - tempo modifier with speed shoes
-f_speedup:		ds.b 1		; flag indicating whether speed shoes tempo is on ($80) or off ($00)
-v_ring_speaker:		ds.b 1		; which speaker the "ring" sound is played in (00 = right; 01 = left)
-f_push_playing:		ds.b 1		; if set, prevents further push sounds from playing
-	dephase
-
-	phase $40
-
-v_music_track_ram:			; Start of music RAM
-
-v_music_fmdac_tracks:
-v_music_dac_track:	ds.b Track.Sz
-v_music_fm_tracks:
-v_music_fm1_track:	ds.b Track.Sz
-v_music_fm2_track:	ds.b Track.Sz
-v_music_fm3_track:	ds.b Track.Sz
-v_music_fm4_track:	ds.b Track.Sz
-v_music_fm5_track:	ds.b Track.Sz
-v_music_fm6_track:	ds.b Track.Sz
-v_music_fm_tracks_end:
-v_music_fmdac_tracks_end:
-v_music_psg_tracks:
-v_music_psg1_track:	ds.b Track.Sz
-v_music_psg2_track:	ds.b Track.Sz
-v_music_psg3_track:	ds.b Track.Sz
-v_music_psg_tracks_end:
-v_music_track_ram_end:
-
-v_sfx_track_ram:			; Start of SFX RAM, straight after the end of music RAM
-
-v_sfx_fm_tracks:
-v_sfx_fm3_track:	ds.b Track.Sz
-v_sfx_fm4_track:	ds.b Track.Sz
-v_sfx_fm5_track:	ds.b Track.Sz
-v_sfx_fm_tracks_end:
-v_sfx_psg_tracks:
-v_sfx_psg1_track:	ds.b Track.Sz
-v_sfx_psg2_track:	ds.b Track.Sz
-v_sfx_psg3_track:	ds.b Track.Sz
-v_sfx_psg_tracks_end:
-v_sfx_track_ram_end:
-
-v_spcsfx_track_ram:			; Start of special SFX RAM, straight after the end of SFX RAM
-
-v_spcsfx_fm4_track:	ds.b Track.Sz
-v_spcsfx_psg3_track:	ds.b Track.Sz
-v_spcsfx_track_ram_end:
-
-v_1up_ram_copy:		ds.b Track.Sz
-
-	dephase
-
-; =================================================================================
-; From here on, no longer relative to sound driver RAM
-; =================================================================================
-
-	phase v_snddriver_ram_end
 v_gamemode:		ds.b 1
 			ds.b 1		; unused
 v_jpadhold2:		ds.b 1
@@ -391,6 +299,7 @@ v_endofram:
 v_ssbuffer1		= v_startofram&$FFFFFF
 v_ssblockbuffer		= v_ssbuffer1+$1020 ; ($2000 bytes)
 v_ssblockbuffer_end	= v_ssblockbuffer+$80*$40
+v_sslayout		= v_startofram&$FFFFFF+$172E
 v_ssbuffer2		= v_startofram&$FFFFFF+$4000
 v_ssblocktypes		= v_ssbuffer2
 v_ssitembuffer		= v_ssbuffer2+$400 ; ($100 bytes)
@@ -399,7 +308,7 @@ v_ssbuffer3		= v_startofram+$8000
 v_ssscroll_buffer	= v_ngfx_buffer+$100
 
 	phase v_objstate
-v_regbuffer:		ds.b $40	; stores registers d0-a7 during an error event
+v_regbuffer:		ds.b obj.Size	; stores registers d0-a7 during an error event
 v_spbuffer:		ds.l 1		; stores most recent sp address
 v_errortype:		ds.b 1		; error type
 	dephase

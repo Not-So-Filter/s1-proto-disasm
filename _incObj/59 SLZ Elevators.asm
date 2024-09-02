@@ -2,13 +2,13 @@
 ; Object 59 - platforms	that move when you stand on them (SLZ)
 ; ---------------------------------------------------------------------------
 
-elev_origX:	= obj.Off_32				; original x-axis position
-elev_origY:	= obj.Off_30				; original y-axis position
-elev_dist:	= obj.Off_3C				; distance to move (2 bytes)
+elev_origX:	equ obj.Off_32				; original x-axis position
+elev_origY:	equ obj.Off_30				; original y-axis position
+elev_dist:	equ obj.Off_3C				; distance to move (2 bytes)
 
 ObjSLZMovingPtfm:
 		moveq	#0,d0
-		move.b	obj.Routine(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_DF9A(pc,d0.w),d1
 		jsr	off_DF9A(pc,d1.w)
 		out_of_range.w	DeleteObject,elev_origX(a0)
@@ -17,8 +17,9 @@ ObjSLZMovingPtfm:
 
 off_DF9A:	dc.w loc_DFC2-off_DF9A, loc_E03A-off_DF9A, loc_E04A-off_DF9A, loc_E194-off_DF9A
 
-byte_DFA2:	dc.b $28, 0
-		dc.b $10, 1
+Elev_Var1:	dc.b $28, 0 ; act width, frame
+
+Elev_Var2:	dc.b $10, 1 ; elev_dist, subtype
 		dc.b $20, 1
 		dc.b $34, 1
 		dc.b $10, 3
@@ -36,11 +37,11 @@ byte_DFA2:	dc.b $28, 0
 ; ---------------------------------------------------------------------------
 
 loc_DFC2:
-		addq.b	#2,obj.Routine(a0)
+		addq.b	#2,obRoutine(a0)
 		moveq	#0,d0
-		move.b	obj.Subtype(a0),d0
+		move.b	obSubtype(a0),d0
 		bpl.s	loc_DFE6
-		addq.b	#4,obj.Routine(a0)
+		addq.b	#4,obRoutine(a0)
 		andi.w	#$7F,d0
 		mulu.w	#6,d0
 		move.w	d0,elev_dist(a0)
@@ -51,41 +52,48 @@ loc_DFC2:
 
 loc_DFE6:
 		lsr.w	#3,d0
+		; There is a bug in which Act 2 has 2 platforms, one with a subtype of $14, and another with a subtype of $7A.
+		; This results in the objects reading code rather than data, which results in a garbled mess.
+		; What causes this is that the table for byte_DFA2 reads beyond the intended list.
+		; The line below is the root cause of the issue, as it does not limit the table to be 0.
+		; What's the most strange part about this (in my opinion) is that this bug technically still persists in the
+		; final game, but the issue never actually got fixed.
+                ; Perhaps they were planning on different types of platforms? Who knows! 
 		andi.w	#$1E,d0
-		lea	byte_DFA2(pc,d0.w),a2
-		move.b	(a2)+,obj.ActWid(a0)
-		move.b	(a2)+,obj.Frame(a0)
+		lea	Elev_Var1(pc,d0.w),a2
+		move.b	(a2)+,obActWid(a0)
+		move.b	(a2)+,obFrame(a0)
 		moveq	#0,d0
-		move.b	obj.Subtype(a0),d0
+		move.b	obSubtype(a0),d0
 		add.w	d0,d0
 		andi.w	#$1E,d0
-		lea	byte_DFA2+2(pc,d0.w),a2
+		lea	Elev_Var2(pc,d0.w),a2
 		move.b	(a2)+,d0
 		lsl.w	#2,d0
 		move.w	d0,elev_dist(a0)
-		move.b	(a2)+,obj.Subtype(a0)
-		move.l	#Map_Elev,obj.Map(a0)
-		move.w	#$4480,obj.Gfx(a0)
-		move.b	#4,obj.Render(a0)
-		move.b	#4,obj.Priority(a0)
-		move.w	obj.Xpos(a0),elev_origX(a0)
-		move.w	obj.Ypos(a0),elev_origY(a0)
+		move.b	(a2)+,obSubtype(a0)
+		move.l	#Map_Elev,obMap(a0)
+		move.w	#$4480,obGfx(a0)
+		move.b	#4,obRender(a0)
+		move.b	#4,obPriority(a0)
+		move.w	obX(a0),elev_origX(a0)
+		move.w	obY(a0),elev_origY(a0)
 
 loc_E03A:
 		moveq	#0,d1
-		move.b	obj.ActWid(a0),d1
+		move.b	obActWid(a0),d1
 		jsr	(PtfmNormal).l
 		bra.w	sub_E06E
 ; ---------------------------------------------------------------------------
 
 loc_E04A:
 		moveq	#0,d1
-		move.b	obj.ActWid(a0),d1
+		move.b	obActWid(a0),d1
 		jsr	(PtfmCheckExit).l
-		move.w	obj.Xpos(a0),-(sp)
+		move.w	obX(a0),-(sp)
 		bsr.w	sub_E06E
 		move.w	(sp)+,d2
-		_tst.b	obj.Id(a0)
+		_tst.b	obID(a0)
 		beq.s	locret_E06C
 		jmp	(ptfmSurfaceNormal).l
 ; ---------------------------------------------------------------------------
@@ -96,15 +104,22 @@ locret_E06C:
 
 sub_E06E:
 		moveq	#0,d0
-		move.b	obj.Subtype(a0),d0
+		move.b	obSubtype(a0),d0
 		andi.w	#$F,d0
 		add.w	d0,d0
 		move.w	off_E082(pc,d0.w),d1
 		jmp	off_E082(pc,d1.w)
 ; ---------------------------------------------------------------------------
 
-off_E082:	dc.w locret_E096-off_E082, loc_E098-off_E082, loc_E0A6-off_E082, loc_E098-off_E082
-		dc.w loc_E0BA-off_E082, loc_E098-off_E082, loc_E0CC-off_E082, loc_E098-off_E082, loc_E0EE-off_E082
+off_E082:	dc.w locret_E096-off_E082
+		dc.w loc_E098-off_E082
+		dc.w loc_E0A6-off_E082
+		dc.w loc_E098-off_E082
+		dc.w loc_E0BA-off_E082
+		dc.w loc_E098-off_E082
+		dc.w loc_E0CC-off_E082
+		dc.w loc_E098-off_E082
+		dc.w loc_E0EE-off_E082
 		dc.w loc_E110-off_E082
 ; ---------------------------------------------------------------------------
 
@@ -113,9 +128,9 @@ locret_E096:
 ; ---------------------------------------------------------------------------
 
 loc_E098:
-		cmpi.b	#4,obj.Routine(a0)
+		cmpi.b	#4,obRoutine(a0)
 		bne.s	locret_E0A4
-		addq.b	#1,obj.Subtype(a0)
+		addq.b	#1,obSubtype(a0)
 
 locret_E0A4:
 		rts
@@ -126,7 +141,7 @@ loc_E0A6:
 		move.w	$34(a0),d0
 		neg.w	d0
 		add.w	elev_origY(a0),d0
-		move.w	d0,obj.Ypos(a0)
+		move.w	d0,obY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -134,7 +149,7 @@ loc_E0BA:
 		bsr.w	sub_E14A
 		move.w	$34(a0),d0
 		add.w	elev_origY(a0),d0
-		move.w	d0,obj.Ypos(a0)
+		move.w	d0,obY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -144,10 +159,10 @@ loc_E0CC:
 		asr.w	#1,d0
 		neg.w	d0
 		add.w	elev_origY(a0),d0
-		move.w	d0,obj.Ypos(a0)
+		move.w	d0,obY(a0)
 		move.w	$34(a0),d0
 		add.w	elev_origX(a0),d0
-		move.w	d0,obj.Xpos(a0)
+		move.w	d0,obX(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -156,11 +171,11 @@ loc_E0EE:
 		move.w	$34(a0),d0
 		asr.w	#1,d0
 		add.w	elev_origY(a0),d0
-		move.w	d0,obj.Ypos(a0)
+		move.w	d0,obY(a0)
 		move.w	$34(a0),d0
 		neg.w	d0
 		add.w	elev_origX(a0),d0
-		move.w	d0,obj.Xpos(a0)
+		move.w	d0,obX(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -169,18 +184,18 @@ loc_E110:
 		move.w	$34(a0),d0
 		neg.w	d0
 		add.w	elev_origY(a0),d0
-		move.w	d0,obj.Ypos(a0)
-		tst.b	obj.Subtype(a0)
+		move.w	d0,obY(a0)
+		tst.b	obSubtype(a0)
 		beq.w	loc_E12C
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_E12C:
-		btst	#3,obj.Status(a0)
+		btst	#3,obStatus(a0)
 		beq.s	loc_E146
-		bset	#1,obj.Status(a1)
-		bclr	#3,obj.Status(a1)
-		move.b	#2,obj.Routine(a1)
+		bset	#1,obStatus(a1)
+		bclr	#3,obStatus(a1)
+		move.b	#2,obRoutine(a1)
 
 loc_E146:
 		bra.w	DeleteObject
@@ -217,7 +232,7 @@ loc_E188:
 		add.w	d2,d2
 		cmp.w	d2,d0
 		bne.s	locret_E192
-		clr.b	obj.Subtype(a0)
+		clr.b	obSubtype(a0)
 
 locret_E192:
 		rts
@@ -229,10 +244,10 @@ loc_E194:
 		move.w	$3E(a0),elev_dist(a0)
 		bsr.w	FindFreeObj
 		bne.s	loc_E1BE
-		_move.b	#id_Elevator,obj.Id(a1)
-		move.w	obj.Xpos(a0),obj.Xpos(a1)
-		move.w	obj.Ypos(a0),obj.Ypos(a1)
-		move.b	#$E,obj.Subtype(a1)
+		_move.b	#id_Elevator,obID(a1)
+		move.w	obX(a0),obX(a1)
+		move.w	obY(a0),obY(a1)
+		move.b	#$E,obSubtype(a1)
 
 loc_E1BE:
 		addq.l	#4,sp

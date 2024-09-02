@@ -54,6 +54,7 @@ SS_MapIndex:	dc.l Map_SSWalls
 		dc.w $23B
 		dc.l ($2<<24)|Map_Bump
 		dc.w $23B
+SS_MapIndex_End:
 
 off_10C78:	dc.w byte_10C7C-off_10C78, byte_10C82-off_10C78
 

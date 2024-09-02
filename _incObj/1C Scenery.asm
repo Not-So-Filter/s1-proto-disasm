@@ -2,7 +2,7 @@
 
 ObjScenery:
 		moveq	#0,d0
-		move.b	obj.Routine(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_6718(pc,d0.w),d1
 		jmp	off_6718(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -11,18 +11,18 @@ off_6718:	dc.w ObjScenery_Init-off_6718, ObjScenery_Normal-off_6718, ObjScenery_
 ; ---------------------------------------------------------------------------
 
 ObjScenery_Init:
-		addq.b	#2,obj.Routine(a0)
+		addq.b	#2,obRoutine(a0)
 		moveq	#0,d0
-		move.b	obj.Subtype(a0),d0
+		move.b	obSubtype(a0),d0
 		mulu.w	#10,d0
 		lea	ObjScenery_Types(pc,d0.w),a1
-		move.l	(a1)+,obj.Map(a0)
-		move.w	(a1)+,obj.Gfx(a0)
-		ori.b	#4,obj.Render(a0)
-		move.b	(a1)+,obj.Frame(a0)
-		move.b	(a1)+,obj.ActWid(a0)
-		move.b	(a1)+,obj.Priority(a0)
-		move.b	(a1)+,obj.ColType(a0)
+		move.l	(a1)+,obMap(a0)
+		move.w	(a1)+,obGfx(a0)
+		ori.b	#4,obRender(a0)
+		move.b	(a1)+,obFrame(a0)
+		move.b	(a1)+,obActWid(a0)
+		move.b	(a1)+,obPriority(a0)
+		move.b	(a1)+,obColType(a0)
 
 ObjScenery_Normal:
 		bsr.w	DisplaySprite
@@ -35,7 +35,8 @@ ObjScenery_Delete:
 		rts
 ; ---------------------------------------------------------------------------
 
-ObjScenery_Types:dc.l Map_Scen
+ObjScenery_Types:
+		dc.l Map_Scen
 		dc.w $398
 		dc.b 0, $10, 4, $82
 		dc.l Map_Scen

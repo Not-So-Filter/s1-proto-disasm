@@ -55,7 +55,7 @@ Deform_GHZ:
 		addi.w	#$26,d0
 		move.w	d0,(v_bg2screenposy).w
 		move.w	d0,d4
-		bsr.w	sub_4344
+		bsr.w	ScrollBlock3
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
 		move.w	#112-1,d1
 		sub.w	d4,d1
@@ -143,7 +143,7 @@ Deform_MZ:
 
 loc_3F50:
 		move.w	d0,(v_bg2screenposy).w
-		bsr.w	sub_4344
+		bsr.w	ScrollBlock3
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
 		lea	(v_hscrolltablebuffer).w,a1
 		move.w	#224-1,d1
@@ -166,9 +166,9 @@ Deform_SLZ:
 		move.w	(v_scrshifty).w,d5
 		ext.l	d5
 		asl.l	#7,d5
-		bsr.w	sub_4302
+		bsr.w	ScrollBlock2
 		move.w	(v_bgscreenposy).w,(v_bgscrposy_dup).w
-		bsr.w	sub_3FF6
+		bsr.w	Deform_SLZ_2
 		lea	(v_bgscroll_buffer).w,a2
 		move.w	(v_bgscreenposy).w,d0
 		move.w	d0,d2
@@ -211,7 +211,7 @@ loc_3FD0:
 		rts
 ; ---------------------------------------------------------------------------
 
-sub_3FF6:
+Deform_SLZ_2:
 		lea	(v_bgscroll_buffer).w,a1
 		move.w	(v_screenposx).w,d2
 		neg.w	d2
@@ -226,7 +226,7 @@ sub_3FF6:
 		asl.l	#8,d0
 		moveq	#0,d3
 		move.w	d2,d3
-		move.w	#$1B,d1
+		move.w	#28-1,d1
 
 loc_401C:
 		move.w	d3,(a1)+
@@ -236,21 +236,21 @@ loc_401C:
 		dbf	d1,loc_401C
 		move.w	d2,d0
 		asr.w	#3,d0
-		move.w	#4,d1
+		move.w	#5-1,d1
 
 loc_4030:
 		move.w	d0,(a1)+
 		dbf	d1,loc_4030
 		move.w	d2,d0
 		asr.w	#2,d0
-		move.w	#4,d1
+		move.w	#5-1,d1
 
 loc_403E:
 		move.w	d0,(a1)+
 		dbf	d1,loc_403E
 		move.w	d2,d0
 		asr.w	#1,d0
-		move.w	#$1D,d1
+		move.w	#30-1,d1
 
 loc_404C:
 		move.w	d0,(a1)+
@@ -324,7 +324,7 @@ locret_40E6:
 ; ---------------------------------------------------------------------------
 
 sub_40E8:
-		move.w	(v_player+obj.Xpos).w,d0
+		move.w	(v_player+obX).w,d0
 		sub.w	(v_screenposx).w,d0
 		subi.w	#$90,d0
 		bcs.s	loc_412C
@@ -374,14 +374,14 @@ loc_4146:
 
 ScrollVertical:
 		moveq	#0,d1
-		move.w	(v_player+obj.Ypos).w,d0
+		move.w	(v_player+obY).w,d0
 		sub.w	(v_screenposy).w,d0
-		btst	#2,(v_objspace+obj.Status).w
+		btst	#2,(v_objspace+obStatus).w
 		beq.s	loc_4160
 		subq.w	#5,d0
 
 loc_4160:
-		btst	#1,(v_player+obj.Status).w
+		btst	#1,(v_player+obStatus).w
 		beq.s	loc_4180
 		addi.w	#$20,d0
 		sub.w	(v_lookshift).w,d0
@@ -410,7 +410,7 @@ loc_4192:
 		move.w	#$600,d1
 		cmpi.w	#6,d0
 		bgt.s	loc_4200
-		cmpi.w	#$FFFA,d0
+		cmpi.w	#-6,d0
 		blt.s	loc_41E8
 		bra.s	loc_41D6
 ; ---------------------------------------------------------------------------
@@ -419,7 +419,7 @@ loc_41AC:
 		move.w	#$200,d1
 		cmpi.w	#2,d0
 		bgt.s	loc_4200
-		cmpi.w	#$FFFE,d0
+		cmpi.w	#-2,d0
 		blt.s	loc_41E8
 		bra.s	loc_41D6
 ; ---------------------------------------------------------------------------
@@ -428,7 +428,7 @@ loc_41BE:
 		move.w	#$1000,d1
 		cmpi.w	#$10,d0
 		bgt.s	loc_4200
-		cmpi.w	#$FFF0,d0
+		cmpi.w	#-$10,d0
 		blt.s	loc_41E8
 		bra.s	loc_41D6
 ; ---------------------------------------------------------------------------
@@ -580,7 +580,7 @@ locret_4300:
 		rts
 ; ---------------------------------------------------------------------------
 
-sub_4302:
+ScrollBlock2:
 		move.l	(v_bgscreenposx).w,d2
 		move.l	d2,d0
 		add.l	d4,d0
@@ -609,7 +609,7 @@ locret_4342:
 		rts
 ; ---------------------------------------------------------------------------
 
-sub_4344:
+ScrollBlock3:
 		move.w	(v_bgscreenposy).w,d3
 		move.w	d0,(v_bgscreenposy).w
 		move.w	d0,d1

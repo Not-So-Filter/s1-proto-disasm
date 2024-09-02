@@ -14,7 +14,7 @@ namespace S1ObjectDefinitions.SYZ
 		{
 			byte[] artfile = ObjectHelper.LevelArt;
 			img = ObjectHelper.MapASMToBmp(artfile, "../_maps/Floating Blocks and Doors.asm", 0, 2);
-			for (int i = 0; i < 8; i++)
+			for (int i = 0; i < 6; i++)
 				imgs.Add(ObjectHelper.MapASMToBmp(artfile, "../_maps/Floating Blocks and Doors.asm", i, 2));
 		}
 

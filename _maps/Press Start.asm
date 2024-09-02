@@ -1,4 +1,6 @@
-MapTitleText:	dc.w byte_6BE3-MapTitleText, byte_6BE2-MapTitleText, byte_6C01-MapTitleText
+MapTitleText:	dc.w byte_6BE3-MapTitleText
+		dc.w byte_6BE2-MapTitleText
+		dc.w byte_6C01-MapTitleText
 
 byte_6BE2:	dc.b 6
 

@@ -133,7 +133,7 @@ PLC_SLZ:	dc.w ((PLC_SLZ2-PLC_SLZ-2)/6)-1
 		plcm    byte_2827A, $68A0
 		plcm    Nem_Crabmeat, $8000
 		plcm    Nem_Buzzbomber, $8880
-		plcm    byte_297B6, $9000
+		plcm    Nem_SLZ_Platfm, $9000
 		plcm    byte_29D4A, $9C00
 		plcm    ArtMotobug, $9E00
 		plcm    byte_294DA, $A260
@@ -142,10 +142,10 @@ PLC_SLZ:	dc.w ((PLC_SLZ2-PLC_SLZ-2)/6)-1
 		plcm    ArtSpringVerti, $A660
 
 PLC_SLZ2:	dc.w ((PLC_SLZ2end-PLC_SLZ2-2)/6)-1
-		plcm    ArtSeesaw, $6E80
-		plcm    ArtFan, $7400
-		plcm    byte_2953C, $7980
-		plcm    byte_2961E, $7B80
+		plcm    ArtSeesaw, ArtTile_SLZ_Seesaw*tile_size
+		plcm    ArtFan, ArtTile_SLZ_Fan*tile_size
+		plcm    byte_2953C, ArtTile_SLZ_Pylon*tile_size
+		plcm    byte_2961E, ArtTile_SLZ_Swing*tile_size
 	PLC_SLZ2end:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - Sparkling

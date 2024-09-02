@@ -122,9 +122,9 @@ loc_4A3E:
 		bcs.s	locret_4A76
 		bsr.w	FindFreeObj
 		bne.s	loc_4A5E
-		_move.b	#id_BossGreenHill,obj.Id(a1)
-		move.w	#$2A60,obj.Xpos(a1)
-		move.w	#$280,obj.Ypos(a1)
+		_move.b	#id_BossGreenHill,obID(a1)
+		move.w	#$2A60,obX(a1)
+		move.w	#$280,obY(a1)
 
 loc_4A5E:
 		move.w	#bgm_Boss,d0

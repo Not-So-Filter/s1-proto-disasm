@@ -5,13 +5,13 @@
 Debug_Coord_Sprites:
 		lea	(Debug_Coords_XY_Index).l,a0
 		lea	(v_objslot10).w,a1
-		move.w	#(Debug_Coords_XY_Index_End-Debug_Coords_XY_Index)/4-1,d1
+		move.w	#bytesToLcnt(Debug_Coords_XY_Index_End-Debug_Coords_XY_Index),d1
 
 .loop:
-		move.b	#id_Obj05,obj.Id(a1)
-		move.w	(a0)+,obj.Xpos(a1)
-		move.w	(a0)+,obj.ScreenY(a1)
-		lea	obj.Size(a1),a1
+		move.b	#id_Obj05,obID(a1)
+		move.w	(a0)+,obX(a1)
+		move.w	(a0)+,obScreenY(a1)
+		lea	object_size(a1),a1
 		dbf	d1,.loop
 		rts
 ; ---------------------------------------------------------------------------
@@ -39,13 +39,13 @@ Debug_Coords_XY_Index_End:
 Debug_Coord_B_Sprites:
 		lea	(Debug_Coords_B_XY_Index).l,a0
 		lea	(v_objslotA).w,a1
-		move.w	#(Debug_Coords_B_XY_Index_End-Debug_Coords_B_XY_Index)/4-1,d1
+		move.w	#bytesToLcnt(Debug_Coords_B_XY_Index_End-Debug_Coords_B_XY_Index),d1
 
 .loop:
-		move.b	#id_Obj05,obj.Id(a1)
-		move.w	(a0)+,obj.Xpos(a1)
-		move.w	(a0)+,obj.ScreenY(a1)
-		lea	obj.Size(a1),a1
+		move.b	#id_Obj05,obID(a1)
+		move.w	(a0)+,obX(a1)
+		move.w	(a0)+,obScreenY(a1)
+		lea	object_size(a1),a1
 		dbf	d1,.loop
 		rts
 ; ---------------------------------------------------------------------------

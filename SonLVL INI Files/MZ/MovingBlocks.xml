@@ -2,24 +2,12 @@
 <ObjDef xmlns="http://www.sonicretro.org" Name="Moving Block Platform" Image="frame0">
   <Images>
     <ImageFromMappings id="frame0">
-      <ArtFile filename="../artnem/MZ Green Pushable Block.bin"/>
-      <MapFile type="ASM" filename="../_maps/Moving Blocks (MZ and SBZ).asm" frame="0" startpal="2"/>
+      <ArtFile filename="../artnem/MZ Green Pushable Block.nem"/>
+      <MapFile type="ASM" filename="../_maps/Moving Blocks (MZ).asm" frame="0" startpal="2"/>
     </ImageFromMappings>
     <ImageFromMappings id="frame1">
-      <ArtFile filename="../artnem/MZ Green Pushable Block.bin"/>
-      <MapFile type="ASM" filename="../_maps/Moving Blocks (MZ and SBZ).asm" frame="1" startpal="2"/>
-    </ImageFromMappings>
-    <ImageFromMappings id="frame2">
-      <ArtFile filename="../artnem/MZ Green Pushable Block.bin"/>
-      <MapFile type="ASM" filename="../_maps/Moving Blocks (MZ and SBZ).asm" frame="2" startpal="2"/>
-    </ImageFromMappings>
-    <ImageFromMappings id="frame3">
-      <ArtFile filename="../artnem/MZ Green Pushable Block.bin"/>
-      <MapFile type="ASM" filename="../_maps/Moving Blocks (MZ and SBZ).asm" frame="3" startpal="2"/>
-    </ImageFromMappings>
-    <ImageFromMappings id="frame4">
-      <ArtFile filename="../artnem/MZ Green Pushable Block.bin"/>
-      <MapFile type="ASM" filename="../_maps/Moving Blocks (MZ and SBZ).asm" frame="4" startpal="2"/>
+      <ArtFile filename="../artnem/MZ Green Pushable Block.nem"/>
+      <MapFile type="ASM" filename="../_maps/Moving Blocks (MZ).asm" frame="1" startpal="2"/>
     </ImageFromMappings>
   </Images>
   <Properties>
@@ -56,18 +44,6 @@
     <DisplayOption>
       <Condition property="Sprite" value="Two Blocks" />
       <ImageRef image="frame1" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Sprite" value="Invalid 1" />
-      <ImageRef image="frame2" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Sprite" value="Invalid 2" />
-      <ImageRef image="frame3" />
-    </DisplayOption>
-    <DisplayOption>
-      <Condition property="Sprite" value="Three Blocks" />
-      <ImageRef image="frame4" />
     </DisplayOption>
   </Display>
 </ObjDef>

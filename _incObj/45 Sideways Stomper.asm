@@ -2,7 +2,7 @@
 
 Obj45:
 		moveq	#0,d0
-		move.b	obj.Routine(a0),d0
+		move.b	obRoutine(a0),d0
 		move.w	off_99DE(pc,d0.w),d1
 		jmp	off_99DE(pc,d1.w)
 ; ---------------------------------------------------------------------------
@@ -19,7 +19,7 @@ word_99F4:	dc.w $3800, $A000, $5000
 
 loc_99FA:
 		moveq	#0,d0
-		move.b	obj.Subtype(a0),d0
+		move.b	obSubtype(a0),d0
 		add.w	d0,d0
 		move.w	word_99F4(pc,d0.w),d2
 		lea	(byte_99E8).l,a2
@@ -33,37 +33,37 @@ loc_9A12:
 		bne.s	loc_9A88
 
 loc_9A18:
-		move.b	(a2)+,obj.Routine(a1)
-		_move.b	#id_SideStomp,obj.Id(a1)
-		move.w	obj.Ypos(a0),obj.Ypos(a1)
+		move.b	(a2)+,obRoutine(a1)
+		_move.b	#id_SideStomp,obID(a1)
+		move.w	obY(a0),obY(a1)
 		move.b	(a2)+,d0
 		ext.w	d0
-		add.w	obj.Xpos(a0),d0
-		move.w	d0,obj.Xpos(a1)
-		move.l	#Map_SStom,obj.Map(a1)
-		move.w	#$300,obj.Gfx(a1)
-		move.b	#4,obj.Render(a1)
-		move.w	obj.Xpos(a1),$30(a1)
-		move.w	obj.Xpos(a0),$3A(a1)
-		move.b	obj.Subtype(a0),obj.Subtype(a1)
-		move.b	#$20,obj.ActWid(a1)
+		add.w	obX(a0),d0
+		move.w	d0,obX(a1)
+		move.l	#Map_SStom,obMap(a1)
+		move.w	#$300,obGfx(a1)
+		move.b	#4,obRender(a1)
+		move.w	obX(a1),$30(a1)
+		move.w	obX(a0),$3A(a1)
+		move.b	obSubtype(a0),obSubtype(a1)
+		move.b	#$20,obActWid(a1)
 		move.w	d2,$34(a1)
-		move.b	#4,obj.Priority(a1)
+		move.b	#4,obPriority(a1)
 		cmpi.b	#1,(a2)
 		bne.s	loc_9A76
-		move.b	#$91,obj.ColType(a1)
+		move.b	#$91,obColType(a1)
 
 loc_9A76:
-		move.b	(a2)+,obj.Frame(a1)
+		move.b	(a2)+,obFrame(a1)
 		move.l	a0,$3C(a1)
 		dbf	d1,loc_9A12
-		move.b	#3,obj.Priority(a1)
+		move.b	#3,obPriority(a1)
 
 loc_9A88:
-		move.b	#$10,obj.ActWid(a0)
+		move.b	#$10,obActWid(a0)
 
 loc_9A8E:
-		move.w	obj.Xpos(a0),-(sp)
+		move.w	obX(a0),-(sp)
 		bsr.w	sub_9AFC
 		move.w	#$17,d1
 		move.w	#$20,d2
@@ -80,7 +80,7 @@ loc_9AB0:
 		addi.b	#$10,d0
 		lsr.b	#5,d0
 		addq.b	#3,d0
-		move.b	d0,obj.Frame(a0)
+		move.b	d0,obFrame(a0)
 
 loc_9AC4:
 		movea.l	$3C(a0),a1
@@ -88,7 +88,7 @@ loc_9AC4:
 		move.b	$32(a1),d0
 		neg.w	d0
 		add.w	$30(a0),d0
-		move.w	d0,obj.Xpos(a0)
+		move.w	d0,obX(a0)
 
 loc_9AD8:
 		bsr.w	DisplaySprite
@@ -100,7 +100,7 @@ loc_9ADC:
 
 sub_9AFC:
 		moveq	#0,d0
-		move.b	obj.Subtype(a0),d0
+		move.b	obSubtype(a0),d0
 		add.w	d0,d0
 		move.w	off_9B0C(pc,d0.w),d1
 		jmp	off_9B0C(pc,d1.w)
@@ -122,7 +122,7 @@ loc_9B22:
 		subi.w	#$80,$32(a0)
 		bcc.s	loc_9B72
 		move.w	#0,$32(a0)
-		move.w	#0,obj.VelX(a0)
+		move.w	#0,obVelX(a0)
 		move.w	#0,$36(a0)
 		bra.s	loc_9B72
 ; ---------------------------------------------------------------------------
@@ -131,13 +131,13 @@ loc_9B3E:
 		move.w	$34(a0),d1
 		cmp.w	$32(a0),d1
 		beq.s	loc_9B72
-		move.w	obj.VelX(a0),d0
-		addi.w	#$70,obj.VelX(a0)
+		move.w	obVelX(a0),d0
+		addi.w	#$70,obVelX(a0)
 		add.w	d0,$32(a0)
 		cmp.w	$32(a0),d1
 		bhi.s	loc_9B72
 		move.w	d1,$32(a0)
-		move.w	#0,obj.VelX(a0)
+		move.w	#0,obVelX(a0)
 		move.w	#1,$36(a0)
 		move.w	#$3C,$38(a0)
 
@@ -146,5 +146,5 @@ loc_9B72:
 		move.b	$32(a0),d0
 		neg.w	d0
 		add.w	$30(a0),d0
-		move.w	d0,obj.Xpos(a0)
+		move.w	d0,obX(a0)
 		rts
