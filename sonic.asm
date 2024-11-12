@@ -6623,7 +6623,13 @@ Nem_MZ:		binclude "artnem/8x8 - MZ.nem"
 Blk256_MZ:	binclude "map256/MZ.kos"
 		even
 ;0x3DA48
-		binclude "unknown/3DA48.dat"
+; end chunk data
+		dc.w $F0, 0, 0, 0, 0, 0, 0, 0
+;0x3DA58
+		binclude "leftovers/map256/Chunk Data.kos"
+		even
+;0x3DB78
+		binclude "unknown/3DB78.dat"
 		even
 Blk16_SLZ:	binclude "map16/SLZ.bin"
 		even
@@ -6644,7 +6650,15 @@ Nem_CWZ:	binclude "artnem/8x8 - CWZ.nem"
 Blk256_CWZ:	binclude "map256/CWZ.kos"
 		even
 ;0x570DC
-		binclude "unknown/570DC.dat"
+; duplicate cut-off chunk data from CWZ
+		dc.w $FFF8, $FCAA, $AAFF, $F8FC, $FFF8, $FCFF, $F8FC, $FFF8
+		dc.w $FC00, $F001, $FFF8, $FCFF, $F8FC, $FFF8, $FC02, $FF
+		dc.w $F89F, $F0, 0, 0, 0, 0, 0, 0
+; and a duplicate of a duplicate end of chunk data pointer
+		dc.w $F89F, $F0, 0, 0, 0, 0, 0, 0
+		
+;0x5711C
+		binclude "unknown/5711C.dat"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
