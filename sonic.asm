@@ -160,13 +160,13 @@ loc_264:
 		dbf	d6,loc_264
 		move.l	#$81048F02,(a4)
 		move.l	#$C0000000,(a4)
-		moveq	#($80)/4-1,d3
+		moveq	#bytesToLcnt(v_palette_end-v_palette),d3
 
 loc_278:
 		move.l	d0,(a3)
 		dbf	d3,loc_278
 		move.l	#$40000010,(a4)
-		moveq	#($50)/4-1,d4
+		moveq	#bytesToLcnt($50),d4
 
 loc_286:
 		move.l	d0,(a3)
