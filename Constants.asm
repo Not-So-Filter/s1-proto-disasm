@@ -1,6 +1,7 @@
 ; VRAM data
 window_plane:	equ $A000	; window plane
 vram_fg:	equ $C000	; plane A (foreground namespace)
+vram_special:	equ $D000	; plane A (foreground namespace)
 vram_bg:	equ $E000	; plane B (background namespace)
 vram_sonic:	equ $F000	; Sonic graphics
 vram_sprites:	equ $F800	; sprite table

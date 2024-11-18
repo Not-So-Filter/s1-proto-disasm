@@ -92,7 +92,7 @@ sub_9E58:
 		move.w	#$20,d4
 		move.w	#$10,d5
 		lea	(v_lvlobjspace).w,a1
-		move.w	#$5F,d6
+		move.w	#(v_lvlobjend-v_lvlobjspace)/object_size-1,d6
 
 loc_9E76:
 		tst.b	obRender(a1)

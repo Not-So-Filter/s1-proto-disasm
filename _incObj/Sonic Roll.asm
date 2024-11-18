@@ -9,7 +9,7 @@ loc_EE54:
 		cmpi.w	#$80,d0
 		bcs.s	locret_EE6C
 		move.b	(v_jpadhold2).w,d0
-		andi.b	#btnL+btnR,d0
+		andi.b	#btnL|btnR,d0
 		bne.s	locret_EE6C
 		btst	#bitDn,(v_jpadhold2).w
 		bne.s	Sonic_CheckRoll

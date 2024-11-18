@@ -58,7 +58,7 @@ loc_11EF6:
 		move.b	#1,(v_debugxspeed).w
 		addq.b	#1,(v_debugyspeed).w
 		bne.s	loc_11F0E
-		move.b	#$FF,(v_debugyspeed).w
+		move.b	#-1,(v_debugyspeed).w
 
 loc_11F0E:
 		move.b	(v_jpadhold1).w,d4

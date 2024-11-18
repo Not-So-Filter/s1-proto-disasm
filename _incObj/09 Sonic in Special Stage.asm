@@ -452,7 +452,7 @@ locret_110FC:
 loc_110FE:
 		cmpi.b	#$12,d0
 		bne.s	loc_11176
-		move.l	$32(a0),d1
+		move.l	objoff_32(a0),d1
 		subi.l	#$FF0001,d1
 		move.w	d1,d2
 		andi.w	#$7F,d1

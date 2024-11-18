@@ -23,10 +23,10 @@ loc_E594:
 		bne.s	loc_E5B6
 		subq.w	#1,objoff_30(a0)
 		bpl.s	loc_E5B6
-		move.w	#$78,objoff_30(a0)
+		move.w	#120,objoff_30(a0)
 		bchg	#0,objoff_32(a0)
 		beq.s	loc_E5B6
-		move.w	#$B4,objoff_30(a0)
+		move.w	#180,objoff_30(a0)
 
 loc_E5B6:
 		tst.b	objoff_32(a0)

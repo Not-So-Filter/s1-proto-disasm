@@ -12,19 +12,19 @@ off_732C:	dc.w loc_7382-off_732C, loc_7418-off_732C, loc_7472-off_732C, loc_74A8
 
 byte_733E:	dc.b 0, 1, 2, 3, 4, 5, 6, 3, 4, 1, 0, 5
 
-word_734A:	dc.w $FE00, $FC00
+word_734A:	dc.w -$200, -$400
 		dc.l Map_Animal1
-		dc.w $FE00, $FD00
+		dc.w -$200, -$300
 		dc.l Map_Animal2
-		dc.w $FEC0, $FE00
+		dc.w -$140, -$200
 		dc.l Map_Animal1
-		dc.w $FF00, $FE80
+		dc.w -$100, -$180
 		dc.l Map_Animal2
-		dc.w $FE80, $FD00
+		dc.w -$180, -$300
 		dc.l Map_Animal3
-		dc.w $FD00, $FC00
+		dc.w -$300, -$400
 		dc.l Map_Animal2
-		dc.w $FD80, $FC80
+		dc.w -$280, -$380
 		dc.l Map_Animal3
 ; ---------------------------------------------------------------------------
 
@@ -37,14 +37,14 @@ loc_7382:
 		add.w	d1,d1
 		add.w	d0,d1
 		move.b	byte_733E(pc,d1.w),d0
-		move.b	d0,$30(a0)
+		move.b	d0,objoff_30(a0)
 		lsl.w	#3,d0
 		lea	word_734A(pc,d0.w),a1
-		move.w	(a1)+,$32(a0)
-		move.w	(a1)+,$34(a0)
+		move.w	(a1)+,objoff_32(a0)
+		move.w	(a1)+,objoff_34(a0)
 		move.l	(a1)+,obMap(a0)
 		move.w	#$580,obGfx(a0)
-		btst	#0,$30(a0)
+		btst	#0,objoff_30(a0)
 		beq.s	loc_73C6
 		move.w	#$592,obGfx(a0)
 
@@ -81,10 +81,10 @@ loc_7418:
 		add.w	d1,obY(a0)
 
 loc_7438:
-		move.w	$32(a0),obVelX(a0)
-		move.w	$34(a0),obVelY(a0)
+		move.w	objoff_32(a0),obVelX(a0)
+		move.w	objoff_34(a0),obVelY(a0)
 		move.b	#1,obFrame(a0)
-		move.b	$30(a0),d0
+		move.b	objoff_30(a0),d0
 		add.b	d0,d0
 		addq.b	#4,d0
 		move.b	d0,obRoutine(a0)
@@ -109,7 +109,7 @@ loc_7472:
 		tst.w	d1
 		bpl.s	loc_749C
 		add.w	d1,obY(a0)
-		move.w	$34(a0),obVelY(a0)
+		move.w	objoff_34(a0),obVelY(a0)
 
 loc_749C:
 		tst.b	obRender(a0)
@@ -126,7 +126,7 @@ loc_74A8:
 		tst.w	d1
 		bpl.s	loc_74CC
 		add.w	d1,obY(a0)
-		move.w	$34(a0),obVelY(a0)
+		move.w	objoff_34(a0),obVelY(a0)
 
 loc_74CC:
 		subq.b	#1,obTimeFrame(a0)

@@ -13,7 +13,7 @@ Sonic_Hurt:
 
 Sonic_HurtStop:
 		move.w	(v_limitbtm2).w,d0
-		addi.w	#$E0,d0
+		addi.w	#224,d0
 		cmp.w	obY(a0),d0
 		bcs.w	loc_FD78
 		bsr.w	loc_F07C

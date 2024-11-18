@@ -49,7 +49,7 @@ loc_8D78:
 		subq.w	#1,objoff_30(a0)
 		bpl.s	locret_8DA0
 		addq.b	#2,ob2ndRout(a0)
-		move.w	#$FF,objoff_30(a0)
+		move.w	#255,objoff_30(a0)
 		move.w	#$80,obVelX(a0)
 		move.b	#1,obAnim(a0)
 		bchg	#0,obStatus(a0)
@@ -89,7 +89,7 @@ loc_8DDE:
 		btst	#2,(v_vbla_byte).w
 		beq.s	loc_8DFE
 		subq.b	#2,ob2ndRout(a0)
-		move.w	#$3B,objoff_30(a0)
+		move.w	#59,objoff_30(a0)
 		move.w	#0,obVelX(a0)
 		move.b	#0,obAnim(a0)
 		rts
@@ -97,7 +97,7 @@ loc_8DDE:
 
 loc_8DFE:
 		addq.b	#2,ob2ndRout(a0)
-		move.w	#$FC00,obVelY(a0)
+		move.w	#-$400,obVelY(a0)
 		move.b	#2,obAnim(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -113,7 +113,7 @@ loc_8E10:
 		add.w	d1,obY(a0)
 		move.w	#0,obVelY(a0)
 		move.b	#1,obAnim(a0)
-		move.w	#$FF,objoff_30(a0)
+		move.w	#255,objoff_30(a0)
 		subq.b	#2,ob2ndRout(a0)
 
 locret_8E44:

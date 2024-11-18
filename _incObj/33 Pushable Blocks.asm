@@ -295,7 +295,7 @@ loc_A222:
 		bmi.s	locret_A29A
 		subi.l	#$10000,obX(a0)
 		moveq	#-1,d0
-		move.w	#$FFC0,d1
+		move.w	#-$40,d1
 
 loc_A24C:
 		lea	(v_objspace).w,a1

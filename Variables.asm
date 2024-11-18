@@ -21,9 +21,11 @@ v_bgscroll_buffer:	ds.b $200
 v_ngfx_buffer:		ds.b $200
 v_ngfx_buffer_end:
 v_spritequeue:		ds.b $400
-v_16x16:		ds.b $1800	; 16x16 tile mappings ($1800 bytes)
+v_16x16:		ds.w 4*$300	; 16x16 tile mappings ($1800 bytes)
 v_16x16_end:
-v_sgfx_buffer:		ds.b $300	; sonic graphics ram buffer ($300 bytes)
+v_sgfx_buffer:		ds.b $2E0	; sonic graphics ram buffer ($2E0 bytes)
+v_sgfx_buffer_end:
+			ds.b $20	; unused
 v_tracksonic:		ds.b $100	; sonic position table ($100 bytes)
 v_hscrolltablebuffer:	ds.b $380
 v_hscrolltablebuffer_end:
@@ -68,7 +70,7 @@ v_lvlobjspace:
 			ds.b obj.Size
 	endm
 v_lvlobjend:
-v_objend:
+v_objspace_end:
 ; $FFFFF000
 v_snddriver_ram:	SMPS_RAM	; start of RAM for the sound driver data ($600 bytes)
 			ds.b $40	; unused

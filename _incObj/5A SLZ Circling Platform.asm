@@ -5,7 +5,7 @@ ObjCirclePtfm:
 		move.b	obRoutine(a0),d0
 		move.w	off_E222(pc,d0.w),d1
 		jsr	off_E222(pc,d1.w)
-		out_of_range.w	DeleteObject,$32(a0)
+		out_of_range.w	DeleteObject,objoff_32(a0)
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 
@@ -19,8 +19,8 @@ loc_E228:
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
 		move.b	#$18,obActWid(a0)
-		move.w	obX(a0),$32(a0)
-		move.w	obY(a0),$30(a0)
+		move.w	obX(a0),objoff_32(a0)
+		move.w	obY(a0),objoff_30(a0)
 
 loc_E258:
 		moveq	#0,d1
@@ -70,9 +70,9 @@ loc_E2BC:
 		exg	d1,d2
 
 loc_E2C8:
-		add.w	$32(a0),d1
+		add.w	objoff_32(a0),d1
 		move.w	d1,obX(a0)
-		add.w	$30(a0),d2
+		add.w	objoff_30(a0),d2
 		move.w	d2,obY(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -97,8 +97,8 @@ loc_E2FA:
 
 loc_E306:
 		neg.w	d1
-		add.w	$32(a0),d1
+		add.w	objoff_32(a0),d1
 		move.w	d1,obX(a0)
-		add.w	$30(a0),d2
+		add.w	objoff_30(a0),d2
 		move.w	d2,obY(a0)
 		rts

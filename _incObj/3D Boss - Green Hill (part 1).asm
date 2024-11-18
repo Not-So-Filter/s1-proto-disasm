@@ -36,7 +36,7 @@ loc_B022:
 		move.b	#$20,obActWid(a1)
 		move.b	#3,obPriority(a1)
 		move.b	(a2)+,obAnim(a1)
-		move.l	a0,$34(a1)
+		move.l	a0,objoff_34(a1)
 		dbf	d1,loc_B01C
 
 loc_B064:
@@ -73,22 +73,22 @@ loc_B0B6:
 		addq.b	#2,ob2ndRout(a0)
 
 loc_B0D2:
-		move.b	$3F(a0),d0
+		move.b	objoff_3F(a0),d0
 		jsr	(CalcSine).l
 		asr.w	#6,d0
 		add.w	obBossY(a0),d0
 		move.w	d0,obY(a0)
 		move.w	obBossX(a0),obX(a0)
-		addq.b	#2,$3F(a0)
+		addq.b	#2,objoff_3F(a0)
 		cmpi.b	#8,ob2ndRout(a0)
 		bcc.s	locret_B136
 		tst.b	obStatus(a0)
 		bmi.s	loc_B138
 		tst.b	obColType(a0)
 		bne.s	locret_B136
-		tst.b	$3E(a0)
+		tst.b	objoff_3E(a0)
 		bne.s	loc_B11A
-		move.b	#$20,$3E(a0)
+		move.b	#$20,objoff_3E(a0)
 		move.w	#sfx_HitBoss,d0
 		jsr	(PlaySound_Special).l
 
@@ -101,7 +101,7 @@ loc_B11A:
 
 loc_B128:
 		move.w	d0,(a1)
-		subq.b	#1,$3E(a0)
+		subq.b	#1,objoff_3E(a0)
 		bne.s	locret_B136
 		move.b	#$F,obColType(a0)
 
@@ -111,5 +111,5 @@ locret_B136:
 
 loc_B138:
 		move.b	#8,ob2ndRout(a0)
-		move.w	#$B3,$3C(a0)
+		move.w	#$B3,objoff_3C(a0)
 		rts

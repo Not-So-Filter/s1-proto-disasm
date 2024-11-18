@@ -74,7 +74,7 @@ loc_5D2C:
 loc_5D70:
 		btst	#1,obStatus(a0)
 		beq.s	loc_5D7E
-		move.w	#$FC00,obVelY(a0)
+		move.w	#-$400,obVelY(a0)
 
 loc_5D7E:
 		bsr.w	DisplaySprite

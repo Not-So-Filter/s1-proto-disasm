@@ -11,7 +11,7 @@ off_79FA:	dc.w loc_7A04-off_79FA, loc_7A4E-off_79FA, loc_7A6C-off_79FA, loc_7AB2
 ; ---------------------------------------------------------------------------
 
 loc_7A04:
-		subq.w	#1,$32(a0)
+		subq.w	#1,objoff_32(a0)
 		bpl.s	sub_7A5E
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_Missile,obMap(a0)
@@ -36,7 +36,7 @@ loc_7A4E:
 ; ---------------------------------------------------------------------------
 
 sub_7A5E:
-		movea.l	$3C(a0),a1
+		movea.l	objoff_3C(a0),a1
 		_cmpi.b	#id_ExplosionItem,obID(a1)
 		beq.s	loc_7AB2
 		rts
@@ -52,7 +52,7 @@ loc_7A6C:
 		bsr.w	AnimateSprite
 		bsr.w	DisplaySprite
 		move.w	(v_limitbtm2).w,d0
-		addi.w	#$E0,d0
+		addi.w	#224,d0
 		cmp.w	obY(a0),d0
 		bcs.s	loc_7AB2
 		rts

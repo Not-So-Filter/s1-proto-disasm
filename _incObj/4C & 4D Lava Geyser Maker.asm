@@ -19,12 +19,12 @@ loc_C932:
 		move.b	#4,obRender(a0)
 		move.b	#1,obPriority(a0)
 		move.b	#$38,obActWid(a0)
-		move.w	#$78,$34(a0)
+		move.w	#120,objoff_34(a0)
 
 loc_C95C:
-		subq.w	#1,$32(a0)
+		subq.w	#1,objoff_32(a0)
 		bpl.s	locret_C980
-		move.w	$34(a0),$32(a0)
+		move.w	objoff_34(a0),objoff_32(a0)
 		move.w	(v_objspace+obY).w,d0
 		move.w	obY(a0),d1
 		cmp.w	d1,d0
@@ -46,7 +46,7 @@ loc_C982:
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		move.b	obSubtype(a0),obSubtype(a1)
-		move.l	a0,$3C(a1)
+		move.l	a0,objoff_3C(a1)
 
 loc_C9A8:
 		move.b	#1,obAnim(a0)
@@ -57,9 +57,9 @@ loc_C9A8:
 ; ---------------------------------------------------------------------------
 
 loc_C9BC:
-		movea.l	$3C(a0),a1
+		movea.l	objoff_3C(a0),a1
 		bset	#1,obStatus(a1)
-		move.w	#$FA80,obVelY(a1)
+		move.w	#-$580,obVelY(a1)
 		bra.s	loc_C9DA
 ; ---------------------------------------------------------------------------
 
@@ -95,13 +95,13 @@ ObjLavafall:
 
 off_CA12:	dc.w loc_CA1E-off_CA12, loc_CB0A-off_CA12, sub_CB8C-off_CA12, loc_CBEA-off_CA12
 
-word_CA1A:	dc.w $FB00
+word_CA1A:	dc.w -$500
 		dc.w 0
 ; ---------------------------------------------------------------------------
 
 loc_CA1E:
 		addq.b	#2,obRoutine(a0)
-		move.w	obY(a0),$30(a0)
+		move.w	obY(a0),objoff_30(a0)
 		tst.b	obSubtype(a0)
 		beq.s	loc_CA34
 		subi.w	#$250,obY(a0)
@@ -144,13 +144,13 @@ loc_CA9A:
 
 loc_CAA0:
 		addi.w	#$60,obY(a1)
-		move.w	$30(a0),$30(a1)
-		addi.w	#$60,$30(a1)
+		move.w	objoff_30(a0),objoff_30(a1)
+		addi.w	#$60,objoff_30(a1)
 		move.b	#$93,obColType(a1)
 		move.b	#$80,obHeight(a1)
 		bset	#4,obRender(a1)
 		addq.b	#4,obRoutine(a1)
-		move.l	a0,$3C(a1)
+		move.l	a0,objoff_3C(a1)
 		tst.b	obSubtype(a0)
 		beq.s	loc_CB00
 		moveq	#0,d1
@@ -159,8 +159,8 @@ loc_CAA0:
 		bset	#4,obGfx(a1)
 		addi.w	#$100,obY(a1)
 		move.b	#0,obPriority(a1)
-		move.w	$30(a0),$30(a1)
-		move.l	$3C(a0),$3C(a1)
+		move.w	objoff_30(a0),objoff_30(a1)
+		move.l	objoff_3C(a0),objoff_3C(a1)
 		move.b	#0,obSubtype(a0)
 
 loc_CB00:
@@ -187,11 +187,11 @@ off_CB48:	dc.w loc_CB4C-off_CB48, loc_CB6C-off_CB48
 
 loc_CB4C:
 		addi.w	#$18,obVelY(a0)
-		move.w	$30(a0),d0
+		move.w	objoff_30(a0),d0
 		cmp.w	obY(a0),d0
 		bcc.s	locret_CB6A
 		addq.b	#4,obRoutine(a0)
-		movea.l	$3C(a0),a1
+		movea.l	objoff_3C(a0),a1
 		move.b	#3,obAnim(a1)
 
 locret_CB6A:
@@ -200,11 +200,11 @@ locret_CB6A:
 
 loc_CB6C:
 		addi.w	#$18,obVelY(a0)
-		move.w	$30(a0),d0
+		move.w	objoff_30(a0),d0
 		cmp.w	obY(a0),d0
 		bcc.s	locret_CB8A
 		addq.b	#4,obRoutine(a0)
-		movea.l	$3C(a0),a1
+		movea.l	objoff_3C(a0),a1
 		move.b	#1,obAnim(a1)
 
 locret_CB8A:
@@ -212,13 +212,13 @@ locret_CB8A:
 ; ---------------------------------------------------------------------------
 
 sub_CB8C:
-		movea.l	$3C(a0),a1
+		movea.l	objoff_3C(a0),a1
 		cmpi.b	#6,obRoutine(a1)
 		beq.w	loc_CBEA
 		move.w	obY(a1),d0
 		addi.w	#$60,d0
 		move.w	d0,obY(a0)
-		sub.w	$30(a0),d0
+		sub.w	objoff_30(a0),d0
 		neg.w	d0
 		moveq	#8,d1
 		cmpi.w	#$40,d0

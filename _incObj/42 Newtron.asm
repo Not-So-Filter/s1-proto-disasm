@@ -129,9 +129,9 @@ loc_BE5E:
 loc_BE6C:
 		cmpi.b	#2,obFrame(a0)
 		bne.s	locret_BEC4
-		tst.b	$32(a0)
+		tst.b	objoff_32(a0)
 		bne.s	locret_BEC4
-		move.b	#1,$32(a0)
+		move.b	#1,objoff_32(a0)
 		bsr.w	FindFreeObj
 		bne.s	locret_BEC4
 		_move.b	#id_Missile,obID(a1)

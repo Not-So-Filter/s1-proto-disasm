@@ -82,7 +82,7 @@ loc_C07A:
 		addq.b	#2,ob2ndRout(a0)
 		bset	#0,$32(a0)
 		beq.s	locret_C08C
-		move.w	#$FA00,obVelY(a0)
+		move.w	#-$600,obVelY(a0)
 
 locret_C08C:
 		rts

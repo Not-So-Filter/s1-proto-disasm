@@ -32,7 +32,7 @@ loc_CC16:
 		move.b	#1,obPriority(a1)
 		move.b	#0,obAnim(a1)
 		move.b	#$94,obColType(a1)
-		move.l	a0,$3C(a1)
+		move.l	a0,objoff_3C(a1)
 
 loc_CC58:
 		dbf	d1,loc_CC10
@@ -56,12 +56,12 @@ loc_CC72:
 loc_CC84:
 		cmpi.w	#$60,d0
 		bcc.s	loc_CC92
-		move.b	#1,$36(a0)
+		move.b	#1,objoff_36(a0)
 		bra.s	loc_CCA2
 ; ---------------------------------------------------------------------------
 
 loc_CC92:
-		tst.b	$36(a0)
+		tst.b	objoff_36(a0)
 		beq.s	loc_CCA2
 		move.w	#$100,obVelX(a0)
 		addq.b	#2,obRoutine(a0)
@@ -70,14 +70,14 @@ loc_CCA2:
 		cmpi.w	#$6A0,obX(a0)
 		bne.s	loc_CCB2
 		clr.w	obVelX(a0)
-		clr.b	$36(a0)
+		clr.b	objoff_36(a0)
 
 loc_CCB2:
 		lea	(Ani_LWall).l,a1
 		bsr.w	AnimateSprite
 		bsr.w	SpeedToPos
 		bsr.w	DisplaySprite
-		tst.b	$36(a0)
+		tst.b	objoff_36(a0)
 		bne.s	locret_CCE6
 		out_of_range.s	loc_CCE8
 
@@ -95,7 +95,7 @@ loc_CCE8:
 ; ---------------------------------------------------------------------------
 
 loc_CD00:
-		movea.l	$3C(a0),a1
+		movea.l	objoff_3C(a0),a1
 		cmpi.b	#8,obRoutine(a1)
 		beq.s	loc_CD1C
 		move.w	obX(a1),obX(a0)

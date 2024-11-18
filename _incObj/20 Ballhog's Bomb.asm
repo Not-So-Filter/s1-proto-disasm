@@ -18,12 +18,12 @@ ObjCannonball_Init:
 		move.b	#3,obPriority(a0)
 		move.b	#$87,obColType(a0)
 		move.b	#8,obActWid(a0)
-		move.w	#$18,$30(a0)
+		move.w	#$18,objoff_30(a0)
 
 ObjCannonball_Act:
 		btst	#7,obStatus(a0)
 		bne.s	loc_70C2
-		tst.w	$30(a0)
+		tst.w	objoff_30(a0)
 		bne.s	loc_70D2
 		jsr	(ObjectHitFloor).l
 		tst.w	d1
@@ -37,7 +37,7 @@ loc_70C2:
 ; ---------------------------------------------------------------------------
 
 loc_70D2:
-		subq.w	#1,$30(a0)
+		subq.w	#1,objoff_30(a0)
 
 loc_70D6:
 		bsr.w	ObjectFall

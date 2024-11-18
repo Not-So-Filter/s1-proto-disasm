@@ -45,7 +45,7 @@ loc_DFC2:
 		andi.w	#$7F,d0
 		mulu.w	#6,d0
 		move.w	d0,elev_dist(a0)
-		move.w	d0,$3E(a0)
+		move.w	d0,objoff_3E(a0)
 		addq.l	#4,sp
 		rts
 ; ---------------------------------------------------------------------------
@@ -138,7 +138,7 @@ locret_E0A4:
 
 loc_E0A6:
 		bsr.w	sub_E14A
-		move.w	$34(a0),d0
+		move.w	objoff_34(a0),d0
 		neg.w	d0
 		add.w	elev_origY(a0),d0
 		move.w	d0,obY(a0)
@@ -147,7 +147,7 @@ loc_E0A6:
 
 loc_E0BA:
 		bsr.w	sub_E14A
-		move.w	$34(a0),d0
+		move.w	objoff_34(a0),d0
 		add.w	elev_origY(a0),d0
 		move.w	d0,obY(a0)
 		rts
@@ -155,12 +155,12 @@ loc_E0BA:
 
 loc_E0CC:
 		bsr.w	sub_E14A
-		move.w	$34(a0),d0
+		move.w	objoff_34(a0),d0
 		asr.w	#1,d0
 		neg.w	d0
 		add.w	elev_origY(a0),d0
 		move.w	d0,obY(a0)
-		move.w	$34(a0),d0
+		move.w	objoff_34(a0),d0
 		add.w	elev_origX(a0),d0
 		move.w	d0,obX(a0)
 		rts
@@ -168,11 +168,11 @@ loc_E0CC:
 
 loc_E0EE:
 		bsr.w	sub_E14A
-		move.w	$34(a0),d0
+		move.w	objoff_34(a0),d0
 		asr.w	#1,d0
 		add.w	elev_origY(a0),d0
 		move.w	d0,obY(a0)
-		move.w	$34(a0),d0
+		move.w	objoff_34(a0),d0
 		neg.w	d0
 		add.w	elev_origX(a0),d0
 		move.w	d0,obX(a0)
@@ -181,7 +181,7 @@ loc_E0EE:
 
 loc_E110:
 		bsr.w	sub_E14A
-		move.w	$34(a0),d0
+		move.w	objoff_34(a0),d0
 		neg.w	d0
 		add.w	elev_origY(a0),d0
 		move.w	d0,obY(a0)
@@ -202,8 +202,8 @@ loc_E146:
 ; ---------------------------------------------------------------------------
 
 sub_E14A:
-		move.w	$38(a0),d0
-		tst.b	$3A(a0)
+		move.w	objoff_38(a0),d0
+		tst.b	objoff_3A(a0)
 		bne.s	loc_E160
 		cmpi.w	#$800,d0
 		bcc.s	loc_E168
@@ -217,16 +217,16 @@ loc_E160:
 		subi.w	#$10,d0
 
 loc_E168:
-		move.w	d0,$38(a0)
+		move.w	d0,objoff_38(a0)
 		ext.l	d0
 		asl.l	#8,d0
-		add.l	$34(a0),d0
-		move.l	d0,$34(a0)
+		add.l	objoff_34(a0),d0
+		move.l	d0,objoff_34(a0)
 		swap	d0
 		move.w	elev_dist(a0),d2
 		cmp.w	d2,d0
 		bls.s	loc_E188
-		move.b	#1,$3A(a0)
+		move.b	#1,objoff_3A(a0)
 
 loc_E188:
 		add.w	d2,d2
@@ -241,7 +241,7 @@ locret_E192:
 loc_E194:
 		subq.w	#1,elev_dist(a0)
 		bne.s	loc_E1BE
-		move.w	$3E(a0),elev_dist(a0)
+		move.w	objoff_3E(a0),elev_dist(a0)
 		bsr.w	FindFreeObj
 		bne.s	loc_E1BE
 		_move.b	#id_Elevator,obID(a1)

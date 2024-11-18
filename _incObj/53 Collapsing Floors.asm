@@ -23,15 +23,15 @@ loc_5FFE:
 loc_6022:
 		ori.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
-		move.b	#7,$38(a0)
+		move.b	#7,objoff_38(a0)
 		move.b	#$44,obActWid(a0)
 
 loc_603A:
-		tst.b	$3A(a0)
+		tst.b	objoff_3A(a0)
 		beq.s	loc_604C
-		tst.b	$38(a0)
+		tst.b	objoff_38(a0)
 		beq.w	loc_6108
-		subq.b	#1,$38(a0)
+		subq.b	#1,objoff_38(a0)
 
 loc_604C:
 		move.w	#$20,d1
@@ -51,10 +51,10 @@ loc_6078:
 ; ---------------------------------------------------------------------------
 
 loc_607C:
-		tst.b	$38(a0)
+		tst.b	objoff_38(a0)
 		beq.w	loc_610E
-		move.b	#1,$3A(a0)
-		subq.b	#1,$38(a0)
+		move.b	#1,objoff_3A(a0)
+		subq.b	#1,objoff_38(a0)
 ; ---------------------------------------------------------------------------
 
 sub_608E:
@@ -66,28 +66,28 @@ sub_608E:
 ; ---------------------------------------------------------------------------
 
 loc_60A2:
-		tst.b	$38(a0)
+		tst.b	objoff_38(a0)
 		beq.s	loc_60F2
-		tst.b	$3A(a0)
+		tst.b	objoff_3A(a0)
 		bne.w	loc_60B8
-		subq.b	#1,$38(a0)
+		subq.b	#1,objoff_38(a0)
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 
 loc_60B8:
-		subq.b	#1,$38(a0)
+		subq.b	#1,objoff_38(a0)
 		bsr.w	sub_608E
 		lea	(v_objspace).w,a1
 		btst	#3,obStatus(a1)
 		beq.s	loc_60E4
-		tst.b	$38(a0)
+		tst.b	objoff_38(a0)
 		bne.s	locret_60F0
 		bclr	#3,obStatus(a1)
 		bclr	#5,obStatus(a1)
 		move.b	#1,obNextAni(a1)
 
 loc_60E4:
-		move.b	#0,$3A(a0)
+		move.b	#0,objoff_3A(a0)
 		move.b	#6,obRoutine(a0)
 
 locret_60F0:
@@ -108,7 +108,7 @@ loc_6102:
 ; ---------------------------------------------------------------------------
 
 loc_6108:
-		move.b	#0,$3A(a0)
+		move.b	#0,objoff_3A(a0)
 
 loc_610E:
 		lea	(CFlo_Data2).l,a4

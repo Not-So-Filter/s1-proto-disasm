@@ -21,7 +21,7 @@ loc_D4DA:
 		move.b	obSubtype(a0),obFrame(a0)
 
 loc_D504:
-		move.b	(v_player+obAnim).w,$32(a0)
+		move.b	(v_player+obAnim).w,objoff_32(a0)
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	#$11,d3
@@ -35,13 +35,13 @@ locret_D526:
 ; ---------------------------------------------------------------------------
 
 loc_D528:
-		cmpi.b	#2,$32(a0)
+		cmpi.b	#2,objoff_32(a0)
 		bne.s	locret_D526
 		bset	#2,obStatus(a1)
 		move.b	#$E,obHeight(a1)
 		move.b	#7,obWidth(a1)
 		move.b	#2,obAnim(a1)
-		move.w	#$FD00,obVelY(a1)
+		move.w	#-$300,obVelY(a1)
 		bset	#1,obStatus(a1)
 		bclr	#3,obStatus(a1)
 		move.b	#2,obRoutine(a1)

@@ -14,7 +14,7 @@ loc_91F8:
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_Fire,obMap(a0)
 		move.w	#$345,obGfx(a0)
-		move.w	obX(a0),$2A(a0)
+		move.w	obX(a0),objoff_2A(a0)
 		move.b	#4,obRender(a0)
 		move.b	#1,obPriority(a0)
 		move.b	#$8B,obColType(a0)
@@ -28,17 +28,17 @@ loc_91F8:
 ; ---------------------------------------------------------------------------
 
 loc_9240:
-		movea.l	$30(a0),a1
+		movea.l	objoff_30(a0),a1
 		move.w	obX(a0),d1
-		sub.w	$2A(a0),d1
+		sub.w	objoff_2A(a0),d1
 		addi.w	#$C,d1
 		move.w	d1,d0
 		lsr.w	#1,d0
 		move.b	(a1,d0.w),d0
 		neg.w	d0
-		add.w	$2C(a0),d0
+		add.w	objoff_2C(a0),d0
 		move.w	d0,d2
-		add.w	$3C(a0),d0
+		add.w	objoff_3C(a0),d0
 		move.w	d0,obY(a0)
 		cmpi.w	#$84,d1
 		bcc.s	loc_92B8
@@ -53,10 +53,10 @@ loc_9240:
 		bne.s	loc_92B8
 		_move.b	#id_GrassFire,obID(a1)
 		move.w	obX(a0),obX(a1)
-		move.w	d2,$2C(a1)
-		move.w	$3C(a0),$3C(a1)
+		move.w	d2,objoff_2C(a1)
+		move.w	objoff_3C(a0),objoff_3C(a1)
 		move.b	#1,obSubtype(a1)
-		movea.l	$38(a0),a2
+		movea.l	objoff_38(a0),a2
 		bsr.w	sub_90A4
 
 loc_92B8:
@@ -64,8 +64,8 @@ loc_92B8:
 ; ---------------------------------------------------------------------------
 
 loc_92BA:
-		move.w	$2C(a0),d0
-		add.w	$3C(a0),d0
+		move.w	objoff_2C(a0),d0
+		add.w	objoff_3C(a0),d0
 		move.w	d0,obY(a0)
 
 loc_92C6:

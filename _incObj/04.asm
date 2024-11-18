@@ -27,7 +27,7 @@ Obj04_Display:
 		bsr.w	DisplaySprite
 		subq.b	#1,obTimeFrame(a0)
 		bpl.s	locret_4D26
-		move.b	#$14,obTimeFrame(a0)
+		move.b	#20,obTimeFrame(a0)
 		move.b	obFrame(a0),d0
 		addq.b	#1,d0
 		cmpi.b	#4,d0

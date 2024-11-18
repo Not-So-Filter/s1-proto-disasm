@@ -46,7 +46,7 @@ off_D3A8:	dc.w loc_D3AC-off_D3A8, loc_D3D0-off_D3A8
 ; ---------------------------------------------------------------------------
 
 loc_D3AC:
-		subq.w	#1,$30(a0)
+		subq.w	#1,objoff_30(a0)
 		bpl.s	locret_D3CE
 		addq.b	#2,ob2ndRout(a0)
 		move.w	#-$100,obVelX(a0)
@@ -74,7 +74,7 @@ loc_D3D0:
 
 loc_D3F0:
 		subq.b	#2,ob2ndRout(a0)
-		move.w	#$3B,$30(a0)
+		move.w	#$3B,objoff_30(a0)
 		move.w	#0,obVelX(a0)
 		move.b	#0,obAnim(a0)
 		rts

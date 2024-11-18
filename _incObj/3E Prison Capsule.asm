@@ -26,7 +26,7 @@ loc_B68C:
 		move.l	#Map_Pri,obMap(a0)
 		move.w	#$49D,obGfx(a0)
 		move.b	#4,obRender(a0)
-		move.w	obY(a0),$30(a0)
+		move.w	obY(a0),objoff_30(a0)
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
 		lsl.w	#2,d0
@@ -74,7 +74,7 @@ loc_B710:
 		bsr.w	SolidObject
 		lea	(Ani_Pri).l,a1
 		bsr.w	AnimateSprite
-		move.w	$30(a0),obY(a0)
+		move.w	objoff_30(a0),obY(a0)
 		tst.b	ob2ndRout(a0)
 		beq.s	locret_B75E
 		addq.w	#8,obY(a0)

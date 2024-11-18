@@ -19,7 +19,7 @@ loc_8BBA:
 		move.b	#4,obPriority(a0)
 		move.b	#9,obColType(a0)
 		move.b	#$10,obActWid(a0)
-		move.w	#$F900,obVelY(a0)
+		move.w	#-$700,obVelY(a0)
 		move.w	obY(a0),objoff_30(a0)
 
 loc_8BF0:

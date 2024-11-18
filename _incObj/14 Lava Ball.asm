@@ -10,7 +10,7 @@ ObjLavaball:
 
 off_C23E:	dc.w loc_C254-off_C23E, loc_C2C8-off_C23E, j_DeleteObject-off_C23E
 
-word_C244:	dc.w $FC00, $FB00, $FA00, $F900, $FE00, $200, $FE00, $200
+word_C244:	dc.w -$400, -$500, -$600, -$700, -$200, $200, -$200, $200
 ; ---------------------------------------------------------------------------
 
 loc_C254:
@@ -22,7 +22,7 @@ loc_C254:
 		move.b	#4,obRender(a0)
 		move.b	#3,obPriority(a0)
 		move.b	#$8B,obColType(a0)
-		move.w	obY(a0),$30(a0)
+		move.w	obY(a0),objoff_30(a0)
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
 		add.w	d0,d0
@@ -60,7 +60,7 @@ off_C306:	dc.w loc_C318-off_C306, loc_C318-off_C306, loc_C318-off_C306, loc_C318
 
 loc_C318:
 		addi.w	#$18,obVelY(a0)
-		move.w	$30(a0),d0
+		move.w	objoff_30(a0),d0
 		cmp.w	obY(a0),d0
 		bcc.s	loc_C32C
 		addq.b	#2,obRoutine(a0)

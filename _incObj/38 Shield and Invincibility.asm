@@ -59,11 +59,11 @@ ObjShield_Stars:
 		lsl.b	#4,d1				; Unused code in the final game as well
 		addq.b	#4,d1
 		sub.b	d1,d0
-		move.b	$30(a0),d1
+		move.b	objoff_30(a0),d1
 		sub.b	d1,d0
 		addq.b	#4,d1
 		andi.b	#$F,d1
-		move.b	d1,$30(a0)
+		move.b	d1,objoff_30(a0)
 		bra.s	ObjShield_StarTrail2a
 ; ---------------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ ObjShield_StarTrail:
 		add.b	d2,d1
 		addq.b	#4,d1
 		sub.b	d1,d0
-		move.b	$30(a0),d1
+		move.b	objoff_30(a0),d1
 		sub.b	d1,d0
 		addq.b	#4,d1
 		cmpi.b	#$18,d1
@@ -82,7 +82,7 @@ ObjShield_StarTrail:
 		moveq	#0,d1
 
 ObjShield_StarTrail2:
-		move.b	d1,$30(a0)
+		move.b	d1,objoff_30(a0)
 
 ObjShield_StarTrail2a:
 		lea	(v_tracksonic).w,a1

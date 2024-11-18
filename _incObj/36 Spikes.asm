@@ -31,8 +31,8 @@ loc_AB1A:
 		adda.w	d0,a1
 		move.b	(a1)+,obFrame(a0)
 		move.b	(a1)+,obActWid(a0)
-		move.w	obX(a0),$30(a0)
-		move.w	obY(a0),$32(a0)
+		move.w	obX(a0),objoff_30(a0)
+		move.w	obY(a0),objoff_32(a0)
 
 loc_AB64:
 		bsr.w	sub_AC02
@@ -84,7 +84,7 @@ loc_ABBE:
 
 loc_ABDE:
 		bsr.w	DisplaySprite
-		out_of_range.w	DeleteObject,$30(a0)
+		out_of_range.w	DeleteObject,objoff_30(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -107,8 +107,8 @@ locret_AC18:
 loc_AC1A:
 		bsr.w	sub_AC42
 		moveq	#0,d0
-		move.b	$34(a0),d0
-		add.w	$32(a0),d0
+		move.b	objoff_34(a0),d0
+		add.w	objoff_32(a0),d0
 		move.w	d0,obY(a0)
 		rts
 ; ---------------------------------------------------------------------------
@@ -116,16 +116,16 @@ loc_AC1A:
 loc_AC2E:
 		bsr.w	sub_AC42
 		moveq	#0,d0
-		move.b	$34(a0),d0
-		add.w	$30(a0),d0
+		move.b	objoff_34(a0),d0
+		add.w	objoff_30(a0),d0
 		move.w	d0,obX(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 sub_AC42:
-		tst.w	$38(a0)
+		tst.w	objoff_38(a0)
 		beq.s	loc_AC60
-		subq.w	#1,$38(a0)
+		subq.w	#1,objoff_38(a0)
 		bne.s	locret_ACA2
 		tst.b	obRender(a0)
 		bpl.s	locret_ACA2
@@ -135,23 +135,23 @@ sub_AC42:
 ; ---------------------------------------------------------------------------
 
 loc_AC60:
-		tst.w	$36(a0)
+		tst.w	objoff_36(a0)
 		beq.s	loc_AC82
-		subi.w	#$800,$34(a0)
+		subi.w	#$800,objoff_34(a0)
 		bcc.s	locret_ACA2
-		move.w	#0,$34(a0)
-		move.w	#0,$36(a0)
-		move.w	#$3C,$38(a0)
+		move.w	#0,objoff_34(a0)
+		move.w	#0,objoff_36(a0)
+		move.w	#$3C,objoff_38(a0)
 		bra.s	locret_ACA2
 ; ---------------------------------------------------------------------------
 
 loc_AC82:
-		addi.w	#$800,$34(a0)
-		cmpi.w	#$2000,$34(a0)
+		addi.w	#$800,objoff_34(a0)
+		cmpi.w	#$2000,objoff_34(a0)
 		bcs.s	locret_ACA2
-		move.w	#$2000,$34(a0)
-		move.w	#1,$36(a0)
-		move.w	#$3C,$38(a0)
+		move.w	#$2000,objoff_34(a0)
+		move.w	#1,objoff_36(a0)
+		move.w	#$3C,objoff_38(a0)
 
 locret_ACA2:
 		rts

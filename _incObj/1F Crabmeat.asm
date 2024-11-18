@@ -46,16 +46,16 @@ off_7632:	dc.w loc_7636-off_7632, loc_76D4-off_7632
 ; ---------------------------------------------------------------------------
 
 loc_7636:
-		subq.w	#1,$30(a0)
+		subq.w	#1,objoff_30(a0)
 		bpl.s	locret_7670
 		tst.b	obRender(a0)
 		bpl.s	loc_764A
-		bchg	#1,$32(a0)
+		bchg	#1,objoff_32(a0)
 		bne.s	loc_7672
 
 loc_764A:
 		addq.b	#2,ob2ndRout(a0)
-		move.w	#$7F,$30(a0)
+		move.w	#127,objoff_30(a0)
 		move.w	#$80,obVelX(a0)
 		bsr.w	sub_7742
 		addq.b	#3,d0
@@ -69,7 +69,7 @@ locret_7670:
 ; ---------------------------------------------------------------------------
 
 loc_7672:
-		move.w	#$3B,$30(a0)
+		move.w	#59,objoff_30(a0)
 		move.b	#6,obAnim(a0)
 		bsr.w	FindFreeObj
 		bne.s	loc_76A8
@@ -95,10 +95,10 @@ locret_76D2:
 ; ---------------------------------------------------------------------------
 
 loc_76D4:
-		subq.w	#1,$30(a0)
+		subq.w	#1,objoff_30(a0)
 		bmi.s	loc_7728
 		bsr.w	SpeedToPos
-		bchg	#0,$32(a0)
+		bchg	#0,objoff_32(a0)
 		bne.s	loc_770E
 		move.w	obX(a0),d3
 		addi.w	#$10,d3
@@ -127,7 +127,7 @@ loc_770E:
 
 loc_7728:
 		subq.b	#2,ob2ndRout(a0)
-		move.w	#$3B,$30(a0)
+		move.w	#59,objoff_30(a0)
 
 loc_7732:
 		move.w	#0,obVelX(a0)
@@ -176,7 +176,7 @@ loc_7778:
 		move.b	#3,obPriority(a0)
 		move.b	#$87,obColType(a0)
 		move.b	#8,obActWid(a0)
-		move.w	#$FC00,obVelY(a0)
+		move.w	#-$400,obVelY(a0)
 		move.b	#7,obAnim(a0)
 
 loc_77AE:
@@ -185,7 +185,7 @@ loc_77AE:
 		bsr.w	ObjectFall
 		bsr.w	DisplaySprite
 		move.w	(v_limitbtm2).w,d0
-		addi.w	#$E0,d0
+		addi.w	#224,d0
 		cmp.w	obY(a0),d0
 		bcs.s	loc_77D0
 		rts

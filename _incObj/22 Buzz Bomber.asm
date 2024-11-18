@@ -33,12 +33,12 @@ off_78F2:
 ; ---------------------------------------------------------------------------
 
 loc_78F6:
-		subq.w	#1,$32(a0)
+		subq.w	#1,objoff_32(a0)
 		bpl.s	locret_7926
-		btst	#1,$34(a0)
+		btst	#1,objoff_34(a0)
 		bne.s	loc_7928
 		addq.b	#2,ob2ndRout(a0)
-		move.w	#$7F,$32(a0)
+		move.w	#$7F,objoff_32(a0)
 		move.w	#$400,obVelX(a0)
 		move.b	#1,obAnim(a0)
 		btst	#0,obStatus(a0)
@@ -67,10 +67,10 @@ loc_7928:
 loc_7964:
 		add.w	d0,obX(a1)
 		move.b	obStatus(a0),obStatus(a1)
-		move.w	#$E,$32(a1)
-		move.l	a0,$3C(a1)
-		move.b	#1,$34(a0)
-		move.w	#$3B,$32(a0)
+		move.w	#$E,objoff_32(a1)
+		move.l	a0,objoff_3C(a1)
+		move.b	#1,objoff_34(a0)
+		move.w	#$3B,objoff_32(a0)
 		move.b	#2,obAnim(a0)
 
 locret_798A:
@@ -78,10 +78,10 @@ locret_798A:
 ; ---------------------------------------------------------------------------
 
 loc_798C:
-		subq.w	#1,$32(a0)
+		subq.w	#1,objoff_32(a0)
 		bmi.s	loc_79C2
 		bsr.w	SpeedToPos
-		tst.b	$34(a0)
+		tst.b	objoff_34(a0)
 		bne.s	locret_79E4
 		move.w	(v_objspace+obX).w,d0
 		sub.w	obX(a0),d0
@@ -93,15 +93,15 @@ loc_79A8:
 		bcc.s	locret_79E4
 		tst.b	obRender(a0)
 		bpl.s	locret_79E4
-		move.b	#2,$34(a0)
-		move.w	#$1D,$32(a0)
+		move.b	#2,objoff_34(a0)
+		move.w	#$1D,objoff_32(a0)
 		bra.s	loc_79D4
 ; ---------------------------------------------------------------------------
 
 loc_79C2:
-		move.b	#0,$34(a0)
+		move.b	#0,objoff_34(a0)
 		bchg	#0,obStatus(a0)
-		move.w	#$3B,$32(a0)
+		move.w	#$3B,objoff_32(a0)
 
 loc_79D4:
 		subq.b	#2,ob2ndRout(a0)

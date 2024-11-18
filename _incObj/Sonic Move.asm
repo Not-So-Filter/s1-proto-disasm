@@ -51,7 +51,7 @@ Sonic_Balance:
 		jsr	(ObjectHitFloor).l
 		cmpi.w	#$C,d1
 		blt.s	Sonic_LookUp
-		cmpi.b	#3,$36(a0)
+		cmpi.b	#3,objoff_36(a0)
 		bne.s	loc_EA8A
 
 loc_EA82:
@@ -60,7 +60,7 @@ loc_EA82:
 ; ---------------------------------------------------------------------------
 
 loc_EA8A:
-		cmpi.b	#3,$37(a0)
+		cmpi.b	#3,objoff_37(a0)
 		bne.s	Sonic_LookUp
 
 loc_EA92:
@@ -102,7 +102,7 @@ loc_EAE6:
 
 loc_EAEA:
 		move.b	(v_jpadhold2).w,d0
-		andi.b	#btnL+btnR,d0
+		andi.b	#btnL|btnR,d0
 		bne.s	loc_EB16
 		move.w	obInertia(a0),d0
 		beq.s	loc_EB16

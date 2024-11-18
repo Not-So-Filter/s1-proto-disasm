@@ -28,7 +28,7 @@ Obj03_Display:
 		bsr.w	DisplaySprite
 		subq.b	#1,obTimeFrame(a0)
 		bpl.s	.dontset
-		move.b	#$10,obTimeFrame(a0)
+		move.b	#16,obTimeFrame(a0)
 
 .dontset:
 		rts

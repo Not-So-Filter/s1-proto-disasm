@@ -23,8 +23,8 @@ loc_8EDE:
 		move.w	#$C000,obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#5,obPriority(a0)
-		move.w	obY(a0),$2C(a0)
-		move.w	obX(a0),$2A(a0)
+		move.w	obY(a0),objoff_2C(a0)
+		move.w	obX(a0),objoff_2A(a0)
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
 		lsr.w	#2,d0
@@ -34,7 +34,7 @@ loc_8F10:
 		lea	off_8ED2(pc,d0.w),a1
 		move.w	(a1)+,d0
 		lea	off_8ED2(pc,d0.w),a2
-		move.l	a2,$30(a0)
+		move.l	a2,objoff_30(a0)
 		move.b	(a1)+,obFrame(a0)
 		move.b	(a1),obActWid(a0)
 		andi.b	#$F,obSubtype(a0)
@@ -59,7 +59,7 @@ loc_8F64:
 		moveq	#0,d1
 		move.b	obActWid(a0),d1
 		addi.w	#$B,d1
-		movea.l	$30(a0),a2
+		movea.l	objoff_30(a0),a2
 		move.w	obX(a0),d2
 		bsr.w	sub_61E0
 		bra.s	loc_8F9E
@@ -75,7 +75,7 @@ loc_8F7C:
 		move.w	#$30,d2
 
 loc_8F96:
-		movea.l	$30(a0),a2
+		movea.l	objoff_30(a0),a2
 		bsr.w	loc_A30C
 
 loc_8F9E:
@@ -129,14 +129,14 @@ loc_8FEE:
 		add.w	d1,d0
 
 loc_8FFA:
-		move.w	$2C(a0),d1
+		move.w	objoff_2C(a0),d1
 		sub.w	d0,d1
 		move.w	d1,obY(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_9006:
-		move.b	$34(a0),d0
+		move.b	objoff_34(a0),d0
 		tst.b	ob2ndRout(a0)
 		bne.s	loc_9018
 		subq.b	#2,d0
@@ -152,33 +152,33 @@ loc_9018:
 		move.b	#$40,d0
 
 loc_9024:
-		move.b	d0,$34(a0)
+		move.b	d0,objoff_34(a0)
 		jsr	(CalcSine).l
 		lsr.w	#4,d0
 		move.w	d0,d1
-		add.w	$2C(a0),d0
+		add.w	objoff_2C(a0),d0
 		move.w	d0,obY(a0)
-		cmpi.b	#$20,$34(a0)
+		cmpi.b	#$20,objoff_34(a0)
 		bne.s	loc_9082
-		tst.b	$35(a0)
+		tst.b	objoff_35(a0)
 		bne.s	loc_9082
-		move.b	#1,$35(a0)
+		move.b	#1,objoff_35(a0)
 		bsr.w	FindNextFreeObj
 		bne.s	loc_9082
 		_move.b	#id_GrassFire,obID(a1)
 		move.w	obX(a0),obX(a1)
-		move.w	$2C(a0),$2C(a1)
-		addq.w	#8,$2C(a1)
-		subq.w	#3,$2C(a1)
+		move.w	objoff_2C(a0),objoff_2C(a1)
+		addq.w	#8,objoff_2C(a1)
+		subq.w	#3,objoff_2C(a1)
 		subi.w	#$40,obX(a1)
-		move.l	$30(a0),$30(a1)
-		move.l	a0,$38(a1)
+		move.l	objoff_30(a0),objoff_30(a1)
+		move.l	a0,objoff_38(a1)
 		movea.l	a0,a2
 		bsr.s	sub_90A4
 
 loc_9082:
 		moveq	#0,d2
-		lea	$36(a0),a2
+		lea	objoff_36(a0),a2
 		move.b	(a2)+,d2
 		subq.b	#1,d2
 		bcs.s	locret_90A2
@@ -186,10 +186,10 @@ loc_9082:
 loc_908E:
 		moveq	#0,d0
 		move.b	(a2)+,d0
-		lsl.w	#6,d0
-		addi.w	#v_objspace&$FFFF,d0
+		lsl.w	#object_size_bits,d0
+		addi.w	#v_objspace,d0
 		movea.w	d0,a1
-		move.w	d1,$3C(a1)
+		move.w	d1,objoff_3C(a1)
 		dbf	d2,loc_908E
 
 locret_90A2:
@@ -197,27 +197,27 @@ locret_90A2:
 ; ---------------------------------------------------------------------------
 
 sub_90A4:
-		lea	$36(a2),a2
+		lea	objoff_36(a2),a2
 		moveq	#0,d0
 		move.b	(a2),d0
 		addq.b	#1,(a2)
 		lea	1(a2,d0.w),a2
 		move.w	a1,d0
 		subi.w	#v_objspace,d0
-		lsr.w	#6,d0
+		lsr.w	#object_size_bits,d0
 		andi.w	#$7F,d0
 		move.b	d0,(a2)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_90C2:
-		tst.b	$35(a0)
+		tst.b	objoff_35(a0)
 		beq.s	loc_90CE
 		tst.b	obRender(a0)
 		bpl.s	loc_90EE
 
 loc_90CE:
-		out_of_range.w	DeleteObject,$2A(a0)
+		out_of_range.w	DeleteObject,objoff_2A(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -225,7 +225,7 @@ loc_90EE:
 		moveq	#0,d2
 
 loc_90F0:
-		lea	$36(a0),a2
+		lea	objoff_36(a0),a2
 		move.b	(a2),d2
 		clr.b	(a2)+
 		subq.b	#1,d2
@@ -235,13 +235,13 @@ loc_90FC:
 		moveq	#0,d0
 		move.b	(a2),d0
 		clr.b	(a2)+
-		lsl.w	#6,d0
-		addi.w	#v_objspace&$FFFF,d0
+		lsl.w	#object_size_bits,d0
+		addi.w	#v_objspace,d0
 		movea.w	d0,a1
 		bsr.w	ObjectDeleteA1
 		dbf	d2,loc_90FC
-		move.b	#0,$35(a0)
-		move.b	#0,$34(a0)
+		move.b	#0,objoff_35(a0)
+		move.b	#0,objoff_34(a0)
 
 locret_911E:
 		rts

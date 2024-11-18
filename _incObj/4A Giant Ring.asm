@@ -24,7 +24,7 @@ ObjEntryRingBeta_Init2:
 		move.b	#1,obPriority(a0)
 		move.b	#$38,obActWid(a0)
 		move.w	#$541,obGfx(a0)
-		move.w	#$78,$30(a0)
+		move.w	#120,objoff_30(a0)
 
 ObjEntryRingBeta_RmvSonic:
 		move.w	(v_player+obX).w,obX(a0)
@@ -45,7 +45,7 @@ ObjEntryRingBeta_Display:
 ; ---------------------------------------------------------------------------
 
 ObjEntryRingBeta_LoadSonic:
-		subq.w	#1,$30(a0)
+		subq.w	#1,objoff_30(a0)
 		bne.s	ObjEntryRingBeta_Wait
 		move.b	#id_SonicPlayer,(v_player).w
 		bra.w	DeleteObject

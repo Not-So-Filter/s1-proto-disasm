@@ -13,7 +13,7 @@ off_B340:	dc.w loc_B34A-off_B340, loc_B404-off_B340, loc_B462-off_B340, loc_B49E
 loc_B34A:
 		addq.b	#2,obRoutine(a0)
 		move.w	#$4080,obAngle(a0)
-		move.w	#-$200,$3E(a0)
+		move.w	#-$200,objoff_3E(a0)
 		move.l	#Map_BossItems,obMap(a0)
 		move.w	#$46C,obGfx(a0)
 		lea	obSubtype(a0),a2
@@ -44,7 +44,7 @@ loc_B3AC:
 		move.b	#4,obRender(a1)
 		move.b	#8,obActWid(a1)
 		move.b	#6,obPriority(a1)
-		move.l	$34(a0),$34(a1)
+		move.l	objoff_34(a0),objoff_34(a1)
 		dbf	d1,loc_B376
 
 loc_B3D6:
@@ -73,23 +73,23 @@ loc_B412:
 		addi.l	#v_objspace&$FFFFFF,d4
 		movea.l	d4,a1
 		move.b	(a3)+,d0
-		cmp.b	$3C(a1),d0
+		cmp.b	objoff_3C(a1),d0
 		beq.s	loc_B42C
-		addq.b	#1,$3C(a1)
+		addq.b	#1,objoff_3C(a1)
 
 loc_B42C:
 		dbf	d6,loc_B412
-		cmp.b	$3C(a1),d0
+		cmp.b	objoff_3C(a1),d0
 		bne.s	loc_B446
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		cmpi.b	#6,ob2ndRout(a1)
 		bne.s	loc_B446
 		addq.b	#2,obRoutine(a0)
 
 loc_B446:
-		cmpi.w	#$20,$32(a0)
+		cmpi.w	#$20,objoff_32(a0)
 		beq.s	loc_B452
-		addq.w	#1,$32(a0)
+		addq.w	#1,objoff_32(a0)
 
 loc_B452:
 		bsr.w	sub_B46E
@@ -105,11 +105,11 @@ loc_B462:
 ; ---------------------------------------------------------------------------
 
 sub_B46E:
-		movea.l	$34(a0),a1
-		move.w	obX(a1),$3A(a0)
+		movea.l	objoff_34(a0),a1
+		move.w	obX(a1),objoff_3A(a0)
 		move.w	obY(a1),d0
-		add.w	$32(a0),d0
-		move.w	d0,$38(a0)
+		add.w	objoff_32(a0),d0
+		move.w	d0,objoff_38(a0)
 		move.b	obStatus(a1),obStatus(a0)
 		tst.b	obStatus(a1)
 		bpl.s	locret_B49C
@@ -121,7 +121,7 @@ locret_B49C:
 ; ---------------------------------------------------------------------------
 
 loc_B49E:
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		tst.b	obStatus(a1)
 		bpl.s	loc_B4B4
 		_move.b	#id_ExplosionBomb,obID(a0)
@@ -139,16 +139,15 @@ loc_B4B8:
 
 loc_B4C2:
 		move.b	d0,obFrame(a0)
-		movea.l	$34(a0),a1
+		movea.l	objoff_34(a0),a1
 		tst.b	obStatus(a1)
 		bpl.w	DisplaySprite
 		move.b	#0,obColType(a0)
 		bsr.w	sub_B146
-		subq.b	#1,$3C(a0)
+		subq.b	#1,objoff_3C(a0)
 		bpl.s	loc_B4EE
 		_move.b	#id_ExplosionBomb,obID(a0)
 		move.b	#0,obRoutine(a0)
 
 loc_B4EE:
 		bra.w	DisplaySprite
-; ---------------------------------------------------------------------------

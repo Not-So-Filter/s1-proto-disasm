@@ -19,8 +19,8 @@ ObjSwingPtfm_Init:
 		move.b	#3,obPriority(a0)
 		move.b	#$18,obActWid(a0)
 		move.b	#8,obHeight(a0)
-		move.w	obY(a0),$38(a0)
-		move.w	obX(a0),$3A(a0)
+		move.w	obY(a0),objoff_38(a0)
+		move.w	obX(a0),objoff_3A(a0)
 		cmpi.b	#id_SLZ,(v_zone).w		; are we on Star Light Zone?
 		bne.s	ObjSwingPtfm_NotSLZ		; if not, branch
 		move.l	#Map_Swing_SLZ,obMap(a0)
@@ -40,7 +40,7 @@ ObjSwingPtfm_NotSLZ:
 		move.w	d1,d3
 		lsl.w	#4,d3
 		addq.b	#8,d3
-		move.b	d3,$3C(a0)
+		move.b	d3,objoff_3C(a0)
 		subq.b	#8,d3
 		tst.b	obFrame(a0)
 		beq.s	ObjSwingPtfm_LoadLinks
@@ -65,7 +65,7 @@ ObjSwingPtfm_LoadLinks:
 		move.b	#4,obPriority(a1)
 		move.b	#8,obActWid(a1)
 		move.b	#1,obFrame(a1)
-		move.b	d3,$3C(a1)
+		move.b	d3,objoff_3C(a1)
 		subi.b	#$10,d3
 		bcc.s	loc_5582
 		move.b	#2,obFrame(a1)
@@ -81,7 +81,7 @@ loc_5586:
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
 		move.w	#$4080,obAngle(a0)
-		move.w	#-$200,$3E(a0)
+		move.w	#-$200,objoff_3E(a0)
 		move.w	(sp)+,d1
 		btst	#4,d1
 		beq.s	loc_55C8
@@ -154,34 +154,34 @@ loc_5650:
 ; ---------------------------------------------------------------------------
 
 loc_5652:
-		tst.b	$3D(a0)
+		tst.b	objoff_3D(a0)
 		bne.s	loc_5674
-		move.w	$3E(a0),d0
+		move.w	objoff_3E(a0),d0
 		addq.w	#8,d0
-		move.w	d0,$3E(a0)
+		move.w	d0,objoff_3E(a0)
 		add.w	d0,obAngle(a0)
 		cmpi.w	#$200,d0
 		bne.s	loc_568E
-		move.b	#1,$3D(a0)
+		move.b	#1,objoff_3D(a0)
 		bra.s	loc_568E
 ; ---------------------------------------------------------------------------
 
 loc_5674:
-		move.w	$3E(a0),d0
+		move.w	objoff_3E(a0),d0
 		subq.w	#8,d0
-		move.w	d0,$3E(a0)
+		move.w	d0,objoff_3E(a0)
 		add.w	d0,obAngle(a0)
 		cmpi.w	#-$200,d0
 		bne.s	loc_568E
-		move.b	#0,$3D(a0)
+		move.b	#0,objoff_3D(a0)
 
 loc_568E:
 		move.b	obAngle(a0),d0
 
 loc_5692:
 		bsr.w	CalcSine
-		move.w	$38(a0),d2
-		move.w	$3A(a0),d3
+		move.w	objoff_38(a0),d2
+		move.w	objoff_3A(a0),d3
 		lea	obSubtype(a0),a2
 		moveq	#0,d6
 		move.b	(a2)+,d6
@@ -193,7 +193,7 @@ loc_56A6:
 		addi.l	#v_objspace&$FFFFFF,d4
 		movea.l	d4,a1
 		moveq	#0,d4
-		move.b	$3C(a1),d4
+		move.b	objoff_3C(a1),d4
 		move.l	d4,d5
 		muls.w	d0,d4
 		asr.l	#8,d4
@@ -208,7 +208,7 @@ loc_56A6:
 ; ---------------------------------------------------------------------------
 
 ObjSwingPtfm_ChkDelete:
-		out_of_range.w	ObjSwingPtfm_DeleteAll,$3A(a0)
+		out_of_range.w	ObjSwingPtfm_DeleteAll,objoff_3A(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

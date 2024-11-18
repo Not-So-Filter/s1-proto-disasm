@@ -70,7 +70,7 @@ loc_7C74:
 		_move.b	#id_Rings,obID(a1)
 		addq.b	#2,obRoutine(a1)
 		move.w	d2,obX(a1)
-		move.w	obX(a0),$32(a1)
+		move.w	obX(a0),objoff_32(a1)
 		move.w	d3,obY(a1)
 		move.l	#Map_Ring,obMap(a1)
 		move.w	#$27B2,obGfx(a1)
@@ -79,7 +79,7 @@ loc_7C74:
 		move.b	#$47,obColType(a1)
 		move.b	#8,obActWid(a1)
 		move.b	obRespawnNo(a0),obRespawnNo(a1)
-		move.b	d1,$34(a1)
+		move.b	d1,objoff_34(a1)
 
 loc_7CBC:
 		addq.w	#1,d1
@@ -95,7 +95,7 @@ loc_7CC8:
 loc_7CD0:
 		move.b	(v_ani1_frame).w,obFrame(a0)
 		bsr.w	DisplaySprite
-		out_of_range.s	loc_7D2C,$32(a0)
+		out_of_range.s	loc_7D2C,objoff_32(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ loc_7CF8:
 		lea	(v_regbuffer).w,a2
 		moveq	#0,d0
 		move.b	obRespawnNo(a0),d0
-		move.b	$34(a0),d1
+		move.b	objoff_34(a0),d1
 		bset	d1,2(a2,d0.w)
 
 loc_7D1E:

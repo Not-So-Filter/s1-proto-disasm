@@ -277,7 +277,7 @@ loc_32C:
 		nop
 		lea	(v_crossresetram).w,a6
 		moveq	#0,d7
-		move.w	#(v_endofram-v_crossresetram)/4-1,d6
+		move.w	#bytesToLcnt(v_endofram-v_crossresetram),d6
 
 loc_348:
 		move.l	d7,(a6)+
@@ -291,7 +291,7 @@ loc_348:
 loc_36A:
 		lea	(v_startofram&$FFFFFF).l,a6
 		moveq	#0,d7
-		move.w	#(v_crossresetram-v_startofram)/4-1,d6
+		move.w	#bytesToLcnt(v_crossresetram-v_startofram),d6
 
 loc_376:
 		move.l	d7,(a6)+
@@ -330,7 +330,7 @@ ChecksumError:
 		moveq	#bytesToWcnt(v_palette_end-v_palette),d7
 
 .palette:
-		move.w	#$E,(vdp_data_port).l		; Write red to data
+		move.w	#cRed,(vdp_data_port).l		; Write red to data
 		dbf	d7,.palette
 		bra.s	*
 ; ---------------------------------------------------------------------------
@@ -425,7 +425,7 @@ ErrorPrint:
 		lea	(vdp_data_port).l,a6
 		locVRAM	$F800
 		lea	(Art_Text).l,a0
-		move.w	#(Art_Text_end-Art_Text)/2-$10-1,d1
+		move.w	#bytesToWcnt(Art_Text_end-Art_Text-tile_size),d1
 
 .loadart:
 		move.w	(a0)+,(a6)
@@ -583,15 +583,15 @@ VBla_08:
 		bsr.w	ReadJoypads
 		stopZ80
 		waitZ80
-		writeCRAM	v_palette,$80,0
-		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
+		writeCRAM	v_palette,0
+		writeVRAM	v_hscrolltablebuffer,vram_hscroll
 		move.w	#$8407,(a5)
 		move.w	(v_hbla_hreg).w,(a5)
 		move.w	(v_bg3scrposy_vdp).w,(v_bg3scrposy_vdp_dup).w
-		writeVRAM	v_spritetablebuffer,$280,vram_sprites
+		writeVRAM	v_spritetablebuffer,vram_sprites
 		tst.b	(f_sonframechg).w
 		beq.s	.nochg
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
+		writeVRAM	v_sgfx_buffer,vram_sonic ; load new Sonic gfx
 		move.b	#0,(f_sonframechg).w
 
 .nochg:
@@ -621,14 +621,14 @@ VBla_0A:
 		bsr.w	ReadJoypads
 		stopZ80
 		waitZ80
-		writeCRAM	v_palette,$80,0
-		writeVRAM	v_spritetablebuffer,$280,vram_sprites
-		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
+		writeCRAM	v_palette,0
+		writeVRAM	v_spritetablebuffer,vram_sprites
+		writeVRAM	v_hscrolltablebuffer,vram_hscroll
 		startZ80
 		bsr.w	SS_PalCycle
 		tst.b	(f_sonframechg).w
 		beq.s	.nochg
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
+		writeVRAM	v_sgfx_buffer,vram_sonic ; load new Sonic gfx
 		move.b	#0,(f_sonframechg).w
 
 .nochg:
@@ -644,12 +644,12 @@ VBla_0C:
 		bsr.w	ReadJoypads
 		stopZ80
 		waitZ80
-		writeCRAM	v_palette,$80,0
-		writeVRAM	v_spritetablebuffer,$280,vram_sprites
-		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
+		writeCRAM	v_palette,0
+		writeVRAM	v_spritetablebuffer,vram_sprites
+		writeVRAM	v_hscrolltablebuffer,vram_hscroll
 		tst.b	(f_sonframechg).w
 		beq.s	.nochg
-		writeVRAM	v_sgfx_buffer,$2E0,vram_sonic ; load new Sonic gfx
+		writeVRAM	v_sgfx_buffer,vram_sonic ; load new Sonic gfx
 		move.b	#0,(f_sonframechg).w
 
 .nochg:
@@ -679,9 +679,9 @@ sub_E78:
 		bsr.w	ReadJoypads
 		stopZ80
 		waitZ80
-		writeCRAM	v_palette,$80,0
-		writeVRAM	v_spritetablebuffer,$280,vram_sprites
-		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
+		writeCRAM	v_palette,0
+		writeVRAM	v_spritetablebuffer,vram_sprites
+		writeVRAM	v_hscrolltablebuffer,vram_hscroll
 		startZ80
 		rts
 ; ---------------------------------------------------------------------------
@@ -690,7 +690,7 @@ HBlank:
 		tst.w	(f_hblank).w
 		beq.s	.locret
 		move.l	a5,-(sp)
-		writeCRAM	v_palette_fading,$80,0
+		writeCRAM	v_palette_fading,0
 		movem.l	(sp)+,a5
 		move.w	#0,(f_hblank).w
 
@@ -708,7 +708,7 @@ HBlank2:
 		locVRAM $F800
 		lea	(v_spritetablebuffer).w,a0
 		lea	(vdp_data_port).l,a5
-		move.w	#(v_spritetablebuffer_end-v_spritetablebuffer)/4-1,d0
+		move.w	#bytesToLcnt(v_spritetablebuffer_end-v_spritetablebuffer),d0
 
 .loop:
 		move.l	(a0)+,(a5)
@@ -768,7 +768,7 @@ VDPSetupGame:
 		lea	(vdp_control_port).l,a0
 		lea	(vdp_data_port).l,a1
 		lea	(VDPSetupArray).l,a2
-		moveq	#(VDPSetupArray_End-VDPSetupArray)/2-1,d7
+		moveq	#bytesToWcnt(VDPSetupArray_End-VDPSetupArray),d7
 
 loc_101E:
 		move.w	(a2)+,(a0)
@@ -777,7 +777,7 @@ loc_101E:
 		move.w	d0,(v_vdp_buffer1).w
 		moveq	#0,d0
 		move.l	#$C0000000,(vdp_control_port).l
-		move.w	#($80/2)-1,d7
+		move.w	#bytesToWcnt(v_palette_end-v_palette),d7
 
 loc_103E:
 		move.w	d0,(a1)
@@ -785,13 +785,7 @@ loc_103E:
 		clr.l	(v_scrposy_dup).w
 		clr.l	(v_scrposx_dup).w
 		move.l	d1,-(sp)
-		fillVRAM	0,$FFFF,0
-
-.waitDMA:
-		move.w	(a5),d1
-		btst	#1,d1
-		bne.s	.waitDMA
-		move.w	#$8F02,(a5)
+		fillVRAM	0,0,$10000
 		move.l	(sp)+,d1
 		rts
 ; ---------------------------------------------------------------------------
@@ -819,36 +813,15 @@ VDPSetupArray_End:
 ; ---------------------------------------------------------------------------
 
 ClearScreen:
-		fillVRAM	0,$FFF,vram_fg		; clear foreground namespace
+		fillVRAM	0, vram_fg, vram_fg+plane_size_64x32		; clear foreground namespace
+		fillVRAM	0, vram_bg, vram_bg+plane_size_64x32		; clear background namespace
 
-.waitDMA1:
-		move.w	(a5),d1
-		btst	#1,d1
-		bne.s	.waitDMA1
-		move.w	#$8F02,(a5)
-		fillVRAM	0,$FFF,vram_bg		; clear background namespace
-
-.waitDMA2:
-		move.w	(a5),d1
-		btst	#1,d1
-		bne.s	.waitDMA2
-		move.w	#$8F02,(a5)
 		move.l	#0,(v_scrposy_dup).w
 		move.l	#0,(v_scrposx_dup).w
-		lea	(v_spritetablebuffer).w,a1
-		moveq	#0,d0
-		move.w	#(v_spritetablebuffer_end-v_spritetablebuffer)/4,d1	; This should have a -1, but this won't effect much since water palette lines don't exist.
 
-loc_111C:
-		move.l	d0,(a1)+
-		dbf	d1,loc_111C
-		lea	(v_hscrolltablebuffer).w,a1
-		moveq	#0,d0
-		move.w	#(v_hscrolltablebuffer_end_padded-v_hscrolltablebuffer)/4,d1	; This should have a -1, leading to a slight bug (first bit of the Sonic object's RAM is cleared)
+		clearRAM v_spritetablebuffer,v_spritetablebuffer_end+4	; This clears too much RAM, but this won't effect much since water palettes don't exist.
+		clearRAM v_hscrolltablebuffer,v_hscrolltablebuffer_end_padded+4	; This clears too much RAM, leading to a slight bug (first bit of the Sonic object's RAM is cleared)
 
-loc_112C:
-		move.l	d0,(a1)+
-		dbf	d1,loc_112C
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -1003,7 +976,7 @@ NewPLC:
 
 ClearPLC:
 		lea	(v_plc_buffer).w,a2		; PLC buffer space in RAM
-		moveq	#(v_plc_buffer_end-v_plc_buffer)/4-1,d0 ; bytesToLcnt(v_plc_buffer_end-v_plc_buffer)
+		moveq	#bytesToLcnt(v_plc_buffer_end-v_plc_buffer),d0
 
 	.loop:
 		clr.l	(a2)+
@@ -1103,7 +1076,7 @@ locret_14D0:
 
 ShiftPLC:
 		lea	(v_plc_buffer).w,a0
-		moveq	#(v_plc_buffer_only_end-v_plc_buffer-6)/4-1,d0
+		moveq	#bytesToLcnt(v_plc_buffer_only_end-v_plc_buffer-6),d0
 
 loc_14D8:
 		move.l	6(a0),(a0)+
@@ -1558,13 +1531,9 @@ GM_Title:
 		andi.b	#$BF,d0
 		move.w	d0,(vdp_control_port).l
 		bsr.w	ClearScreen
-		lea	(v_objspace).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_objend-v_objspace),d1
 
-loc_2592:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2592
+		clearRAM v_objspace,v_objspace_end
+
 		locVRAM $4000
 		lea	(Nem_TitleFg).l,a0
 		bsr.w	NemDec
@@ -1652,18 +1621,12 @@ loc_26E4:
 		beq.w	loc_27AA
 		moveq	#palid_LevelSel,d0
 		bsr.w	PalLoad2
-		lea	(v_hscrolltablebuffer).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_hscrolltablebuffer_end-v_hscrolltablebuffer),d1
-
-loc_2710:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2710
+		clearRAM v_hscrolltablebuffer,v_hscrolltablebuffer_end
 		move.l	d0,(v_scrposy_dup).w
 		disable_ints
 		lea	(vdp_data_port).l,a6
 		move.l	#$60000003,(vdp_control_port).l
-		move.w	#($1000)/4-1,d1
+		move.w	#bytesToLcnt($1000),d1
 
 loc_2732:
 		move.l	d0,(a6)
@@ -1678,7 +1641,7 @@ LevelSelect:
 		bsr.w	RunPLC
 		tst.l	(v_plc_buffer).w
 		bne.s	LevelSelect
-		andi.b	#btnABC+btnStart,(v_jpadpress1).w
+		andi.b	#btnABC|btnStart,(v_jpadpress1).w
 		beq.s	LevelSelect
 		move.w	(v_levselitem).w,d0
 		cmpi.w	#$13,d0
@@ -1750,7 +1713,7 @@ LevSelOrder:	dc.b id_GHZ, 0				; GHZ1
 ; ---------------------------------------------------------------------------
 
 loc_27F8:
-		move.w	#$1E,(v_demolength).w
+		move.w	#30,(v_demolength).w
 
 loc_27FE:
 		move.b	#4,(v_vbla_routine).w
@@ -1804,7 +1767,7 @@ DemoLevels:	binclude "misc/Demo Level Order - Intro.bin"
 
 sub_28A6:
 		move.b	(v_jpadpress1).w,d1
-		andi.b	#btnUp+btnDn,d1
+		andi.b	#btnUp|btnDn,d1
 		bne.s	loc_28B6
 		subq.w	#1,(v_levseldelay).w
 		bpl.s	loc_28F0
@@ -1812,7 +1775,7 @@ sub_28A6:
 loc_28B6:
 		move.w	#$B,(v_levseldelay).w
 		move.b	(v_jpadhold1).w,d1
-		andi.b	#btnUp+btnDn,d1
+		andi.b	#btnUp|btnDn,d1
 		beq.s	loc_28F0
 		move.w	(v_levselitem).w,d0
 		btst	#bitUp,d1
@@ -1839,7 +1802,7 @@ loc_28F0:
 		cmpi.w	#$13,(v_levselitem).w
 		bne.s	locret_292A
 		move.b	(v_jpadpress1).w,d1
-		andi.b	#btnL+btnR,d1
+		andi.b	#btnL|btnR,d1
 		beq.s	locret_292A
 		move.w	(v_levselsound).w,d0
 		btst	#bitL,d1
@@ -1983,27 +1946,11 @@ loc_2C0A:
 		move.w	#$8AAF,(v_hbla_hreg).w
 		move.w	#$8004,(a6)
 		move.w	#$8720,(a6)
-		lea	(v_objspace).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_objend-v_objspace),d1
 
-loc_2C4C:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2C4C
-		lea	(v_misc_variables).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_misc_variables_end-v_misc_variables),d1
+		clearRAM v_objspace,v_objspace_end
+		clearRAM v_misc_variables,v_misc_variables_end
+		clearRAM v_timingandscreenvariables,v_timingandscreenvariables_end
 
-loc_2C5C:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2C5C
-		lea	(v_timingandscreenvariables).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_timingandscreenvariables_end-v_timingandscreenvariables),d1
-
-loc_2C6C:
-		move.l	d0,(a1)+
-		dbf	d1,loc_2C6C
 		moveq	#palid_Sonic,d0
 		bsr.w	PalLoad2
 		moveq	#0,d0
@@ -2358,11 +2305,11 @@ DebugPosLoadArt:
 ; ---------------------------------------------------------------------------
 		locVRAM $9E00
 		lea	(Art_Text).l,a0
-		move.w	#(Art_Text_end-Art_Text)/2-$1F0-1,d1
+		move.w	#bytesToWcnt(Art_Text_end-Art_Text-tile_size*$1F),d1
 		bsr.s	.loadtext
 		lea	(Art_Text).l,a0
-		adda.w	#$220,a0
-		move.w	#(Art_Text_end-Art_Text)/2-$230-1,d1
+		adda.w	#tile_size*$11,a0
+		move.w	#bytesToWcnt(Art_Text_end-Art_Text-tile_size*$23),d1
 
 .loadtext:
 		move.w	(a0)+,(vdp_data_port).l
@@ -2467,49 +2414,14 @@ GM_Special:
 		andi.b	#$BF,d0
 		move.w	d0,(vdp_control_port).l
 		bsr.w	ClearScreen
-		lea	(vdp_control_port).l,a5
-		move.w	#$8F01,(a5)
-		move.l	#$946F93FF,(a5)
-		move.w	#$9780,(a5)
-		move.l	#$50000081,(a5)
-		move.w	#0,(vdp_data_port).l
-
-loc_3534:
-		move.w	(a5),d1
-		btst	#1,d1
-		bne.s	loc_3534
-		move.w	#$8F02,(a5)
+		fillVRAM	0, ArtTile_SS_Plane_1*tile_size+plane_size_64x32, ArtTile_SS_Plane_5*tile_size
 		moveq	#plcid_SpecialStage,d0
 		bsr.w	QuickPLC
 		bsr.w	ssLoadBG
-		lea	(v_objspace).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_objend-v_objspace),d1
-
-loc_3554:
-		move.l	d0,(a1)+
-		dbf	d1,loc_3554
-		lea	(v_misc_variables).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_misc_variables_end-v_misc_variables),d1
-
-loc_3564:
-		move.l	d0,(a1)+
-		dbf	d1,loc_3564
-		lea	(v_timingandscreenvariables).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_timingandscreenvariables_end-v_timingandscreenvariables),d1
-
-loc_3574:
-		move.l	d0,(a1)+
-		dbf	d1,loc_3574
-		lea	(v_ngfx_buffer).w,a1
-		moveq	#0,d0
-		move.w	#bytesToLcnt(v_ngfx_buffer_end-v_ngfx_buffer),d1
-
-loc_3584:
-		move.l	d0,(a1)+
-		dbf	d1,loc_3584
+		clearRAM v_objspace,v_objspace_end
+		clearRAM v_misc_variables,v_misc_variables_end
+		clearRAM v_timingandscreenvariables,v_timingandscreenvariables_end
+		clearRAM v_ngfx_buffer,v_ngfx_buffer_end
 		moveq	#palid_Special,d0
 		bsr.w	PalLoad1
 		jsr	(SS_Load).l
@@ -2847,10 +2759,10 @@ LoadTilesAsYouMove_BGOnly:
 		lea	(v_bgscreenposx).w,a3
 		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
-		bsr.w	sub_4484
+		bsr.w	DrawBGScrollBlock1
 		lea	(v_bg2_scroll_flags).w,a2
 		lea	(v_bg2screenposx).w,a3
-		bra.w	sub_4524
+		bra.w	DrawBGScrollBlock2
 ; ---------------------------------------------------------------------------
 
 LoadTilesAsYouMove:
@@ -2860,10 +2772,10 @@ LoadTilesAsYouMove:
 		lea	(v_bgscreenposx).w,a3
 		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
-		bsr.w	sub_4484
+		bsr.w	DrawBGScrollBlock1
 		lea	(v_bg2_scroll_flags).w,a2
 		lea	(v_bg2screenposx).w,a3
-		bsr.w	sub_4524
+		bsr.w	DrawBGScrollBlock2
 		lea	(v_fg_scroll_flags).w,a2
 		lea	(v_screenposx).w,a3
 		lea	(v_lvllayout).w,a4
@@ -2874,164 +2786,164 @@ LoadTilesAsYouMove:
 		beq.s	loc_4438
 		moveq	#-16,d4
 		moveq	#-16,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		moveq	#-16,d4
 		moveq	#-16,d5
-		bsr.w	sub_4608
+		bsr.w	DrawBlocks_LR
 
 loc_4438:
 		bclr	#1,(a2)
 		beq.s	loc_4452
 		move.w	#224,d4
 		moveq	#-16,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		move.w	#224,d4
 		moveq	#-16,d5
-		bsr.w	sub_4608
+		bsr.w	DrawBlocks_LR
 
 loc_4452:
 		bclr	#2,(a2)
 		beq.s	loc_4468
 		moveq	#-16,d4
 		moveq	#-16,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		moveq	#-16,d4
 		moveq	#-16,d5
-		bsr.w	sub_4634
+		bsr.w	DrawBlocks_TB
 
 loc_4468:
 		bclr	#3,(a2)
 		beq.s	locret_4482
 		moveq	#-16,d4
 		move.w	#320,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		moveq	#-16,d4
 		move.w	#320,d5
-		bsr.w	sub_4634
+		bsr.w	DrawBlocks_TB
 
 locret_4482:
 		rts
 ; ---------------------------------------------------------------------------
 
-sub_4484:
+DrawBGScrollBlock1:
 		tst.b	(a2)
 		beq.w	locret_4522
 		bclr	#0,(a2)
 		beq.s	loc_44A2
 		moveq	#-16,d4
 		moveq	#-16,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		moveq	#-16,d4
 		moveq	#-16,d5
-		moveq	#$1F,d6
-		bsr.w	sub_460A
+		moveq	#(512/16)-1,d6
+		bsr.w	DrawBlocks_LR_2
 
 loc_44A2:
 		bclr	#1,(a2)
 		beq.s	loc_44BE
 		move.w	#224,d4
 		moveq	#-16,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		move.w	#224,d4
 		moveq	#-16,d5
-		moveq	#$1F,d6
-		bsr.w	sub_460A
+		moveq	#(512/16)-1,d6
+		bsr.w	DrawBlocks_LR_2
 
 loc_44BE:
 		bclr	#2,(a2)
 		beq.s	loc_44EE
 		moveq	#-16,d4
 		moveq	#-16,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		moveq	#-16,d4
 		moveq	#-16,d5
 		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
-		andi.w	#$FFF0,d1
+		andi.w	#-16,d1
 		sub.w	d1,d6
 		blt.s	loc_44EE
 		lsr.w	#4,d6
-		cmpi.w	#$F,d6
+		cmpi.w	#((224+16+16)/16)-1,d6
 		bcs.s	loc_44EA
-		moveq	#$F,d6
+		moveq	#((224+16+16)/16)-1,d6
 
 loc_44EA:
-		bsr.w	sub_4636
+		bsr.w	DrawBlocks_TB_2
 
 loc_44EE:
 		bclr	#3,(a2)
 		beq.s	locret_4522
 		moveq	#-16,d4
 		move.w	#320,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		moveq	#-16,d4
 		move.w	#320,d5
 		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
-		andi.w	#$FFF0,d1
+		andi.w	#-16,d1
 		sub.w	d1,d6
 		blt.s	locret_4522
 		lsr.w	#4,d6
-		cmpi.w	#$F,d6
+		cmpi.w	#((224+16+16)/16)-1,d6
 		bcs.s	loc_451E
-		moveq	#$F,d6
+		moveq	#((224+16+16)/16)-1,d6
 
 loc_451E:
-		bsr.w	sub_4636
+		bsr.w	DrawBlocks_TB_2
 
 locret_4522:
 		rts
 ; ---------------------------------------------------------------------------
 
-sub_4524:
+DrawBGScrollBlock2:
 		tst.b	(a2)
 		beq.w	locret_45B0
 		bclr	#2,(a2)
 		beq.s	loc_456E
-		cmpi.w	#$10,(a3)
+		cmpi.w	#16,(a3)
 		bcs.s	loc_456E
 		move.w	(v_scroll_block_1_size).w,d4
 		move.w	4(a3),d1
-		andi.w	#$FFF0,d1
+		andi.w	#-16,d1
 		sub.w	d1,d4
 		move.w	d4,-(sp)
 		moveq	#-16,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		move.w	(sp)+,d4
 		moveq	#-16,d5
 		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
-		andi.w	#$FFF0,d1
+		andi.w	#-16,d1
 		sub.w	d1,d6
 		blt.s	loc_456E
 		lsr.w	#4,d6
-		subi.w	#$E,d6
+		subi.w	#((224+16)/16)-1,d6
 		bhs.s	loc_456E
 		neg.w	d6
-		bsr.w	sub_4636
+		bsr.w	DrawBlocks_TB_2
 
 loc_456E:
 		bclr	#3,(a2)
 		beq.s	locret_45B0
 		move.w	(v_scroll_block_1_size).w,d4
 		move.w	4(a3),d1
-		andi.w	#$FFF0,d1
+		andi.w	#-16,d1
 		sub.w	d1,d4
 		move.w	d4,-(sp)
 		move.w	#320,d5
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		move.w	(sp)+,d4
 		move.w	#320,d5
 		move.w	(v_scroll_block_1_size).w,d6
 		move.w	4(a3),d1
-		andi.w	#$FFF0,d1
+		andi.w	#-16,d1
 		sub.w	d1,d6
 		blt.s	locret_45B0
 		lsr.w	#4,d6
-		subi.w	#$E,d6
+		subi.w	#((224+16)/16)-1,d6
 		bhs.s	locret_45B0
 		neg.w	d6
-		bsr.w	sub_4636
+		bsr.w	DrawBlocks_TB_2
 
 locret_45B0:
 		rts
@@ -3040,110 +2952,130 @@ locret_45B0:
 		beq.s	locret_4606
 		bclr	#2,(a2)
 		beq.s	loc_45DC
-		move.w	#$D0,d4
+		move.w	#224-16,d4
 		move.w	4(a3),d1
-		andi.w	#$FFF0,d1
+		andi.w	#-16,d1
 		sub.w	d1,d4
 		move.w	d4,-(sp)
 		moveq	#-16,d5
-		bsr.w	sub_476E
+		bsr.w	Calc_VRAM_Pos_Unknown
 		move.w	(sp)+,d4
 		moveq	#-16,d5
 		moveq	#2,d6
-		bsr.w	sub_4636
+		bsr.w	DrawBlocks_TB_2
 
 loc_45DC:
 		bclr	#3,(a2)
 		beq.s	locret_4606
-		move.w	#$D0,d4
+		move.w	#224-16,d4
 		move.w	4(a3),d1
-		andi.w	#$FFF0,d1
+		andi.w	#-16,d1
 		sub.w	d1,d4
 		move.w	d4,-(sp)
 		move.w	#320,d5
-		bsr.w	sub_476E
+		bsr.w	Calc_VRAM_Pos_Unknown
 		move.w	(sp)+,d4
 		move.w	#320,d5
 		moveq	#2,d6
-		bsr.w	sub_4636
+		bsr.w	DrawBlocks_TB_2
 
 locret_4606:
 		rts
-; ---------------------------------------------------------------------------
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-sub_4608:
-		moveq	#$15,d6
-
-sub_460A:
-		move.l	#$800000,d7
+; Don't be fooled by the name: this function's for drawing from left to right
+; when the camera's moving up or down
+; DrawTiles_LR:
+DrawBlocks_LR:
+		moveq	#((320+16+16)/16)-1,d6	; Draw the entire width of the screen + two extra columns
+; DrawTiles_LR_2:
+DrawBlocks_LR_2:
+		move.l	#$800000,d7	; Delta between rows of tiles
 		move.l	d0,d1
 
-loc_4612:
+.loop:
 		movem.l	d4-d5,-(sp)
-		bsr.w	sub_4706
+		bsr.w	GetBlockData
 		move.l	d1,d0
-		bsr.w	sub_4662
-		addq.b	#4,d1
-		andi.b	#$7F,d1
+		bsr.w	DrawBlock
+		addq.b	#4,d1		; Two tiles ahead
+		andi.b	#$7F,d1		; Wrap around row
 		movem.l	(sp)+,d4-d5
-		addi.w	#16,d5
-		dbf	d6,loc_4612
+		addi.w	#16,d5		; Move X coordinate one block ahead
+		dbf	d6,.loop
 		rts
-; ---------------------------------------------------------------------------
+; End of function DrawBlocks_LR
 
-sub_4634:
-		moveq	#$F,d6
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-sub_4636:
-		move.l	#$800000,d7
+; Don't be fooled by the name: this function's for drawing from top to bottom
+; when the camera's moving left or right
+; DrawTiles_TB:
+DrawBlocks_TB:
+		moveq	#((224+16+16)/16)-1,d6	; Draw the entire height of the screen + two extra rows
+; DrawTiles_TB_2:
+DrawBlocks_TB_2:
+		move.l	#$800000,d7	; Delta between rows of tiles
 		move.l	d0,d1
 
-loc_463E:
+.loop:
 		movem.l	d4-d5,-(sp)
-		bsr.w	sub_4706
+		bsr.w	GetBlockData
 		move.l	d1,d0
-		bsr.w	sub_4662
-		addi.w	#$100,d1
-		andi.w	#$FFF,d1
+		bsr.w	DrawBlock
+		addi.w	#$100,d1	; Two rows ahead
+		andi.w	#$FFF,d1	; Wrap around plane
 		movem.l	(sp)+,d4-d5
-		addi.w	#16,d4
-		dbf	d6,loc_463E
+		addi.w	#16,d4		; Move X coordinate one block ahead
+		dbf	d6,.loop
 		rts
-; ---------------------------------------------------------------------------
+; End of function DrawBlocks_TB_2
 
-sub_4662:
-		or.w	d2,d0
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; Draws a block's worth of tiles
+; Parameters:
+; a0 = Pointer to block metadata (block index and X/Y flip)
+; a1 = Pointer to block
+; a5 = Pointer to VDP command port
+; a6 = Pointer to VDP data port
+; d0 = VRAM command to access plane
+; d2 = VRAM plane A/B specifier
+; d7 = Plane row delta
+; DrawTiles:
+DrawBlock:
+		or.w	d2,d0	; OR in that plane A/B specifier to the VRAM command
 		swap	d0
-		btst	#4,(a0)
-		bne.s	loc_469E
-		btst	#3,(a0)
-		bne.s	loc_467E
+		btst	#4,(a0)	; Check Y-flip bit
+		bne.s	DrawFlipY
+		btst	#3,(a0)	; Check X-flip bit
+		bne.s	DrawFlipX
 		move.l	d0,(a5)
-		move.l	(a1)+,(a6)
-		add.l	d7,d0
+		move.l	(a1)+,(a6)	; Write top two tiles
+		add.l	d7,d0		; Next row
 		move.l	d0,(a5)
-		move.l	(a1)+,(a6)
-		rts
-; ---------------------------------------------------------------------------
+		move.l	(a1)+,(a6)	; Write bottom two tiles
+		rts	
+; ===========================================================================
 
-loc_467E:
+DrawFlipX:
+		move.l	d0,(a5)
+		move.l	(a1)+,d4
+		eori.l	#$8000800,d4	; Invert X-flip bits of each tile
+		swap	d4		; Swap the tiles around
+		move.l	d4,(a6)		; Write top two tiles
+		add.l	d7,d0		; Next row
 		move.l	d0,(a5)
 		move.l	(a1)+,d4
 		eori.l	#$8000800,d4
 		swap	d4
-		move.l	d4,(a6)
-		add.l	d7,d0
-		move.l	d0,(a5)
-		move.l	(a1)+,d4
-		eori.l	#$8000800,d4
-		swap	d4
-		move.l	d4,(a6)
-		rts
-; ---------------------------------------------------------------------------
+		move.l	d4,(a6)		; Write bottom two tiles
+		rts	
+; ===========================================================================
 
-loc_469E:
+DrawFlipY:
 		btst	#3,(a0)
-		bne.s	loc_46C0
+		bne.s	DrawFlipXY
 		move.l	d0,(a5)
 		move.l	(a1)+,d5
 		move.l	(a1)+,d4
@@ -3153,10 +3085,10 @@ loc_469E:
 		move.l	d0,(a5)
 		eori.l	#$10001000,d5
 		move.l	d5,(a6)
-		rts
-; ---------------------------------------------------------------------------
+		rts	
+; ===========================================================================
 
-loc_46C0:
+DrawFlipXY:
 		move.l	d0,(a5)
 		move.l	(a1)+,d5
 		move.l	(a1)+,d4
@@ -3168,10 +3100,16 @@ loc_46C0:
 		eori.l	#$18001800,d5
 		swap	d5
 		move.l	d5,(a6)
-		rts
+		rts	
+; End of function DrawBlocks
+
 ; ---------------------------------------------------------------------------
+; unused garbage
+; This is interesting. It draws a block, but not before
+; incrementing its palette lines by 1. This may have been
+; a debug function to discolour mirrored tiles, to test
+; if they're loading properly.
 		rts
-; ---------------------------------------------------------------------------
 		move.l	d0,(a5)
 		move.w	#$2000,d5
 		move.w	(a1)+,d4
@@ -3189,57 +3127,95 @@ loc_46C0:
 		add.w	d5,d4
 		move.w	d4,(a6)
 		rts
-; ---------------------------------------------------------------------------
 
-sub_4706:
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; Gets address of block at a certain coordinate
+; Parameters:
+; a4 = Pointer to level layout
+; d4 = Relative Y coordinate
+; d5 = Relative X coordinate
+; Returns:
+; a0 = Address of block metadata
+; a1 = Address of block
+; DrawBlocks:
+GetBlockData:
 		lea	(v_16x16).w,a1
-		add.w	4(a3),d4
-		add.w	(a3),d5
+		add.w	4(a3),d4	; Add camera Y coordinate to relative coordinate
+		add.w	(a3),d5		; Add camera X coordinate to relative coordinate
+		; Turn Y coordinate into index into level layout
 		move.w	d4,d3
 		lsr.w	#1,d3
 		andi.w	#$380,d3
+		; Turn X coordinate into index into level layout
 		lsr.w	#3,d5
 		move.w	d5,d0
 		lsr.w	#5,d0
 		andi.w	#$7F,d0
+		; Get chunk from level layout
 		add.w	d3,d0
 		moveq	#-1,d3
 		move.b	(a4,d0.w),d3
 		andi.b	#$7F,d3
-		beq.s	locret_4750
+		beq.s	locret_4750	; If chunk is 80, just return a pointer to the first block (expected to be empty)
+		; Turn chunk ID into index into chunk table
 		subq.b	#1,d3
 		ext.w	d3
 		ror.w	#7,d3
+		; Turn Y coordinate into index into chunk
 		add.w	d4,d4
 		andi.w	#$1E0,d4
+		; Turn X coordinate into index into chunk
 		andi.w	#$1E,d5
+		; Get block metadata from chunk
 		add.w	d4,d3
 		add.w	d5,d3
 		movea.l	d3,a0
 		move.w	(a0),d3
+		; Turn block ID into address
 		andi.w	#$3FF,d3
 		lsl.w	#3,d3
 		adda.w	d3,a1
 
 locret_4750:
 		rts
-; ---------------------------------------------------------------------------
+; End of function GetBlockData
 
-sub_4752:
-		add.w	4(a3),d4
-		add.w	(a3),d5
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; Produces a VRAM plane access command from coordinates
+; Parameters:
+; d4 = Relative Y coordinate
+; d5 = Relative X coordinate
+; Returns VDP command in d0
+Calc_VRAM_Pos:
+		add.w	4(a3),d4	; Add camera Y coordinate
+		add.w	(a3),d5		; Add camera X coordinate
+		; Floor the coordinates to the nearest pair of tiles (the size of a block).
+		; Also note that this wraps the value to the size of the plane:
+		; The plane is 64*8 wide, so wrap at $100, and it's 32*8 tall, so wrap at $200
 		andi.w	#$F0,d4
 		andi.w	#$1F0,d5
+		; Transform the adjusted coordinates into a VDP command
 		lsl.w	#4,d4
 		lsr.w	#2,d5
 		add.w	d5,d4
-		moveq	#3,d0
+		moveq	#3,d0	; Highest bits of plane VRAM address
 		swap	d0
 		move.w	d4,d0
-		rts
-; ---------------------------------------------------------------------------
+		rts	
+; End of function Calc_VRAM_Pos
 
-sub_476E:
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+; not used
+
+; This is just like Calc_VRAM_Pos, but seemingly for an earlier
+; VRAM layout: the only difference is the high bits of the
+; plane's VRAM address, which are 10 instead of 11.
+; Both the foreground and background are at $C000 and $E000
+; respectively, so this one starting at $8000 makes no sense.
+; sub_6C3C:
+Calc_VRAM_Pos_Unknown:
 		add.w	4(a3),d4
 		add.w	(a3),d5
 		andi.w	#$F0,d4
@@ -3251,7 +3227,14 @@ sub_476E:
 		swap	d0
 		move.w	d4,d0
 		rts
+; End of function Calc_VRAM_Pos_Unknown
+
 ; ---------------------------------------------------------------------------
+; Subroutine to	load tiles as soon as the level	appears
+; ---------------------------------------------------------------------------
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
 
 LoadTilesFromStart:
 		lea	(vdp_control_port).l,a5
@@ -3263,40 +3246,43 @@ LoadTilesFromStart:
 		lea	(v_bgscreenposx).w,a3
 		lea	(v_lvllayoutbg).w,a4
 		move.w	#$6000,d2
+; End of function LoadTilesFromStart
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 DrawChunks:
 		moveq	#-16,d4
-		moveq	#$F,d6
+		moveq	#((224+16+16)/16)-1,d6
 
-loc_47B4:
+.loop:
 		movem.l	d4-d6,-(sp)
 		moveq	#0,d5
 		move.w	d4,d1
-		bsr.w	sub_4752
+		bsr.w	Calc_VRAM_Pos
 		move.w	d1,d4
 		moveq	#0,d5
-		moveq	#$1F,d6
-		bsr.w	sub_460A
+		moveq	#(512/16)-1,d6
+		bsr.w	DrawBlocks_LR_2
 		movem.l	(sp)+,d4-d6
 		addi.w	#16,d4
-		dbf	d6,loc_47B4
+		dbf	d6,.loop
 		rts
 ; ---------------------------------------------------------------------------
 ;loc_47D8:
 		lea	(v_bg3screenposx).w,a3
 		move.w	#$6000,d2
 		move.w	#$B0,d4
-		moveq	#2,d6
+		moveq	#3-1,d6
 
 loc_47E6:
 		movem.l	d4-d6,-(sp)
 		moveq	#0,d5
 		move.w	d4,d1
-		bsr.w	sub_476E
+		bsr.w	Calc_VRAM_Pos_Unknown
 		move.w	d1,d4
 		moveq	#0,d5
-		moveq	#$1F,d6
-		bsr.w	sub_460A
+		moveq	#(512/16)-1,d6
+		bsr.w	DrawBlocks_LR_2
 		movem.l	(sp)+,d4-d6
 		addi.w	#16,d4
 		dbf	d6,loc_47E6
@@ -3977,7 +3963,7 @@ Map_Monitor:	include "_maps/Monitor.asm"
 
 ExecuteObjects:
 		lea	(v_objspace).w,a0
-		moveq	#(v_objend-v_objspace)/object_size-1,d7
+		moveq	#(v_objspace_end-v_objspace)/object_size-1,d7
 		moveq	#0,d0
 		cmpi.b	#6,(v_player+obRoutine).w	; has sonic died?
 		bhs.s	loc_8560			; if so, branch
@@ -4335,7 +4321,8 @@ loc_8A00:
 		move.l	a1,(v_opl_data+$C).w
 		lea	(v_objstate).w,a2
 		move.w	#$101,(a2)+
-		move.w	#(v_objstate_end-v_objstate-2)/2-1,d0
+		; Bug: The last 2 bytes of v_objstate are not accounted for.
+		move.w	#bytesToWcnt(v_objstate_end-v_objstate-2),d0
 
 loc_8A38:
 		clr.l	(a2)+
@@ -4346,7 +4333,7 @@ loc_8A44:
 		lea	(v_objstate).w,a2
 		moveq	#0,d2
 		move.w	(v_screenposx).w,d6
-		andi.w	#$FF80,d6
+		andi.w	#-$80,d6
 		cmp.w	(v_opl_screen).w,d6
 		beq.w	locret_8B20
 		bge.s	loc_8ABA
@@ -4445,7 +4432,7 @@ loc_8B00:
 		movea.l	(v_opl_data+8).w,a0
 		move.w	(v_bg3screenposx).w,d0
 		addi.w	#$200,d0
-		andi.w	#$FF80,d0
+		andi.w	#-$80,d0
 		cmp.w	(a0),d0
 		bcs.s	locret_8B20
 		bsr.w	sub_8B22
@@ -4722,24 +4709,26 @@ Map_PRock:	include "_maps/Purple Rock.asm"
 		include "_incObj/3C Smashable Wall.asm"
 		include "_incObj/sub SmashObject.asm"
 
-ObjSmashWall_FragRight:dc.w $400, $FB00
-		dc.w $600, $FF00
+ObjSmashWall_FragRight:
+		dc.w $400, -$500
+		dc.w $600, -$100
 		dc.w $600, $100
 		dc.w $400, $500
-		dc.w $600, $FA00
-		dc.w $800, $FE00
+		dc.w $600, -$600
+		dc.w $800, -$200
 		dc.w $800, $200
 		dc.w $600, $600
 		even
 
-ObjSmashWall_FragLeft:dc.w $FA00, $FA00
-		dc.w $F800, $FE00
-		dc.w $F800, $200
-		dc.w $FA00, $600
-		dc.w $FC00, $FB00
-		dc.w $FA00, $FF00
-		dc.w $FA00, $100
-		dc.w $FC00, $500
+ObjSmashWall_FragLeft:
+		dc.w -$600, -$600
+		dc.w -$800, -$200
+		dc.w -$800, $200
+		dc.w -$600, $600
+		dc.w -$400, -$500
+		dc.w -$600, -$100
+		dc.w -$600, $100
+		dc.w -$400, $500
 		even
 
 MapSmashWall:	include "_maps/Smashable Walls.asm"
@@ -4859,7 +4848,10 @@ Map_Yadrin:	include "_maps/Yadrin.asm"
 		include "_incObj/51 Smashable Green Block.asm"
 
 ObjSmashBlock_Frag:
-		dc.w $FE00, $FE00, $FF00, $FF00, $200, $FE00, $100, $FF00
+		dc.w -$200, -$200
+		dc.w -$100, -$100
+		dc.w $200, -$200
+		dc.w $100, -$100
 		even
 
 MapSmashBlock:	include "_maps/Smashable Green Block.asm"
@@ -4960,8 +4952,8 @@ loc_E892:
 		jsr	off_E8C8(pc,d1.w)
 		bsr.s	sub_E8D6
 		bsr.w	sub_E952
-		move.b	(v_angle_primary).w,$36(a0)
-		move.b	(v_angle_secondary).w,$37(a0)
+		move.b	(v_angle_primary).w,objoff_36(a0)
+		move.b	(v_angle_secondary).w,objoff_37(a0)
 		bsr.w	Sonic_Animate
 		bsr.w	TouchObjects
 		bsr.w	Sonic_SpecialChunk
@@ -5595,7 +5587,7 @@ Special_ShowLayout:
 		swap	d3
 		neg.w	d3
 		addi.w	#-$B4,d3
-		move.w	#16-1,d7
+		move.w	#$10-1,d7
 
 loc_108C2:
 		movem.w	d0-d2,-(sp)
@@ -5610,7 +5602,7 @@ loc_108C2:
 		muls.w	d3,d1
 		add.l	d0,d1
 		move.l	d6,d2
-		move.w	#16-1,d6
+		move.w	#$10-1,d6
 
 loc_108E4:
 		move.l	d2,d0
@@ -5639,10 +5631,10 @@ loc_108E4:
 		divu.w	#$18,d0
 		adda.w	d0,a0
 		lea	(v_ssbuffer3).w,a4
-		move.w	#16-1,d7
+		move.w	#$10-1,d7
 
 loc_10930:
-		move.w	#16-1,d6
+		move.w	#$10-1,d6
 
 loc_10934:
 		moveq	#0,d0
@@ -5741,19 +5733,19 @@ loc_10A26:
 		move.b	(v_ani0_frame).w,d0
 		add.w	d0,d0
 		lea	(a0,d0.w),a0
-		move.w	0(a0),0(a1)
+		move.w	(a0),(a1)
 		move.w	2(a0),8(a1)
 		move.w	4(a0),$10(a1)
 		move.w	6(a0),$18(a1)
 		adda.w	#$10,a0
 		adda.w	#$20,a1
-		move.w	0(a0),0(a1)
+		move.w	(a0),(a1)
 		move.w	2(a0),8(a1)
 		move.w	4(a0),$10(a1)
 		move.w	6(a0),$18(a1)
 		adda.w	#$10,a0
 		adda.w	#$20,a1
-		move.w	0(a0),0(a1)
+		move.w	(a0),(a1)
 		move.w	2(a0),8(a1)
 		move.w	4(a0),$10(a1)
 		move.w	6(a0),$18(a1)
@@ -5773,7 +5765,7 @@ SS_WaRiVramSet:	dc.w $142, $142, $142, $2142
 
 sub_10ACC:
 		lea	(v_ssitembuffer).l,a2
-		move.w	#(v_ssitembuffer_end-v_ssitembuffer)/8-1,d0
+		move.w	#bytesToXcnt(v_ssitembuffer_end-v_ssitembuffer,8),d0
 
 loc_10AD6:
 		tst.b	(a2)
@@ -5787,7 +5779,7 @@ locret_10AE0:
 
 Special_AniItems:
 		lea	(v_ssitembuffer).l,a0
-		move.w	#(v_ssitembuffer_end-v_ssitembuffer)/8-1,d7
+		move.w	#bytesToXcnt(v_ssitembuffer_end-v_ssitembuffer,8),d7
 
 loc_10AEC:
 		moveq	#0,d0
@@ -5858,7 +5850,7 @@ byte_10B6A:	dc.b $1B, $1C, $1B, $1C, 0, 0
 
 SS_Load:
 		lea	(v_ssbuffer1).l,a1
-		move.w	#(v_ssbuffer2-v_ssbuffer1)/4-1,d0
+		move.w	#bytesToLcnt(v_ssbuffer2-v_ssbuffer1),d0
 
 loc_10B7A:
 		clr.l	(a1)+
@@ -5869,7 +5861,7 @@ loc_10B7A:
 		moveq	#$24-1,d1
 
 loc_10B8E:
-		moveq	#($24)/4-1,d2
+		moveq	#bytesToLcnt($24),d2
 
 loc_10B90:
 		move.l	(a0)+,(a1)+
@@ -5880,7 +5872,7 @@ loc_10B90:
 
 		lea	(v_ssblocktypes+8).l,a1
 		lea	(SS_MapIndex).l,a0
-		moveq	#(SS_MapIndex_End-SS_MapIndex)/6-1,d1
+		moveq	#bytesToXcnt(SS_MapIndex_End-SS_MapIndex,6),d1
 
 loc_10BAC:
 		move.l	(a0)+,(a1)+
@@ -5890,7 +5882,7 @@ loc_10BAC:
 		dbf	d1,loc_10BAC
 
 		lea	(v_ssitembuffer).l,a1
-		move.w	#(v_ssitembuffer_end-v_ssitembuffer)/4-1,d1
+		move.w	#bytesToLcnt(v_ssitembuffer_end-v_ssitembuffer),d1
 
 loc_10BC8:
 
@@ -5908,7 +5900,7 @@ loc_10BC8:
 		moveq	#$40-1,d1
 
 loc_10CA6:
-		moveq	#$10-1,d2
+		moveq	#bytesToLcnt($40),d2
 
 loc_10CA8:
 		move.l	(a0)+,(a1)+

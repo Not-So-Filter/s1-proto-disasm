@@ -53,13 +53,13 @@ loc_57FA:
 		move.b	#4,obRender(a1)
 		move.b	#3,obPriority(a1)
 		move.b	#8,obActWid(a1)
-		move.b	d6,$3E(a1)
+		move.b	d6,objoff_3E(a1)
 		addq.b	#1,d6
 		andi.b	#7,d6
 		addi.w	#$10,d3
 		cmp.w	obX(a0),d3
 		bne.s	loc_5850
-		move.b	d6,$3E(a0)
+		move.b	d6,objoff_3E(a0)
 		addq.b	#1,d6
 		andi.b	#7,d6
 		addi.w	#$10,d3
@@ -77,7 +77,7 @@ loc_5854:
 sub_5860:
 		move.b	(v_ani0_frame).w,d0
 		move.b	#0,obColType(a0)
-		add.b	$3E(a0),d0
+		add.b	objoff_3E(a0),d0
 		andi.b	#7,d0
 		move.b	d0,obFrame(a0)
 		bne.s	locret_587E

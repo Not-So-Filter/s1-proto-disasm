@@ -42,22 +42,22 @@ locret_C77A:
 ; ---------------------------------------------------------------------------
 
 loc_C77C:
-		subq.w	#1,$30(a0)
+		subq.w	#1,objoff_30(a0)
 		bpl.s	loc_C798
-		move.w	#60,$30(a0)
+		move.w	#60,objoff_30(a0)
 		addq.b	#1,obAnim(a0)
 		cmpi.b	#3,obAnim(a0)
 		bne.s	loc_C798
 		addq.b	#2,obRoutine(a0)
 
 loc_C798:
-		subq.w	#1,$32(a0)
+		subq.w	#1,objoff_32(a0)
 		bpl.s	locret_C802
-		move.w	#$B,$32(a0)
+		move.w	#$B,objoff_32(a0)
 		moveq	#0,d0
-		move.b	$34(a0),d0
-		addq.b	#2,$34(a0)
-		andi.b	#$E,$34(a0)
+		move.b	objoff_34(a0),d0
+		addq.b	#2,objoff_34(a0)
+		andi.b	#$E,objoff_34(a0)
 		lea	byte_C804(pc,d0.w),a2
 		bsr.w	FindFreeObj
 		bne.s	locret_C802
@@ -85,7 +85,7 @@ byte_C804:	dc.b -$18, -$10
 		dc.b 8, 8
 		dc.b -$10, 0
 		dc.b $18, -8
-		dc.b 0, $F8
+		dc.b 0, -8
 		dc.b $10, 0
 		dc.b -$18, 8
 		dc.b $18, $10

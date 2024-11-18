@@ -5,7 +5,7 @@ ObjStaircasePtfm:
 		move.b	obRoutine(a0),d0
 		move.w	off_E358(pc,d0.w),d1
 		jsr	off_E358(pc,d1.w)
-		out_of_range.w	DeleteObject,$30(a0)
+		out_of_range.w	DeleteObject,objoff_30(a0)
 		bra.w	DisplaySprite
 ; ---------------------------------------------------------------------------
 
@@ -43,11 +43,11 @@ loc_E38A:
 		move.b	obSubtype(a0),obSubtype(a1)
 		move.w	d2,obX(a1)
 		move.w	obY(a0),obY(a1)
-		move.w	obX(a0),$30(a1)
-		move.w	obY(a1),$32(a1)
+		move.w	obX(a0),objoff_30(a1)
+		move.w	obY(a1),objoff_32(a1)
 		addi.w	#$20,d2
-		move.b	d3,$37(a1)
-		move.l	a0,$3C(a1)
+		move.b	d3,objoff_37(a1)
+		move.l	a0,objoff_3C(a1)
 		add.b	d4,d3
 		dbf	d1,loc_E37C
 
@@ -60,11 +60,11 @@ loc_E3DE:
 		jsr	off_E43A(pc,d1.w)
 
 loc_E3F2:
-		movea.l	$3C(a0),a2
+		movea.l	objoff_3C(a0),a2
 		moveq	#0,d0
-		move.b	$37(a0),d0
+		move.b	objoff_37(a0),d0
 		move.b	(a2,d0.w),d0
-		add.w	$32(a0),d0
+		add.w	objoff_32(a0),d0
 		move.w	d0,obY(a0)
 		moveq	#0,d1
 		move.b	obActWid(a0),d1
@@ -75,12 +75,12 @@ loc_E3F2:
 		bsr.w	SolidObject
 		tst.b	d4
 		bpl.s	loc_E42A
-		move.b	d4,$36(a2)
+		move.b	d4,objoff_36(a2)
 
 loc_E42A:
 		btst	#3,obStatus(a0)
 		beq.s	locret_E438
-		move.b	#1,$36(a2)
+		move.b	#1,objoff_36(a2)
 
 locret_E438:
 		rts
@@ -90,44 +90,44 @@ off_E43A:	dc.w loc_E442-off_E43A, loc_E4A8-off_E43A, loc_E464-off_E43A, loc_E4A8
 ; ---------------------------------------------------------------------------
 
 loc_E442:
-		tst.w	$34(a0)
+		tst.w	objoff_34(a0)
 		bne.s	loc_E458
-		cmpi.b	#1,$36(a0)
+		cmpi.b	#1,objoff_36(a0)
 		bne.s	locret_E456
-		move.w	#$1E,$34(a0)
+		move.w	#$1E,objoff_34(a0)
 
 locret_E456:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_E458:
-		subq.w	#1,$34(a0)
+		subq.w	#1,objoff_34(a0)
 		bne.s	locret_E456
 		addq.b	#1,obSubtype(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_E464:
-		tst.w	$34(a0)
+		tst.w	objoff_34(a0)
 		bne.s	loc_E478
-		tst.b	$36(a0)
+		tst.b	objoff_36(a0)
 		bpl.s	locret_E476
-		move.w	#$3C,$34(a0)
+		move.w	#$3C,objoff_34(a0)
 
 locret_E476:
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_E478:
-		subq.w	#1,$34(a0)
+		subq.w	#1,objoff_34(a0)
 		bne.s	loc_E484
 		addq.b	#1,obSubtype(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
 loc_E484:
-		lea	$38(a0),a1
-		move.w	$34(a0),d0
+		lea	objoff_38(a0),a1
+		move.w	objoff_34(a0),d0
 		lsr.b	#2,d0
 		andi.b	#1,d0
 		move.b	d0,(a1)+
@@ -141,7 +141,7 @@ loc_E484:
 ; ---------------------------------------------------------------------------
 
 loc_E4A8:
-		lea	$38(a0),a1
+		lea	objoff_38(a0),a1
 		cmpi.b	#$80,(a1)
 		beq.s	locret_E4D0
 		addq.b	#1,(a1)

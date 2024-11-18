@@ -21,7 +21,7 @@ loc_ADF0:
 		move.b	obSubtype(a0),obFrame(a0)
 
 loc_AE1A:
-		move.w	(v_objspace+obVelX).w,$30(a0)
+		move.w	(v_objspace+obVelX).w,objoff_30(a0)
 		move.w	#$1B,d1
 		move.w	#$20,d2
 		move.w	#$20,d3
@@ -37,14 +37,14 @@ locret_AE3C:
 loc_AE3E:
 		cmpi.b	#id_Roll,obAnim(a1)
 		bne.s	locret_AE3C
-		move.w	$30(a0),d0
+		move.w	objoff_30(a0),d0
 		bpl.s	loc_AE4E
 		neg.w	d0
 
 loc_AE4E:
 		cmpi.w	#$480,d0
 		bcs.s	locret_AE3C
-		move.w	$30(a0),obVelX(a1)
+		move.w	objoff_30(a0),obVelX(a1)
 		addq.w	#4,obX(a1)
 		lea	(ObjSmashWall_FragRight).l,a4
 		move.w	obX(a0),d0

@@ -39,7 +39,7 @@ ObjBasaran_ChkDrop:
 		bsr.w	ObjBasaran_CheckPlayer
 		bcc.s	ObjBasaran_NotDropped
 		move.w	(v_objspace+obY).w,d0
-		move.w	d0,$36(a0)
+		move.w	d0,objoff_36(a0)
 		sub.w	obY(a0),d0
 		bcs.s	ObjBasaran_NotDropped
 		cmpi.w	#$80,d0
@@ -62,7 +62,7 @@ ObjBasaran_DropFly:
 		addi.w	#$18,obVelY(a0)
 		move.w	#$80,d2
 		bsr.w	ObjBasaran_CheckPlayer
-		move.w	$36(a0),d0
+		move.w	objoff_36(a0),d0
 		sub.w	obY(a0),d0
 		bcs.s	ObjBasaran_Delete
 		cmpi.w	#$10,d0
@@ -116,7 +116,7 @@ ObjBasaran_FlyUp:
 		tst.w	d1
 		bpl.s	locret_D842
 		sub.w	d1,obY(a0)
-		andi.w	#$FFF8,obX(a0)
+		andi.w	#-8,obX(a0)
 		clr.w	obVelX(a0)
 		clr.w	obVelY(a0)
 		clr.b	obAnim(a0)

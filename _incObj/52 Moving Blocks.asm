@@ -28,8 +28,8 @@ loc_D606:
 		move.b	(a2)+,obActWid(a0)
 		move.b	(a2)+,obFrame(a0)
 		move.b	#4,obPriority(a0)
-		move.w	obX(a0),$32(a0)
-		move.w	obY(a0),$30(a0)
+		move.w	obX(a0),objoff_32(a0)
+		move.w	obY(a0),objoff_30(a0)
 
 loc_D648:
 		moveq	#0,d1
@@ -73,7 +73,7 @@ loc_D692:
 		add.w	d1,d0
 
 loc_D6A6:
-		move.w	$32(a0),d1
+		move.w	objoff_32(a0),d1
 		sub.w	d0,d1
 		move.w	d1,obX(a0)
 		rts
@@ -95,7 +95,7 @@ loc_D6C0:
 		tst.w	d1
 		bmi.s	loc_D6DA
 		addq.w	#1,obX(a0)
-		move.w	obX(a0),$32(a0)
+		move.w	obX(a0),objoff_32(a0)
 		rts
 ; ---------------------------------------------------------------------------
 

@@ -45,7 +45,7 @@ loc_BB16:
 
 loc_BB22:
 		andi.w	#$F,d0
-		move.w	word_BAB4(pc,d0.w),$30(a0)
+		move.w	word_BAB4(pc,d0.w),objoff_30(a0)
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ sub_BB2E:
 loc_BB4A:
 		addq.b	#2,obRoutine(a0)
 		addq.w	#8,obY(a1)
-		move.w	$30(a0),obVelY(a1)
+		move.w	objoff_30(a0),obVelY(a1)
 		bset	#1,obStatus(a1)
 		bclr	#3,obStatus(a1)
 		move.b	#$10,obAnim(a1)
@@ -102,7 +102,7 @@ loc_BBBC:
 
 loc_BBC6:
 		addq.b	#2,obRoutine(a0)
-		move.w	$30(a0),obVelX(a1)
+		move.w	objoff_30(a0),obVelX(a1)
 		addq.w	#8,obX(a1)
 		btst	#0,obStatus(a0)
 		bne.s	loc_BBE6
@@ -110,7 +110,7 @@ loc_BBC6:
 		neg.w	obVelX(a1)
 
 loc_BBE6:
-		move.w	#$F,$3E(a1)
+		move.w	#$F,objoff_3E(a1)
 		move.w	obVelX(a1),obInertia(a1)
 		bchg	#0,obStatus(a1)
 		btst	#2,obStatus(a1)
@@ -157,7 +157,7 @@ locret_BC5E:
 loc_BC60:
 		addq.b	#2,obRoutine(a0)
 		subq.w	#8,obY(a1)
-		move.w	$30(a0),obVelY(a1)
+		move.w	objoff_30(a0),obVelY(a1)
 		neg.w	obVelY(a1)
 		bset	#1,obStatus(a1)
 		bclr	#3,obStatus(a1)

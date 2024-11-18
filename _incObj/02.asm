@@ -25,7 +25,7 @@ Obj02_Display:
 		bsr.w	DisplaySprite
 		subq.b	#1,obTimeFrame(a0)	; Decrement delay timer
 		bpl.s	.wait			; Branch if it's not 0
-		move.b	#$10,obTimeFrame(a0)	; Set delay
+		move.b	#16,obTimeFrame(a0)	; Set delay
 		move.b	obFrame(a0),d0	; Set frame to d0
 		addq.b	#1,d0			; Increment d0
 		cmpi.b	#2,d0

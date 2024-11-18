@@ -61,7 +61,7 @@ loc_82CA:
 		cmpi.b	#3,d0
 		bne.s	loc_82F8
 		move.b	#1,(v_shoes).w
-		move.w	#$4B0,(v_objspace+shoetime).w
+		move.w	#1200,(v_objspace+shoetime).w
 		move.w	#$C00,(v_sonspeedmax).w
 		move.w	#$18,(v_sonspeedacc).w
 		move.w	#$80,(v_sonspeeddec).w
@@ -82,7 +82,7 @@ loc_8314:
 		cmpi.b	#5,d0
 		bne.s	loc_8360
 		move.b	#1,(v_invinc).w
-		move.w	#$4B0,(v_objspace+invtime).w
+		move.w	#1200,(v_objspace+invtime).w
 		move.b	#id_ShieldItem,(v_objslot8).w
 		move.b	#1,(v_objslot8+obAnim).w
 		move.b	#id_ShieldItem,(v_objslot9).w

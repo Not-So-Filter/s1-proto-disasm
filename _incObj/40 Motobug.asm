@@ -54,7 +54,7 @@ off_B94E:	dc.w loc_B952-off_B94E, loc_B976-off_B94E
 ; ---------------------------------------------------------------------------
 
 loc_B952:
-		subq.w	#1,$30(a0)
+		subq.w	#1,objoff_30(a0)
 		bpl.s	locret_B974
 		addq.b	#2,ob2ndRout(a0)
 		move.w	#-$100,obVelX(a0)
@@ -75,9 +75,9 @@ loc_B976:
 		cmpi.w	#$C,d1
 		bge.s	loc_B9C0
 		add.w	d1,obY(a0)
-		subq.b	#1,$33(a0)
+		subq.b	#1,objoff_33(a0)
 		bpl.s	locret_B9BE
-		move.b	#$F,$33(a0)
+		move.b	#$F,objoff_33(a0)
 		bsr.w	FindFreeObj
 		bne.s	locret_B9BE
 		_move.b	#id_MotoBug,obID(a1)
@@ -92,7 +92,7 @@ locret_B9BE:
 
 loc_B9C0:
 		subq.b	#2,ob2ndRout(a0)
-		move.w	#$3B,$30(a0)
+		move.w	#$3B,objoff_30(a0)
 		move.w	#0,obVelX(a0)
 		move.b	#0,obAnim(a0)
 		rts
