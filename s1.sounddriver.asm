@@ -2500,7 +2500,7 @@ cfFE_SpcFM3Mode:
 
 cfSSG_Reg:
 		lea	SSG_Reg_Table(pc),a1
-		moveq	#(SSG_Reg_Table_End-SSG_Reg_Table)/2-1,d3
+		moveq	#bytesToWcnt(SSG_Reg_Table_End-SSG_Reg_Table),d3
 
 .loop:
 		move.b	(a1)+,d0

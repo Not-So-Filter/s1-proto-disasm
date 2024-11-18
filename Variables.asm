@@ -217,8 +217,10 @@ v_misc_variables_end:
 v_spritetablebuffer:	ds.b $280
 v_spritetablebuffer_end
 			ds.b $80	; unused
-v_pal_dry:		ds.b $80
-v_pal_dry_dup:		ds.b $80
+v_palette:		ds.b $80
+v_palette_end:
+v_palette_fading:	ds.b $80
+v_palette_fading_end:
 v_objstate:		ds.b $C0	; object state list
 v_objstate_end:
 			ds.b $140	; stack

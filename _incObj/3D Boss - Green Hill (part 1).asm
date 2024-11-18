@@ -93,7 +93,7 @@ loc_B0D2:
 		jsr	(PlaySound_Special).l
 
 loc_B11A:
-		lea	(v_pal_dry+$22).w,a1
+		lea	(v_palette+$22).w,a1
 		moveq	#0,d0
 		tst.w	(a1)
 		bne.s	loc_B128

@@ -327,7 +327,7 @@ ptr_GM_Special:	bra.w	GM_Special
 ChecksumError:
 		bsr.w	VDPSetupGame
 		move.l	#$C0000000,(vdp_control_port).l	; Set VDP to CRAM write
-		moveq	#($80)/2-1,d7
+		moveq	#bytesToWcnt(v_palette_end-v_palette),d7
 
 .palette:
 		move.w	#$E,(vdp_data_port).l		; Write red to data
@@ -583,7 +583,7 @@ VBla_08:
 		bsr.w	ReadJoypads
 		stopZ80
 		waitZ80
-		writeCRAM	v_pal_dry,$80,0
+		writeCRAM	v_palette,$80,0
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		move.w	#$8407,(a5)
 		move.w	(v_hbla_hreg).w,(a5)
@@ -621,7 +621,7 @@ VBla_0A:
 		bsr.w	ReadJoypads
 		stopZ80
 		waitZ80
-		writeCRAM	v_pal_dry,$80,0
+		writeCRAM	v_palette,$80,0
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		startZ80
@@ -644,7 +644,7 @@ VBla_0C:
 		bsr.w	ReadJoypads
 		stopZ80
 		waitZ80
-		writeCRAM	v_pal_dry,$80,0
+		writeCRAM	v_palette,$80,0
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		tst.b	(f_sonframechg).w
@@ -679,7 +679,7 @@ sub_E78:
 		bsr.w	ReadJoypads
 		stopZ80
 		waitZ80
-		writeCRAM	v_pal_dry,$80,0
+		writeCRAM	v_palette,$80,0
 		writeVRAM	v_spritetablebuffer,$280,vram_sprites
 		writeVRAM	v_hscrolltablebuffer,$380,vram_hscroll
 		startZ80
@@ -690,7 +690,7 @@ HBlank:
 		tst.w	(f_hblank).w
 		beq.s	.locret
 		move.l	a5,-(sp)
-		writeCRAM	v_pal_dry_dup,$80,0
+		writeCRAM	v_palette_fading,$80,0
 		movem.l	(sp)+,a5
 		move.w	#0,(f_hblank).w
 
@@ -1157,7 +1157,7 @@ PaletteWhiteIn:
 
 PaletteWhiteIn_Sub:
 		moveq	#0,d0
-		lea	(v_pal_dry).w,a0
+		lea	(v_palette).w,a0
 		move.b	(v_pfade_start).w,d0
 		adda.w	d0,a0
 		moveq	#0,d1
@@ -1179,8 +1179,8 @@ loc_1972:
 
 sub_1988:
 		moveq	#0,d0
-		lea	(v_pal_dry).w,a0
-		lea	(v_pal_dry_dup).w,a1
+		lea	(v_palette).w,a0
+		lea	(v_palette_fading).w,a1
 		move.b	(v_pfade_start).w,d0
 		adda.w	d0,a0
 		adda.w	d0,a1
@@ -1239,7 +1239,7 @@ loc_19DC:
 
 FadeOut_ToBlack:
 		moveq	#0,d0
-		lea	(v_pal_dry).w,a0
+		lea	(v_palette).w,a0
 		move.b	(v_pfade_start).w,d0
 		adda.w	d0,a0
 		move.b	(v_pfade_size).w,d0
@@ -1289,7 +1289,7 @@ PalCycSega:
 		bmi.s	.locret
 		subq.w	#2,(v_pcyc_num).w
 		lea	(Cyc_Sega).l,a0
-		lea	(v_pal_dry+4).w,a1
+		lea	(v_palette+4).w,a1
 		adda.w	d0,a0
 		move.l	(a0)+,(a1)+
 		move.l	(a0)+,(a1)+
@@ -1311,7 +1311,7 @@ PalLoad1:
 		adda.w	d0,a1
 		movea.l	(a1)+,a2
 		movea.w	(a1)+,a3
-		adda.w	#v_pal_dry_dup-v_pal_dry,a3
+		adda.w	#v_palette_fading-v_palette,a3
 		move.w	(a1)+,d7
 
 .loop:
@@ -2664,7 +2664,7 @@ loc_3760:
 		bmi.s	loc_37B6
 		lea	(dword_3898).l,a1
 		adda.w	d0,a1
-		lea	(v_pal_dry+$4E).w,a2
+		lea	(v_palette+$4E).w,a2
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
 		move.l	(a1)+,(a2)+
@@ -2686,18 +2686,18 @@ loc_37C2:
 		andi.w	#$7F,d0
 		bclr	#0,d0
 		beq.s	loc_37E6
-		lea	(v_pal_dry+$6E).w,a2
+		lea	(v_palette+$6E).w,a2
 		move.l	(a1),(a2)+
 		move.l	4(a1),(a2)+
 		move.l	8(a1),(a2)+
 
 loc_37E6:
 		adda.w	#$C,a1
-		lea	(v_pal_dry+$5A).w,a2
+		lea	(v_palette+$5A).w,a2
 		cmpi.w	#$A,d0
 		bcs.s	loc_37FC
 		subi.w	#$A,d0
-		lea	(v_pal_dry+$7A).w,a2
+		lea	(v_palette+$7A).w,a2
 
 loc_37FC:
 		move.w	d0,d1

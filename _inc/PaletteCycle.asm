@@ -33,7 +33,7 @@ loc_1760:
 		addq.w	#1,(v_pcyc_num).w
 		andi.w	#3,d0
 		lsl.w	#3,d0
-		lea	(v_pal_dry+$50).w,a1
+		lea	(v_palette+$50).w,a1
 		move.l	(a0,d0.w),(a1)+
 		move.l	4(a0,d0.w),(a1)
 
@@ -54,7 +54,7 @@ PalCycLZ:
 		lsl.w	#3,d0
 		lea	(Cyc_LZ).l,a0
 		adda.w	d0,a0
-		lea	(v_pal_dry+$6E).w,a1
+		lea	(v_palette+$6E).w,a1
 		move.w	(a0)+,(a1)+
 		addq.w	#8,a1
 		move.w	(a0)+,(a1)+
@@ -85,7 +85,7 @@ loc_17D6:
 		add.w	d1,d0
 		add.w	d0,d0
 		lea	(Cyc_SLZ).l,a0
-		lea	(v_pal_dry+$56).w,a1
+		lea	(v_palette+$56).w,a1
 		move.w	(a0,d0.w),(a1)
 		move.l	2(a0,d0.w),4(a1)
 
@@ -103,7 +103,7 @@ PalCycSZ:
 		andi.w	#3,d0
 		lsl.w	#3,d0
 		lea	(Cyc_SZ1).l,a0
-		lea	(v_pal_dry+$6E).w,a1
+		lea	(v_palette+$6E).w,a1
 		move.l	(a0,d0.w),(a1)+
 		move.l	4(a0,d0.w),(a1)
 		andi.w	#3,d1
@@ -112,7 +112,7 @@ PalCycSZ:
 		add.w	d0,d1
 		add.w	d1,d1
 		lea	(Cyc_SZ2).l,a0
-		lea	(v_pal_dry+$76).w,a1
+		lea	(v_palette+$76).w,a1
 		move.l	(a0,d1.w),(a1)
 		move.w	4(a0,d1.w),6(a1)
 
