@@ -95,8 +95,8 @@ Checksum:	dc.w 0					; Checksum
 		dc.b "J               "			; I\O support
 RomStartLoc:	dc.l StartOfROM				; Start address of ROM
 RomEndLoc:      dc.l EndOfROM-1				; End address of ROM
-RamStartLoc:	dc.l v_startofram&$FFFFFF		; Start address of RAM
-RamEndLoc:      dc.l (v_endofram-1)&$FFFFFF			; End address of RAM
+RamStartLoc:	dc.l v_start&$FFFFFF			; Start address of RAM
+RamEndLoc:      dc.l (v_end-1)&$FFFFFF			; End address of RAM
 SRAMSupport:	dc.l $20202020				; SRAM (none)
                 dc.l $20202020				; SRAM start ($200001)
                 dc.l $20202020				; SRAM end ($20xxxx)
@@ -277,7 +277,7 @@ loc_32C:
 		nop
 		lea	(v_crossresetram).w,a6
 		moveq	#0,d7
-		move.w	#bytesToLcnt(v_endofram-v_crossresetram),d6
+		move.w	#bytesToLcnt(v_end-v_crossresetram),d6
 
 loc_348:
 		move.l	d7,(a6)+
@@ -289,9 +289,9 @@ loc_348:
 		move.l	#"init",(v_init).w
 
 loc_36A:
-		lea	(v_startofram&$FFFFFF).l,a6
+		lea	(v_start&$FFFFFF).l,a6
 		moveq	#0,d7
-		move.w	#bytesToLcnt(v_crossresetram-v_startofram),d6
+		move.w	#bytesToLcnt(v_crossresetram-v_start),d6
 
 loc_376:
 		move.l	d7,(a6)+
@@ -1485,12 +1485,12 @@ GM_Sega:
 		locVRAM 0
 		lea	(Nem_SegaLogo).l,a0
 		bsr.w	NemDec
-		lea	(v_startofram&$FFFFFF).l,a1
+		lea	(v_start&$FFFFFF).l,a1
 		lea	(Eni_SegaLogo).l,a0
 		move.w	#0,d0
 		bsr.w	EniDec
 
-		copyTilemap	v_startofram&$FFFFFF,$C61C,12-1,4-1
+		copyTilemap	v_start&$FFFFFF,$C61C,12-1,4-1
 
 		moveq	#palid_SegaBG,d0
 		bsr.w	PalLoad2
@@ -2481,12 +2481,12 @@ loc_3662:
 ; ---------------------------------------------------------------------------
 
 ssLoadBG:
-		lea	(v_startofram&$FFFFFF).l,a1
+		lea	(v_start&$FFFFFF).l,a1
 		lea	(byte_639B8).l,a0
 		move.w	#$4051,d0
 		bsr.w	EniDec
 		move.l	#$50000001,d3
-		lea	(v_startofram&$FFFFFF+$80).l,a2
+		lea	(v_start&$FFFFFF+$80).l,a2
 		moveq	#6,d7
 
 loc_368C:
@@ -2506,7 +2506,7 @@ loc_369C:
 		bne.s	loc_36B0
 		cmpi.w	#6,d7
 		bne.s	loc_36C0
-		lea	(v_startofram&$FFFFFF).l,a1
+		lea	(v_start&$FFFFFF).l,a1
 
 loc_36B0:
 		movem.l	d0-d4,-(sp)
@@ -2530,12 +2530,12 @@ loc_36C0:
 loc_36EA:
 		adda.w	#$80,a2
 		dbf	d7,loc_368C
-		lea	(v_startofram&$FFFFFF).l,a1
+		lea	(v_start&$FFFFFF).l,a1
 		lea	(byte_6477C).l,a0
 		move.w	#$4000,d0
 		bsr.w	EniDec
-		copyTilemap	v_startofram&$FFFFFF,$C000,64-1,32-1
-		copyTilemap	v_startofram&$FFFFFF,$D000,64-1,64-1
+		copyTilemap	v_start&$FFFFFF,$C000,64-1,32-1
+		copyTilemap	v_start&$FFFFFF,$D000,64-1,64-1
 		rts
 ; ---------------------------------------------------------------------------
 

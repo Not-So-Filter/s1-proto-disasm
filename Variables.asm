@@ -7,7 +7,7 @@ ramaddr function x,(-(x&$80000000)<<1)|x
 ; Variables (v) and Flags (f)
 
 	phase ramaddr($FFFF0000)
-v_startofram:
+v_start:
 v_256x256:		ds.b $52*$200	; 256x256 tile mappings ($A400 bytes)
 v_256x256_end:
 
@@ -296,19 +296,19 @@ f_debugmode:		ds.b 1
 v_init:			ds.b 1		; 'init' text string (4 bytes)
 			ds.w 1		; unused
 			ds.b 1		; unused
-v_endofram:
+v_end:
 	dephase
 
 ; Special Stage Variables
-v_ssbuffer1		= v_startofram&$FFFFFF
+v_ssbuffer1		= v_start&$FFFFFF
 v_ssblockbuffer		= v_ssbuffer1+$1020 ; ($2000 bytes)
 v_ssblockbuffer_end	= v_ssblockbuffer+$80*$40
-v_sslayout		= v_startofram&$FFFFFF+$172E
-v_ssbuffer2		= v_startofram&$FFFFFF+$4000
+v_sslayout		= v_start&$FFFFFF+$172E
+v_ssbuffer2		= v_start&$FFFFFF+$4000
 v_ssblocktypes		= v_ssbuffer2
 v_ssitembuffer		= v_ssbuffer2+$400 ; ($100 bytes)
 v_ssitembuffer_end	= v_ssitembuffer+$100
-v_ssbuffer3		= v_startofram+$8000
+v_ssbuffer3		= v_start+$8000
 v_ssscroll_buffer	= v_ngfx_buffer+$100
 
 	phase v_objstate
