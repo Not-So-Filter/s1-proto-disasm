@@ -478,7 +478,7 @@ FMSetRest:
 FM3SpcUpdateFreq:
 		lea	.fm3freqs(pc),a1
 		lea	SMPS_RAM.v_detune_start(a6),a2
-		moveq	#(.fm3freqs_end-.fm3freqs)/2-1,d7
+		moveq	#bytesToWcnt(.fm3freqs_end-.fm3freqs),d7
 
 .loopfm3:
 		move.w	d6,d1
@@ -2528,7 +2528,7 @@ Unc_Z80_End:	even
 SonicDriverVer = 1 ; Tell SMPS2ASM that we're using Sonic 1's driver.
 		include "sound/_smps2asm_inc.asm"
 
-Music81:	binclude	"sound/music/Mus81 - GHZ.bin"
+Music81:	include	"sound/music/Mus81 - GHZ.asm"
 		even
 Music82:	include	"sound/music/Mus82 - LZ.asm"
 		even
