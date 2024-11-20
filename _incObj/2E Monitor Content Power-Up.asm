@@ -14,7 +14,7 @@ off_8242:	dc.w loc_8248-off_8242, loc_8288-off_8242
 
 loc_8248:
 		addq.b	#2,obRoutine(a0)
-		move.w	#$680,obGfx(a0)
+		move.w	#make_art_tile(ArtTile_Monitor,0,0),obGfx(a0)
 		move.b	#$24,obRender(a0)
 		move.b	#3,obPriority(a0)
 		move.b	#8,obActWid(a0)

@@ -53,7 +53,7 @@ ObjSwingPtfm_LoadLinks:
 		addq.b	#1,obSubtype(a0)
 		move.w	a1,d5
 		subi.w	#v_objspace,d5
-		lsr.w	#6,d5
+		lsr.w	#object_size_bits,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
 		move.b	#$A,obRoutine(a1)
@@ -77,7 +77,7 @@ loc_5582:
 loc_5586:
 		move.w	a0,d5
 		subi.w	#v_objspace,d5
-		lsr.w	#6,d5
+		lsr.w	#object_size_bits,d5
 		andi.w	#$7F,d5
 		move.b	d5,(a2)+
 		move.w	#$4080,obAngle(a0)
@@ -189,7 +189,7 @@ loc_5692:
 loc_56A6:
 		moveq	#0,d4
 		move.b	(a2)+,d4
-		lsl.w	#6,d4
+		lsl.w	#object_size_bits,d4
 		addi.l	#v_objspace&$FFFFFF,d4
 		movea.l	d4,a1
 		moveq	#0,d4
@@ -220,7 +220,7 @@ ObjSwingPtfm_DeleteAll:
 loc_56FE:
 		moveq	#0,d0
 		move.b	(a2)+,d0
-		lsl.w	#6,d0
+		lsl.w	#object_size_bits,d0
 		addi.l	#v_objspace&$FFFFFF,d0
 		movea.l	d0,a1
 		bsr.w	ObjectDeleteA1

@@ -109,7 +109,7 @@ TouchObjects:
 		andi.b	#$3F,d0
 		cmpi.b	#6,d0
 		beq.s	loc_FC2E
-		cmpi.w	#$5A,$30(a0)
+		cmpi.w	#$5A,objoff_30(a0)
 		bcc.w	locret_FC2C
 		addq.b	#2,obRoutine(a1)
 
@@ -125,7 +125,7 @@ loc_FC2E:
 		cmp.w	obY(a1),d0
 		bcs.s	locret_FC68
 		neg.w	obVelY(a0)
-		move.w	#$FE80,obVelY(a1)
+		move.w	#-$180,obVelY(a1)
 		tst.b	ob2ndRout(a1)
 		bne.s	locret_FC68
 		addq.b	#4,ob2ndRout(a1)
@@ -220,7 +220,7 @@ loc_FD18:
 		move.b	#4,obRoutine(a0)
 		bsr.w	Sonic_ResetOnFloor
 		bset	#1,obStatus(a0)
-		move.w	#$FC00,obVelY(a0)
+		move.w	#-$400,obVelY(a0)
 		move.w	#-$200,obVelX(a0)
 		move.w	obX(a0),d0
 		cmp.w	obX(a2),d0
@@ -230,7 +230,7 @@ loc_FD18:
 loc_FD48:
 		move.w	#0,obInertia(a0)
 		move.b	#$1A,obAnim(a0)
-		move.w	#$258,$30(a0)
+		move.w	#600,objoff_30(a0)
 		move.w	#sfx_Death,d0
 		cmpi.b	#id_Spikes,obID(a2)
 		bne.s	loc_FD68
@@ -252,10 +252,10 @@ loc_FD78:
 		move.b	#6,obRoutine(a0)
 		bsr.w	Sonic_ResetOnFloor
 		bset	#1,obStatus(a0)
-		move.w	#$F900,obVelY(a0)
+		move.w	#-$700,obVelY(a0)
 		move.w	#0,obVelX(a0)
 		move.w	#0,obInertia(a0)
-		move.w	obY(a0),$38(a0)
+		move.w	obY(a0),objoff_38(a0)
 		move.b	#$18,obAnim(a0)
 		move.w	#sfx_Death,d0
 		cmpi.b	#id_Spikes,obID(a2)

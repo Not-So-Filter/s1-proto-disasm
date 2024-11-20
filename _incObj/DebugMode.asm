@@ -128,7 +128,7 @@ loc_11FA4:
 		moveq	#0,d0
 		move.w	d0,(v_debuguse).w
 		move.l	#Map_Sonic,(v_player+obMap).w
-		move.w	#$780,(v_player+obGfx).w
+		move.w	#make_art_tile(ArtTile_Sonic,0,0),(v_player+obGfx).w
 		move.b	d0,(v_player+obAnim).w
 		move.w	d0,obScreenY(a0)
 		move.w	d0,obScreenX(a0)

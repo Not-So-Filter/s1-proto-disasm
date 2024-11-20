@@ -20,7 +20,7 @@ off_C726:	dc.w loc_C72E-off_C726
 loc_C72E:
 		addq.b	#2,obRoutine(a0)
 		move.l	#Map_Sign,obMap(a0)
-		move.w	#$680,obGfx(a0)
+		move.w	#make_art_tile(ArtTile_Signpost,0,0),obGfx(a0)
 		move.b	#4,obRender(a0)
 		move.b	#$18,obActWid(a0)
 		move.b	#4,obPriority(a0)

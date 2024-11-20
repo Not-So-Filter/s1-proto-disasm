@@ -4927,7 +4927,7 @@ loc_E830:
 		move.b	#$13,obHeight(a0)
 		move.b	#9,obWidth(a0)
 		move.l	#Map_Sonic,obMap(a0)
-		move.w	#$780,obGfx(a0)
+		move.w	#make_art_tile(ArtTile_Sonic,0,0),obGfx(a0)
 		move.b	#2,obPriority(a0)
 		move.b	#$18,obActWid(a0)
 		move.b	#4,obRender(a0)
@@ -5113,8 +5113,7 @@ sub_F290:
 		include "_incObj/Sonic Loops.asm"
 		include "_incObj/Sonic Animate.asm"
 ; ---------------------------------------------------------------------------
-Ani_Sonic:
-		include "_anim/Sonic.asm"
+Ani_Sonic:	include "_anim/Sonic.asm"
 		include "_incObj/Sonic LoadGfx.asm"
 
 		include "_incObj/38 Shield and Invincibility.asm"

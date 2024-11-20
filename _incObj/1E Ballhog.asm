@@ -48,7 +48,7 @@ loc_6FB6:
 		subq.w	#1,objoff_30(a0)
 		bpl.s	loc_6FE6
 		addq.b	#2,ob2ndRout(a0)
-		move.w	#$FF,objoff_30(a0)
+		move.w	#255,objoff_30(a0)
 		move.w	#$40,obVelX(a0)
 		move.b	#1,obAnim(a0)
 		bchg	#0,obStatus(a0)
@@ -94,7 +94,7 @@ loc_701C:
 
 loc_7032:
 		subq.b	#2,ob2ndRout(a0)
-		move.w	#$3B,objoff_30(a0)
+		move.w	#59,objoff_30(a0)
 		move.w	#0,obVelX(a0)
 		move.b	#0,obAnim(a0)
 		tst.b	obRender(a0)
