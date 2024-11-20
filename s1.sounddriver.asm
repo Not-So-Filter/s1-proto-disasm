@@ -2560,7 +2560,7 @@ Music8F:	include	"sound/music/Mus8F - Game Over.asm"
 		even
 Music90:	include	"sound/music/Mus90 - Continue Screen.asm"
 		even
-Music91:	binclude	"sound/music/Mus91 - Credits.bin"
+Music91:	include	"sound/music/Mus91 - Credits.asm"
 		even
 ; ---------------------------------------------------------------------------
 ; Sound	effect pointers
